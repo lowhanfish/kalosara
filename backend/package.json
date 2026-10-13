@@ -1,0 +1,44 @@
+{
+  "name": "kalosara-backend",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "scripts": {
+    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pino": "^9.14.0",
+    "pino-http": "^10.5.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^20.19.22",
+    "@types/supertest": "^6.0.3",
+    "eslint": "^9.38.0",
+    "prettier": "^3.6.2",
+    "prisma": "^6.19.0",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "vitest": "^3.2.4"
+  },
+  "type": "module"
+}
