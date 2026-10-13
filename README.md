@@ -2,6 +2,8 @@
 
 KALOSARA (Kanal Layanan Online Surat dan Administrasi Rakyat) dimulai sebagai website kelurahan untuk satu kelurahan. Tahap 01 hanya mencakup website, CMS, dan akun; pengajuan surat dikerjakan pada Tahap 02. Dokumen acuan ada di `reff/`.
 
+Untuk melanjutkan pekerjaan di sesi baru, mulai dari [CHECKPOINT.md](CHECKPOINT.md).
+
 ## Struktur
 
 - `frontend/`: Next.js App Router, TypeScript strict, Tailwind CSS, fondasi shadcn/ui, TanStack Query, dan Zustand. Folder `app`, `components`, `features`, `hooks`, `lib`, `services`, dan `store` disiapkan untuk modul berikutnya.
@@ -41,7 +43,7 @@ Buka `http://localhost:3000` dan `http://localhost:3000/api/v1/health`. Endpoint
 
 ```bash
 cp .env.example .env
-# Ganti POSTGRES_PASSWORD di .env
+# Isi POSTGRES_PASSWORD dan AUTH_SIGNING_KEYS di .env; sesuaikan APP_ORIGIN
 docker compose build
 docker compose up -d db
 docker compose run --rm migrate
