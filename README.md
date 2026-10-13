@@ -8,6 +8,7 @@ KALOSARA (Kanal Layanan Online Surat dan Administrasi Rakyat) dimulai sebagai we
 - `backend/`: Express TypeScript, Prisma/PostgreSQL, Zod, dan Pino. Folder `modules`, `controllers`, `services`, `repositories`, `routes`, `middlewares`, `validators`, `config`, `lib`, dan `tests` disiapkan.
 - `nginx/` dan `compose.yaml`: proxy, dua aplikasi, PostgreSQL, dan volume persisten.
 - `backend/docs/auth-design.md`: relasi akun, aturan akses, lifecycle sesi, dan provisioning staf.
+- `backend/docs/auth-api.md`: tabel endpoint autentikasi, contoh payload, dan error.
 
 Frontend dan backend berada dalam satu repo Git `kalosara`. Keduanya tetap aplikasi independen yang berkomunikasi melalui API.
 
@@ -47,6 +48,8 @@ docker compose run --rm migrate
 docker compose up -d
 ```
 
+Sebelum menjalankan backend produksi, isi `AUTH_SIGNING_KEYS` pada `.env` dengan kunci acak minimal 32 byte dalam format `v1:<base64url-key>`. Atur `APP_ORIGIN` ke origin browser yang sebenarnya (HTTPS di produksi, tanpa slash penutup). Petunjuk endpoint dan CSRF ada di [dokumentasi API](backend/docs/auth-api.md).
+
 Buka `http://localhost:8080`. Hanya proxy dipublikasikan; backend dan database tetap di jaringan Compose. `db_data` dan `uploads` adalah named volume. Konfigurasi ini menyediakan HTTP lokal; TLS/HTTPS dan domain produksi dikerjakan saat tahap deployment.
 
 ## Perintah pemeriksaan
@@ -60,4 +63,4 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 
 ## Batasan tahap ini
 
-Belum ada endpoint registrasi/login, berita, CMS, atau layanan surat. Skema akun dan RBAC tersedia sejak Prompt 02; endpoint autentikasi dibuat pada Prompt 03. Library frontend sudah terpasang; integrasi state management dimulai saat fitur antarmuka dibuat.
+Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, antarmuka login, berita, CMS, dan layanan surat belum dibuat. Integrasi state management frontend dikerjakan pada Prompt 04.

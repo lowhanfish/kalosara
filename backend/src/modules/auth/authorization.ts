@@ -6,7 +6,7 @@ import { prisma } from '../../lib/prisma.js';
 export type Principal = { id: string; role: Role; isActive: boolean };
 
 export class AccessError extends Error {
-  constructor(public readonly status: 401 | 403, public readonly code: string, message: string) {
+  constructor(public readonly status: 401 | 403 | 409 | 429 | 503, public readonly code: string, message: string) {
     super(message);
   }
 }
@@ -29,7 +29,7 @@ export function assertOwner(principal: Principal | null | undefined, ownerId: st
   return active;
 }
 
-// A verified auth middleware in Prompt 03 will set req.auth. Never populate it from raw request fields.
+// req.auth is populated only after signature and database session verification.
 export const loadActivePrincipal: RequestHandler = async (req, res, next) => {
   const userId = req.auth?.userId;
   if (!userId || !z.uuid().safeParse(userId).success) return next(new AccessError(401, 'UNAUTHENTICATED', 'Authentication required'));

@@ -1,19 +1,23 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
 import { pinoHttp } from 'pino-http';
 import { logger } from './lib/logger.js';
 import { prisma } from './lib/prisma.js';
 import { errorHandler, notFound } from './middlewares/error-handler.js';
+import { authRouter } from './modules/auth/routes.js';
 
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', 1);
   app.use(pinoHttp({ logger, genReqId: (req, res) => {
     const id = randomUUID();
     res.setHeader('X-Request-Id', id);
     return id;
   } }));
   app.use(express.json({ limit: '100kb' }));
+  app.use(cookieParser());
 
   app.get('/api/v1/health', (req, res) => {
     res.json({ success: true, data: { status: 'ok' }, requestId: req.id });
@@ -27,6 +31,8 @@ export function createApp() {
       res.status(503).json({ success: false, error: { code: 'NOT_READY', message: 'Database unavailable' }, requestId: req.id });
     }
   });
+
+  app.use('/api/v1/auth', authRouter);
 
   app.use(notFound);
   app.use(errorHandler);

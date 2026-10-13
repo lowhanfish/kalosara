@@ -20,6 +20,8 @@ services:
       NODE_ENV: production
       PORT: 4000
       DATABASE_URL: postgresql://kalosara:${POSTGRES_PASSWORD}@db:5432/kalosara?schema=public
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8080}
+      AUTH_SIGNING_KEYS: ${AUTH_SIGNING_KEYS:?Set AUTH_SIGNING_KEYS in .env}
     depends_on:
       db:
         condition: service_healthy

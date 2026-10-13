@@ -22,18 +22,24 @@ Role hanya `LURAH`, `ADMIN_KELURAHAN`, dan `MASYARAKAT`. Layanan registrasi publ
 
 Middleware `loadActivePrincipal` menerima `req.auth.userId` hanya dari middleware token terverifikasi yang akan ditambahkan pada Prompt 03. Ia membaca role dan `isActive` terbaru dari database pada setiap request terproteksi. Akun nonaktif ditolak dengan `ACCOUNT_INACTIVE`; role yang tidak diizinkan dan resource milik user lain ditolak dengan `FORBIDDEN`. Route harus memasang `loadActivePrincipal` sebelum `requireRoles` atau `requireOwnership`.
 
-## Lifecycle sesi yang disiapkan
+## Lifecycle sesi
 
 ```text
-registrasi publik -> User(MASYARAKAT, unverified) -> verifikasi kontak
-login (Prompt 03) -> access cookie 15 menit + refresh cookie 7 hari
-refresh (Prompt 03) -> validasi tokenHash dan expiry -> rotasi token
-                    -> sesi lama revokedAt/rotatedAt, sesi baru dibuat
-logout (Prompt 03) -> revokedAt diisi, cookie dihapus
+registrasi publik -> User(MASYARAKAT, unverified)
+login -> access cookie 15 menit + refresh cookie 7 hari
+refresh -> validasi tokenHash dan expiry -> rotasi token
+        -> sesi lama revokedAt/rotatedAt, sesi baru dibuat
+logout / logout-all -> revokedAt diisi, cookie dihapus
 reset password (Prompt 03+) -> token reset disimpan sebagai hash, digunakan sekali
 ```
 
-Token mentah tidak boleh masuk database atau log. `RefreshSession` menyimpan hash token SHA-256 sepanjang 64 karakter, metadata perangkat minimum (`userAgent` dan hash IP opsional), serta indeks `userId` dan `expiresAt`. Implementasi penerbitan token dan cookie dilakukan pada Prompt 03.
+Token mentah tidak masuk database atau log. `RefreshSession` menyimpan hash SHA-256, metadata `userAgent`, serta indeks `userId` dan `expiresAt`. Refresh token adalah nilai acak 32 byte. Rotasi menyalin `expiresAt` lama sehingga login baru memiliki masa hidup absolut 7 hari tanpa perpanjangan tak terbatas. Permintaan paralel dengan token lama dalam 3 detik menerima `REFRESH_RACE` tanpa cookie baru; pemakaian ulang setelah itu mencabut semua sesi user dan mengembalikan `SESSION_REVOKED`. Klien perlu melakukan refresh tunggal (single flight).
+
+Access token JWT HS256 memuat `sub`, `sid`, `iss`, `aud`, `iat`, dan `exp`. Masa berlaku maksimal 15 menit dan dipotong jika sesi akan habis lebih dulu. Setiap request terlindungi memeriksa tanda tangan, sesi yang belum dicabut, status akun, dan role terbaru dari database. `AUTH_SIGNING_KEYS` berisi daftar `kid:base64url-key` dipisahkan koma. Kunci pertama menandatangani token baru; kunci berikutnya tetap diterima untuk masa transisi. Setiap kunci minimal 32 byte. Produksi menolak startup tanpa konfigurasi ini; development memakai kunci acak sementara per proses.
+
+Cookie access (`/api/v1`) dan refresh (`/api/v1/auth`) memakai HttpOnly dan SameSite=Strict. Cookie Secure aktif ketika `APP_ORIGIN` HTTPS. Semua mutasi auth mewajibkan Origin yang persis sama dengan `APP_ORIGIN` dan header `X-CSRF-Token` yang sama dengan cookie CSRF. `GET /auth/csrf` menerbitkan keduanya; token CSRF boleh dibaca oleh klien, sedangkan token auth tidak dikembalikan di JSON. Di depan proxy, Express mempercayai satu hop untuk IP rate limit. Login dibatasi 10 percobaan per 15 menit per IP; register dan forgot-password masing-masing 5 per jam. Penyimpanan limiter ada di memori proses untuk instalasi satu VPS.
+
+`POST /auth/forgot-password` saat ini mengembalikan `RESET_UNAVAILABLE` untuk semua email dan tetap memiliki rate limit. Pengiriman email serta penyelesaian reset belum tersedia; endpoint ini tidak mengungkap apakah email terdaftar.
 
 ## Provisioning staf
 
