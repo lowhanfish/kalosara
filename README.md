@@ -7,6 +7,7 @@ KALOSARA (Kanal Layanan Online Surat dan Administrasi Rakyat) dimulai sebagai we
 - `frontend/`: Next.js App Router, TypeScript strict, Tailwind CSS, fondasi shadcn/ui, TanStack Query, dan Zustand. Folder `app`, `components`, `features`, `hooks`, `lib`, `services`, dan `store` disiapkan untuk modul berikutnya.
 - `backend/`: Express TypeScript, Prisma/PostgreSQL, Zod, dan Pino. Folder `modules`, `controllers`, `services`, `repositories`, `routes`, `middlewares`, `validators`, `config`, `lib`, dan `tests` disiapkan.
 - `nginx/` dan `compose.yaml`: proxy, dua aplikasi, PostgreSQL, dan volume persisten.
+- `backend/docs/auth-design.md`: relasi akun, aturan akses, lifecycle sesi, dan provisioning staf.
 
 Frontend dan backend berada dalam satu repo Git `kalosara`. Keduanya tetap aplikasi independen yang berkomunikasi melalui API.
 
@@ -55,8 +56,8 @@ cd backend && npm run lint && npm run typecheck && npm test && npm run build
 cd frontend && pnpm lint && pnpm typecheck && pnpm test && pnpm build
 ```
 
-Migrasi pertama hanya membuat `AppSetting` untuk konfigurasi satu kelurahan. Seed development mengisi nama dummy `Kelurahan Contoh`; jangan pakai data pribadi atau rahasia di seed. Jangan masukkan `.env` ke Git.
+Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi, token reset, dan audit. Seed development mengisi nama dummy `Kelurahan Contoh` tanpa akun staf. Provisioning admin/lurah dilakukan hanya melalui CLI terpisah, sesuai [rancangan identitas](backend/docs/auth-design.md). Jangan pakai data pribadi atau rahasia di seed maupun Git.
 
 ## Batasan tahap ini
 
-Belum ada registrasi, berita, CMS, atau layanan surat. Akun dan RBAC mulai Prompt 02. Library frontend sudah terpasang; integrasi state management dimulai saat fitur antarmuka dibuat.
+Belum ada endpoint registrasi/login, berita, CMS, atau layanan surat. Skema akun dan RBAC tersedia sejak Prompt 02; endpoint autentikasi dibuat pada Prompt 03. Library frontend sudah terpasang; integrasi state management dimulai saat fitur antarmuka dibuat.

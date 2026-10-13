@@ -13,3 +13,77 @@ model AppSetting {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum Role {
+  LURAH
+  ADMIN_KELURAHAN
+  MASYARAKAT
+}
+
+model User {
+  id                  String               @id @default(uuid()) @db.Uuid
+  email               String               @unique @db.VarChar(254)
+  phone               String?              @unique @db.VarChar(20)
+  passwordHash        String               @db.VarChar(255)
+  role                Role                 @default(MASYARAKAT)
+  isActive            Boolean              @default(true)
+  verifiedAt          DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  profile             UserProfile?
+  refreshSessions     RefreshSession[]
+  passwordResetTokens PasswordResetToken[]
+  auditLogs           AuditLog[]           @relation("AuditActor")
+
+  @@index([role, isActive])
+}
+
+model UserProfile {
+  userId      String   @id @db.Uuid
+  displayName String?  @db.VarChar(120)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RefreshSession {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String    @unique @db.Char(64)
+  issuedAt  DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+  rotatedAt DateTime?
+  userAgent String?   @db.VarChar(255)
+  ipHash    String?   @db.Char(64)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String    @unique @db.Char(64)
+  issuedAt  DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  actorId      String?  @db.Uuid
+  action       String   @db.VarChar(100)
+  resourceType String?  @db.VarChar(100)
+  resourceId   String?  @db.VarChar(100)
+  createdAt    DateTime @default(now())
+  actor        User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId, createdAt])
+  @@index([createdAt])
+}

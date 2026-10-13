@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { ZodError } from 'zod';
 import { logger } from '../lib/logger.js';
+import { AccessError } from '../modules/auth/authorization.js';
 
 export const notFound: RequestHandler = (req, res) => {
   res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Resource not found' }, requestId: req.id });
@@ -8,6 +9,10 @@ export const notFound: RequestHandler = (req, res) => {
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _next) => {
   void _next;
+  if (error instanceof AccessError) {
+    res.status(error.status).json({ success: false, error: { code: error.code, message: error.message }, requestId: req.id });
+    return;
+  }
   if (error instanceof ZodError) {
     res.status(400).json({ success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid request', details: error.flatten() }, requestId: req.id });
     return;
