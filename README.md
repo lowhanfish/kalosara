@@ -72,3 +72,5 @@ Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian
 Sepuluh halaman publik, design system responsif, pencarian menu, dan state loading/404/500/maintenance sudah tersedia. Identitas dibaca dari `GET /api/v1/public/settings` dengan fallback yang bertanda contoh. Kontrak pengaturan, daftar file, hasil tes, dan batasan tersedia di [laporan Prompt 05](frontend/docs/public-layout.md). CMS dan konten resmi belum dibuat.
 
 Revisi desain memakai foto kantor dan Lurah **AMIRULAH, S.Si** untuk Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe. Foto lokal yang sudah dikompresi tersedia di `frontend/public/images/watundehoa/`; sumber identitas frontend berada di `frontend/lib/site-identity.ts`.
+
+Desain terbaru mengikuti referensi navy/kuning pilihan pengguna: header dengan pencarian, hero kantor dan lurah, akses cepat, panel informasi, panduan pelayanan, profil dan galeri kantor. Informasi yang belum tersedia tetap ditampilkan sebagai state kosong.

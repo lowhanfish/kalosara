@@ -3,10 +3,18 @@ import { ArrowUpRight, Clock3, Mail, MapPin, Phone } from "lucide-react";
 import type { SiteSettings } from "@/lib/site-settings";
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
   return (
-    <footer className="mt-auto bg-[#102d45] text-white">
+    <footer className="mt-auto bg-[#032545] text-white">
       <div className="container grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="text-xl font-bold tracking-[.16em]">KALOSARA</p>
+          <p className="text-[10px] font-semibold tracking-widest text-[#ffcf24]">
+            KELURAHAN
+          </p>
+          <p className="mt-1 text-xl font-extrabold uppercase tracking-wide">
+            Watundehoa
+          </p>
+          <p className="mt-1 text-[10px] text-[#cbd9e5]">
+            Kecamatan Puriala, Kabupaten Konawe
+          </p>
           <p className="mt-2 text-sm text-[#cbd9e5]">
             Kanal Layanan Online Surat dan
             <br />

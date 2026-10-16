@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #193348;
+  --background: #ffffff;
+  --foreground: #0b294e;
   --surface: #ffffff;
-  --primary: #175b91;
-  --primary-hover: #104673;
-  --muted: #536779;
-  --border: #dce5ed;
-  --soft: #edf3f9;
-  --accent: #d4aa58;
+  --primary: #082d58;
+  --primary-hover: #061f3e;
+  --muted: #526680;
+  --border: #e6ecf3;
+  --soft: #f1f5fa;
+  --accent: #ffcb20;
   --focus: #a04a0a;
   --danger: #a4262c;
   --radius: 0.75rem;
@@ -152,29 +152,4 @@ dialog::backdrop {
 footer :focus-visible,
 .bg-\[\#163e33\] :focus-visible {
   outline-color: #f5dca1;
-}
-
-.hero-office {
-  object-position: 62% center;
-}
-.hero-shade {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(9, 30, 50, 0.97) 0%,
-      rgba(9, 30, 50, 0.9) 23%,
-      rgba(9, 30, 50, 0.48) 53%,
-      rgba(9, 30, 50, 0.12) 100%
-    ),
-    linear-gradient(0deg, rgba(9, 30, 50, 0.55), transparent 45%);
-}
-@media (max-width: 767px) {
-  .hero-office {
-    object-position: 57% center;
-  }
-  .hero-shade {
-    background:
-      linear-gradient(90deg, rgba(9, 30, 50, 0.94), rgba(9, 30, 50, 0.64)),
-      linear-gradient(0deg, rgba(9, 30, 50, 0.4), transparent);
-  }
 }

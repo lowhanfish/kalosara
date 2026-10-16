@@ -108,3 +108,11 @@ Palet menjadi biru tua, putih dan emas. Foto kantor menggantikan ilustrasi gener
 Fallback yang telah dikonfirmasi pengguna dan nilai development `Kelurahan Contoh` dinormalisasi ke Watundehoa; konfigurasi backend lain tetap dihormati. Seed hanya mengubah nilai default untuk database baru, tidak menjalankan pembaruan database yang ada. Tidak ada migrasi/env/dependency baru. Fitur auth, menu, dan pembatasan scope CMS tetap berlaku.
 
 Verifikasi revisi Watundehoa: lint/typecheck/test/build frontend dan backend lulus (19 tes frontend, 8 tes backend). Beranda, profil dan kontak diperiksa pada 360, 768, 1440 px: 9 kombinasi tanpa overflow atau gambar rusak. Tidak ada migrasi/env/dependency baru. Nomor kontak dan jam pelayanan tetap belum diisi.
+
+## Revisi mengikuti referensi modern — 16 Oktober 2026
+
+Pengguna memilih gambar `Beranda Kelurahan Watundehoa Modern.png` sebagai arah desain. Beranda disusun ulang dengan warna navy/kuning, identitas berlatar kuning, search langsung di header, hero foto kantor dengan potret lurah dan kartu identitas, tujuh akses cepat, panel berita/pengumuman, band panduan pelayanan, fakta identitas, agenda, galeri kantor dan banner kontak. Komposisi responsif berada di `frontend/components/site/public-portal.css`; token umum tetap di globals.css. Halaman galeri sekarang menampilkan dua dokumentasi kantor yang diberikan pengguna.
+
+Kabupaten tetap **Konawe** sesuai instruksi tertulis pengguna. Nama wilayah lain, logo, angka statistik, artikel, tanggal agenda, sambutan/kutipan, dan layanan pengajuan yang muncul dalam gambar referensi tidak dijadikan fakta. Logo resmi tetap memakai slot backend; fallback berupa ikon gedung generik. Angka statistik yang belum tersedia diganti fakta identitas terkonfirmasi. Tombol pelayanan membuka panduan, dan pengajuan online tetap dinyatakan belum tersedia. Tidak ada implementasi CMS/Prompt 06, perubahan backend, migrasi, env, atau dependency.
+
+Verifikasi: frontend lint/typecheck dan 19 tes lulus. Semua 10 rute publik diperiksa pada 360, 768, dan 1440 px (30 kombinasi tanpa overflow atau gambar rusak). Menu/search seluler dengan kata “kontak” mengarah ke hasil yang benar. Build produksi lulus. Hasil backend dari revisi sebelumnya tetap berlaku karena tidak ada perubahan backend.
