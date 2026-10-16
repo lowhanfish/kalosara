@@ -1,0 +1,52 @@
+.cms-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+  background: white;
+  color: var(--foreground);
+}
+.cms-rich {
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.cms-rich h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-block: 1rem 0.5rem;
+}
+.cms-rich h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-block: 1rem 0.5rem;
+}
+.cms-rich p {
+  margin-block: 0.6rem;
+}
+.cms-rich ul,
+.cms-rich ol {
+  padding-left: 1.5rem;
+}
+.cms-rich ul {
+  list-style: disc;
+}
+.cms-rich ol {
+  list-style: decimal;
+}
+.cms-rich blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  margin-block: 1rem;
+}
+.cms-rich a {
+  text-decoration: underline;
+  color: var(--primary);
+}
+.cms-rich img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}

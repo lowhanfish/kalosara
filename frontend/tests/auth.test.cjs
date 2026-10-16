@@ -271,3 +271,41 @@ test("guest callback distinguishes first visit from invalidation of a known iden
     assert.equal(runtime.store.getState().status, "GUEST");
   }
 });
+
+for (const status of [400, 403, 404, 409, 413]) {
+  test(`CMS business HTTP ${status} preserves authenticated identity and cache`, async () => {
+    const runtime = createAuthRuntime(async (url) =>
+      url.endsWith("/me")
+        ? ok({ user: user("admin") })
+        : fail(status, "CMS_BUSINESS_ERROR"),
+    );
+    await runtime.bootstrap();
+    runtime.queryClient.setQueryData(userQueryKey("admin", "cms-draft"), {
+      title: "unsaved",
+    });
+    await assert.rejects(
+      runtime.request("/admin/news/record", { method: "PUT" }),
+    );
+    assert.equal(runtime.store.getState().status, "AUTHENTICATED");
+    assert.equal(runtime.store.getState().user.id, "admin");
+    assert.deepEqual(
+      runtime.queryClient.getQueryData(userQueryKey("admin", "cms-draft")),
+      { title: "unsaved" },
+    );
+  });
+}
+test("a business conflict after an access refresh retry does not change authentication", async () => {
+  let newsCalls = 0;
+  const runtime = createAuthRuntime(async (url) => {
+    if (url.endsWith("/me")) return ok({ user: user("admin") });
+    if (url.endsWith("/csrf")) return ok({ csrfToken: "csrf" });
+    if (url.endsWith("/refresh")) return ok({});
+    return ++newsCalls === 1
+      ? fail(401, "TOKEN_EXPIRED")
+      : fail(409, "VERSION_CONFLICT");
+  });
+  await runtime.bootstrap();
+  await assert.rejects(runtime.request("/admin/news/record"));
+  assert.equal(newsCalls, 2);
+  assert.equal(runtime.store.getState().status, "AUTHENTICATED");
+});

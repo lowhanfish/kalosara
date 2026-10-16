@@ -1,4 +1,6 @@
 import express from 'express';
+import { newsAdminRouter, publicNewsRouter } from './modules/cms/news.js';
+import { mediaAdminRouter, publicMediaRouter } from './modules/cms/media.js';
 import { publicProfileRouter, profileAdminRouter } from './modules/profile.js';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
@@ -34,6 +36,10 @@ export function createApp() {
     }
   });
 
+  app.use('/api/v1/admin/news', newsAdminRouter);
+  app.use('/api/v1/admin/media', mediaAdminRouter);
+  app.use('/api/v1/public/media', publicMediaRouter);
+  app.use('/api/v1/public/news', publicNewsRouter);
   app.use('/api/v1/public/profile', publicProfileRouter);
   app.use('/api/v1/admin/profile', profileAdminRouter);
   app.use('/api/v1/auth', authRouter);

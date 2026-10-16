@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run src/tests/app.test.ts src/tests/auth.test.ts src/tests/public-settings.test.ts src/tests/profile.test.ts",
+    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run src/tests/app.test.ts src/tests/auth.test.ts src/tests/public-settings.test.ts src/tests/profile.test.ts src/tests/cms.test.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -15,7 +15,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "staff:provision": "tsx src/cli/provision-staff.ts",
-    "test:db": "vitest run src/tests/schema.db.test.ts src/tests/auth-flow.db.test.ts src/tests/profile.db.test.ts"
+    "test:db": "vitest run src/tests/schema.db.test.ts src/tests/auth-flow.db.test.ts src/tests/profile.db.test.ts src/tests/cms.db.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,15 +28,22 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-rate-limit": "^8.7.1",
+    "file-type": "^21.3.4",
     "jose": "^6.2.12",
+    "multer": "^2.4.0",
+    "pdf-lib": "^1.17.1",
     "pino": "^9.14.0",
     "pino-http": "^10.5.0",
+    "sanitize-html": "^2.18.1",
+    "sharp": "^0.35.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.3",
+    "@types/multer": "^2.3.0",
     "@types/node": "^20.19.22",
+    "@types/sanitize-html": "^2.16.2",
     "@types/supertest": "^6.0.3",
     "eslint": "^9.38.0",
     "prettier": "^3.6.2",
@@ -47,5 +54,8 @@
     "typescript-eslint": "^8.46.2",
     "vitest": "^3.2.4"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  }
 }

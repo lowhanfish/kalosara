@@ -151,3 +151,6 @@ vite.config.ts.timestamp-*
 
 # Frontend test compilation
 .test-build/
+
+# Runtime media (public/private served only after DB authorization)
+uploads/

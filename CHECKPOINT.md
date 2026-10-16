@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — setelah Prompt 05
+# Checkpoint KALOSARA — setelah Prompt 07
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -10,16 +10,18 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 02 — skema akun, role, sesi, RBAC, provisioning staf | Selesai dan di-push | `9468293` |
 | 03 — API auth berbasis cookie, rotasi refresh, logout, profil | Selesai dan di-push | `68007ad` |
 | 04 — bootstrap auth frontend | Selesai dan di-push | `8b05260` |
-| 05 — design system dan layout publik | Selesai; lihat commit `feat: add responsive public portal and design system` | commit Prompt 05 |
+| 05 — design system dan layout publik | Selesai dan di-push; desain pilihan pengguna | `961c540` |
+| 06 — konfigurasi, profil dan aparatur | Selesai dan di-push | `359bea8` |
+| 07 — CMS berita, kategori dan media | Selesai; lihat laporan terbaru di bawah | commit Prompt 07 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
 ## Kondisi kode
 
-- `frontend/`: Next.js App Router dengan TypeScript strict, Tailwind, shadcn/ui dasar, TanStack Query, dan Zustand terpasang. Bootstrap sesi, AuthProvider, RouteGuard, HTTP client, store auth minimal dan query cache tersedia. UI login belum dibuat. **Sebelum mengubah frontend, baca `frontend/AGENTS.md` dan dokumentasi Next yang dirujuk di sana.**
+- `frontend/`: Next.js App Router dengan TypeScript strict, Tailwind, shadcn/ui dasar, TanStack Query, dan Zustand terpasang. Bootstrap sesi, AuthProvider, RouteGuard, HTTP client, store auth minimal dan query cache tersedia. Login khusus editor tersedia; UI akun umum belum dibuat. **Sebelum mengubah frontend, baca `frontend/AGENTS.md` dan dokumentasi Next yang dirujuk di sana.**
 - `backend/`: Express, Prisma/PostgreSQL, Zod, Pino. Model akun dan sesi sudah bermigrasi. API auth ada di `/api/v1/auth`; daftar endpoint, contoh request, dan error ada di `backend/docs/auth-api.md`. Lifecycle, RBAC, cookie, dan key rotation ada di `backend/docs/auth-design.md`.
 - `compose.yaml`: proxy Nginx, frontend, backend, PostgreSQL, serta volume database dan upload. Hanya proxy dipublikasikan. File `.env` berisi rahasia lokal dan tidak boleh di-commit.
-- Tidak ada migrasi baru pada Prompt 03. Migrasi terakhir: `backend/prisma/migrations/20261013010000_accounts_and_sessions/`.
+- Migrasi terbaru: `backend/prisma/migrations/20261016020000_news_media/`. Terapkan sebelum menjalankan versi Prompt 07. Backend memerlukan Node >=22.12; Docker backend Node 22.
 
 ## Verifikasi terakhir
 
@@ -52,7 +54,7 @@ Implementasi dan laporan lengkap tersedia di `frontend/docs/auth-bootstrap.md`. 
 ## Batasan yang diketahui
 
 - `POST /auth/forgot-password` saat ini rate-limited tetapi selalu mengembalikan `503 RESET_UNAVAILABLE` tanpa membedakan email. Pengiriman email dan penyelesaian reset password belum dibuat.
-- UI login/registrasi, CMS, berita, dan layanan surat belum dibuat. Backend tetap menjadi otoritas akses; RouteGuard frontend pada Prompt 04 hanya membantu UX.
+- UI akun umum dan layanan surat belum dibuat. CMS profil dan berita tersedia; frontend berita published menunggu Prompt 08. Backend tetap menjadi otoritas akses; RouteGuard frontend pada Prompt 04 hanya membantu UX.
 - Dokumentasikan hasil prompt dengan format PDF: keputusan, file berubah, cara menjalankan, migrasi/env, lint/typecheck/test/build, uji manual, risiko/tertunda, dan status SIAP REVIEW atau BELUM SIAP. Push commit prompt yang selesai ke `origin/main` sesuai instruksi pengguna.
 
 ## Verifikasi Prompt 04
@@ -102,3 +104,19 @@ Identitas Watundehoa/Puriala/Konawe dan AMIRULAH, S.Si dipertahankan. Desain, CS
 Verifikasi: backend lint/typecheck/build, 10 tes unit/HTTP dan 6 tes PostgreSQL lulus; frontend lint/typecheck/build dan 19 tes lulus. Browser login/settings/nama navbar-footer-profil, draft/preview/publish, XSS sebagai teks, aparatur UI, SEO dan 12 kombinasi responsif (360/768/1440) lulus tanpa overflow/gambar rusak/pageerror. Database dan akun uji sementara dibersihkan. Batasan: editor plain text, last-write-wins, menyimpan DRAFT menarik halaman dari publik (belum revisi paralel), komposit hero default tetap gambar pilihan pengguna. Belum deployment produksi.
 
 **SIAP REVIEW Prompt 06. Jangan mulai Prompt 07 sebelum instruksi pengguna berikutnya.**
+
+## Prompt 07 selesai — berhenti untuk review
+
+Laporan lengkap delapan bagian: `backend/docs/news-cms.md`. CMS `/admin/berita` menyediakan kategori, daftar berita dengan cari/filter/sort/pagination, Tiptap 3.32, cover/gambar publik, draft/publish/arsip, preview tersimpan yang terautentikasi, riwayat dan rollback sebagai draft baru. Slug stabil, author berasal dari sesi, expectedVersion/transaksi serializable mencegah konflik edit, dan audit dibuat bersama simpanan. Model baru News/NewsCategory/NewsRevision/MediaAsset/NewsMedia. Tidak ada seed berita resmi atau akun baru.
+
+Upload satu JPG/PNG/WebP/PDF maksimal 20 MiB per request, dua job bersamaan, signature/MIME/ekstensi harus cocok, gambar decode/re-encode maksimal 25 MP, PDF parse valid tanpa enkripsi. File di luar web root, nama UUID, default UI private; private hanya admin pengunggah. Publik hanya file PUBLIC aktif; PDF attachment, nosniff/CSP. Media terpakai oleh cover/embed/revisi/settings/aparatur tidak dapat diarsipkan. Alt/caption tersimpan. Pemilih gambar Prompt 06 sekarang membaca upload publik tervalidasi. CSS/aset publik dan beranda desain `961c540` tidak diubah.
+
+Migration `20261016020000_news_media`; env opsional `UPLOAD_ROOT` (default uploads, Compose memakai volume yang sudah ada). Backend minimum Node 22.12 dan image Node 22 untuk sanitizer perbaikan keamanan. Dependency baru tercatat di laporan/lockfiles. Nginx khusus endpoint upload menerima multipart 21 MiB, file tetap maksimum 20 MiB. Backup database dan upload harus berpasangan; volume lama harus writable oleh user node tanpa menghapus datanya.
+
+Perbaikan pendukung: error bisnis CMS tidak lagi mengubah status auth; editor tetap ada saat recovery jaringan, cache/state editor diisolasi per identitas dan reset ketika admin berganti. Enam tes regresi auth baru lulus. Media URL/UUID dinormalisasi agar perbedaan huruf besar tidak memutus pemeriksaan referensi.
+
+Verifikasi: backend lint/typecheck/build dan 19 tes unit/HTTP lulus; 14 tes PostgreSQL lulus; frontend lint/typecheck/build dan 25 tes lulus. Browser dev dan hasil build produksi menguji login, kategori, upload public/private, Tiptap bold/gambar, preview, publish/arsip/rollback, XSS, konflik/muat ulang, hero upload dan pergantian admin A/B. Enam kombinasi editor/media pada 360/768/1440 px tanpa overflow/pageerror/hydration mismatch. Nginx proxy menerima PDF valid tepat 20 MiB (201), menolak +1 byte (413). Image runtime Node 22.23.3 lulus sanitizer/Sharp/query DB; prune runtime melaporkan 0 vulnerability, dependency development masih memiliki 16 temuan audit. Semua database/akun/upload uji serta kontainer sementara dibersihkan setelah QA.
+
+Batasan: halaman `/berita` dan beranda masih contoh desain berlabel; frontend published, detail SEO/sitemap/cache invalidation menunggu Prompt 08. Tidak ada jadwal publish/autosave otomatis, antivirus, quota total/purge media/retensi otomatis atau deployment HTTPS/load test produksi. Riwayat mempertahankan media; storage perlu dimonitor. LURAH tetap tanpa izin CMS tambahan. Tidak ada layanan surat Tahap 02.
+
+**SIAP REVIEW Prompt 07. Jangan mulai Prompt 08 sebelum instruksi pengguna berikutnya.**

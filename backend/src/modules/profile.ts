@@ -1,3 +1,4 @@
+import { mediaUrlSchema, assertPublicImages, transaction } from './cms/common.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
@@ -5,8 +6,8 @@ import { authenticate, requireMutation } from './auth/routes.js';
 import { loadActivePrincipal, requireRoles } from './auth/authorization.js';
 
 const text = z.string().trim().min(1).max(300);
-// Upload pipeline is deferred. Only existing, reviewed local image assets are selectable.
-export const media = z.enum(['/images/watundehoa/amirulah.webp', '/images/watundehoa/kantor.webp', '/images/watundehoa/papan-kantor.webp', '/images/reference/crest.webp']);
+// Reviewed static assets and database-validated public image uploads.
+export const media = z.union([mediaUrlSchema, z.enum(['/images/watundehoa/amirulah.webp', '/images/watundehoa/kantor.webp', '/images/watundehoa/papan-kantor.webp', '/images/reference/crest.webp'])]);
 const httpsUrl = z.url().max(500).refine(v => new URL(v).protocol === 'https:');
 export const settingSchema = z.object({
   name: text, district: text, regency: text, address: text.nullable(),
@@ -49,7 +50,8 @@ profileAdminRouter.get('/', async (req, res) => {
 });
 profileAdminRouter.put('/settings', requireMutation, async (req, res) => {
   const value = settingSchema.parse(req.body);
-  await prisma.$transaction(async tx => {
+  await transaction(async tx => {
+    await assertPublicImages([value.logoUrl, value.heroUrl], tx);
     await tx.siteSetting.upsert({ where: { id: 'site' }, create: { id: 'site', value }, update: { value } });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'PROFILE_SETTINGS_UPDATED', resourceType: 'SiteSetting', resourceId: 'site' } });
   });
@@ -57,7 +59,7 @@ profileAdminRouter.put('/settings', requireMutation, async (req, res) => {
 });
 profileAdminRouter.put('/pages/:slug', requireMutation, async (req, res) => {
   const slug = pageSlug.parse(req.params.slug); const value = pageSchema.parse(req.body);
-  const page = await prisma.$transaction(async tx => {
+  const page = await transaction(async tx => {
     const result = await tx.page.upsert({ where: { slug }, create: { slug, ...value }, update: value });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'PROFILE_PAGE_SAVED', resourceType: 'Page', resourceId: slug } });
     return result;
@@ -67,7 +69,8 @@ profileAdminRouter.put('/pages/:slug', requireMutation, async (req, res) => {
 profileAdminRouter.put('/officials/:id', requireMutation, async (req, res) => {
   const id = z.uuid().parse(req.params.id); const parsed = officialSchema.parse(req.body);
   const value = { ...parsed, termStart: parsed.termStart ? new Date(parsed.termStart) : null, termEnd: parsed.termEnd ? new Date(parsed.termEnd) : null };
-  const official = await prisma.$transaction(async tx => {
+  const official = await transaction(async tx => {
+    await assertPublicImages([value.photoUrl], tx);
     const result = await tx.official.upsert({ where: { id }, create: { id, ...value }, update: value });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'PROFILE_OFFICIAL_SAVED', resourceType: 'Official', resourceId: id } });
     return result;

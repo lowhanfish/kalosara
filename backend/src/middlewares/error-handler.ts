@@ -1,4 +1,5 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
+import { CmsError } from '../modules/cms/common.js';
 import { ZodError } from 'zod';
 import { logger } from '../lib/logger.js';
 import { AccessError } from '../modules/auth/authorization.js';
@@ -9,7 +10,7 @@ export const notFound: RequestHandler = (req, res) => {
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _next) => {
   void _next;
-  if (error instanceof AccessError) {
+  if (error instanceof AccessError || error instanceof CmsError) {
     res.status(error.status).json({ success: false, error: { code: error.code, message: error.message }, requestId: req.id });
     return;
   }

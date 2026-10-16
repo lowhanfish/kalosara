@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import type { MediaAsset, List } from "@/features/cms/client";
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -86,20 +88,63 @@ function Media({
   value: string | null;
   onChange: (v: string | null) => void;
 }) {
+  const auth = useAuth();
+  const runtime = useAuthRuntime();
+  const [search, setSearch] = useState("");
+  const query = useQuery({
+    queryKey: ["user", auth.user?.id, "cms-media", "profile-picker", search],
+    queryFn: () =>
+      runtime.request<List<MediaAsset>>(
+        `/admin/media?visibility=PUBLIC&limit=50&search=${encodeURIComponent(search)}`,
+      ),
+  });
+  const uploaded =
+    query.data?.items.filter(
+      (item) => item.mimeType.startsWith("image/") && item.url,
+    ) ?? [];
   return (
-    <label className="block">
-      {label}
-      <select
-        className="mt-1 w-full rounded border border-border p-3"
-        value={value ?? ""}
-        onChange={(e) => onChange(e.target.value || null)}
-      >
-        <option value="">Belum diisi</option>
-        {assets.map((asset) => (
-          <option key={asset}>{asset}</option>
-        ))}
-      </select>
-    </label>
+    <div>
+      <label className="block">
+        {label}
+        <select
+          className="mt-1 w-full rounded border border-border p-3"
+          aria-label={label}
+          value={value ?? ""}
+          onChange={(e) => onChange(e.target.value || null)}
+        >
+          <option value="">Belum diisi</option>
+          {value &&
+            !assets.includes(value) &&
+            !uploaded.some((item) => item.url === value) && (
+              <option value={value}>Gambar tersimpan</option>
+            )}
+          {uploaded.map((item) => (
+            <option key={item.id} value={item.url!}>
+              {item.alt || item.originalName}
+            </option>
+          ))}
+          {assets.map((asset) => (
+            <option key={asset}>{asset}</option>
+          ))}
+        </select>
+      </label>
+      <label className="mt-2 block text-sm">
+        Cari gambar untuk {label}
+        <input
+          className="mt-1 w-full rounded border border-border p-2"
+          value={search}
+          maxLength={100}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+      </label>
+      {query.isError && <p role="alert">Pustaka media belum dapat dimuat.</p>}
+      <p className="mt-2 text-xs text-muted">
+        Maksimal 50 hasil gambar publik.{" "}
+        <Link className="underline" href="/admin/berita">
+          Unggah atau kelola media
+        </Link>
+      </p>
+    </div>
   );
 }
 function Editor({ data, reload }: { data: Data; reload: () => void }) {
@@ -151,9 +196,9 @@ function Editor({ data, reload }: { data: Data; reload: () => void }) {
   return (
     <div className="space-y-10">
       <p>
-        Kelola satu kelurahan. Unggah media tersedia pada tahap berikutnya; saat
-        ini pilih aset lokal yang telah tersedia. Materi profil berupa teks
-        biasa.
+        Kelola satu kelurahan. Pilih aset lokal atau unggah gambar publik
+        melalui pustaka media untuk logo, hero, dan foto aparatur. Materi profil
+        berupa teks biasa.
       </p>
       <form
         className="space-y-4 rounded-xl border border-border p-5"
@@ -473,6 +518,9 @@ export default function ProfileAdmin() {
   });
   return (
     <main id="konten" tabIndex={-1} className="container py-10">
+      <Link className="mb-4 inline-block underline" href="/admin/berita">
+        Kelola berita dan media
+      </Link>
       <h1 className="mb-6 text-3xl font-bold">Kelola profil kelurahan</h1>
       {auth.user && (
         <button
@@ -520,7 +568,7 @@ export default function ProfileAdmin() {
         </p>
       )}
       {query.data &&
-        (auth.status === "AUTHENTICATED" || auth.status === "INITIALIZING") &&
+        auth.status !== "GUEST" &&
         auth.user?.role === "ADMIN_KELURAHAN" && (
           <Editor
             key={auth.user.id}

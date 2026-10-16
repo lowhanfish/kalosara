@@ -30,6 +30,8 @@ model User {
   verifiedAt          DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
+  news                News[]
+  media               MediaAsset[]
   profile             UserProfile?
   refreshSessions     RefreshSession[]
   passwordResetTokens PasswordResetToken[]
@@ -115,4 +117,92 @@ model Official {
   termEnd   DateTime? @db.Date
   status    String   @default("DRAFT") @db.VarChar(20)
   updatedAt DateTime @updatedAt
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MediaVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+model NewsCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique @db.VarChar(100)
+  name      String   @db.VarChar(120)
+  archived  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  news      News[]
+}
+
+model News {
+  id          String   @id @default(uuid()) @db.Uuid
+  slug        String   @unique @db.VarChar(180)
+  title       String   @db.VarChar(200)
+  excerpt     String   @db.VarChar(1000)
+  bodyHtml    String   @db.Text
+  status      PublicationStatus @default(DRAFT)
+  publishedAt DateTime?
+  version     Int      @default(1)
+  authorId    String   @db.Uuid
+  categoryId  String   @db.Uuid
+  coverId     String?  @db.Uuid
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  category    NewsCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  cover       MediaAsset? @relation("NewsCover", fields: [coverId], references: [id], onDelete: Restrict)
+  media       NewsMedia[]
+  revisions   NewsRevision[]
+
+  @@index([status, updatedAt])
+  @@index([categoryId, status])
+}
+
+model NewsRevision {
+  id        String   @id @default(uuid()) @db.Uuid
+  newsId    String   @db.Uuid
+  version   Int
+  editorId  String   @db.Uuid
+  snapshot  Json
+  mediaIds  String[]
+  createdAt DateTime @default(now())
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@unique([newsId, version])
+}
+
+model MediaAsset {
+  id           String   @id @default(uuid()) @db.Uuid
+  storageKey   String   @unique @db.VarChar(100)
+  originalName String   @db.VarChar(200)
+  mimeType     String   @db.VarChar(100)
+  size         Int
+  alt          String   @db.VarChar(300)
+  caption      String   @db.VarChar(1000)
+  visibility   MediaVisibility @default(PRIVATE)
+  archived     Boolean  @default(false)
+  ownerId      String   @db.Uuid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  owner        User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  covers       News[]   @relation("NewsCover")
+  news         NewsMedia[]
+
+  @@index([visibility, archived, createdAt])
+  @@index([ownerId])
+}
+
+model NewsMedia {
+  newsId  String @db.Uuid
+  mediaId String @db.Uuid
+  news    News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  media   MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+
+  @@id([newsId, mediaId])
 }

@@ -16,7 +16,7 @@ Frontend dan backend berada dalam satu repo Git `kalosara`. Keduanya tetap aplik
 
 ## Jalankan tanpa Docker
 
-Butuh Node.js 20.19+, pnpm 10, dan PostgreSQL 17. Buat database `kalosara` dan user lokal sesuai `DATABASE_URL`.
+Butuh Node.js 22.12+ untuk backend (frontend mendukung 20.19+), pnpm 10, dan PostgreSQL 17. Image backend menggunakan Node 22. Buat database `kalosara` dan user lokal sesuai `DATABASE_URL`.
 
 ```bash
 cp backend/.env.example backend/.env
@@ -65,7 +65,7 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 
 ## Batasan tahap ini
 
-Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum, CMS berita, dan layanan surat belum dibuat. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI akun umum dan dashboard lengkap belum dibuat.
+Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum dan layanan surat belum dibuat. CMS berita tersedia sejak Prompt 07. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI akun umum dan dashboard lengkap belum dibuat.
 
 ## Layout publik — Prompt 05
 
@@ -77,4 +77,14 @@ Desain terbaru mengikuti referensi navy/kuning pilihan pengguna: header dengan p
 
 ## Profil dan konfigurasi — Prompt 06
 
-Editor settings, lima bagian profil, serta aparatur tersedia pada `/admin/profil` untuk ADMIN_KELURAHAN. Gunakan migrasi `20261016010000_profile_cms` melalui `cd backend && npm run db:deploy` sebelum menjalankan versi ini. Konten draft/arsip tidak terbuka melalui API publik. Upload sementara memakai pilihan aset lokal; CMS berita belum dimulai. Laporan, kontrak API, kebijakan akses, hasil tes dan langkah review: [Prompt 06](backend/docs/profile-cms.md).
+Editor settings, lima bagian profil, serta aparatur tersedia pada `/admin/profil` untuk ADMIN_KELURAHAN. Gunakan migrasi `20261016010000_profile_cms` melalui `cd backend && npm run db:deploy` sebelum menjalankan versi ini. Konten draft/arsip tidak terbuka melalui API publik. Sejak Prompt 07, pilihan gambar juga membaca upload publik tervalidasi dari pustaka media. Laporan, kontrak API, kebijakan akses, hasil tes dan langkah review: [Prompt 06](backend/docs/profile-cms.md).
+
+## CMS berita dan media — Prompt 07
+
+Buka `/admin/berita` dan login menggunakan akun ADMIN_KELURAHAN terprovisi. Buat kategori, unggah media (default privat), buat berita DRAFT, simpan lalu preview. Status PUBLISHED/ARCHIVED serta pemulihan revisi tersedia. Halaman berita publik dinamis tetap menunggu Prompt 08; contoh desain belum diganti menjadi berita resmi.
+
+Sebelum menjalankan versi ini: `cd backend && npm ci && npm run db:generate && npm run db:deploy`. Migrasi baru `20261016020000_news_media` menambah model berita, kategori, revisi dan media. Backend memerlukan Node >=22.12 karena sanitizer versi perbaikan keamanan. Install frontend dengan `pnpm install --frozen-lockfile`.
+
+`UPLOAD_ROOT` opsional, default `uploads` relatif working directory backend; jangan arahkan ke folder web publik. Compose memakai volume `/app/uploads` yang sudah ada; image menyiapkan permission untuk user node. Jika volume lama tidak writable, perbaiki kepemilikannya untuk UID/GID user node pada image sebelum upload. Jangan menghapus volume berisi data. Backup database dan volume upload harus berpasangan. Nginx mengizinkan multipart 21 MiB pada endpoint upload (file maksimal 20 MiB); request JSON tetap kecil.
+
+Kontrak API, keputusan permission, extension Tiptap, perintah tes dan hasil review: [laporan Prompt 07](backend/docs/news-cms.md). Belum ada upload surat/berkas warga Tahap 02.

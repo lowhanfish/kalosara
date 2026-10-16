@@ -111,7 +111,13 @@ export function createAuthRuntime(
         !["TOKEN_EXPIRED", "UNAUTHENTICATED"].includes(error.code)
       ) {
         if (definitive(error)) guest(error);
-        else temporary(error);
+        else if (
+          path === "/auth/me" ||
+          !(error instanceof ApiError) ||
+          error.status === 0 ||
+          error.status >= 500
+        )
+          temporary(error);
         throw error;
       }
       if (invalid) throw error;
@@ -134,7 +140,13 @@ export function createAuthRuntime(
       } catch (retryError) {
         ensureCurrent();
         if (definitive(retryError)) guest(retryError);
-        else temporary(retryError);
+        else if (
+          path === "/auth/me" ||
+          !(retryError instanceof ApiError) ||
+          retryError.status === 0 ||
+          retryError.status >= 500
+        )
+          temporary(retryError);
         throw retryError;
       }
     }
