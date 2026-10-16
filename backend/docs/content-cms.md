@@ -43,7 +43,7 @@ Setelah migration diizinkan/diterapkan, buka `/admin/konten`, login admin terpro
 
 Migration hanya menambah tabel/enum/foreign key/indeks, tidak mereset atau menimpa tabel lama. Telah diterapkan dan diuji pada dua database disposable PostgreSQL native 18.4 di 127.0.0.1:55439, terpisah dari Neon dan Docker.
 
-**Belum diterapkan ke Neon.** Auto-review menolak tindakan migrate deploy ke database persisten karena menilai otorisasi tersebut belum ada; tidak ada eksekusi/bypass. Aktivasi runtime utama memerlukan persetujuan eksplisit untuk menjalankan `cd backend && npm run db:deploy` memakai DATABASE_URL yang ada. Sebelum itu endpoint empat kanal pada runtime utama belum siap digunakan; UI publik menampilkan state gangguan. Tidak ada reset, seed, tes atau akun QA di Neon.
+**Migrasi Neon berhasil diterapkan pada 17 Oktober 2026 setelah pengguna memberi persetujuan eksplisit.** `prisma migrate deploy` menerapkan hanya `20261016040000_public_content`; `prisma migrate status` melaporkan skema mutakhir. Penolakan auto-review sebelumnya tidak dilewati; eksekusi baru dilakukan setelah izin pengguna. DATABASE_URL yang ada dipakai tanpa ditimpa; tidak ada reset, seed, tes destruktif atau akun QA di Neon.
 
 Tidak ada env/dependency aplikasi baru. APP_ORIGIN dan FRONTEND_INTERNAL_URL backend serta SITE_ORIGIN frontend sudah menunjuk http://localhost:3001; API_INTERNAL_URL http://localhost:4000. Shared secret invalidasi diperiksa cocok tanpa ditampilkan atau diubah. Mutasi menulis invalidasi `public-content` dalam transaksi dan memakai pengiriman HMAC/retry yang ada; receiver mengekspirasi layout publik. Pembacaan kanal dan beranda no-store agar expiry tidak menunggu TTL.
 
@@ -81,7 +81,7 @@ Langkah reviewer setelah izin migration Neon: login `/admin/konten`; buat draft 
 
 ## 7. Risiko/pekerjaan tertunda
 
-Aktivasi Neon menunggu persetujuan; migration telah diuji pada PostgreSQL native 18.4, belum diverifikasi terhadap versi Neon pengguna. Tidak ada pengujian destruktif database pengguna, deployment HTTPS, uji beban, antivirus atau quota storage total. Album dibatasi 12 foto dan API maksimal 50 item; situs no-store menambah query baca pada empat kanal tetapi menjamin expiry tanpa job berat. Pustaka media memerlukan pencarian untuk file di luar 50 hasil teratas. Tidak ada reordering drag-and-drop atau FAQ opsional. Tidak ada konten resmi seed. Backup database dan folder upload harus berpasangan.
+Migration telah diterapkan pada Neon setelah izin eksplisit; seluruh suite integrasi tetap hanya dijalankan pada PostgreSQL native 18.4 terisolasi. Tidak ada pengujian destruktif database pengguna, deployment HTTPS, uji beban, antivirus atau quota storage total. Album dibatasi 12 foto dan API maksimal 50 item; situs no-store menambah query baca pada empat kanal tetapi menjamin expiry tanpa job berat. Pustaka media memerlukan pencarian untuk file di luar 50 hasil teratas. Tidak ada reordering drag-and-drop atau FAQ opsional. Tidak ada konten resmi seed. Backup database dan folder upload harus berpasangan.
 
 File PUBLIC merupakan keputusan publikasi file tersendiri; mengarsipkan item CMS tidak mencabut URL file PUBLIC yang sudah disetujui. Untuk rahasia gunakan PRIVATE sejak upload; UI memberi penjelasan ini. Media dengan referensi draft/arsip tetap dilindungi dari arsip sehingga penyimpanan perlu dimonitor.
 
@@ -89,6 +89,8 @@ Statistik/ilustrasi pada desain lama tetap berlabel contoh dan menunggu Prompt 1
 
 ## 8. Status
 
-**SIAP REVIEW untuk kode Prompt 09 dan hasil pengujian terisolasi. Aktivasi database/runtime utama BELUM SIAP sampai migration Neon disetujui.** Commit dan push hanya kode/dokumentasi setelah pemeriksaan lulus, lalu berhenti untuk review. Tidak melanjutkan Prompt 10.
+**SIAP REVIEW Prompt 09; migration Neon telah diterapkan dengan persetujuan pengguna.** Commit dan push hanya kode/dokumentasi setelah pemeriksaan lulus, lalu berhenti untuk review. Tidak melanjutkan Prompt 10.
 
 Cleanup akhir: frontend QA3002, backend QA4002 dan PostgreSQL native55439 telah dihentikan; database, akun, file, fixture dan kredensial uji sementara dibersihkan. Proses utama frontend3001/backend4000 serta Redis6380 tetap berjalan.
+
+Verifikasi aktivasi Neon (17 Oktober 2026): readiness dan empat API kanal langsung pada4000 serta melalui proxy3001 HTTP200; beranda, pengumuman, agenda, galeri, informasi-publik dan admin/konten HTTP200 tanpa state gangguan konten. Keempat kanal masih kosong (total0), tidak diisi seed. Cache Turbopack dev rusak saat startup dibersihkan hanya pada .next/dev/cache/turbopack; frontend kemudian berjalan normal. Tidak ada perubahan kode aplikasi atau pengujian destruktif. **SIAP REVIEW Prompt09 termasuk aktivasi Neon.**

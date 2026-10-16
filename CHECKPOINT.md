@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 09 siap review kode
+# Checkpoint KALOSARA — Prompt 09 siap review
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -15,7 +15,7 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 07 — CMS berita, kategori dan media | Selesai dan di-push | `b6ecc46` |
 | 08 — berita publik dan SEO | Selesai dan di-push | `a56c58e` |
 | Revisi runtime manual/Neon/upload | Selesai dan di-push | `867f095` |
-| 09 — pengumuman, agenda, galeri, informasi publik | Kode siap review; migrasi Neon menunggu persetujuan | lihat laporan Prompt 09 |
+| 09 — pengumuman, agenda, galeri, informasi publik | Selesai; migrasi Neon diterapkan dengan persetujuan | lihat laporan Prompt 09 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -168,3 +168,11 @@ QA Chrome build produksi 3002/backend4002 dengan DB/akun/file terisolasi: login,
 **SIAP REVIEW kode Prompt09; aktivasi Neon tertunda persetujuan.** Jangan lanjut Prompt10 atau surat Tahap02. Lihat laporan untuk SOP reviewer dan batasan. Commit/push setelah pemeriksaan lulus, lalu berhenti.
 
 Cleanup akhir: frontend QA3002, backend QA4002 dan PostgreSQL native55439 telah dihentikan; database, akun, file, fixture dan kredensial uji sementara dibersihkan. Proses utama frontend3001/backend4000 serta Redis6380 tetap berjalan.
+
+## Aktivasi Neon Prompt 09 — 17 Oktober 2026
+
+Pengguna memberi izin eksplisit menerapkan migrasi Prompt 09 dengan DATABASE_URL yang ada tanpa reset/seed. `prisma migrate deploy` berhasil menerapkan `20261016040000_public_content`; `prisma migrate status` melaporkan skema mutakhir. Catatan penundaan di bagian sebelumnya adalah riwayat, bukan status terkini. URL/rahasia tidak ditimpa atau ditampilkan. Tidak ada konten/akun seed maupun tes destruktif di Neon.
+
+Frontend/backend sempat berhenti di antara sesi; keduanya dijalankan kembali manual pada3001/4000 untuk smoke test baca-saja. Prompt10/Tahap02 tetap tidak dimulai.
+
+Verifikasi aktivasi Neon (17 Oktober 2026): readiness dan empat API kanal langsung pada4000 serta melalui proxy3001 HTTP200; beranda, pengumuman, agenda, galeri, informasi-publik dan admin/konten HTTP200 tanpa state gangguan konten. Keempat kanal masih kosong (total0), tidak diisi seed. Cache Turbopack dev rusak saat startup dibersihkan hanya pada .next/dev/cache/turbopack; frontend kemudian berjalan normal. Tidak ada perubahan kode aplikasi atau pengujian destruktif. **SIAP REVIEW Prompt09 termasuk aktivasi Neon.**
