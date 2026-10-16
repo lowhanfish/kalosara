@@ -11,7 +11,7 @@ const assets = [
   "/images/watundehoa/amirulah.webp",
   "/images/watundehoa/kantor.webp",
   "/images/watundehoa/papan-kantor.webp",
-  "/images/reference/crest.webp",
+  "/images/watundehoa/konawe.png",
 ];
 const slugs = [
   "sejarah",

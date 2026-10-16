@@ -1,3 +1,4 @@
+import { siteIdentity } from "@/lib/site-identity";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Clock3, Mail, MapPin, Phone } from "lucide-react";
@@ -8,10 +9,10 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
       <div className="container reference-footer-grid">
         <div className="reference-footer-brand">
           <Image
-            src={settings.logoUrl ?? "/images/reference/crest.webp"}
+            src={settings.logoUrl ?? siteIdentity.logo}
             alt=""
             width={43}
-            height={51}
+            height={43}
             unoptimized
             className="reference-footer-crest"
           />

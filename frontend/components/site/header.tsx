@@ -1,4 +1,5 @@
 "use client";
+import { siteIdentity } from "@/lib/site-identity";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -48,10 +49,10 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             className="portal-brand"
           >
             <Image
-              src={settings.logoUrl ?? "/images/reference/crest.webp"}
-              alt={`Logo pada desain ${settings.name}`}
-              width={47}
-              height={58}
+              src={settings.logoUrl ?? siteIdentity.logo}
+              alt="Lambang Kabupaten Konawe"
+              width={64}
+              height={64}
               unoptimized
               className="portal-crest"
             />

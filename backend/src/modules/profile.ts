@@ -8,7 +8,7 @@ import { loadActivePrincipal, requireRoles } from './auth/authorization.js';
 
 const text = z.string().trim().min(1).max(300);
 // Reviewed static assets and database-validated public image uploads.
-export const media = z.union([mediaUrlSchema, z.enum(['/images/watundehoa/amirulah.webp', '/images/watundehoa/kantor.webp', '/images/watundehoa/papan-kantor.webp', '/images/reference/crest.webp'])]);
+export const media = z.union([mediaUrlSchema, z.enum(['/images/watundehoa/amirulah.webp', '/images/watundehoa/kantor.webp', '/images/watundehoa/papan-kantor.webp', '/images/reference/crest.webp', '/images/watundehoa/konawe.png'])]);
 const httpsUrl = z.url().max(500).refine(v => new URL(v).protocol === 'https:');
 export const settingSchema = z.object({
   name: text, district: text, regency: text, address: text.nullable(),

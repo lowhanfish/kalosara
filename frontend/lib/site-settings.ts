@@ -20,7 +20,7 @@ export const fallbackSettings: SiteSettings = {
   phone: null,
   email: null,
   hours: null,
-  logoUrl: null,
+  logoUrl: siteIdentity.logo,
   relatedLinks: [],
   isExample: false,
 };
@@ -67,7 +67,12 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
     phone: text("phone"),
     email: text("email"),
     hours: text("hours"),
-    logoUrl: safeUrl(data.logoUrl) ? data.logoUrl : null,
+    logoUrl:
+      data.logoUrl === "/images/reference/crest.webp"
+        ? siteIdentity.logo
+        : safeUrl(data.logoUrl)
+          ? data.logoUrl
+          : null,
     relatedLinks: Array.isArray(data.relatedLinks)
       ? data.relatedLinks
           .filter(
