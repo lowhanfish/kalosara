@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafbf8;
-  --foreground: #19332e;
+  --background: #f8fafc;
+  --foreground: #193348;
   --surface: #ffffff;
-  --primary: #145b49;
-  --primary-hover: #0d4337;
-  --muted: #53675f;
-  --border: #dce5df;
-  --soft: #edf3eb;
-  --accent: #d7ad50;
+  --primary: #175b91;
+  --primary-hover: #104673;
+  --muted: #536779;
+  --border: #dce5ed;
+  --soft: #edf3f9;
+  --accent: #d4aa58;
   --focus: #a04a0a;
   --danger: #a4262c;
   --radius: 0.75rem;
   --space-unit: 0.25rem;
-  --elevation-card: 0 8px 30px #16392b08;
+  --elevation-card: 0 8px 30px #183d5f0b;
 }
 @theme inline {
   --color-background: var(--background);
@@ -71,8 +71,8 @@ summary,
   outline-offset: 4px;
 }
 ::selection {
-  background: #d9ead1;
-  color: #163b2f;
+  background: #daeaf7;
+  color: #15354f;
 }
 h1,
 h2,
@@ -152,4 +152,29 @@ dialog::backdrop {
 footer :focus-visible,
 .bg-\[\#163e33\] :focus-visible {
   outline-color: #f5dca1;
+}
+
+.hero-office {
+  object-position: 62% center;
+}
+.hero-shade {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(9, 30, 50, 0.97) 0%,
+      rgba(9, 30, 50, 0.9) 23%,
+      rgba(9, 30, 50, 0.48) 53%,
+      rgba(9, 30, 50, 0.12) 100%
+    ),
+    linear-gradient(0deg, rgba(9, 30, 50, 0.55), transparent 45%);
+}
+@media (max-width: 767px) {
+  .hero-office {
+    object-position: 57% center;
+  }
+  .hero-shade {
+    background:
+      linear-gradient(90deg, rgba(9, 30, 50, 0.94), rgba(9, 30, 50, 0.64)),
+      linear-gradient(0deg, rgba(9, 30, 50, 0.4), transparent);
+  }
 }

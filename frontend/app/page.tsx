@@ -1,4 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
+import { siteIdentity } from "@/lib/site-identity";
+import { LeaderSection } from "@/components/site/leader-section";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -12,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Neighborhood } from "@/components/site/neighborhood";
 
 const shortcuts = [
   {
@@ -43,45 +45,75 @@ const shortcuts = [
 export default function Home() {
   return (
     <main id="konten" tabIndex={-1}>
-      <section className="overflow-hidden border-b border-border bg-[#f0f4e9]">
-        <div className="container grid items-center gap-4 pt-12 pb-8 lg:grid-cols-[1.05fr_1fr] lg:py-14">
-          <div className="relative z-10 py-4">
-            <p className="eyebrow flex items-center gap-3">
-              <span className="h-px w-7 bg-primary" />
-              Terhubung, terbuka, melayani
-            </p>
-            <h1 className="display-title mt-5 max-w-xl text-5xl sm:text-6xl lg:text-[4.25rem]">
-              Lebih dekat dengan
-              <br className="hidden sm:block" /> kelurahan Anda.
-            </h1>
-            <p className="mt-6 max-w-md text-base leading-7 text-muted">
-              Temukan informasi lingkungan, kabar kelurahan, dan panduan
-              pelayanan dalam satu tempat.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild>
-                <Link href="/pelayanan">
-                  Jelajahi pelayanan{" "}
-                  <ArrowUpRight aria-hidden="true" className="ml-4 size-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/profil">Kenali kelurahan</Link>
-              </Button>
-            </div>
-            <p className="mt-6 text-xs text-muted">
-              Portal dalam pengembangan. Konten resmi belum diterbitkan.
-            </p>
+      <section className="watundehoa-hero relative isolate overflow-hidden bg-[#102e49] text-white">
+        <Image
+          src={siteIdentity.officePhoto}
+          alt="Tampak depan Kantor Kelurahan Watundehoa dengan bangunan biru dan atap merah"
+          fill
+          unoptimized
+          preload
+          sizes="100vw"
+          className="hero-office object-cover"
+        />
+        <div className="hero-shade absolute inset-0" aria-hidden="true" />
+        <div className="container relative z-10 flex min-h-[560px] flex-col justify-center py-14 lg:min-h-[620px] lg:py-20">
+          <p className="mb-6 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[.18em] text-[#f3d58f]">
+            <span className="h-px w-8 bg-[#e8bf69]" />
+            Selamat datang di Watundehoa
+          </p>
+          <h1 className="max-w-2xl text-[2.8rem] leading-[1.08] font-semibold tracking-[-.045em] sm:text-6xl lg:text-[4.5rem]">
+            Lebih dekat.
+            <br />
+            Lebih mudah.
+            <br />
+            <span className="font-display font-normal italic text-[#f3d58f]">
+              Untuk warga.
+            </span>
+          </h1>
+          <p className="mt-6 max-w-md text-sm leading-7 text-[#e2ebf4] sm:text-base">
+            Portal informasi Kelurahan Watundehoa.
+            <br />
+            Kecamatan Puriala, Kabupaten Konawe.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button
+              asChild
+              className="bg-white text-[#173951] hover:bg-[#e7eff6]"
+            >
+              <Link href="/pelayanan">
+                Informasi pelayanan{" "}
+                <ArrowUpRight aria-hidden="true" className="ml-4 size-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="border-white/40 bg-transparent text-white hover:bg-white/10"
+            >
+              <Link href="/profil">Mengenal Watundehoa</Link>
+            </Button>
           </div>
-          <div className="relative mx-auto w-full max-w-xl">
-            <Neighborhood />
-            <p className="text-right text-[10px] tracking-wide text-muted">
-              ILUSTRASI KANTOR • BUKAN LOKASI SEBENARNYA
+          <div className="mt-10 flex items-center gap-3 text-[11px] text-[#d0dfeb]">
+            <span
+              className="size-1.5 rounded-full bg-[#f0cb7d]"
+              aria-hidden="true"
+            />
+            Informasi publik, terbuka untuk semua.
+          </div>
+          <div className="mt-8 max-w-xs border-t border-white/25 pt-4 text-xs lg:absolute lg:right-0 lg:bottom-8 lg:mt-0 lg:text-right">
+            <p className="font-semibold text-white">
+              Kantor Kelurahan Watundehoa
+            </p>
+            <p className="mt-1 text-[#d0dfeb]">
+              Kecamatan Puriala · Kabupaten Konawe
             </p>
           </div>
         </div>
       </section>
-      <section aria-labelledby="akses-cepat" className="container py-9">
+      <section
+        aria-labelledby="akses-cepat"
+        className="container relative z-10 py-8 lg:-mt-7 lg:pt-0"
+      >
         <h2 id="akses-cepat" className="sr-only">
           Akses cepat
         </h2>
@@ -90,7 +122,7 @@ export default function Home() {
             <Link
               key={href}
               href={href}
-              className="group flex items-start gap-4 rounded-card border border-border bg-white p-5 transition-colors hover:border-primary"
+              className="group flex items-start gap-4 rounded-xl border border-border bg-white p-5 shadow-card transition-colors hover:border-primary"
             >
               <span className="rounded-lg bg-soft p-2.5 text-primary">
                 <Icon aria-hidden="true" className="size-5" strokeWidth={1.5} />
@@ -109,6 +141,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <LeaderSection />
       <section className="container grid gap-10 pt-5 pb-16 lg:grid-cols-[1.6fr_1fr]">
         <div>
           <div className="mb-6 flex items-end justify-between gap-4">
@@ -127,7 +160,7 @@ export default function Home() {
             title="Ruang untuk kabar baik"
             description="Belum ada berita yang diterbitkan. Kegiatan dan informasi resmi kelurahan akan hadir di sini."
           >
-            <Badge>Pratinjau • belum ada konten resmi</Badge>
+            <Badge>Publikasi akan hadir di sini</Badge>
           </EmptyState>
         </div>
         <aside>
@@ -175,10 +208,44 @@ export default function Home() {
           </div>
         </aside>
       </section>
-      <section className="border-y border-border bg-[#edf2e9]">
+      <section className="container pb-16" aria-labelledby="kantor-title">
+        <div className="grid overflow-hidden rounded-2xl border border-border bg-white md:grid-cols-2">
+          <div className="relative min-h-56 sm:min-h-72">
+            <Image
+              src={siteIdentity.officeSignPhoto}
+              alt="Papan nama Kantor Kelurahan Watundehoa di depan halaman kantor"
+              fill
+              unoptimized
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-col items-start justify-center p-7 sm:p-10">
+            <p className="eyebrow">Ruang pelayanan masyarakat</p>
+            <h2 id="kantor-title" className="display-title mt-3 text-3xl">
+              Mari terhubung
+              <br />
+              dengan kelurahan.
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Kelurahan Watundehoa
+              <br />
+              Kecamatan Puriala, Kabupaten Konawe.
+            </p>
+            <Link
+              href="/kontak"
+              className="mt-6 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary"
+            >
+              Alamat dan informasi kontak{" "}
+              <ArrowUpRight aria-hidden="true" className="size-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section className="border-y border-border bg-soft">
         <div className="container flex flex-col items-start justify-between gap-6 py-10 md:flex-row md:items-center">
           <div className="flex items-start gap-5">
-            <span className="hidden rounded-full border border-[#bccfb9] p-4 sm:block">
+            <span className="hidden rounded-full border border-border p-4 sm:block">
               <Newspaper
                 aria-hidden="true"
                 className="size-7 text-primary"

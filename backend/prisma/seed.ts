@@ -6,7 +6,7 @@ try {
   await prisma.appSetting.upsert({
     where: { key: 'site.name' },
     update: {},
-    create: { key: 'site.name', value: 'Kelurahan Contoh' },
+    create: { key: 'site.name', value: 'Kelurahan Watundehoa' },
   });
 } finally {
   await prisma.$disconnect();

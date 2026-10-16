@@ -1,3 +1,4 @@
+import { siteIdentity } from "./site-identity";
 export type SiteSettings = {
   name: string;
   address: string | null;
@@ -9,14 +10,14 @@ export type SiteSettings = {
   isExample: boolean;
 };
 export const fallbackSettings: SiteSettings = {
-  name: "Kelurahan Contoh",
-  address: null,
+  name: siteIdentity.name,
+  address: siteIdentity.location,
   phone: null,
   email: null,
   hours: null,
   logoUrl: null,
   relatedLinks: [],
-  isExample: true,
+  isExample: false,
 };
 const safeUrl = (value: unknown): value is string => {
   if (
@@ -37,13 +38,16 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
   if (!value || typeof value !== "object") return null;
   const data = value as Record<string, unknown>;
   if (typeof data.name !== "string" || !data.name.trim()) return null;
+  // Ignore only the known development seed; explicit backend settings still take precedence.
+  const legacyExample = data.name === "Kelurahan Contoh";
   const text = (key: string) =>
     typeof data[key] === "string" && data[key].length <= 300
       ? (data[key] as string)
       : null;
   return {
-    name: data.name.slice(0, 300),
-    address: text("address"),
+    name: legacyExample ? fallbackSettings.name : data.name.slice(0, 300),
+    address:
+      text("address") ?? (legacyExample ? fallbackSettings.address : null),
     phone: text("phone"),
     email: text("email"),
     hours: text("hours"),
@@ -56,7 +60,7 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
           )
           .slice(0, 10)
       : [],
-    isExample: data.isExample !== false,
+    isExample: legacyExample ? false : data.isExample !== false,
   };
 }
 

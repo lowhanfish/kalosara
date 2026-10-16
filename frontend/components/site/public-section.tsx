@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { siteIdentity } from "@/lib/site-identity";
 import { ArrowUpRight, Clock3, MapPin, Phone } from "lucide-react";
 import { publicPages, type PublicPath } from "@/lib/public-pages";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -32,7 +34,11 @@ export async function PublicSection({ href }: { href: PublicPath }) {
       />
       <div className="mb-9 flex flex-wrap items-end justify-between gap-5 border-b border-border pb-8">
         <div>
-          <Badge>Pratinjau • konten resmi belum tersedia</Badge>
+          <Badge>
+            {href === "/kontak"
+              ? "Kelurahan Watundehoa"
+              : "Informasi kelurahan"}
+          </Badge>
           <h1 className="display-title mt-5 text-4xl sm:text-5xl">
             {page.title === "Profil" ? "Profil kelurahan" : page.title}
           </h1>
@@ -43,6 +49,16 @@ export async function PublicSection({ href }: { href: PublicPath }) {
       {href === "/kontak" ? (
         <div className="grid items-start gap-7 lg:grid-cols-2">
           <Card>
+            <div className="relative mb-6 aspect-[2/1] overflow-hidden rounded-lg">
+              <Image
+                src={siteIdentity.officePhoto}
+                alt="Gedung Kantor Kelurahan Watundehoa"
+                fill
+                unoptimized
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
             <p className="eyebrow">Kantor kelurahan</p>
             <h2 className="mt-3 text-2xl font-semibold">{settings.name}</h2>
             <dl className="mt-7 space-y-6 text-sm">

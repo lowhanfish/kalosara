@@ -66,3 +66,11 @@ Laporan lengkap: `frontend/docs/public-layout.md`. Design tokens dan 12 komponen
 Lint/typecheck/build frontend dan backend lulus; frontend 19/19 tes, backend 8/8 tes. Browser QA menguji semua 10 rute pada 360, 768 dan 1440 px (30 kombinasi tanpa overflow), dialog/keyboard, pencarian, form kontak, toast, skip link dan halaman sistem. Smoke produksi homepage 200 dan tanpa log error browser. Native dialog diperkuat focus trap. Guest anonim biasa kini boleh tetap pada deep link publik; RouteGuard dan invalidasi identitas lama tetap mengalihkan bila diperlukan.
 
 **Berikutnya hanya setelah diminta: Prompt 06 — konfigurasi kelurahan, profil dan aparatur.** Jangan otomatis melanjutkan atau memulai dashboard, CMS berita maupun pelayanan surat.
+
+## Revisi desain Watundehoa — 16 Oktober 2026
+
+Pengguna mengonfirmasi website untuk **Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe**, dengan Lurah **AMIRULAH, S.Si**, serta memberikan tiga foto. Identitas contoh diganti data tersebut; fallback/backend seed lama `Kelurahan Contoh` dinormalisasi tanpa menimpa konfigurasi instansi lain. Nomor telepon, email, jam pelayanan, alamat jalan rinci, sejarah, visi-misi dan sambutan belum diberikan: jangan mengarangnya.
+
+Beranda kini memakai foto kantor sebagai hero, palet biru tua/putih/emas, bagian potret lurah, foto papan kantor dan akses cepat. Profil dan kontak menampilkan identitas/foto nyata. Aset WebP ada di `frontend/public/images/watundehoa/`; potret transparan dipertahankan dan ruang transparan luar dipangkas, tanpa retouch wajah. Komponen gambar memakai aset WebP yang sudah dikompresi agar tidak bergantung pada optimizer runtime. Sumber identitas frontend: `frontend/lib/site-identity.ts`. Revisi ini tetap perbaikan Prompt 05, belum memulai CMS/Prompt 06.
+
+Verifikasi revisi Watundehoa: lint/typecheck/test/build frontend dan backend lulus (19 tes frontend, 8 tes backend). Beranda, profil dan kontak diperiksa pada 360, 768, 1440 px: 9 kombinasi tanpa overflow atau gambar rusak. Tidak ada migrasi/env/dependency baru. Nomor kontak dan jam pelayanan tetap belum diisi.

@@ -26,11 +26,13 @@ export function projectPublicSettings(rows: { key: string; value: unknown }[]) {
     const parsed = fields[key].safeParse(data.get(key));
     return parsed.success ? parsed.data : null;
   }
+  const configuredName = read('site.name');
+  const name = typeof configuredName === 'string' && configuredName !== 'Kelurahan Contoh' ? configuredName : 'Kelurahan Watundehoa';
   return {
-    name: read('site.name') ?? 'Kelurahan Contoh',
-    address: read('site.address'), phone: read('site.phone'), email: read('site.email'),
+    name,
+    address: read('site.address') ?? (name === 'Kelurahan Watundehoa' ? 'Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe' : null), phone: read('site.phone'), email: read('site.email'),
     hours: read('site.hours'), logoUrl: read('site.logoUrl'),
-    relatedLinks: read('site.relatedLinks') ?? [], isExample: read('site.isExample') !== false,
+    relatedLinks: read('site.relatedLinks') ?? [], isExample: read('site.isExample') ?? (name !== 'Kelurahan Watundehoa'),
   };
 }
 

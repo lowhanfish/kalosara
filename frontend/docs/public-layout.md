@@ -98,3 +98,13 @@ Belum ada konten resmi, editor pengaturan/profil/aparatur, CMS berita, pencarian
 ## 8. Status
 
 SIAP REVIEW untuk Prompt 05. Commit dan push ke origin/main mengikuti gerbang lint/typecheck/test/build yang telah lulus. Jangan melanjutkan Prompt 06 tanpa instruksi pengguna.
+
+## Revisi identitas dan desain Watundehoa
+
+Pada 16 Oktober 2026 pengguna mengganti identitas contoh dengan Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe dan mengonfirmasi Lurah AMIRULAH, S.Si. Foto `Lurah Watundehoa.png`, `Papan Kantor Kelurahan Watundehoa.png`, dan `Kantor Kelurahan.png` dipakai sebagai aset WebP lokal. Foto tidak digenerasi ulang; transparansi potret dipertahankan, ruang transparan luar dipangkas dan resolusi/kompresi disesuaikan.
+
+Palet menjadi biru tua, putih dan emas. Foto kantor menggantikan ilustrasi generik di hero, potret lurah diberi crop tubuh bagian atas, dan papan nama kantor tampil pada bagian lokasi. Header, metadata, footer, profil dan kontak menggunakan identitas nyata. Belum ada logo resmi terpisah; ikon gedung tetap penanda visual, bukan lambang pemerintah yang direka. Tidak dibuat kutipan/sambutan atas nama lurah.
+
+Fallback yang telah dikonfirmasi pengguna dan nilai development `Kelurahan Contoh` dinormalisasi ke Watundehoa; konfigurasi backend lain tetap dihormati. Seed hanya mengubah nilai default untuk database baru, tidak menjalankan pembaruan database yang ada. Tidak ada migrasi/env/dependency baru. Fitur auth, menu, dan pembatasan scope CMS tetap berlaku.
+
+Verifikasi revisi Watundehoa: lint/typecheck/test/build frontend dan backend lulus (19 tes frontend, 8 tes backend). Beranda, profil dan kontak diperiksa pada 360, 768, 1440 px: 9 kombinasi tanpa overflow atau gambar rusak. Tidak ada migrasi/env/dependency baru. Nomor kontak dan jam pelayanan tetap belum diisi.

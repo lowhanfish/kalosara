@@ -20,7 +20,7 @@ test("public identity cannot introduce script or protocol-relative URLs", () => 
   assert.deepEqual(settings.relatedLinks, [{ label: "Safe", href: "/kontak" }]);
   assert.equal(settings.isExample, false);
   assert.equal(parseSiteSettings({ name: 12 }), null);
-  assert.equal(fallbackSettings.isExample, true);
+  assert.equal(fallbackSettings.isExample, false);
   assert.equal(fallbackSettings.phone, null);
 });
 

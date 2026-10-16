@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Landmark, MapPin } from "lucide-react";
+import { siteIdentity } from "@/lib/site-identity";
 import { publicPages } from "@/lib/public-pages";
 import type { SiteSettings } from "@/lib/site-settings";
 import { Dialog } from "@/components/ui/dialog";
@@ -26,7 +27,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
       <a className="skip-link" href="#konten">
         Langsung ke konten
       </a>
-      <div className="bg-[#163e33] text-white">
+      <div className="bg-[#102d45] text-white">
         <div className="container flex min-h-9 flex-wrap items-center justify-between gap-x-6 gap-y-1 py-2 text-[11px]">
           <p className="flex items-center gap-2">
             <span
@@ -35,7 +36,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             />
             {settings.isExample
               ? "Pratinjau portal • Identitas dan konten contoh"
-              : "Portal informasi kelurahan"}
+              : "Pemerintah Kabupaten Konawe • Kecamatan Puriala"}
           </p>
           <Link
             href="/kontak"
@@ -50,7 +51,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
         <div className="container flex min-h-24 items-center justify-between gap-5 py-4">
           <Link
             href="/"
-            aria-label={`KALOSARA — beranda ${settings.name}`}
+            aria-label={`Beranda ${settings.name}`}
             className="flex min-w-0 items-center gap-3"
           >
             {settings.logoUrl ? (
@@ -64,7 +65,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               />
             ) : (
               <span
-                className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[#c4d7c9] bg-soft text-primary"
+                className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-border bg-soft text-primary"
                 title="Slot logo resmi belum diisi"
               >
                 <Landmark
@@ -75,10 +76,15 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               </span>
             )}
             <span className="min-w-0">
-              <span className="block text-xl font-extrabold tracking-[.15em] text-primary">
+              <span className="mb-0.5 block text-[9px] font-semibold tracking-[.18em] text-primary">
                 KALOSARA
               </span>
-              <span className="block text-xs text-muted">{settings.name}</span>
+              <span className="block text-[1.35rem] font-bold tracking-tight text-foreground">
+                {settings.name.replace(/^Kelurahan /, "")}
+              </span>
+              <span className="block text-[10px] font-medium tracking-wide text-muted">
+                Kelurahan · {siteIdentity.district}
+              </span>
             </span>
           </Link>
           <div className="hidden items-center gap-5 lg:flex">

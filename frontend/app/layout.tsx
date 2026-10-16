@@ -7,8 +7,12 @@ import { ToastProvider } from "@/components/ui/toast";
 import { AuthProvider, AuthRecovery } from "@/features/auth/auth-provider";
 
 export const metadata: Metadata = {
-  title: { default: "KALOSARA — Portal kelurahan", template: "%s | KALOSARA" },
-  description: "Kanal Layanan Online Surat dan Administrasi Rakyat",
+  title: {
+    default: "Kelurahan Watundehoa — KALOSARA",
+    template: "%s | KALOSARA",
+  },
+  description:
+    "Portal informasi Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe. Profil, informasi publik, dan panduan pelayanan masyarakat.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

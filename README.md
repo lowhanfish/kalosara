@@ -61,7 +61,7 @@ cd backend && npm run lint && npm run typecheck && npm test && npm run build
 cd frontend && pnpm lint && pnpm typecheck && pnpm test && pnpm build
 ```
 
-Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi, token reset, dan audit. Seed development mengisi nama dummy `Kelurahan Contoh` tanpa akun staf. Provisioning admin/lurah dilakukan hanya melalui CLI terpisah, sesuai [rancangan identitas](backend/docs/auth-design.md). Jangan pakai data pribadi atau rahasia di seed maupun Git.
+Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi, token reset, dan audit. Seed mengisi identitas awal `Kelurahan Watundehoa` sesuai konfirmasi pengguna, tanpa akun staf. Provisioning admin/lurah dilakukan hanya melalui CLI terpisah, sesuai [rancangan identitas](backend/docs/auth-design.md). Jangan pakai data pribadi atau rahasia di seed maupun Git.
 
 ## Batasan tahap ini
 
@@ -70,3 +70,5 @@ Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian
 ## Layout publik — Prompt 05
 
 Sepuluh halaman publik, design system responsif, pencarian menu, dan state loading/404/500/maintenance sudah tersedia. Identitas dibaca dari `GET /api/v1/public/settings` dengan fallback yang bertanda contoh. Kontrak pengaturan, daftar file, hasil tes, dan batasan tersedia di [laporan Prompt 05](frontend/docs/public-layout.md). CMS dan konten resmi belum dibuat.
+
+Revisi desain memakai foto kantor dan Lurah **AMIRULAH, S.Si** untuk Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe. Foto lokal yang sudah dikompresi tersedia di `frontend/public/images/watundehoa/`; sumber identitas frontend berada di `frontend/lib/site-identity.ts`.
