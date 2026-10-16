@@ -1,4 +1,5 @@
 import express from 'express';
+import { publicProfileRouter, profileAdminRouter } from './modules/profile.js';
 import cookieParser from 'cookie-parser';
 import { randomUUID } from 'node:crypto';
 import { pinoHttp } from 'pino-http';
@@ -33,6 +34,8 @@ export function createApp() {
     }
   });
 
+  app.use('/api/v1/public/profile', publicProfileRouter);
+  app.use('/api/v1/admin/profile', profileAdminRouter);
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/public/settings', publicSettingsRouter);
 

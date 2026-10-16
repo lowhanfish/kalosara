@@ -23,7 +23,7 @@ export function clearSessionCookies(res: Response): void {
 
 export function issueCsrf(res: Response): string {
   const token = randomBytes(32).toString('base64url');
-  res.cookie(CSRF_COOKIE, token, { ...authCookieOptions('/api/v1/auth', false), maxAge: REFRESH_TTL_MS });
+  res.cookie(CSRF_COOKIE, token, { ...authCookieOptions('/api/v1', false), maxAge: REFRESH_TTL_MS });
   return token;
 }
 

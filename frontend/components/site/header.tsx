@@ -63,7 +63,8 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
                 {settings.name.replace(/^Kelurahan /, "")}
               </span>
               <span className="mt-1 block text-[9px] font-medium">
-                Kecamatan Puriala, Kabupaten Konawe
+                {settings.district ?? "Kecamatan Puriala"},{" "}
+                {settings.regency ?? "Kabupaten Konawe"}
               </span>
             </span>
           </Link>
@@ -79,7 +80,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             </nav>
           </div>
           <div className="portal-mobile-menu">
-            <Dialog title="Jelajahi Watundehoa" triggerLabel="Menu">
+            <Dialog title={`Jelajahi ${settings.name}`} triggerLabel="Menu">
               <nav
                 aria-label="Navigasi seluler"
                 className="mb-6 grid grid-cols-2 gap-x-4"

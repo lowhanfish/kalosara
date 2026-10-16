@@ -87,3 +87,32 @@ model AuditLog {
   @@index([actorId, createdAt])
   @@index([createdAt])
 }
+
+// One installation, one kelurahan. No tenant identifier.
+model SiteSetting {
+  id        String   @id @default("site")
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  slug      String   @id @db.VarChar(60)
+  title     String   @db.VarChar(160)
+  content   String   @db.Text
+  status    String   @default("DRAFT") @db.VarChar(20)
+  updatedAt DateTime @updatedAt
+}
+
+model Official {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(160)
+  position  String   @db.VarChar(160)
+  unit      String   @db.VarChar(160)
+  sortOrder Int      @default(0)
+  photoUrl  String?  @db.VarChar(500)
+  active    Boolean  @default(true)
+  termStart DateTime? @db.Date
+  termEnd   DateTime? @db.Date
+  status    String   @default("DRAFT") @db.VarChar(20)
+  updatedAt DateTime @updatedAt
+}

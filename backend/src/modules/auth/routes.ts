@@ -23,11 +23,11 @@ const registerLimit = limiter(60 * 60_000, 5);
 const loginLimit = limiter(15 * 60_000, 10);
 const forgotLimit = limiter(60 * 60_000, 5);
 
-const requireMutation: RequestHandler = (req, _res, next) => {
+export const requireMutation: RequestHandler = (req, _res, next) => {
   try { validateMutation(req); next(); } catch (error) { next(error); }
 };
 
-const authenticate: RequestHandler = async (req, _res, next) => {
+export const authenticate: RequestHandler = async (req, _res, next) => {
   try {
     const raw = req.cookies?.[ACCESS_COOKIE];
     if (typeof raw !== 'string') throw new AccessError(401, 'UNAUTHENTICATED', 'Access token required');

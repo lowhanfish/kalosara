@@ -8,7 +8,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
       <div className="container reference-footer-grid">
         <div className="reference-footer-brand">
           <Image
-            src="/images/reference/crest.webp"
+            src={settings.logoUrl ?? "/images/reference/crest.webp"}
             alt=""
             width={43}
             height={51}
@@ -19,10 +19,11 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             KELURAHAN
           </p>
           <p className="mt-1 text-xl font-extrabold uppercase tracking-wide">
-            Watundehoa
+            {settings.name.replace(/^Kelurahan /, "")}
           </p>
           <p className="mt-1 text-[10px] text-[#cbd9e5]">
-            Kecamatan Puriala, Kabupaten Konawe
+            {settings.district ?? "Kecamatan Puriala"},{" "}
+            {settings.regency ?? "Kabupaten Konawe"}
           </p>
           <p className="mt-2 text-sm text-[#cbd9e5]">
             Kanal Layanan Online Surat dan

@@ -1,6 +1,11 @@
 import { siteIdentity } from "./site-identity";
 export type SiteSettings = {
   name: string;
+  district?: string;
+  regency?: string;
+  heroUrl?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   address: string | null;
   phone: string | null;
   email: string | null;
@@ -45,6 +50,17 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
       ? (data[key] as string)
       : null;
   return {
+    district: text("district") ?? siteIdentity.district,
+    regency: text("regency") ?? siteIdentity.regency,
+    heroUrl: safeUrl(data.heroUrl) ? data.heroUrl : null,
+    latitude:
+      typeof data.latitude === "number" && Math.abs(data.latitude) <= 90
+        ? data.latitude
+        : null,
+    longitude:
+      typeof data.longitude === "number" && Math.abs(data.longitude) <= 180
+        ? data.longitude
+        : null,
     name: legacyExample ? fallbackSettings.name : data.name.slice(0, 300),
     address:
       text("address") ?? (legacyExample ? fallbackSettings.address : null),
@@ -69,7 +85,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const response = await fetch(
       `${process.env.API_INTERNAL_URL ?? "http://localhost:4000"}/api/v1/public/settings`,
       {
-        next: { revalidate: 60 },
+        cache: "no-store",
         signal: AbortSignal.timeout(3000),
       },
     );

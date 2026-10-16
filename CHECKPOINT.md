@@ -92,3 +92,13 @@ Audit berita: rute `/berita` sudah ada tetapi sebelumnya hanya kerangka. Tidak d
 Perubahan tidak menambah CMS, tabel, env, dependency atau dashboard. Laporan dan batasan ada di `frontend/docs/public-layout.md`.
 
 Verifikasi koreksi: frontend lint/typecheck/19 tes/build lulus; 44 kombinasi browser tanpa overflow/gambar rusak. **SIAP REVIEW desain**, integrasi berita resmi menunggu sumber pengguna.
+
+## Prompt 06 selesai — berhenti untuk review
+
+Laporan delapan bagian: `backend/docs/profile-cms.md`. Tiga tabel baru SiteSetting (singleton), Page dan Official dengan unit organisasi sederhana. Editor `/admin/profil` menyediakan login admin, settings, lima bagian profil, draft/publish/arsip, preview teks aman, aparatur, dan logout. Backend memeriksa sesi/akun aktif/role ADMIN_KELURAHAN serta Origin/CSRF pada mutasi; LURAH tetap tanpa izin kelola. Audit dicatat dalam transaksi. Cookie CSRF kini path `/api/v1` agar berlaku untuk CMS.
+
+Identitas Watundehoa/Puriala/Konawe dan AMIRULAH, S.Si dipertahankan. Desain, CSS dan aset `961c540` dipertahankan; frontend mengikat identitas/profil/media ke data backend tanpa deploy ulang. Profil punya metadata dinamis, breadcrumb, state kosong/error, aparatur published dan alamat/peta. Media sementara hanya empat aset lokal; upload dan CMS berita belum dibuat. Migration baru: `20261016010000_profile_cms`; tanpa env/dependency baru. Terapkan migration sebelum menjalankan versi ini.
+
+Verifikasi: backend lint/typecheck/build, 10 tes unit/HTTP dan 6 tes PostgreSQL lulus; frontend lint/typecheck/build dan 19 tes lulus. Browser login/settings/nama navbar-footer-profil, draft/preview/publish, XSS sebagai teks, aparatur UI, SEO dan 12 kombinasi responsif (360/768/1440) lulus tanpa overflow/gambar rusak/pageerror. Database dan akun uji sementara dibersihkan. Batasan: editor plain text, last-write-wins, menyimpan DRAFT menarik halaman dari publik (belum revisi paralel), komposit hero default tetap gambar pilihan pengguna. Belum deployment produksi.
+
+**SIAP REVIEW Prompt 06. Jangan mulai Prompt 07 sebelum instruksi pengguna berikutnya.**

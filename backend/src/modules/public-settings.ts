@@ -1,3 +1,4 @@
+import { readSettings } from './profile.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
@@ -38,6 +39,11 @@ export function projectPublicSettings(rows: { key: string; value: unknown }[]) {
 
 export const publicSettingsRouter = Router();
 publicSettingsRouter.get('/', async (req, res) => {
+  const settings = await readSettings();
+  if (settings) {
+    res.json({ success: true, data: { settings: { ...settings, isExample: false } }, requestId: req.id });
+    return;
+  }
   const rows = await prisma.appSetting.findMany({ where: { key: { in: Object.keys(fields) } }, select: { key: true, value: true } });
   res.json({ success: true, data: { settings: projectPublicSettings(rows) }, requestId: req.id });
 });

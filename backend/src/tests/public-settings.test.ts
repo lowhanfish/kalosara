@@ -17,6 +17,7 @@ describe('public site identity', () => {
     expect(JSON.stringify(settings)).not.toContain('private');
   });
   it('serves the DB identity in the standard envelope', async () => {
+    const settingSpy = vi.spyOn(prisma.siteSetting, 'findUnique').mockResolvedValue(null);
     const spy = vi.spyOn(prisma.appSetting, 'findMany').mockResolvedValue([
       { key: 'site.name', value: 'Kelurahan Uji', createdAt: new Date(), updatedAt: new Date() },
     ]);
@@ -25,6 +26,6 @@ describe('public site identity', () => {
       expect(response.body.data.settings.name).toBe('Kelurahan Uji');
       expect(response.body.requestId).toBe(response.headers['x-request-id']);
       expect(spy).toHaveBeenCalledWith(expect.objectContaining({ where: { key: { in: expect.not.arrayContaining(['auth.secret']) } } }));
-    } finally { spy.mockRestore(); }
+    } finally { spy.mockRestore(); settingSpy.mockRestore(); }
   });
 });

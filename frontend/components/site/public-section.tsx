@@ -35,9 +35,7 @@ export async function PublicSection({ href }: { href: PublicPath }) {
       <div className="mb-9 flex flex-wrap items-end justify-between gap-5 border-b border-border pb-8">
         <div>
           <Badge>
-            {href === "/kontak"
-              ? "Kelurahan Watundehoa"
-              : "Informasi kelurahan"}
+            {href === "/kontak" ? settings.name : "Informasi kelurahan"}
           </Badge>
           <h1 className="display-title mt-5 text-4xl sm:text-5xl">
             {page.title === "Profil" ? "Profil kelurahan" : page.title}

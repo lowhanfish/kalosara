@@ -65,7 +65,7 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 
 ## Batasan tahap ini
 
-Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, antarmuka login, berita, CMS, dan layanan surat belum dibuat. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI login dan dashboard belum dibuat.
+Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum, CMS berita, dan layanan surat belum dibuat. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI akun umum dan dashboard lengkap belum dibuat.
 
 ## Layout publik — Prompt 05
 
@@ -74,3 +74,7 @@ Sepuluh halaman publik, design system responsif, pencarian menu, dan state loadi
 Revisi desain memakai foto kantor dan Lurah **AMIRULAH, S.Si** untuk Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe. Foto lokal yang sudah dikompresi tersedia di `frontend/public/images/watundehoa/`; sumber identitas frontend berada di `frontend/lib/site-identity.ts`.
 
 Desain terbaru mengikuti referensi navy/kuning pilihan pengguna: header dengan pencarian, hero kantor dan lurah, akses cepat, panel informasi, panduan pelayanan, profil dan galeri kantor. Informasi yang belum tersedia tetap ditampilkan sebagai state kosong.
+
+## Profil dan konfigurasi — Prompt 06
+
+Editor settings, lima bagian profil, serta aparatur tersedia pada `/admin/profil` untuk ADMIN_KELURAHAN. Gunakan migrasi `20261016010000_profile_cms` melalui `cd backend && npm run db:deploy` sebelum menjalankan versi ini. Konten draft/arsip tidak terbuka melalui API publik. Upload sementara memakai pilihan aset lokal; CMS berita belum dimulai. Laporan, kontrak API, kebijakan akses, hasil tes dan langkah review: [Prompt 06](backend/docs/profile-cms.md).

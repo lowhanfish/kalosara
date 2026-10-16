@@ -1,3 +1,5 @@
+import { getPublicProfile } from "@/lib/profile";
+import { getSiteSettings } from "@/lib/site-settings";
 import Link from "next/link";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
@@ -92,13 +94,20 @@ const announcementIcons = [
   ClipboardList,
   ClipboardList,
 ];
-export default function Home() {
+export default async function Home() {
+  const [settings, profile] = await Promise.all([
+    getSiteSettings(),
+    getPublicProfile(),
+  ]);
+  const leader = profile.officials.find(
+    (o) => o.position.toLowerCase() === "lurah",
+  );
   const [featured, ...news] = referenceNews;
   return (
     <main id="konten" tabIndex={-1} className="portal-home reference-fidelity">
       <section className="modern-hero" aria-labelledby="hero-title">
         <Image
-          src={siteIdentity.officePhoto}
+          src={settings.heroUrl ?? siteIdentity.officePhoto}
           alt=""
           fill
           unoptimized
@@ -109,7 +118,7 @@ export default function Home() {
         <div className="modern-hero-shade" aria-hidden="true" />
         <div className="reference-hero-scene">
           <Image
-            src="/images/reference/hero-right.webp"
+            src={settings.heroUrl ?? "/images/reference/hero-right.webp"}
             alt="Komposisi foto kantor, bendera Merah Putih dan Lurah Watundehoa pada desain pilihan pengguna"
             fill
             unoptimized
@@ -120,7 +129,7 @@ export default function Home() {
         </div>
         <div className="container modern-hero-inner">
           <div className="modern-hero-copy">
-            <p className="mini-label text-[#ffcf24]">Kelurahan Watundehoa</p>
+            <p className="mini-label text-[#ffcf24]">{settings.name}</p>
             <h1 id="hero-title">
               Lebih dekat.
               <br />
@@ -129,9 +138,10 @@ export default function Home() {
               <span>Untuk warga.</span>
             </h1>
             <p className="hero-intro">
-              Portal informasi Kelurahan Watundehoa
+              Portal informasi {settings.name}
               <br />
-              Kecamatan Puriala, Kabupaten Konawe.
+              {settings.district ?? "Kecamatan Puriala"},{" "}
+              {settings.regency ?? "Kabupaten Konawe"}.
               <br />
               Hadir untuk memberikan pelayanan yang transparan,
               <br className="hidden sm:block" /> cepat, dan mudah diakses oleh
@@ -148,7 +158,7 @@ export default function Home() {
           </div>
           <div className="hero-leader-photo">
             <Image
-              src={siteIdentity.leaderPhoto}
+              src={leader?.photoUrl ?? siteIdentity.leaderPhoto}
               alt="AMIRULAH, S.Si, Lurah Watundehoa"
               fill
               unoptimized
@@ -158,7 +168,9 @@ export default function Home() {
             />
           </div>
           <div className="hero-leader-card">
-            <p className="font-extrabold">{siteIdentity.leader}</p>
+            <p className="font-extrabold">
+              {leader?.name ?? siteIdentity.leader}
+            </p>
             <p className="mt-0.5 text-xs">Lurah Watundehoa</p>
             <div className="reference-quote">
               <span aria-hidden="true">“</span>
@@ -350,14 +362,14 @@ export default function Home() {
             </span>
             <div>
               <p className="mini-label">Profil kelurahan</p>
-              <h2>Tentang Kelurahan Watundehoa</h2>
+              <h2>Tentang {settings.name}</h2>
             </div>
           </div>
           <p className="profile-description">
-            Kelurahan Watundehoa merupakan salah satu kelurahan di Kecamatan
-            Puriala, Kabupaten Konawe. Kami berkomitmen memberikan pelayanan
-            prima, transparan, terbuka dan berorientasi pada kebutuhan
-            masyarakat.
+            {settings.name} berada di {settings.district ?? "Kecamatan Puriala"}
+            , {settings.regency ?? "Kabupaten Konawe"}. Kami berkomitmen
+            memberikan pelayanan prima, transparan, terbuka dan berorientasi
+            pada kebutuhan masyarakat.
           </p>
           <Link href="/profil" className="soft-button">
             Kenali Kelurahan Kami <ArrowRight aria-hidden="true" size={14} />

@@ -2,7 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
-export function LeaderSection() {
+import { getPublicProfile } from "@/lib/profile";
+export async function LeaderSection() {
+  const profile = await getPublicProfile();
+  const leader = profile.officials.find(
+    (o) => o.position.toLowerCase() === "lurah",
+  );
   return (
     <section className="container py-14 sm:py-20" aria-labelledby="lurah-title">
       <div className="grid overflow-hidden rounded-2xl border border-border bg-[#f0f5fa] md:grid-cols-[.85fr_1.15fr]">
@@ -12,8 +17,8 @@ export function LeaderSection() {
             className="absolute top-14 left-1/2 size-72 -translate-x-1/2 rounded-full border-[40px] border-white/45 sm:size-96"
           />
           <Image
-            src={siteIdentity.leaderPhoto}
-            alt="AMIRULAH, S.Si, Lurah Watundehoa, mengenakan seragam Korpri biru"
+            src={leader?.photoUrl ?? siteIdentity.leaderPhoto}
+            alt={leader?.name ?? siteIdentity.leader}
             fill
             unoptimized
             sizes="(max-width: 768px) 100vw, 45vw"
@@ -38,7 +43,7 @@ export function LeaderSection() {
           </p>
           <div className="mt-7 border-l-2 border-accent pl-4">
             <p className="text-lg font-bold tracking-wide text-foreground">
-              {siteIdentity.leader}
+              {leader?.name ?? siteIdentity.leader}
             </p>
             <p className="mt-1 text-xs text-muted">Lurah Watundehoa</p>
           </div>
