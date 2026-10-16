@@ -65,4 +65,4 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 
 ## Batasan tahap ini
 
-Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, antarmuka login, berita, CMS, dan layanan surat belum dibuat. Integrasi state management frontend dikerjakan pada Prompt 04.
+Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, antarmuka login, berita, CMS, dan layanan surat belum dibuat. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI login dan dashboard belum dibuat.

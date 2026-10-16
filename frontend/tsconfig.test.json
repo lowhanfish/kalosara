@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "outDir": ".test-build",
+    "incremental": false,
+    "isolatedModules": true
+  },
+  "include": [
+    "services/http-client.ts",
+    "store/auth-store.ts",
+    "features/auth/runtime.ts"
+  ],
+  "exclude": ["node_modules"]
+}

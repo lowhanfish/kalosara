@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node --test",
+    "test": "tsc -p tsconfig.test.json && node --test tests/*.test.cjs",
     "format": "prettier --write ."
   },
   "dependencies": {
