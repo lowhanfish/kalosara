@@ -3,52 +3,50 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  BookOpen,
   CalendarDays,
   FileText,
   Images,
   Landmark,
-  MapPin,
   Megaphone,
   MessageCircle,
   Newspaper,
-  Phone,
   Users,
   ChartNoAxesCombined,
-  Clock3,
   LayoutGrid,
+  ShieldCheck,
+  ClipboardList,
+  Building2,
 } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
-
+import {
+  referenceNews,
+  referenceAnnouncements,
+  referenceAgenda,
+} from "@/lib/reference-content";
 const shortcuts = [
+  { title: "Ajukan Layanan", href: "/pelayanan", icon: Landmark, tone: "red" },
+  { title: "Profil Kelurahan", href: "/profil", icon: FileText, tone: "blue" },
   {
-    title: "Informasi pelayanan",
-    href: "/pelayanan",
-    icon: Landmark,
-    tone: "gold",
-  },
-  { title: "Profil kelurahan", href: "/profil", icon: FileText, tone: "blue" },
-  {
-    title: "Informasi publik",
+    title: "Informasi Publik",
     href: "/informasi-publik",
-    icon: BookOpen,
+    icon: FileText,
     tone: "blue",
   },
   {
-    title: "Agenda kegiatan",
+    title: "Agenda Kegiatan",
     href: "/agenda",
     icon: CalendarDays,
     tone: "green",
   },
   {
-    title: "Kontak kelurahan",
+    title: "Pengaduan Pelayanan",
     href: "/kontak",
     icon: Megaphone,
     tone: "orange",
   },
-  { title: "Galeri kantor", href: "/galeri", icon: Images, tone: "gold" },
+  { title: "Galeri Kegiatan", href: "/galeri", icon: Images, tone: "gold" },
   {
-    title: "Statistik kelurahan",
+    title: "Statistik Kelurahan",
     href: "/statistik",
     icon: ChartNoAxesCombined,
     tone: "blue",
@@ -61,7 +59,7 @@ function SectionHeading({
   href,
 }: {
   icon: LucideIcon;
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   href: string;
 }) {
@@ -71,7 +69,7 @@ function SectionHeading({
         <Icon aria-hidden="true" size={20} />
       </span>
       <div>
-        <p className="mini-label">{eyebrow}</p>
+        {eyebrow && <p className="mini-label">{eyebrow}</p>}
         <h2>{title}</h2>
       </div>
       <Link href={href}>
@@ -80,28 +78,46 @@ function SectionHeading({
     </div>
   );
 }
-const guidance = [
-  { title: "Persyaratan pelayanan", href: "/pelayanan", icon: FileText },
-  { title: "Panduan pelayanan", href: "/pelayanan", icon: BookOpen },
-  { title: "Informasi kelurahan", href: "/profil", icon: Users },
-  { title: "Kontak petugas", href: "/kontak", icon: Phone },
-  { title: "Informasi publik", href: "/informasi-publik", icon: Newspaper },
-  { title: "Semua informasi", href: "/pelayanan", icon: LayoutGrid },
+const services = [
+  { title: "Surat Keterangan Domisili", icon: FileText, tone: "green" },
+  { title: "Surat Keterangan Usaha", icon: Building2, tone: "green" },
+  { title: "Surat Keterangan Tidak Mampu", icon: Users, tone: "gold" },
+  { title: "Surat Pengantar Nikah", icon: ShieldCheck, tone: "green" },
+  { title: "Surat Keterangan Kehilangan", icon: FileText, tone: "gold" },
+  { title: "Lihat Semua Layanan", icon: LayoutGrid, tone: "blue" },
+];
+const announcementIcons = [
+  CalendarDays,
+  ShieldCheck,
+  ClipboardList,
+  ClipboardList,
 ];
 export default function Home() {
+  const [featured, ...news] = referenceNews;
   return (
-    <main id="konten" tabIndex={-1} className="portal-home">
+    <main id="konten" tabIndex={-1} className="portal-home reference-fidelity">
       <section className="modern-hero" aria-labelledby="hero-title">
         <Image
           src={siteIdentity.officePhoto}
-          alt="Kantor Kelurahan Watundehoa dengan bangunan biru dan atap merah"
+          alt=""
           fill
           unoptimized
           preload
-          sizes="100vw"
           className="modern-hero-bg"
+          sizes="100vw"
         />
         <div className="modern-hero-shade" aria-hidden="true" />
+        <div className="reference-hero-scene">
+          <Image
+            src="/images/reference/hero-right.webp"
+            alt="Komposisi foto kantor, bendera Merah Putih dan Lurah Watundehoa pada desain pilihan pengguna"
+            fill
+            unoptimized
+            preload
+            className="object-fill"
+            sizes="60vw"
+          />
+        </div>
         <div className="container modern-hero-inner">
           <div className="modern-hero-copy">
             <p className="mini-label text-[#ffcf24]">Kelurahan Watundehoa</p>
@@ -117,15 +133,16 @@ export default function Home() {
               <br />
               Kecamatan Puriala, Kabupaten Konawe.
               <br />
-              Informasi kelurahan dan panduan pelayanan, lebih mudah diakses
-              oleh seluruh masyarakat.
+              Hadir untuk memberikan pelayanan yang transparan,
+              <br className="hidden sm:block" /> cepat, dan mudah diakses oleh
+              seluruh masyarakat.
             </p>
             <div className="hero-actions">
-              <Link className="yellow-button" href="/profil">
-                Informasi kelurahan <ArrowRight aria-hidden="true" size={16} />
+              <Link href="/profil" className="yellow-button">
+                Informasi Kelurahan <ArrowRight aria-hidden="true" size={16} />
               </Link>
-              <Link className="white-button" href="/pelayanan">
-                Panduan pelayanan <ArrowRight aria-hidden="true" size={16} />
+              <Link href="/pelayanan" className="white-button">
+                Ajukan Layanan <ArrowRight aria-hidden="true" size={16} />
               </Link>
             </div>
           </div>
@@ -136,27 +153,39 @@ export default function Home() {
               fill
               unoptimized
               loading="eager"
-              sizes="(max-width: 768px) 55vw, 360px"
               className="object-cover object-top"
+              sizes="55vw"
             />
           </div>
           <div className="hero-leader-card">
             <p className="font-extrabold">{siteIdentity.leader}</p>
             <p className="mt-0.5 text-xs">Lurah Watundehoa</p>
-            <div className="mt-3 flex items-start gap-3 border-t border-border pt-3">
-              <Users
-                className="shrink-0 text-[#b18000]"
-                aria-hidden="true"
-                size={23}
-              />
-              <p className="text-xs leading-5 text-muted">
-                Kenali kelurahan dan aparatur yang melayani masyarakat
-                Watundehoa.
+            <div className="reference-quote">
+              <span aria-hidden="true">“</span>
+              <p>
+                Bersama warga, kita wujudkan Kelurahan Watundehoa yang maju,
+                nyaman dan sejahtera.
               </p>
             </div>
           </div>
         </div>
-        <div className="hero-yellow-ribbon" aria-hidden="true" />
+        <svg
+          className="reference-hero-wave"
+          viewBox="0 0 864 130"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 0C60 15 55 105 112 81C180 50 200 100 240 120L864 130H0Z"
+            fill="#ffca25"
+          />
+          <path
+            d="M0 62C80 11 110 137 190 109L242 130H0Z"
+            fill="#ffdf77"
+            opacity=".8"
+          />
+          <path d="M864 66C820 58 787 88 750 130H864Z" fill="#ffd82f" />
+        </svg>
       </section>
       <section className="container quick-access" aria-label="Akses cepat">
         <div className="quick-access-panel">
@@ -167,7 +196,7 @@ export default function Home() {
               className={`quick-tile ${index === 0 ? "quick-tile-featured" : ""}`}
             >
               <span className={`tile-icon tone-${tone}`}>
-                <Icon aria-hidden="true" size={23} strokeWidth={1.8} />
+                <Icon aria-hidden="true" size={24} />
               </span>
               <span className="quick-tile-title">{title}</span>
               <span className="round-arrow">
@@ -177,88 +206,96 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <p className="container reference-demo-note">
+        Pratinjau desain: berita, pengumuman, angka dan agenda di bawah adalah
+        contoh dari gambar, belum terhubung ke publikasi backend.
+      </p>
       <section className="container portal-news-grid section-space">
         <div>
           <SectionHeading
             icon={Newspaper}
-            eyebrow="Kabar kelurahan"
-            title="Berita terbaru"
+            eyebrow="Berita terbaru"
+            title="Berita Terbaru"
             href="/berita"
           />
           <div className="news-content">
-            <Link href="/profil" className="office-feature">
-              <Image
-                src={siteIdentity.officeSignPhoto}
-                alt="Papan nama Kantor Kelurahan Watundehoa"
-                fill
-                unoptimized
-                sizes="(max-width:768px) 100vw, 33vw"
-                className="object-cover"
-              />
-              <div className="office-feature-caption">
-                <span>PROFIL KELURAHAN</span>
-                <h3>
-                  Mengenal lebih dekat
-                  <br />
-                  Kelurahan Watundehoa
-                </h3>
-                <p>Kecamatan Puriala, Kabupaten Konawe.</p>
+            <Link
+              href={`/berita?contoh=${featured.slug}`}
+              className="reference-news-feature"
+            >
+              <div className="reference-news-photo">
+                <Image
+                  src={featured.image}
+                  alt="Contoh foto berita dari gambar desain"
+                  fill
+                  unoptimized
+                  className="object-cover"
+                  sizes="40vw"
+                />
               </div>
-              <span className="round-arrow">
-                <ArrowRight aria-hidden="true" size={16} />
-              </span>
+              <div className="reference-news-title">
+                <span className="reference-date-box">
+                  <b>15</b>
+                  <small>Okt 2026</small>
+                </span>
+                <h3>{featured.title}</h3>
+                <span className="round-arrow">
+                  <ArrowRight aria-hidden="true" size={17} />
+                </span>
+              </div>
+              <p>{featured.excerpt}</p>
             </Link>
-            <div className="news-empty">
-              <span className="tile-icon tone-blue">
-                <Newspaper aria-hidden="true" size={24} />
-              </span>
-              <h3>Kabar resmi akan hadir di sini.</h3>
-              <p>
-                Belum ada berita yang diterbitkan. Nantikan informasi dan
-                kegiatan dari Kelurahan Watundehoa.
-              </p>
-              <Link href="/berita">
-                Buka halaman berita <ArrowRight aria-hidden="true" size={14} />
-              </Link>
+            <div className="reference-news-list">
+              {news.map((item) => (
+                <Link key={item.slug} href={`/berita?contoh=${item.slug}`}>
+                  <Image
+                    src={item.image}
+                    alt="Ilustrasi berita contoh pada desain"
+                    width={90}
+                    height={60}
+                    unoptimized
+                    className="object-cover"
+                  />
+                  <span>
+                    <time>{item.date}</time>
+                    <h3>{item.title}</h3>
+                  </span>
+                  <ArrowRight aria-hidden="true" size={14} />
+                </Link>
+              ))}
             </div>
           </div>
         </div>
         <aside>
           <SectionHeading
             icon={Megaphone}
-            eyebrow="Papan informasi"
             title="Pengumuman"
             href="/pengumuman"
           />
-          <div className="announcement-panel">
-            <div className="announcement-empty">
-              <span className="tile-icon tone-orange">
-                <Megaphone aria-hidden="true" size={22} />
-              </span>
-              <div>
-                <h3>Belum ada pengumuman terbaru</h3>
-                <p>Pengumuman resmi akan ditampilkan setelah diterbitkan.</p>
-              </div>
-            </div>
-            <Link className="announcement-link" href="/pelayanan">
-              <span className="tile-icon tone-green">
-                <BookOpen aria-hidden="true" size={21} />
-              </span>
-              <span>
-                Perlu informasi pelayanan?
-                <small>Kenali alur sebelum berkunjung.</small>
-              </span>
-              <ArrowRight aria-hidden="true" size={16} />
-            </Link>
-            <Link className="announcement-link" href="/kontak">
-              <span className="tile-icon tone-blue">
-                <MessageCircle aria-hidden="true" size={21} />
-              </span>
-              <span>
-                Hubungi kelurahan<small>Temukan informasi kontak kantor.</small>
-              </span>
-              <ArrowRight aria-hidden="true" size={16} />
-            </Link>
+          <div className="announcement-panel reference-announcements">
+            {referenceAnnouncements.map((item, index) => {
+              const Icon = announcementIcons[index];
+              return (
+                <Link
+                  key={item.title}
+                  href="/pengumuman"
+                  className="announcement-link"
+                >
+                  <span
+                    className={`tile-icon tone-${["orange", "green", "blue", "blue"][index]}`}
+                  >
+                    <Icon aria-hidden="true" size={22} />
+                  </span>
+                  <span>
+                    <time>{item.date}</time>
+                    <strong>{item.title}</strong>
+                  </span>
+                  <span className="round-arrow">
+                    <ArrowRight aria-hidden="true" size={14} />
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </aside>
       </section>
@@ -268,33 +305,31 @@ export default function Home() {
           alt=""
           fill
           unoptimized
-          sizes="100vw"
           className="object-cover"
+          sizes="100vw"
         />
         <div className="service-band-shade" aria-hidden="true" />
         <div className="container relative">
           <div className="service-band-heading">
             <div>
-              <p className="mini-label">Informasi pelayanan</p>
-              <h2>Urusan administrasi, mulai dari informasi.</h2>
+              <p className="mini-label">Layanan online</p>
+              <h2>Urus administrasi, sekarang lebih mudah.</h2>
               <p>
-                Kenali panduan pelayanan sebelum datang ke kantor.
+                Kenali persyaratan dan panduan pelayanan kelurahan.
                 <br />
-                Pengajuan surat online belum tersedia.
+                Pengajuan online belum tersedia pada tahap ini.
               </p>
             </div>
             <Link href="/pelayanan" className="yellow-button">
-              Lihat panduan pelayanan{" "}
+              Ajukan Layanan Sekarang{" "}
               <ArrowRight aria-hidden="true" size={16} />
             </Link>
           </div>
           <div className="service-tiles">
-            {guidance.map(({ title, href, icon: Icon }, index) => (
-              <Link href={href} key={title}>
-                <span
-                  className={`tile-icon tone-${index < 2 ? "green" : index < 5 ? "gold" : "blue"}`}
-                >
-                  <Icon aria-hidden="true" size={24} />
+            {services.map(({ title, icon: Icon, tone }) => (
+              <Link key={title} href="/pelayanan">
+                <span className={`tile-icon tone-${tone}`}>
+                  <Icon aria-hidden="true" size={23} />
                 </span>
                 <ArrowRight
                   aria-hidden="true"
@@ -319,115 +354,96 @@ export default function Home() {
             </div>
           </div>
           <p className="profile-description">
-            Kelurahan Watundehoa berada di Kecamatan Puriala, Kabupaten Konawe.
-            Melalui KALOSARA, informasi kelurahan dan panduan pelayanan dapat
-            diakses masyarakat dalam satu tempat.
+            Kelurahan Watundehoa merupakan salah satu kelurahan di Kecamatan
+            Puriala, Kabupaten Konawe. Kami berkomitmen memberikan pelayanan
+            prima, transparan, terbuka dan berorientasi pada kebutuhan
+            masyarakat.
           </p>
-          <Link className="soft-button" href="/profil">
-            Kenali kelurahan kami <ArrowRight aria-hidden="true" size={15} />
+          <Link href="/profil" className="soft-button">
+            Kenali Kelurahan Kami <ArrowRight aria-hidden="true" size={14} />
           </Link>
         </div>
-        <dl className="identity-facts">
+        <dl
+          className="identity-facts reference-statistics"
+          aria-label="Contoh statistik dari gambar desain"
+        >
           {[
-            { label: "Kecamatan", value: "Puriala", icon: MapPin },
-            { label: "Kabupaten", value: "Konawe", icon: Landmark },
-            { label: "Lurah", value: "AMIRULAH, S.Si", icon: Users },
-            { label: "Kanal informasi", value: "KALOSARA", icon: LayoutGrid },
-          ].map(({ label, value, icon: Icon }) => (
+            { value: "4", label: "Lingkungan", icon: Landmark },
+            { value: "1.250+", label: "Jumlah KK", icon: Building2 },
+            { value: "3.842+", label: "Jumlah Penduduk", icon: Users },
+            { value: "12", label: "RT / RW", icon: Users },
+          ].map(({ value, label, icon: Icon }) => (
             <div key={label}>
               <span className="tile-icon tone-blue">
-                <Icon aria-hidden="true" size={21} />
+                <Icon aria-hidden="true" size={22} />
               </span>
               <span>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
+                <dt>{value}</dt>
+                <dd>{label}</dd>
               </span>
             </div>
           ))}
         </dl>
-        <Link href="/profil" className="profile-photo">
+        <figure className="reference-profile-image">
           <Image
-            src={siteIdentity.officeSignPhoto}
-            alt="Identitas Kantor Kelurahan Watundehoa"
+            src="/images/reference/profile-monument.webp"
+            alt="Panel ilustrasi profil dari gambar desain pilihan pengguna"
             fill
             unoptimized
-            sizes="(max-width:768px) 100vw, 25vw"
             className="object-cover"
+            sizes="25vw"
           />
-          <span>
-            Kenali wilayah.
-            <br />
-            Terhubung dengan
-            <br />
-            kelurahan Anda.
-          </span>
-        </Link>
+        </figure>
       </section>
       <section className="container agenda-gallery section-space">
         <div>
           <SectionHeading
-            icon={CalendarDays}
+            icon={Users}
             eyebrow="Agenda kegiatan"
-            title="Agenda kelurahan"
+            title="Agenda Kegiatan"
             href="/agenda"
           />
-          <div className="agenda-placeholder">
-            <span className="calendar-placeholder">
-              <CalendarDays aria-hidden="true" size={30} />
-            </span>
-            <div>
-              <h3>Jadwal kegiatan sedang disiapkan.</h3>
-              <p>
-                Belum ada agenda yang diterbitkan. Kegiatan resmi kelurahan akan
-                ditampilkan di sini.
-              </p>
-              <Link href="/agenda">
-                Lihat halaman agenda <ArrowRight aria-hidden="true" size={14} />
+          <div className="reference-agenda">
+            {referenceAgenda.map((item) => (
+              <Link key={item.title} href="/agenda">
+                <span className="reference-date-box">
+                  <b>{item.day}</b>
+                  <small>{item.month}</small>
+                </span>
+                <span>
+                  <h3>{item.title}</h3>
+                  <p>{item.place}</p>
+                </span>
+                <span className="round-arrow">
+                  <ArrowRight aria-hidden="true" size={15} />
+                </span>
               </Link>
-            </div>
+            ))}
           </div>
-          <Link href="/kontak" className="agenda-help">
-            <Clock3 aria-hidden="true" size={20} />
-            <span>
-              Konfirmasikan informasi kegiatan melalui kontak kelurahan.
-            </span>
-            <ArrowRight aria-hidden="true" size={15} />
-          </Link>
         </div>
         <div>
           <SectionHeading
             icon={Images}
-            eyebrow="Dokumentasi kantor"
-            title="Galeri kelurahan"
+            title="Galeri Kegiatan"
             href="/galeri"
           />
-          <div className="office-gallery">
-            <figure>
-              <div>
+          <div className="reference-gallery">
+            {[1, 2, 3, 4, 5].map((index) => (
+              <Link
+                href="/galeri"
+                key={index}
+                className={`reference-gallery-${index}`}
+              >
                 <Image
-                  src={siteIdentity.officePhoto}
-                  alt="Gedung Kantor Kelurahan Watundehoa"
+                  src={`/images/reference/gallery-${index}.webp`}
+                  alt={`Ilustrasi kegiatan ${index} dari gambar desain`}
                   fill
                   unoptimized
-                  sizes="(max-width:768px) 50vw, 25vw"
                   className="object-cover"
+                  sizes="30vw"
                 />
-              </div>
-              <figcaption>Kantor Kelurahan Watundehoa</figcaption>
-            </figure>
-            <figure>
-              <div>
-                <Image
-                  src={siteIdentity.officeSignPhoto}
-                  alt="Papan nama kelurahan di halaman kantor"
-                  fill
-                  unoptimized
-                  sizes="(max-width:768px) 50vw, 25vw"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption>Halaman dan papan nama kantor</figcaption>
-            </figure>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -439,11 +455,12 @@ export default function Home() {
           <div>
             <h2>Ada pertanyaan atau butuh bantuan?</h2>
             <p>
-              Temukan informasi kontak dan kunjungi kantor Kelurahan Watundehoa.
+              Hubungi kami melalui kontak resmi atau datang langsung ke kantor
+              kelurahan.
             </p>
           </div>
           <Link href="/kontak" className="navy-button">
-            Hubungi kelurahan <ArrowRight aria-hidden="true" size={16} />
+            Hubungi Kelurahan <ArrowRight aria-hidden="true" size={16} />
           </Link>
         </div>
       </section>

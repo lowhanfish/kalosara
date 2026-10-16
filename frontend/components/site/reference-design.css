@@ -1,0 +1,904 @@
+/* Layout fidelity to the user's uploaded 864 × 1821 reference. */
+.container {
+  width: min(calc(100% - 80px), 1280px);
+}
+.portal-header-inner {
+  grid-template-columns: 32% minmax(0, 1fr);
+  gap: 28px;
+}
+.portal-brand {
+  min-height: clamp(80px, 9vw, 125px);
+  gap: 13px;
+}
+.portal-brand::before {
+  inset: 0 -15px -3px min(-40px, calc((1280px - 100vw) / 2));
+  border-radius: 0 0 28% 18%;
+}
+.portal-crest {
+  width: clamp(43px, 4.8vw, 65px);
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.portal-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: clamp(8px, 0.85vw, 12px);
+}
+.nav-chevron {
+  font-size: 11px;
+  color: #496784;
+}
+.portal-search-row {
+  gap: 30px;
+}
+.portal-search-row .yellow-button {
+  min-width: 165px;
+}
+.modern-hero-inner {
+  min-height: clamp(390px, 45.1vw, 650px);
+  padding-top: clamp(36px, 4.1vw, 59px);
+  padding-bottom: 100px;
+}
+.modern-hero-copy {
+  padding-left: 26px;
+  max-width: 54%;
+}
+.modern-hero h1 {
+  font-size: clamp(44px, 5.2vw, 75px);
+  line-height: 0.99;
+  margin-top: 14px;
+  letter-spacing: -0.045em;
+}
+.modern-hero .mini-label {
+  font-size: clamp(9px, 1.02vw, 14px);
+}
+.hero-intro {
+  margin-top: clamp(15px, 1.7vw, 25px);
+  font-size: clamp(11px, 1.28vw, 18px);
+  line-height: 1.45;
+  max-width: 96%;
+}
+.hero-actions {
+  margin-top: clamp(17px, 2.1vw, 30px);
+  gap: 16px;
+}
+.hero-actions .yellow-button,
+.hero-actions .white-button {
+  padding: clamp(10px, 1.3vw, 19px) clamp(17px, 2.1vw, 31px);
+  min-height: 0;
+  font-size: clamp(10px, 1.14vw, 16px);
+  gap: 22px;
+}
+.modern-hero-bg {
+  opacity: 0.3;
+}
+.modern-hero-shade {
+  background: linear-gradient(90deg, #062c48 0%, #062c48eb 30%, #062c4800 55%);
+}
+.reference-hero-scene {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 58.333%;
+  height: calc(100% - 44px);
+}
+.reference-hero-scene::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0 auto 0 -2px;
+  width: 55px;
+  background: linear-gradient(90deg, #062c48, transparent);
+}
+.reference-hero-wave {
+  position: absolute;
+  z-index: 2;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: clamp(100px, 15vw, 215px);
+  pointer-events: none;
+}
+.reference-quote {
+  margin-top: 13px;
+  display: flex;
+  gap: 10px;
+}
+.reference-quote > span {
+  color: #dfaf19;
+  font:
+    700 35px/1 Georgia,
+    serif;
+}
+.reference-quote p {
+  font-size: 12px;
+  line-height: 1.4;
+  font-style: italic;
+}
+.quick-access {
+  margin-top: clamp(-70px, -4.86vw, -42px);
+}
+.quick-access-panel {
+  padding: clamp(16px, 1.85vw, 27px);
+  border-radius: 27px;
+  gap: 9px;
+}
+.quick-tile {
+  min-height: clamp(105px, 12.15vw, 175px);
+  padding: 15px 18px;
+}
+.quick-tile-title {
+  max-width: 115px;
+  font-size: clamp(10px, 1.15vw, 16px);
+  line-height: 1.25;
+}
+.quick-tile .tile-icon {
+  width: clamp(29px, 3.4vw, 47px);
+  height: clamp(29px, 3.4vw, 47px);
+  border-radius: 50%;
+}
+.quick-tile .round-arrow {
+  width: clamp(25px, 2.9vw, 40px);
+  height: clamp(25px, 2.9vw, 40px);
+}
+.quick-tile-featured .tone-red {
+  background: #fffbd9;
+  color: #cf2c25;
+}
+.reference-demo-note {
+  margin-top: 10px;
+  color: #64778d;
+  font-size: 10px;
+  text-align: right;
+}
+.reference-fidelity .section-space {
+  padding-block: clamp(23px, 2.8vw, 40px);
+}
+.portal-news-grid {
+  grid-template-columns: 1.83fr 1fr;
+  gap: 35px;
+}
+.portal-section-heading {
+  margin-bottom: clamp(14px, 1.7vw, 24px);
+  gap: 11px;
+  min-height: 35px;
+}
+.portal-section-heading h2 {
+  font-size: clamp(18px, 2.1vw, 30px);
+  line-height: 1.1;
+}
+.portal-section-heading > a {
+  font-size: clamp(8px, 0.9vw, 12px);
+}
+.portal-section-heading .mini-label {
+  font-size: clamp(6px, 0.65vw, 9px);
+}
+.section-icon {
+  width: clamp(29px, 3.4vw, 48px);
+  height: clamp(29px, 3.4vw, 48px);
+}
+.news-content {
+  grid-template-columns: 1.2fr 1fr;
+  gap: 22px;
+}
+.reference-news-feature {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(214px, 24.8vw, 357px);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #062b46;
+  color: #fff;
+}
+.reference-news-photo {
+  position: absolute;
+  inset: 0 0 30% 0;
+}
+.reference-news-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #062b46, transparent 70%);
+}
+.reference-news-title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding: 15px 14px 0;
+}
+.reference-news-title h3 {
+  max-width: 75%;
+  font-size: clamp(10px, 1.2vw, 17px);
+  line-height: 1.35;
+  font-weight: 700;
+}
+.reference-news-title .round-arrow {
+  position: absolute;
+  right: 15px;
+  top: -20px;
+}
+.reference-news-feature > p {
+  position: relative;
+  padding: 12px 14px 16px;
+  font-size: clamp(8px, 0.88vw, 12px);
+  line-height: 1.5;
+}
+.reference-date-box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 7px;
+  background: linear-gradient(#fff7d2, #ffe9a1);
+  color: #7b3005;
+  min-width: clamp(48px, 5.5vw, 79px);
+  min-height: clamp(48px, 5.5vw, 79px);
+}
+.reference-date-box b {
+  font-size: clamp(21px, 2.4vw, 34px);
+  line-height: 1;
+}
+.reference-date-box small {
+  margin-top: 3px;
+  font-size: clamp(10px, 1.15vw, 16px);
+}
+.reference-news-title .reference-date-box {
+  min-width: 40px;
+  min-height: 52px;
+  color: #132e49;
+  background: #fff;
+  border-radius: 4px;
+}
+.reference-news-title .reference-date-box b {
+  font-size: 20px;
+}
+.reference-news-title .reference-date-box small {
+  font-size: 8px;
+}
+.reference-news-list {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 8px;
+}
+.reference-news-list > a {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid #edf0f4;
+  padding-bottom: 9px;
+}
+.reference-news-list > a:last-child {
+  border-bottom: 0;
+}
+.reference-news-list img {
+  width: clamp(65px, 7.5vw, 108px);
+  height: clamp(43px, 5vw, 72px);
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+.reference-news-list > a > span {
+  flex: 1;
+}
+.reference-news-list time,
+.reference-announcements time {
+  display: block;
+  font-size: clamp(7px, 0.81vw, 11px);
+  color: #65788e;
+  margin-bottom: 6px;
+}
+.reference-news-list h3 {
+  font-size: clamp(9px, 1.04vw, 15px);
+  font-weight: 700;
+  line-height: 1.45;
+}
+.reference-news-list svg {
+  flex-shrink: 0;
+  align-self: center;
+}
+.reference-announcements {
+  padding: 0 18px;
+}
+.reference-announcements .announcement-link {
+  min-height: clamp(53px, 6.18vw, 89px);
+  padding-block: 14px;
+  gap: 14px;
+}
+.reference-announcements .announcement-link:first-child {
+  border-top: 0;
+}
+.reference-announcements .announcement-link strong {
+  display: block;
+  font-size: clamp(9px, 1.04vw, 15px);
+  line-height: 1.4;
+}
+.reference-announcements .round-arrow {
+  background: #fff7dc;
+  color: #c4960a;
+  width: 27px;
+  height: 27px;
+}
+.reference-fidelity .service-band {
+  margin-top: 0;
+  padding-block: clamp(28px, 3.2vw, 46px);
+}
+.service-band h2 {
+  font-size: clamp(23px, 2.66vw, 38px);
+}
+.service-band-heading p:not(.mini-label) {
+  font-size: clamp(11px, 1.2vw, 16px);
+}
+.service-tiles > a {
+  min-height: clamp(86px, 10vw, 144px);
+  padding: clamp(15px, 1.7vw, 24px);
+}
+.service-tiles > a > span:last-child {
+  font-size: clamp(10px, 1.15vw, 16px);
+}
+.service-band-heading .yellow-button {
+  font-size: clamp(10px, 1.15vw, 16px);
+}
+.reference-fidelity .profile-overview {
+  grid-template-columns: 1.25fr 1fr 0.9fr;
+  gap: 24px;
+}
+.profile-overview h2 {
+  font-size: clamp(18px, 2.05vw, 29px);
+}
+.profile-description {
+  font-size: clamp(11px, 1.22vw, 17px);
+  line-height: 1.6;
+  padding-left: 44px;
+}
+.profile-overview .soft-button {
+  margin-left: 44px;
+  font-size: clamp(9px, 1vw, 14px);
+}
+.reference-statistics > div {
+  min-height: clamp(57px, 6.7vw, 96px);
+  padding: 12px;
+}
+.reference-statistics dt {
+  font-size: clamp(13px, 1.5vw, 22px);
+  font-weight: 800;
+  color: #082b50;
+}
+.reference-statistics dd {
+  font-size: clamp(7px, 0.81vw, 11px);
+  font-weight: 400;
+  color: #65788e;
+}
+.reference-profile-image {
+  position: relative;
+  min-height: clamp(155px, 17.9vw, 258px);
+  overflow: hidden;
+  border-radius: 12px;
+}
+.agenda-gallery {
+  grid-template-columns: 1fr 1fr;
+  gap: 34px;
+}
+.reference-agenda > a {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 9px 5px;
+  border-bottom: 1px solid #edf0f4;
+}
+.reference-agenda > a:last-child {
+  border-bottom: 0;
+}
+.reference-agenda > a > span:nth-child(2) {
+  flex: 1;
+}
+.reference-agenda h3 {
+  font-size: clamp(10px, 1.15vw, 16px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.reference-agenda p {
+  margin-top: 6px;
+  font-size: clamp(9px, 1vw, 14px);
+  color: #576d85;
+}
+.reference-agenda .round-arrow {
+  background: #f1f5f9;
+}
+.reference-gallery {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 11px;
+}
+.reference-gallery > a {
+  position: relative;
+  min-height: clamp(104px, 12.1vw, 174px);
+  overflow: hidden;
+  border-radius: 11px;
+}
+.reference-gallery-1,
+.reference-gallery-2 {
+  grid-column: span 3;
+}
+.reference-gallery-3,
+.reference-gallery-4,
+.reference-gallery-5 {
+  grid-column: span 2;
+}
+.contact-ribbon {
+  margin-top: 0;
+}
+.contact-ribbon h2 {
+  font-size: clamp(18px, 2.1vw, 30px);
+}
+.contact-ribbon p {
+  font-size: clamp(10px, 1.16vw, 16px);
+}
+@media (min-width: 800px) {
+  .portal-header-content {
+    display: block;
+  }
+  .portal-mobile-menu {
+    display: none;
+  }
+  .quick-access-panel {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .hero-leader-photo {
+    display: none;
+  }
+  .hero-leader-card {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .service-tiles {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@media (min-width: 800px) and (max-width: 1100px) {
+  .portal-header-inner {
+    grid-template-columns: 32% minmax(0, 1fr);
+    gap: 18px;
+  }
+  .portal-brand .text-xl {
+    font-size: 18px;
+  }
+  .portal-brand .text-\[9px\] {
+    font-size: 8px;
+  }
+  .portal-search-row {
+    gap: 20px;
+  }
+  .portal-search-row .yellow-button {
+    min-width: 118px;
+    padding: 9px 15px;
+    font-size: 10px;
+  }
+  .portal-search-row .field,
+  .portal-search-row button {
+    min-height: 32px;
+    height: 32px;
+    padding-block: 6px;
+  }
+  .portal-search-row .field {
+    font-size: 10px;
+  }
+  .portal-search-row button {
+    width: 38px;
+  }
+  .portal-header-content {
+    padding-top: 7px;
+  }
+  .portal-nav-link {
+    min-height: 30px;
+    padding-block: 8px;
+  }
+  .portal-desktop-nav {
+    padding-top: 3px;
+    gap: 8px;
+  }
+  .quick-tile {
+    padding: 12px 10px;
+  }
+  .reference-announcements {
+    padding-inline: 12px;
+  }
+  .reference-announcements .tile-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .reference-announcements .announcement-link {
+    gap: 10px;
+    padding-block: 9px;
+  }
+  .reference-news-list > a {
+    gap: 9px;
+  }
+  .reference-news-title {
+    gap: 8px;
+    padding: 10px 11px 0;
+  }
+  .reference-news-title .reference-date-box {
+    min-width: 33px;
+    min-height: 44px;
+  }
+  .reference-news-title .reference-date-box b {
+    font-size: 16px;
+  }
+  .reference-news-title .reference-date-box small {
+    font-size: 7px;
+  }
+  .reference-news-feature > p {
+    padding: 10px 11px;
+  }
+}
+@media (max-width: 799px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+  .portal-header-inner {
+    grid-template-columns: 1fr auto;
+  }
+  .portal-brand {
+    min-height: 84px;
+  }
+  .portal-brand::before {
+    left: -40px;
+    right: 0;
+  }
+  .portal-crest {
+    width: 39px;
+  }
+  .portal-header-content {
+    display: none;
+  }
+  .portal-mobile-menu {
+    display: block;
+  }
+  .portal-nav-link {
+    min-height: 42px;
+    font-size: 12px;
+  }
+  .reference-hero-scene {
+    display: none;
+  }
+  .modern-hero-inner {
+    min-height: 760px;
+    padding: 38px 0 325px;
+  }
+  .modern-hero-copy {
+    max-width: none;
+    padding-left: 0;
+  }
+  .modern-hero h1 {
+    font-size: 46px;
+  }
+  .hero-intro {
+    font-size: 12px;
+    max-width: 340px;
+  }
+  .hero-actions .yellow-button,
+  .hero-actions .white-button {
+    font-size: 11px;
+    gap: 12px;
+    padding: 13px 15px;
+  }
+  .modern-hero-bg {
+    opacity: 0.9;
+  }
+  .modern-hero-shade {
+    background: linear-gradient(90deg, #032c4df2, #032c4d77);
+  }
+  .hero-leader-photo {
+    display: block;
+  }
+  .hero-leader-card {
+    width: 225px;
+  }
+  .reference-hero-wave {
+    height: 95px;
+  }
+  .quick-access {
+    margin-top: -25px;
+  }
+  .quick-access-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 11px;
+    gap: 7px;
+  }
+  .quick-tile {
+    min-height: 116px;
+    padding: 13px;
+  }
+  .quick-tile-title {
+    font-size: 12px;
+  }
+  .quick-tile:last-child {
+    min-height: 70px;
+  }
+  .reference-demo-note {
+    font-size: 9px;
+    line-height: 1.5;
+    text-align: left;
+  }
+  .portal-news-grid,
+  .reference-fidelity .profile-overview,
+  .agenda-gallery {
+    grid-template-columns: 1fr;
+    gap: 27px;
+  }
+  .portal-section-heading h2 {
+    font-size: 23px;
+  }
+  .portal-section-heading .mini-label {
+    font-size: 8px;
+  }
+  .portal-section-heading > a {
+    font-size: 10px;
+  }
+  .news-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .reference-news-feature {
+    min-height: 290px;
+  }
+  .reference-news-title h3 {
+    font-size: 15px;
+  }
+  .reference-news-feature > p {
+    font-size: 11px;
+  }
+  .reference-news-list {
+    gap: 12px;
+  }
+  .reference-news-list img {
+    width: 85px;
+    height: 58px;
+  }
+  .reference-news-list h3,
+  .reference-announcements .announcement-link strong {
+    font-size: 12px;
+  }
+  .reference-news-list time,
+  .reference-announcements time {
+    font-size: 10px;
+  }
+  .reference-announcements .announcement-link {
+    min-height: 78px;
+  }
+  .service-band h2 {
+    font-size: 27px;
+  }
+  .service-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .service-tiles > a {
+    min-height: 120px;
+  }
+  .service-tiles > a > span:last-child {
+    font-size: 12px;
+  }
+  .profile-description {
+    font-size: 12px;
+  }
+  .reference-statistics > div {
+    min-height: 80px;
+  }
+  .reference-statistics dt {
+    font-size: 19px;
+  }
+  .reference-statistics dd {
+    font-size: 10px;
+  }
+  .reference-profile-image {
+    min-height: 230px;
+  }
+  .reference-agenda h3 {
+    font-size: 12px;
+  }
+  .reference-agenda p {
+    font-size: 10px;
+  }
+  .reference-gallery > a {
+    min-height: 110px;
+  }
+  .reference-date-box {
+    min-width: 50px;
+    min-height: 60px;
+  }
+  .reference-date-box b {
+    font-size: 24px;
+  }
+  .reference-date-box small {
+    font-size: 12px;
+  }
+  .contact-ribbon h2 {
+    font-size: 20px;
+  }
+  .contact-ribbon p {
+    font-size: 12px;
+  }
+}
+.reference-footer-grid {
+  display: grid;
+  gap: 38px;
+  padding-block: 28px;
+  grid-template-columns: 1.15fr 1fr 0.9fr;
+}
+.reference-footer-brand {
+  position: relative;
+  padding-left: 57px;
+}
+.reference-footer-crest {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.reference-footer-grid p,
+.reference-footer-grid li {
+  font-size: clamp(9px, 1.1vw, 14px);
+  line-height: 1.5;
+}
+.reference-footer-grid .text-xl {
+  font-size: clamp(15px, 1.8vw, 23px);
+  line-height: 1.1;
+}
+.reference-footer-grid h2 {
+  margin-bottom: 12px;
+  font-size: clamp(11px, 1.25vw, 16px);
+}
+.reference-footer-grid ul {
+  display: grid;
+  gap: 8px;
+}
+.reference-footer-grid ul > * {
+  margin: 0;
+}
+.reference-footer-brand > p:nth-last-child(-n + 2) {
+  margin-left: -57px;
+}
+@media (min-width: 800px) {
+  .portal-brand {
+    min-height: 80px;
+  }
+  .modern-hero-inner {
+    height: clamp(348px, 40.3vw, 580px);
+    min-height: 0;
+    padding-bottom: 38px;
+  }
+  .hero-actions .yellow-button,
+  .hero-actions .white-button {
+    padding-inline: 18px;
+    gap: 18px;
+  }
+  .quick-access-panel {
+    padding: 16px;
+  }
+  .quick-tile {
+    gap: 7px;
+    min-height: 105px;
+  }
+  .portal-news-grid {
+    grid-template-columns: 2.14fr 1fr;
+    gap: 25px;
+  }
+  .news-content {
+    gap: 16px;
+    grid-template-columns: 1.25fr 1fr;
+  }
+  .reference-news-list {
+    gap: 5px;
+  }
+  .reference-news-list > a {
+    padding-bottom: 4px;
+    gap: 8px;
+  }
+  .reference-news-list time {
+    margin-bottom: 3px;
+  }
+  .reference-news-list h3 {
+    line-height: 1.3;
+  }
+  .reference-news-title h3 {
+    max-width: 80%;
+  }
+  .service-band-heading {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .service-band-heading > a {
+    min-width: 180px;
+    max-width: none;
+    white-space: nowrap;
+    padding: 12px 20px;
+  }
+  .service-tiles {
+    gap: 10px;
+  }
+  .service-tiles > a {
+    gap: 10px;
+    padding: 12px;
+  }
+  .reference-fidelity .service-band {
+    padding-block: 22px;
+  }
+  .reference-fidelity .profile-overview {
+    grid-template-columns: 1.4fr 1.1fr 0.9fr;
+    gap: 16px;
+  }
+  .profile-overview h2 {
+    font-size: clamp(16px, 1.9vw, 27px);
+  }
+  .profile-description {
+    line-height: 1.4;
+  }
+  .reference-fidelity .section-space {
+    padding-block: 20px;
+  }
+  .reference-agenda > a {
+    padding-block: 5px;
+  }
+  .contact-ribbon > div {
+    min-height: 80px;
+    padding-block: 12px;
+  }
+  .contact-ribbon-icon {
+    width: 48px;
+    height: 48px;
+  }
+  footer > .border-t .container {
+    padding-block: 12px;
+    font-size: 9px;
+  }
+}
+@media (max-width: 799px) {
+  .reference-footer-grid {
+    grid-template-columns: 1fr;
+    padding-block: 32px;
+  }
+}
+@media (min-width: 800px) {
+  .modern-hero-inner {
+    height: clamp(390px, 45.1vw, 650px);
+  }
+}
+@media (min-width: 800px) and (max-width: 1100px) {
+  .portal-brand {
+    padding-block: 8px;
+  }
+  .quick-tile {
+    height: 105px;
+    padding: 10px;
+  }
+  .reference-demo-note {
+    margin-top: 5px;
+    font-size: 9px;
+  }
+  .reference-fidelity .service-band {
+    padding-block: 18px;
+  }
+  .service-tiles > a {
+    min-height: 86px;
+  }
+  .service-band-heading p:not(.mini-label) {
+    margin-top: 5px;
+  }
+  .reference-fidelity .profile-overview {
+    padding-block: 16px;
+  }
+  .reference-statistics > div {
+    padding: 8px;
+  }
+}

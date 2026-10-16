@@ -116,3 +116,19 @@ Pengguna memilih gambar `Beranda Kelurahan Watundehoa Modern.png` sebagai arah d
 Kabupaten tetap **Konawe** sesuai instruksi tertulis pengguna. Nama wilayah lain, logo, angka statistik, artikel, tanggal agenda, sambutan/kutipan, dan layanan pengajuan yang muncul dalam gambar referensi tidak dijadikan fakta. Logo resmi tetap memakai slot backend; fallback berupa ikon gedung generik. Angka statistik yang belum tersedia diganti fakta identitas terkonfirmasi. Tombol pelayanan membuka panduan, dan pengajuan online tetap dinyatakan belum tersedia. Tidak ada implementasi CMS/Prompt 06, perubahan backend, migrasi, env, atau dependency.
 
 Verifikasi: frontend lint/typecheck dan 19 tes lulus. Semua 10 rute publik diperiksa pada 360, 768, dan 1440 px (30 kombinasi tanpa overflow atau gambar rusak). Menu/search seluler dengan kata “kontak” mengarah ke hasil yang benar. Build produksi lulus. Hasil backend dari revisi sebelumnya tetap berlaku karena tidak ada perubahan backend.
+
+## Koreksi referensi unggahan — 16 Oktober 2026
+
+**Keputusan:** mengikuti komposisi gambar pilihan pengguna, menggunakan potongan aset dari unggahan untuk menjaga visual hero dan foto ilustrasi. Identitas tertulis pengguna (Kabupaten Konawe, AMIRULAH, S.Si) didahulukan atas teks berbeda pada gambar. Tidak mengubah autentikasi/backend.
+
+**File berubah:** `app/page.tsx`, `app/berita/page.tsx`, `app/layout.tsx`, `components/site/header.tsx`, `components/site/footer.tsx`, CSS `reference-design.css`, data contoh `lib/reference-content.ts`, aset `public/images/reference/`, serta CHECKPOINT.
+
+**Menjalankan:** `pnpm --dir frontend dev`; backend lokal mengikuti README. Tidak ada migrasi, variabel lingkungan atau dependency baru.
+
+**Berita:** audit schema dan sumber backend menunjukkan belum ada penyimpanan/API berita; `/berita` sebelumnya kerangka. Sumber berita resmi sudah ditanyakan kepada pengguna dan masih ditunggu. Isi dari gambar sementara ditandai contoh, termasuk statistik, agenda dan pengumuman. Link berita membuka daftar/detail contoh yang diberi pemberitahuan dan noindex. Ini pratinjau desain, bukan publikasi berita faktual.
+
+**Uji manual:** 11 URL (10 rute publik ditambah detail contoh berita) × 360/768/864/1440 px: 44 kombinasi tanpa overflow horizontal atau gambar gagal. Beranda diperiksa visual pada 864 dan 360 px. Screenshot desktop disimpan sebagai artefak percakapan. Build pernah membutuhkan pembersihan cache Turbopack rusak pada volume macOS; setelah cache dibersihkan preview berjalan.
+
+**Risiko/tertunda:** sumber berita resmi, statistik, agenda, logo asli resolusi tinggi dan dokumentasi kegiatan belum diberikan. Aset hasil potong screenshot memiliki resolusi terbatas. Kontak/jam pelayanan tetap belum diisi. Tidak memulai CMS atau prompt lanjutan. Status desain **SIAP REVIEW**; integrasi berita resmi **MENUNGGU SUMBER**.
+
+**Verifikasi otomatis revisi:** lint dan typecheck lulus, 19/19 tes frontend lulus, build produksi Next.js lulus. Backend tidak berubah; hasil verifikasi backend pada revisi sebelumnya tetap berlaku.

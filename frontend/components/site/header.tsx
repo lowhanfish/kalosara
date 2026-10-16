@@ -2,14 +2,25 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Landmark } from "lucide-react";
-import { publicPages } from "@/lib/public-pages";
+import { ArrowRight } from "lucide-react";
+
 import type { SiteSettings } from "@/lib/site-settings";
 import { Dialog } from "@/components/ui/dialog";
 import { SearchForm } from "./search-form";
 export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const path = usePathname();
-  const links = publicPages.map((page) => (
+  const items = [
+    { title: "Beranda", href: "/" },
+    { title: "Profil", href: "/profil" },
+    { title: "Berita", href: "/berita" },
+    { title: "Pelayanan", href: "/pelayanan" },
+    { title: "Agenda", href: "/agenda" },
+    { title: "Galeri", href: "/galeri" },
+    { title: "Informasi", href: "/informasi-publik" },
+    { title: "Statistik", href: "/statistik" },
+    { title: "Kontak", href: "/kontak" },
+  ];
+  const links = items.map((page) => (
     <Link
       key={page.href}
       href={page.href}
@@ -17,6 +28,11 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
       className="portal-nav-link"
     >
       {page.title}
+      {["Profil", "Pelayanan", "Informasi"].includes(page.title) && (
+        <span className="nav-chevron" aria-hidden="true">
+          ⌄
+        </span>
+      )}
     </Link>
   ));
   return (
@@ -31,22 +47,14 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             aria-label={`Beranda ${settings.name}`}
             className="portal-brand"
           >
-            {settings.logoUrl ? (
-              <Image
-                src={settings.logoUrl}
-                alt={`Logo resmi ${settings.name}`}
-                width={48}
-                height={58}
-                unoptimized
-              />
-            ) : (
-              <span
-                className="portal-brand-mark"
-                title="Ikon kelurahan; logo resmi belum diisi"
-              >
-                <Landmark aria-hidden="true" size={30} strokeWidth={1.7} />
-              </span>
-            )}
+            <Image
+              src={settings.logoUrl ?? "/images/reference/crest.webp"}
+              alt={`Logo pada desain ${settings.name}`}
+              width={47}
+              height={58}
+              unoptimized
+              className="portal-crest"
+            />
             <span>
               <span className="block text-xs font-bold uppercase tracking-wide">
                 Kelurahan
@@ -63,7 +71,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             <div className="portal-search-row">
               <SearchForm id="desktop-search" compact />
               <Link href="/pelayanan" className="yellow-button">
-                Cek pelayanan <ArrowRight aria-hidden="true" size={15} />
+                Cek Layanan <ArrowRight aria-hidden="true" size={15} />
               </Link>
             </div>
             <nav aria-label="Navigasi utama" className="portal-desktop-nav">

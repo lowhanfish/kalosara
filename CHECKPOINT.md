@@ -82,3 +82,13 @@ Pengguna memilih gambar `Beranda Kelurahan Watundehoa Modern.png` sebagai arah d
 Kabupaten tetap **Konawe** sesuai instruksi tertulis pengguna. Nama wilayah lain, logo, angka statistik, artikel, tanggal agenda, sambutan/kutipan, dan layanan pengajuan yang muncul dalam gambar referensi tidak dijadikan fakta. Logo resmi tetap memakai slot backend; fallback berupa ikon gedung generik. Angka statistik yang belum tersedia diganti fakta identitas terkonfirmasi. Tombol pelayanan membuka panduan, dan pengajuan online tetap dinyatakan belum tersedia. Tidak ada implementasi CMS/Prompt 06, perubahan backend, migrasi, env, atau dependency.
 
 Verifikasi: frontend lint/typecheck dan 19 tes lulus. Semua 10 rute publik diperiksa pada 360, 768, dan 1440 px (30 kombinasi tanpa overflow atau gambar rusak). Menu/search seluler dengan kata “kontak” mengarah ke hasil yang benar. Build produksi lulus. Hasil backend dari revisi sebelumnya tetap berlaku karena tidak ada perubahan backend.
+
+## Koreksi mengikuti unggahan pengguna — 16 Oktober 2026
+
+Pengguna menolak interpretasi desain sebelumnya dan meminta komposisi gambar unggahan dipakai langsung. Beranda disesuaikan dengan susunan referensi: hero, tujuh akses cepat, satu berita utama + empat berita samping, empat pengumuman, enam layanan, profil/statistik, agenda/galeri, banner kontak dan footer. Potongan visual dari gambar pengguna disimpan di `frontend/public/images/reference/`, termasuk komposit hero, crest, foto ilustrasi berita/galeri dan panel monumen. Konten dan navigasi tetap HTML; halaman bukan satu gambar penuh. Desktop menggunakan komposit hero dari unggahan; seluler memakai foto kantor dan potret asli yang diberikan sebelumnya. Kabupaten tetap Konawe sesuai instruksi pengguna.
+
+Audit berita: rute `/berita` sudah ada tetapi sebelumnya hanya kerangka. Tidak ditemukan model Prisma, endpoint, seed atau artikel tersimpan. Pengguna sudah dimintai lokasi sumber berita. Sementara sumber belum diberikan, `frontend/lib/reference-content.ts` memuat contoh dari gambar, dengan pemberitahuan terlihat pada beranda dan halaman berita. Angka statistik, pengumuman, agenda serta dokumentasi kegiatan dalam gambar belum diverifikasi sebagai fakta; jangan menganggapnya publikasi resmi. Halaman detail contoh tidak diindeks. Logo dari gambar hanya fallback desain; konfigurasi logo backend tetap didahulukan di header.
+
+Perubahan tidak menambah CMS, tabel, env, dependency atau dashboard. Laporan dan batasan ada di `frontend/docs/public-layout.md`.
+
+Verifikasi koreksi: frontend lint/typecheck/19 tes/build lulus; 44 kombinasi browser tanpa overflow/gambar rusak. **SIAP REVIEW desain**, integrasi berita resmi menunggu sumber pengguna.

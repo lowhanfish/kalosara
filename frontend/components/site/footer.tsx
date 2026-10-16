@@ -1,11 +1,20 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Clock3, Mail, MapPin, Phone } from "lucide-react";
 import type { SiteSettings } from "@/lib/site-settings";
 export function SiteFooter({ settings }: { settings: SiteSettings }) {
   return (
     <footer className="mt-auto bg-[#032545] text-white">
-      <div className="container grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
+      <div className="container reference-footer-grid">
+        <div className="reference-footer-brand">
+          <Image
+            src="/images/reference/crest.webp"
+            alt=""
+            width={43}
+            height={51}
+            unoptimized
+            className="reference-footer-crest"
+          />
           <p className="text-[10px] font-semibold tracking-widest text-[#ffcf24]">
             KELURAHAN
           </p>
@@ -20,7 +29,6 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             <br />
             Administrasi Rakyat
           </p>
-          <p className="mt-6 font-semibold">{settings.name}</p>
           <p className="mt-1 max-w-xs text-sm text-[#cbd9e5]">
             Informasi yang dekat, pelayanan yang lebih mudah diakses.
           </p>
