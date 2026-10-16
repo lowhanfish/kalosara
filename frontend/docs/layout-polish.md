@@ -27,3 +27,9 @@ Browser Chrome pada 13 halaman (10 publik + 3 admin), lebar 360/768/1024/1440: 5
 Server frontend utama 3001/backend 4000 tetap manual. Tidak ada perubahan Docker/Redis, konten resmi atau desain hero. Perubahan ini memperbaiki tampilan yang terlihat; review akhir pengguna tetap diperlukan untuk memastikan ukuran dan kepadatan sesuai kenyamanan mereka.
 
 Smoke visual tambahan pada build produksi sementara3002:6 kombinasi beranda/agenda/editor CMS pada360 dan1440 lulus tanpa overflow atau pageerror; stylesheet, tanggal dua kolom dan panel upload terbuka diperiksa. Server QA3002 telah dihentikan setelah pemeriksaan; runtime utama tetap berjalan.
+
+## Koreksi hero setelah review pengguna
+
+Hero desktop sebelumnya masih menampilkan komposit referensi, bukan foto kantor asli yang menjadi latar seluler. Komposit dihapus; satu foto kantor (`/images/watundehoa/kantor.webp`, atau pengaturan hero yang disetujui admin) menjadi latar bersama pada semua layar. Potret AMIRULAH, S.Si (`/images/watundehoa/amirulah.webp`, atau foto aparatur published) adalah gambar terpisah dengan caption nama/jabatan. CSS hero khusus mengembalikan potret desktop yang sebelumnya disembunyikan, menjaga rasio gambar dan menata ulang posisi responsif. Kutipan belum disahkan dari desain tidak lagi ditampilkan. Tidak mengedit atau menghasilkan ulang gambar sumber.
+
+Lint/typecheck/31 tes/build frontend lulus. QA browser hero pada360/768/1024/1440: foto kantor dan potret memakai file yang tepat, tidak ada komposit, caption terlihat, nol overflow/gambar rusak/pageerror/overlap teks dan potret. Tampilan desktop dan seluler diperiksa visual. Tidak ada migration, mutasi database atau perubahan backend.

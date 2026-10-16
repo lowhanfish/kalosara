@@ -119,10 +119,13 @@ export default async function Home() {
       : [];
   return (
     <main id="konten" tabIndex={-1} className="portal-home reference-fidelity">
-      <section className="modern-hero" aria-labelledby="hero-title">
+      <section
+        className="modern-hero hero-separated"
+        aria-labelledby="hero-title"
+      >
         <Image
           src={settings.heroUrl ?? siteIdentity.officePhoto}
-          alt=""
+          alt="Foto kantor Kelurahan Watundehoa"
           fill
           unoptimized
           preload
@@ -130,17 +133,6 @@ export default async function Home() {
           sizes="100vw"
         />
         <div className="modern-hero-shade" aria-hidden="true" />
-        <div className="reference-hero-scene">
-          <Image
-            src={settings.heroUrl ?? "/images/reference/hero-right.webp"}
-            alt="Komposisi foto kantor, bendera Merah Putih dan Lurah Watundehoa pada desain pilihan pengguna"
-            fill
-            unoptimized
-            preload
-            className="object-fill"
-            sizes="60vw"
-          />
-        </div>
         <div className="container modern-hero-inner">
           <div className="modern-hero-copy">
             <p className="mini-label text-[#ffcf24]">{settings.name}</p>
@@ -178,7 +170,7 @@ export default async function Home() {
               unoptimized
               loading="eager"
               className="object-cover object-top"
-              sizes="55vw"
+              sizes="(max-width: 799px) 230px, (max-width: 1100px) 270px, 350px"
             />
           </div>
           <div className="hero-leader-card">
@@ -186,13 +178,6 @@ export default async function Home() {
               {leader?.name ?? siteIdentity.leader}
             </p>
             <p className="mt-0.5 text-xs">Lurah Watundehoa</p>
-            <div className="reference-quote">
-              <span aria-hidden="true">“</span>
-              <p>
-                Bersama warga, kita wujudkan Kelurahan Watundehoa yang maju,
-                nyaman dan sejahtera.
-              </p>
-            </div>
           </div>
         </div>
         <svg
