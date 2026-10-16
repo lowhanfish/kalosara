@@ -1,3 +1,4 @@
+import { contentAdminRouter, publicContentRouter } from './modules/cms/content.js';
 import express from 'express';
 import { newsAdminRouter } from './modules/cms/news.js';
 import { publicNewsRouter } from './modules/cms/public-news.js';
@@ -37,6 +38,8 @@ export function createApp() {
     }
   });
 
+  app.use('/api/v1/admin/content', contentAdminRouter);
+  app.use('/api/v1/public/content', publicContentRouter);
   app.use('/api/v1/admin/news', newsAdminRouter);
   app.use('/api/v1/admin/media', mediaAdminRouter);
   app.use('/api/v1/public/media', publicMediaRouter);

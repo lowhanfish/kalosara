@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — setelah Prompt 07
+# Checkpoint KALOSARA — Prompt 09 siap review kode
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -12,7 +12,10 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 04 — bootstrap auth frontend | Selesai dan di-push | `8b05260` |
 | 05 — design system dan layout publik | Selesai dan di-push; desain pilihan pengguna | `961c540` |
 | 06 — konfigurasi, profil dan aparatur | Selesai dan di-push | `359bea8` |
-| 07 — CMS berita, kategori dan media | Selesai; lihat laporan terbaru di bawah | commit Prompt 07 |
+| 07 — CMS berita, kategori dan media | Selesai dan di-push | `b6ecc46` |
+| 08 — berita publik dan SEO | Selesai dan di-push | `a56c58e` |
+| Revisi runtime manual/Neon/upload | Selesai dan di-push | `867f095` |
+| 09 — pengumuman, agenda, galeri, informasi publik | Kode siap review; migrasi Neon menunggu persetujuan | lihat laporan Prompt 09 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -145,3 +148,23 @@ Upload file fisik pada backend/public/uploads/<source>/<images|documents>/; sour
 Verifikasi revisi: lima migration berhasil diterapkan ke Neon; backend lint/typecheck/build dan 26 tes lulus memakai Node >=22.12; frontend lint/typecheck/build dan 30 tes lulus. QA upload nyata di Neon membuktikan direktori news/images dan settings/documents, file fisik dan WebP turunan, proteksi file privat serta penolakan source traversal. Akun/file QA sementara dibersihkan tanpa reset atau penghapusan konten pengguna. Redis healthy/PONG pada localhost:6380. Cache Turbopack yang rusak dibersihkan sebelum build ulang.
 
 Runtime lokal aktif: frontend http://localhost:3001 (3000 milik proses lain), backend http://localhost:4000, Redis localhost:6380. Origin/URL internal dan shared secret server di env lokal diselaraskan; DATABASE_URL pengguna dipertahankan dan tidak masuk Git.
+
+## Prompt 09 selesai untuk review kode — 17 Oktober 2026
+
+Audit awal HEAD `867f095`, working tree bersih. Kedua PDF Tahap 01, README, checkpoint, frontend/AGENTS.md dan panduan Next.js terpasang 16.4.0 sudah dibaca. Laporan delapan bagian: `backend/docs/content-cms.md`.
+
+CMS `/admin/konten` mengelola pengumuman, agenda daftar, album foto dan dokumen publik dengan draft/publish/arsip, search/filter/pagination, Origin/CSRF, role ADMIN_KELURAHAN aktif, optimistic version, transaksi/audit. Model ContentItem + Announcement/Event/Gallery/GalleryPhoto/PublicDocument berelasi media. Pengumuman pinned menyaring future/expired setiap request tanpa job. Empat halaman publik dan panel beranda membaca CMS no-store. Dokumen PUBLISHED wajib PDF PUBLIC aktif; privat tetap hanya pengunggah. Gambar galeri PUBLIC ber-alt, maksimal 12/album dan 4 album/halaman, thumb480/display1200/lazy. Media yang dirujuk tidak dapat diarsipkan. Tidak ada seed konten resmi.
+
+Upload menambah source allowlist announcements/events/galleries/documents, pola `<asal>/<images|documents>/` tetap pada backend/public/uploads; legacy kompatibel. API tetap menjaga akses tanpa static folder public. File PUBLIC memang bisa diakses lewat URL media walau item CMS diarsipkan; arsip konten bukan pencabutan visibilitas file. PRIVATE tidak dipromosikan otomatis. Validasi signature/isi/MIME/ekstensi, batas tepat 20 MiB, optimasi dan proteksi lama dipertahankan. Tag HMAC public-content ditambah dengan retry/outbox lama. Tidak ada env/dependency aplikasi baru atau perubahan Docker.
+
+**Migration `20261016040000_public_content` BELUM diterapkan ke Neon.** Auto-review menolak migrate deploy ke database persisten karena menganggap belum ada otorisasi eksplisit. Jangan mencoba bypass. Perlu persetujuan pengguna khusus untuk menerapkan migration additive memakai DATABASE_URL yang sudah ada; tidak ada reset/seed/tes pada Neon. Sebelum itu kanal baru pada runtime utama belum aktif dan UI menunjukkan error state. URL/rahasia .env tidak diubah/ditampilkan.
+
+Runtime utama diperiksa: manual frontend3001/backend4000; APP_ORIGIN/SITE_ORIGIN/FRONTEND_INTERNAL_URL3001, API4000 dan shared secret cocok; Redis6380 healthy/PONG. Tidak mengganggu port3000/proyek lain. CSS/aset desain pilihan `961c540` dipertahankan, angka statistik/ilustrasi lama tetap berlabel contoh. Identitas Watundehoa/Puriala/Konawe dan AMIRULAH, S.Si dipertahankan. Prompt10/Tahap02 tidak dimulai.
+
+Verifikasi: backend lint/typecheck/build dan 28 tes unit/HTTP lulus; frontend lint/typecheck/build dan 31 tes lulus; 25 tes PostgreSQL dalam 6 suite lulus, keenam migration pada DB kosong berhasil. PostgreSQL **native 18.4 disposable** pada55439, tanpa image/container PostgreSQL, dengan database regresi dan browser terpisah. `npm run test:db` kini wajib TEST_DATABASE_URL localhost dengan nama kalosara_*_test dan tanpa query; setiap suite menolak Neon/non-test bahkan bila dipanggil langsung. Upload tes terisolasi sementara. Tes mencakup role/inactive/CSRF, draft/archive/future/expired, expiry segera, pinned/filter/pagination/konflik, acara mendatang/lampau, PDF PUBLIC/PRIVATE tepat20MiB, +1byte413, disguise/traversal, private owner vs admin lain, static URL404, thumbnail480 dan referensi media.
+
+QA Chrome build produksi 3002/backend4002 dengan DB/akun/file terisolasi: login, publish empat kanal, upload gambar/PDF, HTML SSR escaped, 18 kombinasi enam halaman pada360/768/1440 tanpa overflow/gambar rusak/pageerror. HMAC nyata7 terkirim/0 pending. Browser QA mengarahkan request API sesinya ke backend uji karena rewrite build tetap4000; tidak menguji mutasi Neon. Cache Turbopack rusak/konflik build dengan server QA diselesaikan dengan menghentikan hanya server QA dan rebuild. Fixture browser sempat tercampur suite regresi; rerun di DB kedua yang kosong lulus seluruhnya.
+
+**SIAP REVIEW kode Prompt09; aktivasi Neon tertunda persetujuan.** Jangan lanjut Prompt10 atau surat Tahap02. Lihat laporan untuk SOP reviewer dan batasan. Commit/push setelah pemeriksaan lulus, lalu berhenti.
+
+Cleanup akhir: frontend QA3002, backend QA4002 dan PostgreSQL native55439 telah dihentikan; database, akun, file, fixture dan kredensial uji sementara dibersihkan. Proses utama frontend3001/backend4000 serta Redis6380 tetap berjalan.

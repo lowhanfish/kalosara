@@ -22,10 +22,7 @@ import {
   Building2,
 } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
-import {
-  referenceAnnouncements,
-  referenceAgenda,
-} from "@/lib/reference-content";
+import { getContent, formatContentDate } from "@/lib/content";
 const shortcuts = [
   { title: "Ajukan Layanan", href: "/pelayanan", icon: Landmark, tone: "red" },
   { title: "Profil Kelurahan", href: "/profil", icon: FileText, tone: "blue" },
@@ -104,6 +101,22 @@ export default async function Home() {
   const leader = profile.officials.find(
     (o) => o.position.toLowerCase() === "lurah",
   );
+  const homeContent = await Promise.allSettled([
+    getContent("announcements", new URLSearchParams({ limit: "4" })),
+    getContent(
+      "events",
+      new URLSearchParams({ limit: "3", period: "upcoming" }),
+    ),
+    getContent("galleries", new URLSearchParams({ limit: "1" })),
+  ]);
+  const homeAnnouncements =
+    homeContent[0].status === "fulfilled" ? homeContent[0].value.items : [];
+  const homeEvents =
+    homeContent[1].status === "fulfilled" ? homeContent[1].value.items : [];
+  const homePhotos =
+    homeContent[2].status === "fulfilled"
+      ? (homeContent[2].value.items[0]?.gallery?.photos.slice(0, 5) ?? [])
+      : [];
   return (
     <main id="konten" tabIndex={-1} className="portal-home reference-fidelity">
       <section className="modern-hero" aria-labelledby="hero-title">
@@ -220,9 +233,9 @@ export default async function Home() {
         </div>
       </section>
       <p className="container reference-demo-note">
-        Pengumuman, angka, agenda, serta dokumentasi kegiatan pada desain ini
-        masih contoh dan belum merupakan publikasi resmi. Bagian berita hanya
-        menampilkan konten yang sudah diterbitkan pengelola.
+        Angka statistik dan ilustrasi profil pada desain ini masih contoh, belum
+        merupakan data resmi. Berita, pengumuman, agenda, dan galeri menampilkan
+        konten yang telah diterbitkan pengelola.
       </p>
       <section className="container portal-news-grid section-space">
         <div>
@@ -241,12 +254,12 @@ export default async function Home() {
             href="/pengumuman"
           />
           <div className="announcement-panel reference-announcements">
-            {referenceAnnouncements.map((item, index) => {
+            {homeAnnouncements.map((item, index) => {
               const Icon = announcementIcons[index];
               return (
                 <Link
-                  key={item.title}
-                  href="/pengumuman"
+                  key={item.id}
+                  href={`/pengumuman#${item.id}`}
                   className="announcement-link"
                 >
                   <span
@@ -255,7 +268,7 @@ export default async function Home() {
                     <Icon aria-hidden="true" size={22} />
                   </span>
                   <span>
-                    <time>{item.date}</time>
+                    <time>{formatContentDate(item.updatedAt)}</time>
                     <strong>{item.title}</strong>
                   </span>
                   <span className="round-arrow">
@@ -264,6 +277,13 @@ export default async function Home() {
                 </Link>
               );
             })}
+            {!homeAnnouncements.length && (
+              <p className="p-5">
+                {homeContent[0].status === "rejected"
+                  ? "Pengumuman sementara tidak dapat dimuat."
+                  : "Belum ada pengumuman aktif."}
+              </p>
+            )}
           </div>
         </aside>
       </section>
@@ -372,21 +392,42 @@ export default async function Home() {
             href="/agenda"
           />
           <div className="reference-agenda">
-            {referenceAgenda.map((item) => (
-              <Link key={item.title} href="/agenda">
+            {homeEvents.map((item) => (
+              <Link key={item.id} href={`/agenda#${item.id}`}>
                 <span className="reference-date-box">
-                  <b>{item.day}</b>
-                  <small>{item.month}</small>
+                  <b>
+                    {item.event
+                      ? new Intl.DateTimeFormat("id-ID", {
+                          day: "numeric",
+                          timeZone: "Asia/Makassar",
+                        }).format(new Date(item.event.start))
+                      : ""}
+                  </b>
+                  <small>
+                    {item.event
+                      ? new Intl.DateTimeFormat("id-ID", {
+                          month: "short",
+                          timeZone: "Asia/Makassar",
+                        }).format(new Date(item.event.start))
+                      : ""}
+                  </small>
                 </span>
                 <span>
                   <h3>{item.title}</h3>
-                  <p>{item.place}</p>
+                  <p>{item.event?.location}</p>
                 </span>
                 <span className="round-arrow">
                   <ArrowRight aria-hidden="true" size={15} />
                 </span>
               </Link>
             ))}
+            {!homeEvents.length && (
+              <p className="p-5">
+                {homeContent[1].status === "rejected"
+                  ? "Agenda sementara tidak dapat dimuat."
+                  : "Belum ada agenda mendatang."}
+              </p>
+            )}
           </div>
         </div>
         <div>
@@ -396,22 +437,30 @@ export default async function Home() {
             href="/galeri"
           />
           <div className="reference-gallery">
-            {[1, 2, 3, 4, 5].map((index) => (
+            {homePhotos.map((photo, i) => (
               <Link
                 href="/galeri"
-                key={index}
-                className={`reference-gallery-${index}`}
+                key={photo.mediaId}
+                className={`reference-gallery-${i + 1}`}
               >
                 <Image
-                  src={`/images/reference/gallery-${index}.webp`}
-                  alt={`Ilustrasi kegiatan ${index} dari gambar desain`}
+                  src={`/api/v1/public/media/${photo.mediaId}?variant=thumb`}
+                  alt={photo.alt}
                   fill
+                  loading="lazy"
                   unoptimized
                   className="object-cover"
                   sizes="30vw"
                 />
               </Link>
             ))}
+            {!homePhotos.length && (
+              <p className="p-5">
+                {homeContent[2].status === "rejected"
+                  ? "Galeri sementara tidak dapat dimuat."
+                  : "Belum ada galeri yang diterbitkan."}
+              </p>
+            )}
           </div>
         </div>
       </section>

@@ -192,6 +192,8 @@ model MediaAsset {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   owner        User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  galleryPhotos GalleryPhoto[]
+  documents PublicDocument[]
   covers       News[]   @relation("NewsCover")
   news         NewsMedia[]
 
@@ -225,4 +227,64 @@ model CacheInvalidation {
   attempts      Int       @default(0)
   nextAttemptAt DateTime  @default(now())
   @@index([deliveredAt, nextAttemptAt])
+}
+
+enum ContentKind {
+  announcements
+  events
+  galleries
+  documents
+}
+
+// Shared lifecycle; each channel has a typed one-to-one payload.
+model ContentItem {
+  id String @id @default(uuid()) @db.Uuid
+  kind ContentKind
+  title String @db.VarChar(200)
+  content String @db.Text
+  status PublicationStatus @default(DRAFT)
+  version Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  announcement Announcement?
+  event Event?
+  gallery Gallery?
+  document PublicDocument?
+  @@index([kind, status, updatedAt])
+}
+model Announcement {
+  contentId String @id @db.Uuid
+  pinned Boolean @default(false)
+  startsAt DateTime?
+  expiredAt DateTime?
+  item ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
+}
+model Event {
+  contentId String @id @db.Uuid
+  start DateTime
+  end DateTime
+  location String @db.VarChar(300)
+  item ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  @@index([start, end])
+}
+model Gallery {
+  contentId String @id @db.Uuid
+  item ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  photos GalleryPhoto[]
+}
+model GalleryPhoto {
+  galleryId String @db.Uuid
+  mediaId String @db.Uuid
+  alt String @db.VarChar(300)
+  sortOrder Int
+  gallery Gallery @relation(fields: [galleryId], references: [contentId], onDelete: Cascade)
+  media MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+  @@id([galleryId, mediaId])
+}
+model PublicDocument {
+  contentId String @id @db.Uuid
+  category String @db.VarChar(120)
+  fileId String @db.Uuid
+  item ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  file MediaAsset @relation(fields: [fileId], references: [id], onDelete: Restrict)
 }

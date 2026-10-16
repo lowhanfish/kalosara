@@ -97,3 +97,9 @@ test("origin is explicit and rejects credentials, subpath, query and non HTTP sc
     else process.env.SITE_ORIGIN = old;
   }
 });
+
+test("Prompt 09 invalidation accepts public-content with signed public tags only", () => {
+  const event = { id: JSON.parse(body).id, tags: ["public-content", "news", "site-settings", "public-profile"] };
+  assert.deepEqual(parseCacheEvent(event), event);
+  assert.equal(parseCacheEvent({ ...event, tags: ["public-content", "user-private"] }), null);
+});

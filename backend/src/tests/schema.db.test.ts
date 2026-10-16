@@ -1,3 +1,4 @@
+import './db-safety.js';
 import { randomUUID, createHash } from 'node:crypto';
 import { afterAll, describe, expect, it } from 'vitest';
 import { PrismaClient } from '@prisma/client';

@@ -1,5 +1,10 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-export const cacheTags = ["news", "site-settings", "public-profile"] as const;
+export const cacheTags = [
+  "news",
+  "site-settings",
+  "public-profile",
+  "public-content",
+] as const;
 export function verifyCacheSignature(
   body: string,
   timestamp: string | null,
@@ -35,7 +40,8 @@ export function parseCacheEvent(
     ) ||
     !Array.isArray(event.tags) ||
     !event.tags.length ||
-    event.tags.length > 3 ||
+    event.tags.length > 4 ||
+    new Set(event.tags).size !== event.tags.length ||
     !event.tags.every((tag) => cacheTags.includes(tag))
   )
     return null;

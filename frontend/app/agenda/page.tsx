@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { PublicSection } from "@/components/site/public-section";
+import { ContentPage } from "@/features/content/public-list";
 export const metadata: Metadata = { title: "Agenda" };
-export default function Page() {
-  return <PublicSection href="/agenda" />;
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  return <ContentPage kind="events" searchParams={searchParams} />;
 }

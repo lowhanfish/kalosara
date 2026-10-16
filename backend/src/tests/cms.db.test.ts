@@ -1,3 +1,4 @@
+import './db-safety.js';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
@@ -58,7 +59,7 @@ describe('news and media integration PostgreSQL', () => {
     const privateAsset = await upload('PRIVATE'); privateId = privateAsset.id;
     expect(privateAsset.url).toBeNull(); expect(publicAsset.url).toBe(`/api/v1/public/media/${publicId}`);
     expect(publicAsset).not.toHaveProperty('storageKey');
-    const row = await prisma.mediaAsset.findUniqueOrThrow({ where: { id: publicId } }); expect(row.storageKey).toBe(`${publicId}.png`);
+    const row = await prisma.mediaAsset.findUniqueOrThrow({ where: { id: publicId } }); expect(row.storageKey).toBe(`general/images/${publicId}.png`);
     await request(app).get(`/api/v1/public/media/${publicId}`).expect(200).expect('X-Content-Type-Options','nosniff');
     await request(app).get(`/api/v1/public/media/${privateId}`).expect(404);
     await request(app).get(`/api/v1/admin/media/${privateId}/file`).expect(401);

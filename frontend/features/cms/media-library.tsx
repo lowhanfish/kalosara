@@ -98,6 +98,10 @@ export function MediaLibrary() {
             <option value="profile">Profil kelurahan</option>
             <option value="officials">Aparatur</option>
             <option value="settings">Pengaturan / identitas</option>
+            <option value="announcements">Pengumuman</option>
+            <option value="events">Agenda</option>
+            <option value="galleries">Galeri</option>
+            <option value="documents">Informasi publik</option>
             <option value="general">Umum</option>
           </select>
         </label>

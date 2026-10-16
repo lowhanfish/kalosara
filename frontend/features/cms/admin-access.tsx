@@ -90,6 +90,9 @@ export function AdminAccess({ children }: { children: React.ReactNode }) {
           <Link className="underline" href="/admin/berita">
             Berita dan media
           </Link>
+          <Link className="underline" href="/admin/konten">
+            Pengumuman, agenda, galeri, dokumen
+          </Link>
           <button
             className="underline"
             disabled={logout.isPending}

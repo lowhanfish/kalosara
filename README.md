@@ -16,16 +16,13 @@ Frontend dan backend berada dalam satu repo Git `kalosara`. Keduanya tetap aplik
 
 ## Jalankan tanpa Docker
 
-Butuh Node.js 22.12+ untuk backend (frontend mendukung 20.19+), pnpm 10, dan PostgreSQL 17. Image backend menggunakan Node 22. Buat database `kalosara` dan user lokal sesuai `DATABASE_URL`.
+Butuh Node.js 22.12+ untuk backend, pnpm 10, dan koneksi Neon yang sudah tersedia di `backend/.env`. Jangan menimpa file env yang telah dikonfigurasi. Untuk instalasi baru saja, salin `.env.example` dan isi sendiri rahasianya.
 
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env.local
 cd backend
 npm ci
 npm run db:generate
-npm run db:migrate
-npm run db:seed
+npm run db:deploy
 npm run dev
 ```
 
@@ -34,10 +31,10 @@ Di terminal lain:
 ```bash
 cd frontend
 pnpm install --frozen-lockfile
-pnpm dev
+pnpm dev --port 3001
 ```
 
-Buka `http://localhost:3000` dan `http://localhost:3000/api/v1/health`. Endpoint `ready` di `http://localhost:3000/api/v1/ready` memeriksa koneksi database. Semua respons API memakai `success`, `data` atau `error`, dan `requestId`; respons juga menyertakan header `X-Request-Id`.
+Buka `http://localhost:3001`; API manual berada pada `http://localhost:4000`. Frontend memproksikan `/api/v1`. `APP_ORIGIN`, `SITE_ORIGIN`, dan `FRONTEND_INTERNAL_URL` lokal harus memakai origin frontend yang sama. `/api/v1/health` memeriksa aplikasi dan `/api/v1/ready` memeriksa database. Jangan menjalankan reset atau seed pada database pengguna.
 
 ## Runtime manual + Neon + Redis
 
@@ -47,7 +44,7 @@ Compose hanya menjalankan Redis: `docker compose up -d redis`, lalu `docker comp
 
 ## Penyimpanan upload
 
-File fisik berada di `backend/public/uploads/<asal>/<images|documents>/`. UPLOAD_ROOT default public/uploads, jalankan backend dari folder backend. Asal dipilih pada pustaka media: news, profile, officials, settings, general. Turunan gambar berada bersama original. File lama dipindahkan ke legacy tanpa mengubah ID/URL database. Upload diabaikan Git; backup file bersama database Neon.
+File fisik berada di `backend/public/uploads/<asal>/<images|documents>/`. UPLOAD_ROOT default public/uploads, jalankan backend dari folder backend. Asal tervalidasi pada pustaka media: news, profile, officials, settings, general, announcements, events, galleries, documents. Turunan gambar berada bersama original. File lama dipindahkan ke legacy tanpa mengubah ID/URL database. Upload diabaikan Git; backup file bersama database Neon.
 
 Database hanya menyimpan metadata, path dan relasi, tanpa blob/base64 gambar/PDF. Public ini folder backend, bukan Next.js. API tetap memeriksa PUBLIC/PRIVATE, owner dan arsip; jangan pasang static server tanpa pembatasan pada seluruh folder karena akan membuka file privat.
 
@@ -91,3 +88,24 @@ Kontrak API, keputusan permission, extension Tiptap, perintah tes dan hasil revi
 Daftar, detail dan kategori berita tersedia pada `/berita`, `/berita/[slug]`, `/berita/kategori/[slug]`, dengan metadata server, NewsArticle/BreadcrumbList, sitemap dan robots. Slug berita dapat diedit; slug lama menjadi alias 301 ke slug terbaru selama artikel published. Draft/arsip tetap 404.
 
 Terapkan migration `20261016030000_news_publication`. Isi `SITE_ORIGIN` frontend dengan origin publik sebenarnya, `FRONTEND_INTERNAL_URL` backend dengan origin frontend internal, serta `CACHE_INVALIDATION_SECRET` acak minimal 32 karakter yang sama pada kedua aplikasi. Secret wajib produksi dan tidak boleh NEXT_PUBLIC. Jalankan backend dari folder backend dan frontend dari folder frontend. Webhook memerlukan HMAC; bila kelak memakai reverse proxy publik, tutup `/api/internal/` pada proxy. Notifikasi invalidasi disimpan dalam transaksi dan dicoba ulang; editor memperingatkan bila masih tertunda. Lihat [laporan delapan bagian Prompt 08](frontend/docs/news-public.md) untuk hasil pemeriksaan dan batasan operasi.
+
+## Kanal informasi — Prompt 09
+
+CMS `/admin/konten` mengelola pengumuman, agenda, album galeri, dan informasi publik. ADMIN_KELURAHAN dapat membuat, mencari, memfilter status, menyunting, menerbitkan dan mengarsipkan; LURAH dan MASYARAKAT tetap tidak memiliki izin kelola. Arsip merupakan penghapusan aman. Setiap simpan memeriksa versi terakhir dan mencatat audit dalam transaksi.
+
+Pengumuman mendukung pinned, awal berlaku dan kedaluwarsa; publikasi yang belum berlaku atau kedaluwarsa disaring oleh server setiap request. `/agenda` menyediakan daftar mendatang/berlangsung dan lampau. `/galeri` memuat maksimal 4 album per halaman, masing-masing 12 foto ber-alt, thumbnail 480px dan lazy loading. `/informasi-publik` menyediakan pencarian/kategori serta unduhan PDF resmi. Isi standar pelayanan, maklumat dan dokumen resmi harus diisi pengelola setelah disetujui; tidak ada konten resmi buatan atau seed.
+
+Gunakan pustaka media dalam CMS untuk mengunggah file. PRIVATE tetap default dan hanya dapat dibuka pengunggah melalui API; PDF privat hanya dapat ditautkan sebagai draft/arsip oleh pengunggah. Penerbitan dokumen mensyaratkan PDF PUBLIC aktif; tidak ada perubahan visibilitas otomatis. Galeri hanya menerima gambar PUBLIC aktif. Simpanan CMS tidak mengubah file publik menjadi privat saat konten diarsipkan: pilihan PUBLIC pada upload berarti URL media memang boleh diakses anonim. Media yang masih dirujuk tidak dapat diarsipkan. File maksimal **20 MiB (20.971.520 byte)**, signature/MIME/ekstensi dan isi tetap divalidasi. File lama pada legacy tetap kompatibel.
+
+Migrasi tambahan: `20261016040000_public_content`; jalankan `npm run db:generate && npm run db:deploy` dari backend. Tidak ada env atau dependency aplikasi baru. Pembacaan empat kanal publik dan beranda memakai no-store agar batas waktu berlaku tepat; simpanan tetap mengantrekan invalidasi HMAC `public-content` beserta retry persisten.
+
+### Tes database terisolasi
+
+`npm run test:db` sekarang **wajib** memakai `TEST_DATABASE_URL` eksplisit menuju database lokal disposable bernama `kalosara_*_test`; runner menolak URL nonlokal, query parameter, dan nama lain. Tidak pernah mengambil DATABASE_URL Neon dari `.env`. Gunakan instance PostgreSQL native terpisah (bukan Docker), dengan port bebas dan upload tes sementara. Runner menerapkan migrasi hanya ke database uji dan membersihkan folder upload tes setelah selesai.
+
+```bash
+cd backend
+TEST_DATABASE_URL=postgresql://test:test@127.0.0.1:55439/kalosara_prompt09_test npm run test:db
+```
+
+Kredensial di contoh hanya milik instance tes disposable. Jangan menggantinya dengan URL Neon. Laporan implementasi, kontrak API, hasil pemeriksaan, SOP review dan batasan tersedia pada [laporan Prompt 09](backend/docs/content-cms.md).

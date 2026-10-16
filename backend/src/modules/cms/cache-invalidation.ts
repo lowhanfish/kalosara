@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { env } from '../../config/env.js';
 import { logger } from '../../lib/logger.js';
-export type PublicCacheTag = 'news' | 'site-settings' | 'public-profile';
+export type PublicCacheTag = 'news' | 'site-settings' | 'public-profile' | 'public-content';
 export function enqueueInvalidation(tx: Prisma.TransactionClient, tags: PublicCacheTag[] = ['news']) {
   return tx.cacheInvalidation.create({ data: { tags: [...new Set(tags)] }, select: { id: true } });
 }
