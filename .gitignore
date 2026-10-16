@@ -154,3 +154,6 @@ vite.config.ts.timestamp-*
 
 # Runtime media (public/private served only after DB authorization)
 uploads/
+
+# Runtime files under backend public (metadata only is stored in PostgreSQL)
+backend/public/uploads/

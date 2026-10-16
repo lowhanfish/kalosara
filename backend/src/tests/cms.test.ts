@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { sanitizeBody } from '../modules/cms/sanitize.js';
 import { mediaUrlSchema } from '../modules/cms/common.js';
+import { filePath, storageKey, variantKey } from '../modules/cms/storage.js';
+describe('disk media storage', () => {
+  const id = '9cad3488-0dab-4b40-9537-f177765fe067';
+  it('groups files by validated origin/type and keeps derivatives beside originals', () => {
+    const key = storageKey('news', id, 'png', true);
+    expect(key).toBe(`news/images/${id}.png`);
+    expect(filePath(key)).toContain(`/news/images/${id}.png`);
+    expect(variantKey(key, 'thumb')).toBe(`news/images/${id}-thumb.webp`);
+    expect(storageKey('profile', id, 'pdf', false)).toBe(`profile/documents/${id}.pdf`);
+    expect(filePath(`${id}.png`)).toContain(`/legacy/${id}.png`);
+  });
+  it.each(['../../secret.env', '/etc/passwd', 'news/../../secret.env', 'bad/images/file.png'])('rejects unsafe storage keys %s', key => {
+    expect(() => filePath(key)).toThrow('Invalid media storage key');
+  });
+});
 describe('news HTML safety', () => {
   it('retains only supported editor formatting and internal media IDs', () => {
     const id = '9cad3488-0dab-4b40-9537-f177765fe067';

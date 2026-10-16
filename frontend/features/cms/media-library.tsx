@@ -92,6 +92,16 @@ export function MediaLibrary() {
           />
         </label>
         <label className="block">
+          Asal upload
+          <select className="cms-input" name="source" defaultValue="news">
+            <option value="news">Berita</option>
+            <option value="profile">Profil kelurahan</option>
+            <option value="officials">Aparatur</option>
+            <option value="settings">Pengaturan / identitas</option>
+            <option value="general">Umum</option>
+          </select>
+        </label>
+        <label className="block">
           Akses media
           <select
             className="cms-input"

@@ -134,3 +134,14 @@ Verifikasi akhir: backend lint/typecheck/build, 21 tes unit/HTTP dan 18 tes Post
 Batasan lingkungan: disk sistem sempat penuh, Docker read-only. Setelah pengguna mengosongkan disk dan menyetujui restart, PostgreSQL/QA aplikasi pulih. Build image tambahan belum berhasil (frontend exit139 pada corepack base image; backend npm ci tidak maju, dihentikan saat ruang menyusut). Validasi ulang image Docker di lingkungan sehat sebelum deployment. Belum uji scraper eksternal/domain HTTPS atau cache bersama multi-instance. Rincian batasan ada di laporan.
 
 **SIAP REVIEW Prompt 08 untuk kode dan build produksi lokal. Jangan mulai Prompt 09 sebelum instruksi pengguna berikutnya.**
+
+
+## Revisi runtime manual dan upload — 16 Oktober 2026
+
+Instruksi pengguna menggantikan rencana Docker sebelumnya: frontend/backend manual, PostgreSQL Neon dari backend/.env, Compose hanya Redis pada localhost:6380 (6379 sudah terpakai). Dockerfile aplikasi/proxy dihapus. Image KALOSARA backend/proxy dibersihkan. Image postgres:17-alpine juga dihapus setelah pengguna memberi persetujuan spesifik; daftar image kini hanya redis. Volume data lama dipertahankan.
+
+Upload file fisik pada backend/public/uploads/<source>/<images|documents>/; source allowlist news/profile/officials/settings/general dari form media. File lama dipindah ke legacy dan storageKey/URL lama tetap terbaca. Database hanya metadata/path/relasi, tanpa blob/base64 file. Akses PUBLIC/PRIVATE tetap via API, tanpa static mount seluruh public. Tidak ada migration schema baru. Jangan jalankan tes database destruktif pada Neon pengguna. Tidak memulai Prompt 09.
+
+Verifikasi revisi: lima migration berhasil diterapkan ke Neon; backend lint/typecheck/build dan 26 tes lulus memakai Node >=22.12; frontend lint/typecheck/build dan 30 tes lulus. QA upload nyata di Neon membuktikan direktori news/images dan settings/documents, file fisik dan WebP turunan, proteksi file privat serta penolakan source traversal. Akun/file QA sementara dibersihkan tanpa reset atau penghapusan konten pengguna. Redis healthy/PONG pada localhost:6380. Cache Turbopack yang rusak dibersihkan sebelum build ulang.
+
+Runtime lokal aktif: frontend http://localhost:3001 (3000 milik proses lain), backend http://localhost:4000, Redis localhost:6380. Origin/URL internal dan shared secret server di env lokal diselaraskan; DATABASE_URL pengguna dipertahankan dan tidak masuk Git.

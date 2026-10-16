@@ -1,87 +1,17 @@
 services:
-  db:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: kalosara
-      POSTGRES_USER: kalosara
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kalosara -d kalosara"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-
-  backend:
-    build: ./backend
-    environment:
-      NODE_ENV: production
-      PORT: 4000
-      DATABASE_URL: postgresql://kalosara:${POSTGRES_PASSWORD}@db:5432/kalosara?schema=public
-      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8080}
-      FRONTEND_INTERNAL_URL: http://frontend:3000
-      CACHE_INVALIDATION_SECRET: ${CACHE_INVALIDATION_SECRET:?Set CACHE_INVALIDATION_SECRET in .env}
-      AUTH_SIGNING_KEYS: ${AUTH_SIGNING_KEYS:?Set AUTH_SIGNING_KEYS in .env}
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - uploads:/app/uploads
-    healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/api/v1/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-
-  migrate:
-    build:
-      context: ./backend
-      target: migrate
-    profiles: ["tools"]
-    environment:
-      DATABASE_URL: postgresql://kalosara:${POSTGRES_PASSWORD}@db:5432/kalosara?schema=public
-    depends_on:
-      db:
-        condition: service_healthy
-
-  frontend:
-    build:
-      context: ./frontend
-      args:
-        SITE_ORIGIN: ${APP_ORIGIN:-http://localhost:8080}
-    environment:
-      API_INTERNAL_URL: http://backend:4000
-      SITE_ORIGIN: ${APP_ORIGIN:-http://localhost:8080}
-      CACHE_INVALIDATION_SECRET: ${CACHE_INVALIDATION_SECRET:?Set CACHE_INVALIDATION_SECRET in .env}
-      PORT: 3000
-      HOSTNAME: 0.0.0.0
-    depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-
-  proxy:
-    build: ./nginx
+  redis:
+    image: redis@sha256:2c2dff791878316e3b083188be0d578423b24813cdda5de0e80ea4f7b3e6bfd6
     ports:
-      - "${HTTP_PORT:-8080}:80"
-    depends_on:
-      frontend:
-        condition: service_healthy
+      - "127.0.0.1:${REDIS_PORT:-6380}:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 3s
       retries: 5
     restart: unless-stopped
 
 volumes:
-  db_data:
-  uploads:
+  redis_data:

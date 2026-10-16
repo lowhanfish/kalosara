@@ -8,7 +8,7 @@ Untuk melanjutkan pekerjaan di sesi baru, mulai dari [CHECKPOINT.md](CHECKPOINT.
 
 - `frontend/`: Next.js App Router, TypeScript strict, Tailwind CSS, fondasi shadcn/ui, TanStack Query, dan Zustand. Folder `app`, `components`, `features`, `hooks`, `lib`, `services`, dan `store` disiapkan untuk modul berikutnya.
 - `backend/`: Express TypeScript, Prisma/PostgreSQL, Zod, dan Pino. Folder `modules`, `controllers`, `services`, `repositories`, `routes`, `middlewares`, `validators`, `config`, `lib`, dan `tests` disiapkan.
-- `nginx/` dan `compose.yaml`: proxy, dua aplikasi, PostgreSQL, dan volume persisten.
+- `compose.yaml`: hanya Redis lokal. Frontend/backend manual dan PostgreSQL Neon.
 - `backend/docs/auth-design.md`: relasi akun, aturan akses, lifecycle sesi, dan provisioning staf.
 - `backend/docs/auth-api.md`: tabel endpoint autentikasi, contoh payload, dan error.
 
@@ -39,20 +39,17 @@ pnpm dev
 
 Buka `http://localhost:3000` dan `http://localhost:3000/api/v1/health`. Endpoint `ready` di `http://localhost:3000/api/v1/ready` memeriksa koneksi database. Semua respons API memakai `success`, `data` atau `error`, dan `requestId`; respons juga menyertakan header `X-Request-Id`.
 
-## Jalankan dengan Docker Compose
+## Runtime manual + Neon + Redis
 
-```bash
-cp .env.example .env
-# Isi POSTGRES_PASSWORD dan AUTH_SIGNING_KEYS di .env; sesuaikan APP_ORIGIN
-docker compose build
-docker compose up -d db
-docker compose run --rm migrate
-docker compose up -d
-```
+Frontend/backend berjalan manual; PostgreSQL memakai Neon dari `backend/.env` (`DATABASE_URL`). URL database tidak masuk Git. Migration: `cd backend && npm run db:deploy`, tanpa reset/seed database yang sudah berisi data. Backend `npm run dev`, frontend `pnpm dev`. Produksi: backend `npm run build && npm start`, frontend `pnpm build && pnpm start`. Isi APP_ORIGIN, SITE_ORIGIN dan secret invalidasi sesuai env aplikasi.
 
-Sebelum menjalankan backend produksi, isi `AUTH_SIGNING_KEYS` pada `.env` dengan kunci acak minimal 32 byte dalam format `v1:<base64url-key>`. Atur `APP_ORIGIN` ke origin browser yang sebenarnya (HTTPS di produksi, tanpa slash penutup). Petunjuk endpoint dan CSRF ada di [dokumentasi API](backend/docs/auth-api.md).
+Compose hanya menjalankan Redis: `docker compose up -d redis`, lalu `docker compose exec -T redis redis-cli ping`. Port `127.0.0.1:6380` (REDIS_PORT dapat diubah), volume redis_data, AOF aktif. Tidak ada container aplikasi/PostgreSQL/proxy. Redis disiapkan; auth/CMS saat ini belum memakai Redis. Tidak ada integrasi queue/cache baru.
 
-Buka `http://localhost:8080`. Hanya proxy dipublikasikan; backend dan database tetap di jaringan Compose. `db_data` dan `uploads` adalah named volume. Konfigurasi ini menyediakan HTTP lokal; TLS/HTTPS dan domain produksi dikerjakan saat tahap deployment.
+## Penyimpanan upload
+
+File fisik berada di `backend/public/uploads/<asal>/<images|documents>/`. UPLOAD_ROOT default public/uploads, jalankan backend dari folder backend. Asal dipilih pada pustaka media: news, profile, officials, settings, general. Turunan gambar berada bersama original. File lama dipindahkan ke legacy tanpa mengubah ID/URL database. Upload diabaikan Git; backup file bersama database Neon.
+
+Database hanya menyimpan metadata, path dan relasi, tanpa blob/base64 gambar/PDF. Public ini folder backend, bukan Next.js. API tetap memeriksa PUBLIC/PRIVATE, owner dan arsip; jangan pasang static server tanpa pembatasan pada seluruh folder karena akan membuka file privat.
 
 ## Perintah pemeriksaan
 
@@ -85,7 +82,7 @@ Buka `/admin/berita` dan login menggunakan akun ADMIN_KELURAHAN terprovisi. Buat
 
 Sebelum menjalankan versi ini: `cd backend && npm ci && npm run db:generate && npm run db:deploy`. Migrasi baru `20261016020000_news_media` menambah model berita, kategori, revisi dan media. Backend memerlukan Node >=22.12 karena sanitizer versi perbaikan keamanan. Install frontend dengan `pnpm install --frozen-lockfile`.
 
-`UPLOAD_ROOT` opsional, default `uploads` relatif working directory backend; jangan arahkan ke folder web publik. Compose memakai volume `/app/uploads` yang sudah ada; image menyiapkan permission untuk user node. Jika volume lama tidak writable, perbaiki kepemilikannya untuk UID/GID user node pada image sebelum upload. Jangan menghapus volume berisi data. Backup database dan volume upload harus berpasangan. Nginx mengizinkan multipart 21 MiB pada endpoint upload (file maksimal 20 MiB); request JSON tetap kecil.
+`UPLOAD_ROOT` default `public/uploads` relatif folder backend. File fisik dikelompokkan menurut asal upload, tanpa blob/base64 di database. API mempertahankan izin PUBLIC/PRIVATE. Backup file upload dan database Neon harus berpasangan; tidak ada volume upload Docker atau proxy Nginx untuk runtime lokal.
 
 Kontrak API, keputusan permission, extension Tiptap, perintah tes dan hasil review: [laporan Prompt 07](backend/docs/news-cms.md). Belum ada upload surat/berkas warga Tahap 02.
 
@@ -93,4 +90,4 @@ Kontrak API, keputusan permission, extension Tiptap, perintah tes dan hasil revi
 
 Daftar, detail dan kategori berita tersedia pada `/berita`, `/berita/[slug]`, `/berita/kategori/[slug]`, dengan metadata server, NewsArticle/BreadcrumbList, sitemap dan robots. Slug berita dapat diedit; slug lama menjadi alias 301 ke slug terbaru selama artikel published. Draft/arsip tetap 404.
 
-Terapkan migration `20261016030000_news_publication`. Isi `SITE_ORIGIN` frontend dengan origin publik sebenarnya (juga build arg Docker), `FRONTEND_INTERNAL_URL` backend dengan origin frontend internal, serta `CACHE_INVALIDATION_SECRET` acak minimal 32 karakter yang sama pada kedua aplikasi. Secret wajib produksi dan tidak boleh NEXT_PUBLIC. Compose membaca SITE_ORIGIN dari APP_ORIGIN dan menutup webhook dari Nginx publik. Notifikasi invalidasi disimpan dalam transaksi dan dicoba ulang; editor memperingatkan bila masih tertunda. Lihat [laporan delapan bagian Prompt 08](frontend/docs/news-public.md) untuk hasil pemeriksaan dan batasan operasi.
+Terapkan migration `20261016030000_news_publication`. Isi `SITE_ORIGIN` frontend dengan origin publik sebenarnya, `FRONTEND_INTERNAL_URL` backend dengan origin frontend internal, serta `CACHE_INVALIDATION_SECRET` acak minimal 32 karakter yang sama pada kedua aplikasi. Secret wajib produksi dan tidak boleh NEXT_PUBLIC. Jalankan backend dari folder backend dan frontend dari folder frontend. Webhook memerlukan HMAC; bila kelak memakai reverse proxy publik, tutup `/api/internal/` pada proxy. Notifikasi invalidasi disimpan dalam transaksi dan dicoba ulang; editor memperingatkan bila masih tertunda. Lihat [laporan delapan bagian Prompt 08](frontend/docs/news-public.md) untuk hasil pemeriksaan dan batasan operasi.
