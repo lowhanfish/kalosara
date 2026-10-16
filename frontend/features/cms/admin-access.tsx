@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { createHttpClient } from "@/services/http-client";
 import { cmsError } from "./client";
 export function AdminAccess({ children }: { children: React.ReactNode }) {
+  const path = usePathname();
   const auth = useAuth();
   const runtime = useAuthRuntime();
   const [email, setEmail] = useState("");
@@ -44,7 +46,7 @@ export function AdminAccess({ children }: { children: React.ReactNode }) {
       {auth.status === "INITIALIZING" && <p role="status">Memeriksa sesi…</p>}
       {auth.status === "GUEST" && (
         <form
-          className="max-w-md space-y-4"
+          className="cms-login max-w-md space-y-4"
           onSubmit={(e) => {
             e.preventDefault();
             login.mutate();
@@ -80,18 +82,24 @@ export function AdminAccess({ children }: { children: React.ReactNode }) {
         </form>
       )}
       {auth.user?.role === "ADMIN_KELURAHAN" && (
-        <nav
-          aria-label="Pengelolaan website"
-          className="mb-7 flex flex-wrap gap-5"
-        >
-          <Link className="underline" href="/admin/profil">
+        <nav aria-label="Pengelolaan website" className="cms-navigation">
+          <Link
+            aria-current={path === "/admin/profil" ? "page" : undefined}
+            href="/admin/profil"
+          >
             Profil dan pengaturan
           </Link>
-          <Link className="underline" href="/admin/berita">
+          <Link
+            aria-current={path === "/admin/berita" ? "page" : undefined}
+            href="/admin/berita"
+          >
             Berita dan media
           </Link>
-          <Link className="underline" href="/admin/konten">
-            Pengumuman, agenda, galeri, dokumen
+          <Link
+            aria-current={path === "/admin/konten" ? "page" : undefined}
+            href="/admin/konten"
+          >
+            Kanal informasi
           </Link>
           <button
             className="underline"

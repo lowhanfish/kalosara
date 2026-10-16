@@ -61,7 +61,7 @@ export async function ContentPage({
           </Link>
         </p>
       )}
-      <form className="mb-8 flex flex-wrap items-end gap-4">
+      <form className="public-content-filters">
         <label>
           Cari judul
           <input

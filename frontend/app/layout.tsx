@@ -1,8 +1,10 @@
 import { siteOrigin } from "@/lib/news-seo";
 import type { Metadata } from "next";
 import "./globals.css";
+import "@/features/cms/cms.css";
 import "@/components/site/public-portal.css";
 import "@/components/site/reference-design.css";
+import "@/components/site/readability.css";
 import { getSiteSettings } from "@/lib/site-settings";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";

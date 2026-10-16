@@ -109,3 +109,5 @@ TEST_DATABASE_URL=postgresql://test:test@127.0.0.1:55439/kalosara_prompt09_test 
 ```
 
 Kredensial di contoh hanya milik instance tes disposable. Jangan menggantinya dengan URL Neon. Laporan implementasi, kontrak API, hasil pemeriksaan, SOP review dan batasan tersedia pada [laporan Prompt 09](backend/docs/content-cms.md).
+
+Perbaikan tampilan 17 Oktober 2026: stylesheet kontrol dimuat konsisten pada CMS dan filter publik, editor/admin memakai layout responsif dan input 16px, pustaka media dapat dilipat, tipografi publik lebih terbaca dan state galeri kosong diperbaiki. Desain hero/navy/kuning tetap dipertahankan. Lihat [catatan perbaikan layout](frontend/docs/layout-polish.md) untuk cakupan dan hasil QA.

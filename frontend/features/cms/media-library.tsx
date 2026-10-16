@@ -50,7 +50,10 @@ export function MediaLibrary() {
     onSuccess: invalidate,
   });
   return (
-    <section className="space-y-5" aria-labelledby="media-title">
+    <section
+      className="cms-media-library space-y-5"
+      aria-labelledby="media-title"
+    >
       <h2 id="media-title" className="text-2xl font-semibold">
         Pustaka media
       </h2>
@@ -62,7 +65,7 @@ export function MediaLibrary() {
       </p>
       <form
         ref={form}
-        className="space-y-4 rounded-xl border border-border p-5"
+        className="cms-upload-form"
         onSubmit={(e) => {
           e.preventDefault();
           const data = new FormData(e.currentTarget);
@@ -171,7 +174,7 @@ export function MediaLibrary() {
         </p>
       )}
       {query.data?.items.length === 0 && <p>Belum ada media yang sesuai.</p>}
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="cms-media-grid">
         {query.data?.items.map((asset) => (
           <form
             key={`${asset.id}-${asset.alt}-${asset.caption}`}

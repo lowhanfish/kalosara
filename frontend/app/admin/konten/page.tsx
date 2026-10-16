@@ -65,7 +65,7 @@ function Editor({
       : "";
   return (
     <form
-      className="my-6 space-y-4 rounded-xl border border-border p-5"
+      className="cms-editor"
       onSubmit={(e) => {
         e.preventDefault();
         const f = new FormData(e.currentTarget);
@@ -305,8 +305,8 @@ function Editor({
       {(kind === "documents" || kind === "galleries") && (
         <>
           <p>
-            Unggah melalui pustaka media di bawah. Daftar pilihan dibatasi 50
-            file terbaru.
+            Buka pustaka media di bawah untuk mengunggah file. Gunakan pencarian
+            untuk menemukan file lama.
           </p>
           <button
             type="button"
@@ -364,7 +364,7 @@ function Workspace() {
     confirm("Tutup editor? Pastikan perubahan sudah disimpan.");
   return (
     <>
-      <div className="flex flex-wrap gap-4">
+      <div className="cms-channel-tabs">
         {Object.entries(channels).map(([key, c]) => (
           <button
             className="rounded border p-3"
@@ -383,7 +383,7 @@ function Workspace() {
         ))}
       </div>
       <form
-        className="my-6 flex flex-wrap items-end gap-4"
+        className="cms-filters"
         onSubmit={(e) => {
           e.preventDefault();
           setPage(1);
@@ -433,17 +433,22 @@ function Workspace() {
       {query.data?.items.length === 0 && (
         <p className="py-5">Belum ada konten yang sesuai.</p>
       )}
-      <ul className="my-5 space-y-3">
+      <ul className="cms-content-list">
         {query.data?.items.map((item) => (
-          <li
-            className="flex flex-wrap justify-between gap-3 rounded border p-4"
-            key={item.id}
-          >
-            <span className="min-w-0 break-words">
-              {item.title} · {item.status}
-            </span>
+          <li className="cms-content-row" key={item.id}>
+            <div className="cms-row-title">
+              <h2>{item.title}</h2>
+              <span className="cms-status" data-status={item.status}>
+                {
+                  { DRAFT: "Draft", PUBLISHED: "Terbit", ARCHIVED: "Arsip" }[
+                    item.status
+                  ]
+                }
+              </span>
+            </div>
             <button
-              className="underline"
+              className="cms-edit-button"
+              aria-label={`Edit ${item.title}`}
               onClick={() => {
                 if (leave()) {
                   setSelected(item);
@@ -451,12 +456,12 @@ function Workspace() {
                 }
               }}
             >
-              Edit {item.title}
+              Edit konten
             </button>
           </li>
         ))}
       </ul>
-      <nav aria-label="Halaman CMS" className="flex flex-wrap gap-5">
+      <nav aria-label="Halaman CMS" className="cms-pagination">
         <button disabled={page === 1} onClick={() => setPage(page - 1)}>
           Sebelumnya
         </button>
@@ -478,16 +483,28 @@ function Workspace() {
           onSaved={() => void query.refetch()}
         />
       )}
-      <div className="mt-10">
-        <MediaLibrary />
-      </div>
+      <details className="cms-media-drawer">
+        <summary>
+          Pustaka media <span>Unggah dan kelola gambar atau PDF</span>
+        </summary>
+        <div className="cms-media-content">
+          <MediaLibrary />
+        </div>
+      </details>
     </>
   );
 }
 export default function Page() {
   return (
     <main id="konten" tabIndex={-1} className="container py-10">
-      <h1 className="mb-6 text-3xl font-bold">Kelola kanal informasi</h1>
+      <header className="cms-page-heading">
+        <p className="eyebrow">Pengelolaan website</p>
+        <h1>Kelola kanal informasi</h1>
+        <p>
+          Atur pengumuman, agenda, galeri, dan dokumen yang akan tampil di
+          website kelurahan.
+        </p>
+      </header>
       <AdminAccess>
         <Workspace />
       </AdminAccess>
