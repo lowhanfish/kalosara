@@ -1,3 +1,5 @@
+import { connection } from "next/server";
+import { HomeNews } from "@/features/news/home-news";
 import { getPublicProfile } from "@/lib/profile";
 import { getSiteSettings } from "@/lib/site-settings";
 import Link from "next/link";
@@ -21,7 +23,6 @@ import {
 } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
 import {
-  referenceNews,
   referenceAnnouncements,
   referenceAgenda,
 } from "@/lib/reference-content";
@@ -95,6 +96,7 @@ const announcementIcons = [
   ClipboardList,
 ];
 export default async function Home() {
+  await connection();
   const [settings, profile] = await Promise.all([
     getSiteSettings(),
     getPublicProfile(),
@@ -102,7 +104,6 @@ export default async function Home() {
   const leader = profile.officials.find(
     (o) => o.position.toLowerCase() === "lurah",
   );
-  const [featured, ...news] = referenceNews;
   return (
     <main id="konten" tabIndex={-1} className="portal-home reference-fidelity">
       <section className="modern-hero" aria-labelledby="hero-title">
@@ -219,8 +220,9 @@ export default async function Home() {
         </div>
       </section>
       <p className="container reference-demo-note">
-        Pratinjau desain: berita, pengumuman, angka dan agenda di bawah adalah
-        contoh dari gambar, belum terhubung ke publikasi backend.
+        Pengumuman, angka, agenda, serta dokumentasi kegiatan pada desain ini
+        masih contoh dan belum merupakan publikasi resmi. Bagian berita hanya
+        menampilkan konten yang sudah diterbitkan pengelola.
       </p>
       <section className="container portal-news-grid section-space">
         <div>
@@ -230,53 +232,7 @@ export default async function Home() {
             title="Berita Terbaru"
             href="/berita"
           />
-          <div className="news-content">
-            <Link
-              href={`/berita?contoh=${featured.slug}`}
-              className="reference-news-feature"
-            >
-              <div className="reference-news-photo">
-                <Image
-                  src={featured.image}
-                  alt="Contoh foto berita dari gambar desain"
-                  fill
-                  unoptimized
-                  className="object-cover"
-                  sizes="40vw"
-                />
-              </div>
-              <div className="reference-news-title">
-                <span className="reference-date-box">
-                  <b>15</b>
-                  <small>Okt 2026</small>
-                </span>
-                <h3>{featured.title}</h3>
-                <span className="round-arrow">
-                  <ArrowRight aria-hidden="true" size={17} />
-                </span>
-              </div>
-              <p>{featured.excerpt}</p>
-            </Link>
-            <div className="reference-news-list">
-              {news.map((item) => (
-                <Link key={item.slug} href={`/berita?contoh=${item.slug}`}>
-                  <Image
-                    src={item.image}
-                    alt="Ilustrasi berita contoh pada desain"
-                    width={90}
-                    height={60}
-                    unoptimized
-                    className="object-cover"
-                  />
-                  <span>
-                    <time>{item.date}</time>
-                    <h3>{item.title}</h3>
-                  </span>
-                  <ArrowRight aria-hidden="true" size={14} />
-                </Link>
-              ))}
-            </div>
-          </div>
+          <HomeNews />
         </div>
         <aside>
           <SectionHeading

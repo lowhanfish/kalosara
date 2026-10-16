@@ -120,3 +120,17 @@ Verifikasi: backend lint/typecheck/build dan 19 tes unit/HTTP lulus; 14 tes Post
 Batasan: halaman `/berita` dan beranda masih contoh desain berlabel; frontend published, detail SEO/sitemap/cache invalidation menunggu Prompt 08. Tidak ada jadwal publish/autosave otomatis, antivirus, quota total/purge media/retensi otomatis atau deployment HTTPS/load test produksi. Riwayat mempertahankan media; storage perlu dimonitor. LURAH tetap tanpa izin CMS tambahan. Tidak ada layanan surat Tahap 02.
 
 **SIAP REVIEW Prompt 07. Jangan mulai Prompt 08 sebelum instruksi pengguna berikutnya.**
+
+## Prompt 08 selesai — berhenti untuk review
+
+Laporan delapan bagian: `frontend/docs/news-public.md`; bukti HTML server anonim: `frontend/docs/news-server-html.md`. Daftar/detail/kategori sekarang membaca berita PUBLISHED, dengan pencarian/pagination, metadata absolut di head sebelum hidrasi, NewsArticle/BreadcrumbList, sitemap/robots, related dan berbagi/salin URL. Beranda mempertahankan susunan desain pilihan `961c540` dan memakai publikasi CMS; belum ada berita resmi seed. CSS publik/hero/aset sumber tidak diubah. Identitas Watundehoa/Puriala/Konawe dan AMIRULAH, S.Si tetap berlaku.
+
+Slug berita dapat diedit; NewsSlugAlias mencadangkan histori dan mengarahkan semua alias langsung dengan HTTP 301 ke slug terkini. Rollback mempertahankan slug dan tetap DRAFT. Proxy memeriksa publikasi sebelum streaming agar draft/arsip/missing benar-benar HTTP 404; gangguan resolver HTTP 503 noindex/Retry-After. Daftar/cache publik 60 detik, detail SSR live, halaman umum tetap statis/ISR. CacheInvalidation ditulis dalam transaksi mutasi; HMAC internal mengekspirasi tag/path, retry database tiap 30 detik/backoff maksimum 5 menit, peringatan editor bila notifikasi tertunda. Tidak ada secret/data pribadi di bundle/cache publik.
+
+Migration `20261016030000_news_publication`. Env baru: frontend SITE_ORIGIN (juga build arg), backend FRONTEND_INTERNAL_URL, CACHE_INVALIDATION_SECRET sama di kedua aplikasi dan wajib produksi minimal 32 karakter. Compose memakai APP_ORIGIN untuk SITE_ORIGIN; Nginx menutup webhook internal. Upload gambar publik baru membuat thumb WebP 480 px/display 1200 px; upload lama fallback original terkompresi. Tidak ada dependency baru.
+
+Verifikasi akhir: backend lint/typecheck/build, 21 tes unit/HTTP dan 18 tes PostgreSQL lulus; frontend lint/typecheck/build dan 30 tes lulus. QA standalone produksi/curl menguji metadata sebelum JavaScript, HMAC invalid/expired/tampered/oversize, publish/update/archive cache hangat, draft404, alias301 langsung, sitemap/robots, gambar/fallback OG, related/share/copy, kategori/cari/pagination dan retry persisten. Dua belas kombinasi responsif 360/768/1440 tanpa overflow/gambar rusak/pageerror/hydration mismatch. Gangguan backend diuji lewat instance terisolasi dan menghasilkan503. Secret tidak ada di static browser.
+
+Batasan lingkungan: disk sistem sempat penuh, Docker read-only. Setelah pengguna mengosongkan disk dan menyetujui restart, PostgreSQL/QA aplikasi pulih. Build image tambahan belum berhasil (frontend exit139 pada corepack base image; backend npm ci tidak maju, dihentikan saat ruang menyusut). Validasi ulang image Docker di lingkungan sehat sebelum deployment. Belum uji scraper eksternal/domain HTTPS atau cache bersama multi-instance. Rincian batasan ada di laporan.
+
+**SIAP REVIEW Prompt 08 untuk kode dan build produksi lokal. Jangan mulai Prompt 09 sebelum instruksi pengguna berikutnya.**

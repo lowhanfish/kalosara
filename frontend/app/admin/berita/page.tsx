@@ -86,8 +86,8 @@ function Workspace() {
       {tab === "berita" && (
         <>
           <p>
-            Kelola dan pratinjau berita resmi di sini. Halaman berita publik
-            belum dihubungkan ke CMS dan masih menampilkan contoh desain.
+            Kelola dan pratinjau berita resmi di sini. Berita berstatus
+            PUBLISHED tampil pada website publik.
           </p>
           <button
             className="yellow-button"
@@ -234,11 +234,11 @@ function Workspace() {
             <NewsEditor
               key={`${selected.id}-${selected.version}-${editorEpoch}`}
               initial={selected}
-              onSaved={(news) => {
+              onSaved={(news, cacheInvalidated) => {
                 setEditorEpoch((value) => value + 1);
                 setSelected(news);
                 setNotice(
-                  `Berita tersimpan — ${news.status}, versi ${news.version}.`,
+                  `Berita tersimpan — ${news.status}, versi ${news.version}.${cacheInvalidated === false ? " Pembaruan cache publik tertunda dan akan dicoba ulang otomatis." : ""}`,
                 );
                 void query.refetch();
               }}

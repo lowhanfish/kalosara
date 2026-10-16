@@ -1,3 +1,4 @@
+import { enqueueInvalidation, notifyInvalidation } from './cache-invalidation.js';
 import { Router } from 'express';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
@@ -25,9 +26,11 @@ newsAdminRouter.put('/categories/:id', requireMutation, async (req, res) => {
     if (input.archived && await tx.news.count({ where: { categoryId: id, status: { not: 'ARCHIVED' } } })) throw new CmsError(409, 'CATEGORY_IN_USE', 'Archive its news before archiving this category');
     const result = await tx.newsCategory.upsert({ where: { id }, create: { id, ...input }, update: input });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'NEWS_CATEGORY_SAVED', resourceType: 'NewsCategory', resourceId: id } });
-    return result;
+    const event = await enqueueInvalidation(tx);
+    return { result, event };
   });
-  res.json({ success: true, data: { category }, requestId: req.id });
+  const cacheInvalidated = await notifyInvalidation(category.event.id);
+  res.json({ success: true, data: { category: category.result, cacheInvalidated }, requestId: req.id });
 });
 newsAdminRouter.get('/', async (req, res) => {
   const query = pagination.extend({ status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(), categoryId: z.uuid().optional(), sort: z.enum(['newest', 'oldest', 'title']).default('newest') }).parse(req.query);
@@ -50,7 +53,13 @@ async function saveNews(tx: Prisma.TransactionClient, id: string, raw: unknown, 
   const input = newsInput.parse(raw);
   const current = await tx.news.findUnique({ where: { id } });
   if ((current?.version ?? 0) !== input.expectedVersion) throw new CmsError(409, 'VERSION_CONFLICT', 'News changed; reload before saving');
-  if (current && current.slug !== input.slug) throw new CmsError(400, 'SLUG_IMMUTABLE', 'News slug cannot change');
+  const reserved = await tx.newsSlugAlias.findUnique({ where: { slug: input.slug } });
+  if (reserved && reserved.newsId !== id) throw new CmsError(409, 'SLUG_RESERVED', 'Slug belongs to another article history');
+  if (current && current.slug !== input.slug) {
+    if (await tx.news.findFirst({ where: { slug: input.slug, id: { not: id } } })) throw new CmsError(409, 'SLUG_RESERVED', 'Slug already in use');
+    if (reserved) await tx.newsSlugAlias.delete({ where: { slug: input.slug } });
+    await tx.newsSlugAlias.upsert({ where: { slug: current.slug }, create: { slug: current.slug, newsId: id }, update: {} });
+  }
   const category = await tx.newsCategory.findUnique({ where: { id: input.categoryId } });
   if (!category || category.archived) throw new CmsError(400, 'INVALID_CATEGORY', 'Choose an active category');
   const body = sanitizeBody(input.bodyHtml);
@@ -65,12 +74,13 @@ async function saveNews(tx: Prisma.TransactionClient, id: string, raw: unknown, 
   if (mediaIds.length) await tx.newsMedia.createMany({ data: mediaIds.map(mediaId => ({ newsId: id, mediaId })) });
   await tx.newsRevision.create({ data: { newsId: id, version, editorId: actorId, mediaIds, snapshot: { ...fields, bodyHtml: body.html } } });
   await tx.auditLog.create({ data: { actorId, action: 'NEWS_SAVED', resourceType: 'News', resourceId: id } });
-  return news;
+  const event = await enqueueInvalidation(tx);
+  return { news, event };
 }
 newsAdminRouter.put('/:id', requireMutation, async (req, res) => {
   const id = idSchema.parse(req.params.id);
   const news = await transaction(tx => saveNews(tx, id, req.body, req.auth!.userId));
-  res.json({ success: true, data: { news }, requestId: req.id });
+  res.json({ success: true, data: { news: news.news, cacheInvalidated: await notifyInvalidation(news.event.id) }, requestId: req.id });
 });
 newsAdminRouter.post('/:id/rollback', requireMutation, async (req, res) => {
   const newsId = idSchema.parse(req.params.id);
@@ -79,24 +89,16 @@ newsAdminRouter.post('/:id/rollback', requireMutation, async (req, res) => {
     const revision = await tx.newsRevision.findFirst({ where: { id: input.revisionId, newsId } });
     if (!revision) throw new CmsError(404, 'NOT_FOUND', 'Revision not found for this news');
     const snapshot = revision.snapshot as Prisma.JsonObject;
-    const result = await saveNews(tx, newsId, { ...snapshot, status: 'DRAFT', expectedVersion: input.expectedVersion }, req.auth!.userId);
+    const current = await tx.news.findUniqueOrThrow({ where: { id: newsId }, select: { slug: true } });
+    const result = await saveNews(tx, newsId, { ...snapshot, slug: current.slug, status: 'DRAFT', expectedVersion: input.expectedVersion }, req.auth!.userId);
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'NEWS_ROLLED_BACK', resourceType: 'News', resourceId: newsId } });
     return result;
   });
-  res.json({ success: true, data: { news }, requestId: req.id });
+  res.json({ success: true, data: { news: news.news, cacheInvalidated: await notifyInvalidation(news.event.id) }, requestId: req.id });
 });
 // Authenticated preview uses only server-sanitized saved content. Never a public preview token/URL.
 newsAdminRouter.get('/:id/preview', async (req, res) => {
   const news = await prisma.news.findUnique({ where: { id: idSchema.parse(req.params.id) }, select: { title: true, excerpt: true, bodyHtml: true, status: true, cover: { select: { id: true, alt: true, caption: true } } } });
   if (!news) throw new CmsError(404, 'NOT_FOUND', 'News not found');
-  res.json({ success: true, data: { news: { ...news, bodyHtml: sanitizeBody(news.bodyHtml).html } }, requestId: req.id });
-});
-// The public rendering/SEO routes remain Prompt 08. This read contract exposes only published data.
-export const publicNewsRouter = Router();
-publicNewsRouter.get('/:slug', async (req, res) => {
-  const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(180).parse(req.params.slug);
-  const news = await prisma.news.findFirst({ where: { slug, status: 'PUBLISHED' }, select: { slug: true, title: true, excerpt: true, bodyHtml: true, publishedAt: true, category: { select: { name: true, slug: true } }, cover: { select: { id: true, alt: true, caption: true } } } });
-  if (!news) throw new CmsError(404, 'NOT_FOUND', 'News not found');
-  res.setHeader('Cache-Control', 'no-store');
   res.json({ success: true, data: { news: { ...news, bodyHtml: sanitizeBody(news.bodyHtml).html } }, requestId: req.id });
 });

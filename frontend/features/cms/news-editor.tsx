@@ -26,7 +26,7 @@ export function NewsEditor({
   onSaved,
 }: {
   initial: News;
-  onSaved: (news: News) => void;
+  onSaved: (news: News, cacheInvalidated?: boolean) => void;
 }) {
   const auth = useAuth();
   const runtime = useAuthRuntime();
@@ -80,19 +80,26 @@ export function NewsEditor({
   });
   const save = useMutation({
     mutationFn: () =>
-      cmsMutate<{ news: News }>(runtime.request, `/admin/news/${draft.id}`, {
-        slug: draft.slug,
-        title: draft.title,
-        excerpt: draft.excerpt,
-        bodyHtml: draft.bodyHtml,
-        categoryId: draft.categoryId,
-        coverId: draft.coverId,
-        status: draft.status,
-        expectedVersion: draft.version,
-      }),
+      cmsMutate<{ news: News; cacheInvalidated: boolean }>(
+        runtime.request,
+        `/admin/news/${draft.id}`,
+        {
+          slug: draft.slug,
+          title: draft.title,
+          excerpt: draft.excerpt,
+          bodyHtml: draft.bodyHtml,
+          categoryId: draft.categoryId,
+          coverId: draft.coverId,
+          status: draft.status,
+          expectedVersion: draft.version,
+        },
+      ),
     onSuccess: (data) => {
       setDirty(false);
-      onSaved(data.news);
+      onSaved(
+        data.news,
+        "cacheInvalidated" in data ? Boolean(data.cacheInvalidated) : undefined,
+      );
     },
   });
   const preview = useMutation({
@@ -101,7 +108,7 @@ export function NewsEditor({
   });
   const rollback = useMutation({
     mutationFn: (revisionId: string) =>
-      cmsMutate<{ news: News }>(
+      cmsMutate<{ news: News; cacheInvalidated: boolean }>(
         runtime.request,
         `/admin/news/${draft.id}/rollback`,
         { revisionId, expectedVersion: draft.version },
@@ -109,7 +116,10 @@ export function NewsEditor({
       ),
     onSuccess: (data) => {
       setDirty(false);
-      onSaved(data.news);
+      onSaved(
+        data.news,
+        "cacheInvalidated" in data ? Boolean(data.cacheInvalidated) : undefined,
+      );
     },
   });
   const reload = useMutation({
@@ -117,7 +127,10 @@ export function NewsEditor({
       runtime.request<{ news: News }>(`/admin/news/${draft.id}`),
     onSuccess: (data) => {
       setDirty(false);
-      onSaved(data.news);
+      onSaved(
+        data.news,
+        "cacheInvalidated" in data ? Boolean(data.cacheInvalidated) : undefined,
+      );
     },
   });
   function change<K extends keyof News>(key: K, value: News[K]) {
@@ -162,13 +175,12 @@ export function NewsEditor({
           />
         </label>
         <label className="block">
-          Slug berita (tetap setelah dibuat)
+          Slug berita
           <input
             className="cms-input"
             required
             maxLength={180}
             pattern="[a-z0-9]+(-[a-z0-9]+)*"
-            disabled={draft.version > 0}
             value={draft.slug}
             onChange={(e) => change("slug", e.target.value)}
           />

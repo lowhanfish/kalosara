@@ -1,3 +1,4 @@
+import { enqueueInvalidation, notifyInvalidation } from './cms/cache-invalidation.js';
 import { mediaUrlSchema, assertPublicImages, transaction } from './cms/common.js';
 import { Router } from 'express';
 import { z } from 'zod';
@@ -50,11 +51,13 @@ profileAdminRouter.get('/', async (req, res) => {
 });
 profileAdminRouter.put('/settings', requireMutation, async (req, res) => {
   const value = settingSchema.parse(req.body);
-  await transaction(async tx => {
+  const event = await transaction(async tx => {
     await assertPublicImages([value.logoUrl, value.heroUrl], tx);
     await tx.siteSetting.upsert({ where: { id: 'site' }, create: { id: 'site', value }, update: { value } });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'PROFILE_SETTINGS_UPDATED', resourceType: 'SiteSetting', resourceId: 'site' } });
+    return enqueueInvalidation(tx, ['site-settings']);
   });
+  await notifyInvalidation(event.id);
   res.json({ success: true, data: { settings: value }, requestId: req.id });
 });
 profileAdminRouter.put('/pages/:slug', requireMutation, async (req, res) => {
@@ -62,9 +65,10 @@ profileAdminRouter.put('/pages/:slug', requireMutation, async (req, res) => {
   const page = await transaction(async tx => {
     const result = await tx.page.upsert({ where: { slug }, create: { slug, ...value }, update: value });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'PROFILE_PAGE_SAVED', resourceType: 'Page', resourceId: slug } });
-    return result;
+    return { result, event: await enqueueInvalidation(tx, ['public-profile']) };
   });
-  res.json({ success: true, data: { page }, requestId: req.id });
+  await notifyInvalidation(page.event.id);
+  res.json({ success: true, data: { page: page.result }, requestId: req.id });
 });
 profileAdminRouter.put('/officials/:id', requireMutation, async (req, res) => {
   const id = z.uuid().parse(req.params.id); const parsed = officialSchema.parse(req.body);
@@ -73,7 +77,8 @@ profileAdminRouter.put('/officials/:id', requireMutation, async (req, res) => {
     await assertPublicImages([value.photoUrl], tx);
     const result = await tx.official.upsert({ where: { id }, create: { id, ...value }, update: value });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'PROFILE_OFFICIAL_SAVED', resourceType: 'Official', resourceId: id } });
-    return result;
+    return { result, event: await enqueueInvalidation(tx, ['public-profile']) };
   });
-  res.json({ success: true, data: { official }, requestId: req.id });
+  await notifyInvalidation(official.event.id);
+  res.json({ success: true, data: { official: official.result }, requestId: req.id });
 });

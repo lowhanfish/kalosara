@@ -1,5 +1,6 @@
 import express from 'express';
-import { newsAdminRouter, publicNewsRouter } from './modules/cms/news.js';
+import { newsAdminRouter } from './modules/cms/news.js';
+import { publicNewsRouter } from './modules/cms/public-news.js';
 import { mediaAdminRouter, publicMediaRouter } from './modules/cms/media.js';
 import { publicProfileRouter, profileAdminRouter } from './modules/profile.js';
 import cookieParser from 'cookie-parser';

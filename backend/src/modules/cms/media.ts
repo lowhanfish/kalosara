@@ -1,6 +1,7 @@
+import { enqueueInvalidation, notifyInvalidation } from './cache-invalidation.js';
 import { Router, type RequestHandler, type Response } from 'express';
 import multer from 'multer';
-import { mkdir, readFile, writeFile, rm, rename } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rm, rename, stat } from 'node:fs/promises';
 import { resolve, basename, extname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { fileTypeFromFile } from 'file-type';
@@ -36,6 +37,7 @@ const uploadHandler: RequestHandler = async (req, res) => {
   const temporary = resolve(root, 'tmp', randomUUID());
   let stored: string | undefined;
   let committed = false;
+  const derivatives: string[] = [];
   try {
     await mkdir(temporary, { recursive: true, mode: 0o700 });
     await mkdir(resolve(root, 'objects'), { recursive: true, mode: 0o700 });
@@ -71,6 +73,13 @@ const uploadHandler: RequestHandler = async (req, res) => {
         size = buffer.length;
         if (size > MAX_FILE_SIZE) throw new Error('Oversized image');
         await writeFile(stored, buffer, { flag: 'wx', mode: 0o600 });
+        if (input.visibility === 'PUBLIC') {
+          for (const [variant, width] of [['thumb', 480], ['display', 1200]] as const) {
+            const target = filePath(`${id}-${variant}.webp`); derivatives.push(target);
+            const optimized = await sharp(buffer).resize({ width, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer();
+            await writeFile(target, optimized, { flag: 'wx', mode: 0o600 });
+          }
+        }
       } catch { throw new CmsError(400, 'INVALID_IMAGE', 'Image cannot be decoded safely (maximum 25 megapixels)'); }
     }
     const asset = await transaction(async tx => {
@@ -87,6 +96,7 @@ const uploadHandler: RequestHandler = async (req, res) => {
     processing--;
     await rm(temporary, { recursive: true, force: true });
     if (stored && !committed) await rm(stored, { force: true });
+    if (!committed) await Promise.all(derivatives.map(path => rm(path, { force: true })));
   }
 };
 mediaAdminRouter.post('/', requireMutation, uploadLimit, uploadHandler);
@@ -107,9 +117,10 @@ mediaAdminRouter.patch('/:id', requireMutation, async (req, res) => {
     }
     const result = await tx.mediaAsset.update({ where: { id }, data: input, select });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'MEDIA_UPDATED', resourceType: 'MediaAsset', resourceId: id } });
-    return result;
+    const event = await enqueueInvalidation(tx);
+    return { result, event };
   });
-  res.json({ success: true, data: { asset }, requestId: req.id });
+  res.json({ success: true, data: { asset: asset.result, cacheInvalidated: await notifyInvalidation(asset.event.id) }, requestId: req.id });
 });
 function serveFile(res: Response, asset: { storageKey: string; mimeType: string; size: number; id: string }) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -129,5 +140,11 @@ export const publicMediaRouter = Router();
 publicMediaRouter.get('/:id', async (req, res) => {
   const asset = await prisma.mediaAsset.findFirst({ where: { id: idSchema.parse(req.params.id), archived: false, visibility: 'PUBLIC' } });
   if (!asset) throw new CmsError(404, 'NOT_FOUND', 'Media not found');
+  const variant = z.enum(['thumb', 'display']).optional().parse(req.query.variant);
+  if (variant && asset.mimeType.startsWith('image/')) {
+    const key = `${asset.id}-${variant}.webp`;
+    try { await stat(filePath(key)); serveFile(res, { ...asset, storageKey: key, mimeType: 'image/webp' }); return; }
+    catch { /* Older uploads remain readable using the already compressed original. */ }
+  }
   serveFile(res, asset);
 });

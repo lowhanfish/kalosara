@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run src/tests/app.test.ts src/tests/auth.test.ts src/tests/public-settings.test.ts src/tests/profile.test.ts src/tests/cms.test.ts",
+    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run src/tests/app.test.ts src/tests/auth.test.ts src/tests/public-settings.test.ts src/tests/profile.test.ts src/tests/cms.test.ts src/tests/cache-invalidation.test.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -15,7 +15,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "staff:provision": "tsx src/cli/provision-staff.ts",
-    "test:db": "vitest run src/tests/schema.db.test.ts src/tests/auth-flow.db.test.ts src/tests/profile.db.test.ts src/tests/cms.db.test.ts"
+    "test:db": "vitest run --no-file-parallelism src/tests/schema.db.test.ts src/tests/auth-flow.db.test.ts src/tests/profile.db.test.ts src/tests/cms.db.test.ts src/tests/public-news.db.test.ts"
   },
   "keywords": [],
   "author": "",

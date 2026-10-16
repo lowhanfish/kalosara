@@ -1,0 +1,43 @@
+.news-body {
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+}
+.news-body p {
+  margin-block: 1rem;
+}
+.news-body h2 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-block: 2rem 1rem;
+}
+.news-body h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-block: 1.5rem 0.75rem;
+}
+.news-body ul,
+.news-body ol {
+  margin-block: 1rem;
+  padding-left: 1.5rem;
+}
+.news-body ul {
+  list-style: disc;
+}
+.news-body ol {
+  list-style: decimal;
+}
+.news-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.25rem;
+  margin-block: 1.5rem;
+}
+.news-body a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+.news-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin-block: 1.5rem;
+}

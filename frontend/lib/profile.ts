@@ -24,7 +24,10 @@ export async function getPublicProfile(): Promise<{
   try {
     const response = await fetch(
       `${process.env.API_INTERNAL_URL ?? "http://localhost:4000"}/api/v1/public/profile`,
-      { cache: "no-store", signal: AbortSignal.timeout(3000) },
+      {
+        next: { revalidate: 60, tags: ["public-profile"] },
+        signal: AbortSignal.timeout(3000),
+      },
     );
     if (!response.ok) throw new Error("Profile unavailable");
     const body = await response.json();

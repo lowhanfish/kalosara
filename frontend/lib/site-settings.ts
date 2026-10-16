@@ -85,7 +85,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const response = await fetch(
       `${process.env.API_INTERNAL_URL ?? "http://localhost:4000"}/api/v1/public/settings`,
       {
-        cache: "no-store",
+        next: { revalidate: 60, tags: ["site-settings"] },
         signal: AbortSignal.timeout(3000),
       },
     );

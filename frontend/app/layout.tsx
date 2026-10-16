@@ -1,3 +1,4 @@
+import { siteOrigin } from "@/lib/news-seo";
 import type { Metadata } from "next";
 import "./globals.css";
 import "@/components/site/public-portal.css";
@@ -9,6 +10,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import { AuthProvider, AuthRecovery } from "@/features/auth/auth-provider";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteOrigin()),
   title: {
     default: "Kelurahan Watundehoa — KALOSARA",
     template: "%s | KALOSARA",

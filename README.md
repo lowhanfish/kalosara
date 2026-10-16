@@ -81,10 +81,16 @@ Editor settings, lima bagian profil, serta aparatur tersedia pada `/admin/profil
 
 ## CMS berita dan media — Prompt 07
 
-Buka `/admin/berita` dan login menggunakan akun ADMIN_KELURAHAN terprovisi. Buat kategori, unggah media (default privat), buat berita DRAFT, simpan lalu preview. Status PUBLISHED/ARCHIVED serta pemulihan revisi tersedia. Halaman berita publik dinamis tetap menunggu Prompt 08; contoh desain belum diganti menjadi berita resmi.
+Buka `/admin/berita` dan login menggunakan akun ADMIN_KELURAHAN terprovisi. Buat kategori, unggah media (default privat), buat berita DRAFT, simpan lalu preview. Status PUBLISHED/ARCHIVED serta pemulihan revisi tersedia. Sejak Prompt 08, beranda dan `/berita` membaca publikasi resmi dari CMS; bila belum ada publikasi, ditampilkan state kosong.
 
 Sebelum menjalankan versi ini: `cd backend && npm ci && npm run db:generate && npm run db:deploy`. Migrasi baru `20261016020000_news_media` menambah model berita, kategori, revisi dan media. Backend memerlukan Node >=22.12 karena sanitizer versi perbaikan keamanan. Install frontend dengan `pnpm install --frozen-lockfile`.
 
 `UPLOAD_ROOT` opsional, default `uploads` relatif working directory backend; jangan arahkan ke folder web publik. Compose memakai volume `/app/uploads` yang sudah ada; image menyiapkan permission untuk user node. Jika volume lama tidak writable, perbaiki kepemilikannya untuk UID/GID user node pada image sebelum upload. Jangan menghapus volume berisi data. Backup database dan volume upload harus berpasangan. Nginx mengizinkan multipart 21 MiB pada endpoint upload (file maksimal 20 MiB); request JSON tetap kecil.
 
 Kontrak API, keputusan permission, extension Tiptap, perintah tes dan hasil review: [laporan Prompt 07](backend/docs/news-cms.md). Belum ada upload surat/berkas warga Tahap 02.
+
+## Berita publik dan SEO — Prompt 08
+
+Daftar, detail dan kategori berita tersedia pada `/berita`, `/berita/[slug]`, `/berita/kategori/[slug]`, dengan metadata server, NewsArticle/BreadcrumbList, sitemap dan robots. Slug berita dapat diedit; slug lama menjadi alias 301 ke slug terbaru selama artikel published. Draft/arsip tetap 404.
+
+Terapkan migration `20261016030000_news_publication`. Isi `SITE_ORIGIN` frontend dengan origin publik sebenarnya (juga build arg Docker), `FRONTEND_INTERNAL_URL` backend dengan origin frontend internal, serta `CACHE_INVALIDATION_SECRET` acak minimal 32 karakter yang sama pada kedua aplikasi. Secret wajib produksi dan tidak boleh NEXT_PUBLIC. Compose membaca SITE_ORIGIN dari APP_ORIGIN dan menutup webhook dari Nginx publik. Notifikasi invalidasi disimpan dalam transaksi dan dicoba ulang; editor memperingatkan bila masih tertunda. Lihat [laporan delapan bagian Prompt 08](frontend/docs/news-public.md) untuk hasil pemeriksaan dan batasan operasi.

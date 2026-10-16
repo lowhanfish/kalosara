@@ -159,6 +159,7 @@ model News {
   cover       MediaAsset? @relation("NewsCover", fields: [coverId], references: [id], onDelete: Restrict)
   media       NewsMedia[]
   revisions   NewsRevision[]
+  slugAliases NewsSlugAlias[]
 
   @@index([status, updatedAt])
   @@index([categoryId, status])
@@ -205,4 +206,23 @@ model NewsMedia {
   media   MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Restrict)
 
   @@id([newsId, mediaId])
+}
+
+model NewsSlugAlias {
+  slug      String   @id @db.VarChar(180)
+  newsId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  news      News     @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  @@index([newsId])
+}
+
+// Transactional delivery record, drained by the existing API process (no queue service).
+model CacheInvalidation {
+  id            String    @id @default(uuid()) @db.Uuid
+  tags          String[]
+  createdAt     DateTime  @default(now())
+  deliveredAt   DateTime?
+  attempts      Int       @default(0)
+  nextAttemptAt DateTime  @default(now())
+  @@index([deliveredAt, nextAttemptAt])
 }

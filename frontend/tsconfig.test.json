@@ -7,14 +7,21 @@
     "outDir": ".test-build",
     "incremental": false,
     "isolatedModules": true,
-    "types": ["node", "next"]
+    "types": [
+      "node",
+      "next"
+    ]
   },
   "include": [
     "services/http-client.ts",
     "store/auth-store.ts",
     "features/auth/runtime.ts",
     "lib/site-settings.ts",
-    "lib/public-pages.ts"
+    "lib/public-pages.ts",
+    "lib/news-seo.ts",
+    "lib/cache-signature.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -106,7 +106,7 @@ describe('news and media integration PostgreSQL', () => {
     const first = (await admin.get(`/api/v1/admin/news/${newsId}/revisions`)).body.data.items[0];
     await admin.put(`/api/v1/admin/news/${newsId}`).set(headers).send({ ...base(), status: 'PUBLISHED', bodyHtml: `<h2>Kegiatan</h2><p onclick="evil()">Isi terbit<script>window.cmsXss=1</script></p><img src="/api/v1/public/media/${publicId}" alt="Kantor" onerror="evil()"><iframe src="https://evil.invalid"></iframe>` }).expect(200).then(r => { version = r.body.data.news.version; expect(r.body.data.news.publishedAt).toBeTruthy(); });
     await request(app).get(`/api/v1/public/news/${slug}`).expect(200).then(r => { expect(r.body.data.news.bodyHtml).not.toMatch(/script|onerror|onclick|iframe/); expect(r.body.data.news.bodyHtml).toContain('<h2>Kegiatan</h2>'); });
-    await admin.put(`/api/v1/admin/news/${newsId}`).set(headers).send({ ...base(), slug: 'different' }).expect(400);
+    await admin.put(`/api/v1/admin/news/${newsId}`).set(headers).send({ ...base(), slug: 'invalid slug' }).expect(400);
     await admin.put(`/api/v1/admin/news/${newsId}`).set(headers).send({ ...base(), expectedVersion: 0 }).expect(409);
     await admin.put(`/api/v1/admin/news/${newsId}`).set(headers).send({ ...base(), coverId: privateId }).expect(400);
     await admin.put(`/api/v1/admin/news/${newsId}`).set(headers).send({ ...base(), coverId: pdfId }).expect(400);
