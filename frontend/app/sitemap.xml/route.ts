@@ -13,7 +13,15 @@ export async function GET() {
       getCategories(false),
     ]);
     const urls = [
-      ...["/", "/profil", "/berita", "/kontak", "/pelayanan"].map((path) => ({
+      ...[
+        "/",
+        "/profil",
+        "/berita",
+        "/kontak",
+        "/pelayanan",
+        "/statistik",
+        "/potensi",
+      ].map((path) => ({
         path,
         updatedAt: null as string | null,
       })),

@@ -40,6 +40,12 @@ export const publicPages = [
     description: "Gambaran wilayah melalui data agregat yang bersumber.",
   },
   {
+    href: "/potensi",
+    title: "Potensi dan fasilitas",
+    description:
+      "Potensi lokal, UMKM terpublikasi, dan fasilitas publik wilayah.",
+  },
+  {
     href: "/kontak",
     title: "Kontak",
     description: "Temukan alamat, kontak, dan jam pelayanan kelurahan.",

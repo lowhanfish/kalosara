@@ -101,6 +101,12 @@ export function AdminAccess({ children }: { children: React.ReactNode }) {
           >
             Kanal informasi
           </Link>
+          <Link
+            aria-current={path === "/admin/wilayah" ? "page" : undefined}
+            href="/admin/wilayah"
+          >
+            Statistik dan wilayah
+          </Link>
           <button
             className="underline"
             disabled={logout.isPending}

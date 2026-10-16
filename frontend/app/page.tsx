@@ -1,3 +1,4 @@
+import { getRegion, type Statistic } from "@/lib/region";
 import { connection } from "next/server";
 import { HomeNews } from "@/features/news/home-news";
 import { getPublicProfile } from "@/lib/profile";
@@ -108,6 +109,7 @@ export default async function Home() {
       new URLSearchParams({ limit: "3", period: "upcoming" }),
     ),
     getContent("galleries", new URLSearchParams({ limit: "1" })),
+    getRegion<Statistic>("statistics", new URLSearchParams({ limit: "1" })),
   ]);
   const homeAnnouncements =
     homeContent[0].status === "fulfilled" ? homeContent[0].value.items : [];
@@ -117,6 +119,12 @@ export default async function Home() {
     homeContent[2].status === "fulfilled"
       ? (homeContent[2].value.items[0]?.gallery?.photos.slice(0, 5) ?? [])
       : [];
+  const statistic =
+    homeContent[3].status === "fulfilled"
+      ? homeContent[3].value.items[0]
+      : undefined;
+  const statisticValue = (value: number | null | undefined) =>
+    value == null ? "—" : new Intl.NumberFormat("id-ID").format(value);
   return (
     <main id="konten" tabIndex={-1} className="portal-home reference-fidelity">
       <section
@@ -218,9 +226,9 @@ export default async function Home() {
         </div>
       </section>
       <p className="container reference-demo-note">
-        Angka statistik dan ilustrasi profil pada desain ini masih contoh, belum
-        merupakan data resmi. Berita, pengumuman, agenda, dan galeri menampilkan
-        konten yang telah diterbitkan pengelola.
+        Ilustrasi profil mengikuti referensi desain. Angka statistik, berita,
+        pengumuman, agenda, dan galeri menampilkan data yang telah diterbitkan
+        pengelola.
       </p>
       <section className="container portal-news-grid section-space">
         <div>
@@ -338,13 +346,25 @@ export default async function Home() {
         </div>
         <dl
           className="identity-facts reference-statistics"
-          aria-label="Contoh statistik dari gambar desain"
+          aria-label="Statistik agregat wilayah"
         >
           {[
-            { value: "4", label: "Lingkungan", icon: Landmark },
-            { value: "1.250+", label: "Jumlah KK", icon: Building2 },
-            { value: "3.842+", label: "Jumlah Penduduk", icon: Users },
-            { value: "12", label: "RT / RW", icon: Users },
+            {
+              value: statisticValue(statistic?.population),
+              label: "Penduduk",
+              icon: Users,
+            },
+            {
+              value: statisticValue(statistic?.households),
+              label: "Kepala keluarga",
+              icon: Building2,
+            },
+            {
+              value: statisticValue(statistic?.rt),
+              label: "RT",
+              icon: Landmark,
+            },
+            { value: statisticValue(statistic?.rw), label: "RW", icon: Users },
           ].map(({ value, label, icon: Icon }) => (
             <div key={label}>
               <span className="tile-icon tone-blue">
@@ -356,6 +376,25 @@ export default async function Home() {
               </span>
             </div>
           ))}
+          <div className="col-span-2">
+            <span>
+              <dt className="!text-sm">
+                {statistic
+                  ? `Periode ${statistic.period}`
+                  : "Statistik belum tersedia"}
+              </dt>
+              <dd className="mt-1 break-words">
+                {statistic
+                  ? `Sumber: ${statistic.source}`
+                  : homeContent[3].status === "rejected"
+                    ? "Data sementara tidak dapat dimuat."
+                    : "Menunggu data resmi dari pengelola."}{" "}
+                <Link href="/statistik" className="underline">
+                  Lihat statistik
+                </Link>
+              </dd>
+            </span>
+          </div>
         </dl>
         <figure className="reference-profile-image">
           <Image

@@ -19,6 +19,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
     { title: "Galeri", href: "/galeri" },
     { title: "Informasi", href: "/informasi-publik" },
     { title: "Statistik", href: "/statistik" },
+    { title: "Potensi", href: "/potensi" },
     { title: "Kontak", href: "/kontak" },
   ];
   const links = items.map((page) => (

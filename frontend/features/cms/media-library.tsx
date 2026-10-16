@@ -105,6 +105,8 @@ export function MediaLibrary() {
             <option value="events">Agenda</option>
             <option value="galleries">Galeri</option>
             <option value="documents">Informasi publik</option>
+            <option value="facilities">Fasilitas publik</option>
+            <option value="potentials">Potensi lokal</option>
             <option value="general">Umum</option>
           </select>
         </label>

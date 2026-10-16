@@ -192,6 +192,8 @@ model MediaAsset {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   owner        User     @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  facilities Facility[]
+  potentials Potential[]
   galleryPhotos GalleryPhoto[]
   documents PublicDocument[]
   covers       News[]   @relation("NewsCover")
@@ -287,4 +289,59 @@ model PublicDocument {
   fileId String @db.Uuid
   item ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
   file MediaAsset @relation(fields: [fileId], references: [id], onDelete: Restrict)
+}
+
+// Aggregate statistics only: no resident identities or household identifiers.
+model StatisticSnapshot {
+  id String @id @default(uuid()) @db.Uuid
+  period String @unique @db.VarChar(7)
+  source String @db.VarChar(300)
+  referenceDate DateTime @db.Date
+  population Int?
+  male Int?
+  female Int?
+  households Int?
+  rt Int?
+  rw Int?
+  status PublicationStatus @default(DRAFT)
+  version Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([status, period])
+}
+
+model Facility {
+  id String @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(160)
+  description String @db.Text
+  category String @db.VarChar(100)
+  location String @db.VarChar(300)
+  latitude Float?
+  longitude Float?
+  photoId String? @db.Uuid
+  photoAlt String @db.VarChar(300)
+  status PublicationStatus @default(DRAFT)
+  version Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  photo MediaAsset? @relation(fields: [photoId], references: [id], onDelete: Restrict)
+  @@index([status, category])
+}
+
+model Potential {
+  id String @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(160)
+  description String @db.Text
+  category String @db.VarChar(100)
+  location String @db.VarChar(300)
+  latitude Float?
+  longitude Float?
+  photoId String? @db.Uuid
+  photoAlt String @db.VarChar(300)
+  status PublicationStatus @default(DRAFT)
+  version Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  photo MediaAsset? @relation(fields: [photoId], references: [id], onDelete: Restrict)
+  @@index([status, category])
 }

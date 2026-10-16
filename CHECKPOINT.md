@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 09 siap review
+# Checkpoint KALOSARA — Prompt 10 siap review kode
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -16,6 +16,7 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 08 — berita publik dan SEO | Selesai dan di-push | `a56c58e` |
 | Revisi runtime manual/Neon/upload | Selesai dan di-push | `867f095` |
 | 09 — pengumuman, agenda, galeri, informasi publik | Selesai; migrasi Neon diterapkan dengan persetujuan | lihat laporan Prompt 09 |
+| 10 — statistik, potensi/fasilitas, lokasi/kontak | Kode siap review; migrasi Neon menunggu izin khusus | lihat laporan Prompt 10 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -196,3 +197,17 @@ CSS terisolasi `frontend/components/site/hero.css`, dimuat sesudah CSS referensi
 Pengguna memberikan PNG lambang Kabupaten Konawe dan meminta penggantian logo. File disalin persis tanpa modifikasi ke `frontend/public/images/watundehoa/konawe.png`; hash sumber dan hasil cocok. Header/footer memakai logo baru dengan rasio asli, alt header diperbarui. Referensi logo lama yang tersimpan sebagai `/images/reference/crest.webp` dinormalisasi pada pembacaan settings ke logo baru; upload logo kustom tetap didahulukan. Pemilih aset CMS profil dan allowlist backend ditambah path baru, path lama tetap kompatibel. Tidak ada perubahan database/env/migration atau fitur prompt berikutnya.
 
 Verifikasi frontend lint/typecheck/31 tes/build dan backend lint/typecheck lulus. Browser header/footer pada360/768/1440: logo baru berhasil dimuat, rasio1:1 sama dengan sumber dan tanpa overflow. Tidak ada seed atau mutasi database.
+
+## Prompt 10 — implementasi dan pengujian terisolasi, 17 Oktober 2026
+
+Audit mulai HEAD `2af2407`, working tree bersih. Acuan kedua PDF Tahap 01, README/CHECKPOINT, frontend/AGENTS.md dan dokumentasi Next.js 16.4 terpasang dibaca. Hanya Prompt 10; desain besar ditunda, hero/potret/logo terbaru dipertahankan. Laporan delapan bagian: `backend/docs/region-cms.md`.
+
+Model StatisticSnapshot menyimpan angka agregat per periode unik, sumber/tanggal, penduduk, laki-laki, perempuan, jumlah kepala keluarga, RT dan RW nullable. Facility/Potential memuat nama, deskripsi, kategori, lokasi, koordinat opsional, foto PUBLIC dan status. Tidak ada identitas penduduk/NIK/nomor KK/daftar warga. Admin aktif + Origin/CSRF, transaksi/audit/versi, draft/publish/archive, strict fields dan pagination/filter berlaku. `/admin/wilayah` mengelola ketiganya; `/statistik` memakai tabel ber-caption/scope; `/potensi` menampilkan daftar fasilitas/potensi. Kontak membaca pengaturan resmi dengan peta opt-in OpenStreetMap serta fallback alamat, tanpa formulir pengiriman pesan. Beranda mengganti angka contoh dengan snapshot terbit atau tanda belum tersedia. Tidak ada seed konten resmi.
+
+Migration `20261017000000_region_information` lulus pada PostgreSQL native 18.4 disposable port 55439, dengan database regresi/browser terpisah. Source upload facilities/potentials dan proteksi referensi foto ditambah; file fisik, legacy, PRIVATE dan batas 20 MiB tetap berlaku. Env/dependency aplikasi/Docker tidak diubah. Origin utama 3001/API 4000 serta shared secret diperiksa cocok tanpa mencetak rahasia. Redis 6380 tidak aktif dan daemon Docker tidak berjalan; tidak dinyalakan atau mengganggu proyek lain. Modul ini tidak membutuhkan Redis.
+
+Backend lint/typecheck/build, 30 tes unit/HTTP dan 32 tes integrasi dalam 7 suite lulus. Frontend lint/typecheck/build dan 34 tes lulus. QA produksi terisolasi 3002/4002: publish/edit statistik 100→120 tanpa deploy, publish fasilitas/potensi, pembaruan kontak melalui HMAC, peta nol request sebelum consent/satu setelahnya, tutup menghapus iframe. 24 kombinasi enam halaman × empat lebar 360/768/1024/1440 tanpa overflow, gambar rusak, pageerror atau XSS. Batasan tanpa JavaScript: alamat kontak tersedia; markup tabel statistik terkirim server tetapi reveal streaming Next.js memerlukan JavaScript. Angka demografi palsu tidak dipakai. Lihat laporan untuk batasan dan hasil error-state.
+
+**SIAP REVIEW kode; aktivasi Neon Prompt 10 menunggu izin khusus.** Izin sebelumnya hanya Prompt 09; pertanyaan izin baru disampaikan setelah implementasi dan pemeriksaan lulus. Jangan bypass/reset/seed Neon. Commit/push hasil kode, lalu berhenti; jangan mulai Prompt 11/Tahap 02.
+
+Cleanup Prompt 10: runtime QA 3002/4002 dan PostgreSQL native 55439 dihentikan; akun/database/upload/kredensial sementara dibersihkan. Build akhir kembali memakai konfigurasi utama 3001/4000. Error-state statistik/potensi/beranda teruji saat backend QA dimatikan; tidak menampilkan angka palsu.

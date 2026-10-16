@@ -109,12 +109,13 @@ mediaAdminRouter.patch('/:id', requireMutation, async (req, res) => {
     if (current.visibility === 'PRIVATE') assertOwner(res.locals.principal, current.ownerId);
     if (current.mimeType.startsWith('image/') && !input.alt) throw new CmsError(400, 'ALT_REQUIRED', 'Image alt text is required');
     if (input.archived) {
-      const [news, revisions, galleries, documents, settings, officials] = await Promise.all([
+      const [news, revisions, galleries, documents, facilities, potentials, settings, officials] = await Promise.all([
         tx.newsMedia.count({ where: { mediaId: id } }), tx.newsRevision.count({ where: { mediaIds: { has: id } } }),
         tx.galleryPhoto.count({ where: { mediaId: id } }), tx.publicDocument.count({ where: { fileId: id } }),
+        tx.facility.count({ where: { photoId: id } }), tx.potential.count({ where: { photoId: id } }),
         tx.siteSetting.findUnique({ where: { id: 'site' } }), tx.official.count({ where: { photoUrl: mediaUrl(id) } }),
       ]);
-      if (news || revisions || galleries || documents || officials || JSON.stringify(settings?.value ?? {}).includes(mediaUrl(id))) throw new CmsError(409, 'MEDIA_IN_USE', 'Media is referenced by content or revision; keep it available');
+      if (news || revisions || galleries || documents || facilities || potentials || officials || JSON.stringify(settings?.value ?? {}).includes(mediaUrl(id))) throw new CmsError(409, 'MEDIA_IN_USE', 'Media is referenced by content or revision; keep it available');
     }
     const result = await tx.mediaAsset.update({ where: { id }, data: input, select });
     await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'MEDIA_UPDATED', resourceType: 'MediaAsset', resourceId: id } });

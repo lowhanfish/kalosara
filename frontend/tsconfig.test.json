@@ -19,7 +19,8 @@
     "lib/site-settings.ts",
     "lib/public-pages.ts",
     "lib/news-seo.ts",
-    "lib/cache-signature.ts"
+    "lib/cache-signature.ts",
+    "lib/region.ts"
   ],
   "exclude": [
     "node_modules"

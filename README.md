@@ -111,3 +111,11 @@ TEST_DATABASE_URL=postgresql://test:test@127.0.0.1:55439/kalosara_prompt09_test 
 Kredensial di contoh hanya milik instance tes disposable. Jangan menggantinya dengan URL Neon. Laporan implementasi, kontrak API, hasil pemeriksaan, SOP review dan batasan tersedia pada [laporan Prompt 09](backend/docs/content-cms.md).
 
 Perbaikan tampilan 17 Oktober 2026: stylesheet kontrol dimuat konsisten pada CMS dan filter publik, editor/admin memakai layout responsif dan input 16px, pustaka media dapat dilipat, tipografi publik lebih terbaca dan state galeri kosong diperbaiki. Desain hero/navy/kuning tetap dipertahankan. Lihat [catatan perbaikan layout](frontend/docs/layout-polish.md) untuk cakupan dan hasil QA.
+
+## Statistik, potensi, fasilitas dan kontak — Prompt 10
+
+CMS `/admin/wilayah` menyediakan snapshot statistik agregat per tahun/bulan dengan sumber/tanggal, serta fasilitas publik dan potensi lokal/UMKM. ADMIN_KELURAHAN mengelola draft/terbit/arsip dengan pemeriksaan role, CSRF dan versi. Publik membaca `/statistik` (tabel ber-caption, filter periode), `/potensi` (pilih fasilitas/potensi, kategori/cari/pagination), dan kontak dari pengaturan resmi. Beranda tidak lagi menampilkan angka demografi contoh; hanya snapshot terbit terbaru atau tanda belum tersedia. Tidak ada data NIK/nomor KK/daftar penduduk perorangan, tidak ada seed angka resmi buatan.
+
+Peta kantor memakai koordinat dari `/admin/profil` dan dimuat setelah pengunjung menyetujui koneksi OpenStreetMap; alamat dan tautan menjadi fallback. Tidak ada API key atau pengiriman pesan kontak. Form pemilih topik hanya navigasi, tidak mengirim pesan. Statistik berisi markup tabel server, tetapi pembukaan streaming dinamis Next.js masih memerlukan JavaScript.
+
+Migration `20261017000000_region_information` menambah StatisticSnapshot/Facility/Potential. Aktivasi Neon memerlukan persetujuan khusus Prompt 10; jangan menjalankan reset/seed/tes DB pada Neon. Source upload facilities/potentials tervalidasi, file tetap fisik dan akses PUBLIC/PRIVATE tidak berubah. Tidak ada env/dependency aplikasi baru. Rincian delapan bagian dan hasil pemeriksaan: [laporan Prompt 10](backend/docs/region-cms.md).
