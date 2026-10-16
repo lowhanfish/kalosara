@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — setelah Prompt 04
+# Checkpoint KALOSARA — setelah Prompt 05
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -9,7 +9,8 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 01 — fondasi Next.js, Express, Prisma, Docker Compose, Nginx | Selesai dan di-push | `13e62d0` |
 | 02 — skema akun, role, sesi, RBAC, provisioning staf | Selesai dan di-push | `9468293` |
 | 03 — API auth berbasis cookie, rotasi refresh, logout, profil | Selesai dan di-push | `68007ad` |
-| 04 — bootstrap auth frontend | Selesai; lihat commit terbaru `feat: bootstrap frontend cookie authentication` | commit Prompt 04 |
+| 04 — bootstrap auth frontend | Selesai dan di-push | `8b05260` |
+| 05 — design system dan layout publik | Selesai; lihat commit `feat: add responsive public portal and design system` | commit Prompt 05 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -44,9 +45,9 @@ npm run build
 - `APP_ORIGIN` harus sama persis dengan origin browser tanpa slash penutup. HTTPS mengaktifkan cookie `Secure`. Semua POST auth butuh Origin tersebut dan header `X-CSRF-Token` dari `GET /api/v1/auth/csrf`.
 - Access cookie HttpOnly maksimal 15 menit; refresh cookie HttpOnly 7 hari tanpa perpanjangan batas absolut. Frontend tidak boleh menyimpan token auth di `localStorage`.
 
-## Prompt 04 selesai — berhenti untuk review
+## Prompt 04 — acuan implementasi
 
-Implementasi dan laporan lengkap tersedia di `frontend/docs/auth-bootstrap.md`. Jangan melanjutkan Prompt 05 tanpa instruksi pengguna. Spesifikasi acuan Prompt 04: PDF1 halaman 6 meminta HTTP client dengan timeout, `AbortSignal`, error standar dan `requestId`; bootstrap `GET /auth/me`; satu refresh lalu satu retry saat access 401; single-flight untuk 10 request paralel; cleanup Zustand dan TanStack Query saat refresh definitif invalid; pertahankan sesi pada gangguan jaringan/502/503; cache per pengguna; AuthProvider dan RouteGuard. Tampilkan diagram state `INITIALIZING`, `AUTHENTICATED`, `GUEST`, `TEMPORARY_ERROR`. Uji reload access expired, refresh revoked, error jaringan, 10 respons 401 paralel, dan isolasi cache pengguna A/B. Jangan membuat dashboard atau Prompt 05.
+Implementasi dan laporan lengkap tersedia di `frontend/docs/auth-bootstrap.md`. Spesifikasi acuan Prompt 04: PDF1 halaman 6 meminta HTTP client dengan timeout, `AbortSignal`, error standar dan `requestId`; bootstrap `GET /auth/me`; satu refresh lalu satu retry saat access 401; single-flight untuk 10 request paralel; cleanup Zustand dan TanStack Query saat refresh definitif invalid; pertahankan sesi pada gangguan jaringan/502/503; cache per pengguna; AuthProvider dan RouteGuard. Tampilkan diagram state `INITIALIZING`, `AUTHENTICATED`, `GUEST`, `TEMPORARY_ERROR`. Uji reload access expired, refresh revoked, error jaringan, 10 respons 401 paralel, dan isolasi cache pengguna A/B. Dashboard tetap menunggu prompt terkait.
 
 ## Batasan yang diketahui
 
@@ -57,3 +58,11 @@ Implementasi dan laporan lengkap tersedia di `frontend/docs/auth-bootstrap.md`. 
 ## Verifikasi Prompt 04
 
 Frontend lint/typecheck/test (16 kasus)/build dan backend lint/typecheck/test (6 kasus)/build lulus. Kasus negatif mencakup expiry, revocation, jaringan/502/503, 10 request paralel (refresh sukses maupun gagal), batas retry, timeout/abort, isolasi A/B dan respons identitas lama. Build perlu cache Turbopack bersih di volume macOS dan izin socket worker; supertest perlu socket lokal. Uji manual browser lengkap belum dijalankan; langkah reviewer ada di dokumentasi frontend. Tidak ada migration/env/dependency baru.
+
+## Prompt 05 selesai — berhenti untuk review
+
+Laporan lengkap: `frontend/docs/public-layout.md`. Design tokens dan 12 komponen UI tersedia, header/footer membaca endpoint whitelist `GET /api/v1/public/settings` dari AppSetting lama. Sepuluh halaman publik, pencarian menu, 404/500/maintenance, skeleton/loading dan error boundaries tersedia. Tidak ada migration/env/dependency baru. Data identitas fallback jelas bertanda contoh; editor dan konten resmi belum dibuat.
+
+Lint/typecheck/build frontend dan backend lulus; frontend 19/19 tes, backend 8/8 tes. Browser QA menguji semua 10 rute pada 360, 768 dan 1440 px (30 kombinasi tanpa overflow), dialog/keyboard, pencarian, form kontak, toast, skip link dan halaman sistem. Smoke produksi homepage 200 dan tanpa log error browser. Native dialog diperkuat focus trap. Guest anonim biasa kini boleh tetap pada deep link publik; RouteGuard dan invalidasi identitas lama tetap mengalihkan bila diperlukan.
+
+**Berikutnya hanya setelah diminta: Prompt 06 — konfigurasi kelurahan, profil dan aparatur.** Jangan otomatis melanjutkan atau memulai dashboard, CMS berita maupun pelayanan surat.

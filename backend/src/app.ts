@@ -5,6 +5,7 @@ import { pinoHttp } from 'pino-http';
 import { logger } from './lib/logger.js';
 import { prisma } from './lib/prisma.js';
 import { errorHandler, notFound } from './middlewares/error-handler.js';
+import { publicSettingsRouter } from './modules/public-settings.js';
 import { authRouter } from './modules/auth/routes.js';
 
 export function createApp() {
@@ -33,6 +34,7 @@ export function createApp() {
   });
 
   app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/public/settings', publicSettingsRouter);
 
   app.use(notFound);
   app.use(errorHandler);

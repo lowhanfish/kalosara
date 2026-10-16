@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "scripts": {
-    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run src/tests/app.test.ts src/tests/auth.test.ts",
+    "test": "DATABASE_URL=postgresql://test:test@localhost:5432/test vitest run src/tests/app.test.ts src/tests/auth.test.ts src/tests/public-settings.test.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",

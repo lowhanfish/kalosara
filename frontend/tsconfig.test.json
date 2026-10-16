@@ -6,12 +6,15 @@
     "noEmit": false,
     "outDir": ".test-build",
     "incremental": false,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "types": ["node", "next"]
   },
   "include": [
     "services/http-client.ts",
     "store/auth-store.ts",
-    "features/auth/runtime.ts"
+    "features/auth/runtime.ts",
+    "lib/site-settings.ts",
+    "lib/public-pages.ts"
   ],
   "exclude": ["node_modules"]
 }

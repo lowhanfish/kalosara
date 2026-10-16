@@ -17,7 +17,7 @@ const definitive = (e: unknown) =>
 // One runtime per mounted provider: never share server-rendered users across requests.
 export function createAuthRuntime(
   fetcher: typeof fetch = fetch,
-  redirect: () => void = () => {},
+  redirect: (error?: ApiError, hadIdentity?: boolean) => void = () => {},
 ) {
   const store = createAuthStore();
   const queryClient = new QueryClient({
@@ -34,14 +34,15 @@ export function createAuthRuntime(
   let bootstrapFlight: Promise<void> | undefined;
   let invalid = false;
 
-  function guest() {
+  function guest(error?: unknown) {
     if (invalid) return;
+    const hadIdentity = store.getState().user !== null;
     invalid = true;
     identityVersion++;
     generation++;
     queryClient.clear(); // Cancels queries before a new identity can render.
     store.setState({ status: "GUEST", user: null, error: null });
-    redirect();
+    redirect(error instanceof ApiError ? error : undefined, hadIdentity);
   }
   function temporary(error: unknown) {
     if (
@@ -64,7 +65,7 @@ export function createAuthRuntime(
           generation++;
         } catch (error) {
           generation++;
-          if (definitive(error)) guest();
+          if (definitive(error)) guest(error);
           else temporary(error);
           throw error;
         }
@@ -109,7 +110,7 @@ export function createAuthRuntime(
         error.status !== 401 ||
         !["TOKEN_EXPIRED", "UNAUTHENTICATED"].includes(error.code)
       ) {
-        if (definitive(error)) guest();
+        if (definitive(error)) guest(error);
         else temporary(error);
         throw error;
       }
@@ -132,7 +133,7 @@ export function createAuthRuntime(
         return data;
       } catch (retryError) {
         ensureCurrent();
-        if (definitive(retryError)) guest();
+        if (definitive(retryError)) guest(retryError);
         else temporary(retryError);
         throw retryError;
       }
@@ -157,7 +158,7 @@ export function createAuthRuntime(
           error: null,
         });
       } catch (error) {
-        if (definitive(error)) guest();
+        if (definitive(error)) guest(error);
         else temporary(error);
       }
     })().finally(() => {

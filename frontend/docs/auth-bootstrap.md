@@ -69,3 +69,7 @@ Belum diklaim sebagai uji browser end-to-end. Dengan backend/database aktif, log
 ## Risiko / tertunda / status
 
 UI login/logout, dashboard, design system Prompt 05 dan E2E browser lengkap menunggu prompt terkait. Tidak ada perubahan backend atau migrasi; test PostgreSQL Prompt 03 tidak diulang karena tidak ada perubahan DB/API. Penyempurnaan koordinasi refresh lintas tab dapat ditinjau terpisah. Status implementasi Prompt 04: SIAP REVIEW setelah seluruh gerbang otomatis lulus; berhenti untuk review manusia.
+
+## Integrasi halaman publik pada Prompt 05
+
+Guest awal dengan UNAUTHENTICATED tanpa identitas sebelumnya dapat tetap membaca halaman publik, termasuk 404. Callback invalidasi menerima error dan indikator identitas sebelumnya; RouteGuard tetap mengalihkan guest area protected. Revocation dan invalidasi identitas yang sudah dikenal tetap membersihkan cache dan mengalihkan ke beranda. Ini mencegah pengunjung anonim terlempar dari setiap deep link publik.

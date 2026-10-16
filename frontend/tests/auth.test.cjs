@@ -251,3 +251,23 @@ test("late A response cannot log B out or return A data after identity switch", 
   assert.equal(runtime.store.getState().status, "AUTHENTICATED");
   assert.equal(runtime.store.getState().user.id, "B");
 });
+
+test("guest callback distinguishes first visit from invalidation of a known identity", async () => {
+  for (const hadIdentity of [false, true]) {
+    let outcome;
+    const runtime = createAuthRuntime(
+      async (url) =>
+        url.endsWith("/csrf")
+          ? ok({ csrfToken: "csrf" })
+          : fail(401, "UNAUTHENTICATED"),
+      (error, known) => {
+        outcome = { code: error.code, known };
+      },
+    );
+    if (hadIdentity)
+      runtime.store.setState({ user: user("A"), status: "AUTHENTICATED" });
+    await runtime.bootstrap();
+    assert.deepEqual(outcome, { code: "UNAUTHENTICATED", known: hadIdentity });
+    assert.equal(runtime.store.getState().status, "GUEST");
+  }
+});

@@ -66,3 +66,7 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 ## Batasan tahap ini
 
 Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, antarmuka login, berita, CMS, dan layanan surat belum dibuat. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI login dan dashboard belum dibuat.
+
+## Layout publik — Prompt 05
+
+Sepuluh halaman publik, design system responsif, pencarian menu, dan state loading/404/500/maintenance sudah tersedia. Identitas dibaca dari `GET /api/v1/public/settings` dengan fallback yang bertanda contoh. Kontrak pengaturan, daftar file, hasil tes, dan batasan tersedia di [laporan Prompt 05](frontend/docs/public-layout.md). CMS dan konten resmi belum dibuat.

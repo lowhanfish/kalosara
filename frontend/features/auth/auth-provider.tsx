@@ -12,7 +12,9 @@ const AuthContext = createContext<ReturnType<typeof createAuthRuntime> | null>(
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [runtime] = useState(() =>
-    createAuthRuntime(fetch, () => {
+    createAuthRuntime(fetch, (error, hadIdentity) => {
+      // Guest access to public pages is valid. RouteGuard handles protected routes.
+      if (!hadIdentity && error?.code === "UNAUTHENTICATED") return;
       if (window.location.pathname !== "/") router.replace("/");
       router.refresh();
     }),
@@ -51,10 +53,17 @@ export function AuthRecovery() {
   const { status, error } = useAuth();
   if (status !== "TEMPORARY_ERROR") return null;
   return (
-    <div role="alert">
+    <div
+      role="alert"
+      className="container my-4 rounded-lg border border-[#d3b878] bg-[#fff8e5] p-4 text-sm"
+    >
       <p>Sesi belum dapat diperiksa. Periksa koneksi lalu coba lagi.</p>
       <p>Referensi: {error?.requestId}</p>
-      <button type="button" onClick={() => void bootstrap()}>
+      <button
+        className="mt-2 min-h-11 font-semibold underline"
+        type="button"
+        onClick={() => void bootstrap()}
+      >
         Coba lagi
       </button>
     </div>
