@@ -46,7 +46,7 @@ Migration baru hanya menambah tiga tabel, relasi foto dan indeks. Tidak mengubah
 
 Seluruh tujuh migration berhasil diuji dari database kosong pada PostgreSQL native 18.4 disposable port 55439. Database regresi dan browser dipisahkan. TEST_DATABASE_URL runner wajib local kalosara_*_test; guard Neon/non-test tetap berlaku. Upload/akun/fixture QA diisolasi.
 
-Status aktivasi Neon: **menunggu persetujuan khusus migrasi Prompt 10**. Izin sebelumnya menyebut Prompt 09; permintaan persetujuan telah disampaikan setelah kode dan tes siap. Jangan menganggap izin lama sebagai izin migrasi baru, jangan reset/seed atau menjalankan suite DB di Neon. Saat diizinkan, jalankan `cd backend && npm run db:generate && npm run db:deploy`, lalu smoke GET saja. Sebelum migration, kanal baru belum aktif pada runtime utama dan menampilkan error state; kode API referensi media baru juga memerlukan tabel tersebut sebelum dipakai.
+Status aktivasi Neon: **berhasil pada 17 Oktober 2026 setelah pengguna memberikan persetujuan eksplisit untuk Prompt 10**. `prisma migrate deploy` menerapkan `20261017000000_region_information`; `prisma migrate status` melaporkan skema mutakhir. DATABASE_URL yang ada dipakai tanpa ditimpa/ditampilkan. Tidak ada reset, seed, akun/konten QA atau tes destruktif di Neon. Izin migrasi tidak mencakup memulai prompt berikutnya.
 
 APP_ORIGIN/SITE_ORIGIN/FRONTEND_INTERNAL_URL tetap localhost 3001, API 4000; secret invalidasi lokal diperiksa sama tanpa ditampilkan/diubah. Mutasi memakai outbox HMAC tag public-content yang sudah ada, tidak menambah queue/Redis. Retry dan invalidasi layout memperbarui cache kontak/settings; list baru no-store.
 
@@ -91,6 +91,8 @@ Redis 6380 saat audit tidak aktif; Docker daemon socket tidak ada. Tidak menyala
 
 ## 8. Status
 
-**SIAP REVIEW kode Prompt 10 dan pengujian terisolasi. Aktivasi Neon menunggu persetujuan migrasi baru.** Commit/push ke origin/main setelah pemeriksaan lulus, lalu berhenti. Tidak melanjutkan Prompt 11 atau Tahap 02. Penataan/desain besar tetap ditunda sesuai pengguna.
+**SIAP REVIEW Prompt 10; aktivasi Neon berhasil dengan persetujuan pengguna.** Commit/push ke origin/main setelah pemeriksaan lulus, lalu berhenti. Tidak melanjutkan Prompt 11 atau Tahap 02. Penataan/desain besar tetap ditunda sesuai pengguna.
 
-Cleanup akhir: frontend QA 3002, backend QA 4002 dan PostgreSQL native 55439 dihentikan. Database, akun, upload, screenshot/fixture dan kredensial QA sementara dibersihkan; tidak ada perubahan data Neon. Build akhir memakai environment utama 3001/4000 dan berhasil.
+Cleanup akhir: frontend QA 3002, backend QA 4002 dan PostgreSQL native 55439 dihentikan. Database, akun, upload, screenshot/fixture dan kredensial QA sementara dibersihkan; pada tahap QA tidak ada perubahan data Neon. Build akhir memakai environment utama 3001/4000 dan berhasil.
+
+Smoke aktivasi Neon: readiness serta statistics/facilities/potentials pada backend 4000 dan proxy frontend 3001 HTTP 200; ketiga daftar total 0. Beranda, /statistik, /potensi, /kontak dan /admin/wilayah HTTP 200 tanpa state gangguan wilayah. Seluruh pemeriksaan baca-saja; tidak menambahkan data resmi atau contoh. **SIAP REVIEW Prompt 10 termasuk aktivasi Neon.**

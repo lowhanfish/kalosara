@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 10 siap review kode
+# Checkpoint KALOSARA — Prompt 10 siap review
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -16,7 +16,7 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 08 — berita publik dan SEO | Selesai dan di-push | `a56c58e` |
 | Revisi runtime manual/Neon/upload | Selesai dan di-push | `867f095` |
 | 09 — pengumuman, agenda, galeri, informasi publik | Selesai; migrasi Neon diterapkan dengan persetujuan | lihat laporan Prompt 09 |
-| 10 — statistik, potensi/fasilitas, lokasi/kontak | Kode siap review; migrasi Neon menunggu izin khusus | lihat laporan Prompt 10 |
+| 10 — statistik, potensi/fasilitas, lokasi/kontak | Selesai; migrasi Neon diterapkan dengan izin pengguna | lihat laporan Prompt 10 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -211,3 +211,9 @@ Backend lint/typecheck/build, 30 tes unit/HTTP dan 32 tes integrasi dalam 7 suit
 **SIAP REVIEW kode; aktivasi Neon Prompt 10 menunggu izin khusus.** Izin sebelumnya hanya Prompt 09; pertanyaan izin baru disampaikan setelah implementasi dan pemeriksaan lulus. Jangan bypass/reset/seed Neon. Commit/push hasil kode, lalu berhenti; jangan mulai Prompt 11/Tahap 02.
 
 Cleanup Prompt 10: runtime QA 3002/4002 dan PostgreSQL native 55439 dihentikan; akun/database/upload/kredensial sementara dibersihkan. Build akhir kembali memakai konfigurasi utama 3001/4000. Error-state statistik/potensi/beranda teruji saat backend QA dimatikan; tidak menampilkan angka palsu.
+
+## Aktivasi Neon Prompt 10 — 17 Oktober 2026
+
+Pengguna memberi persetujuan eksplisit menerapkan migrasi Prompt 10 ke Neon memakai DATABASE_URL yang ada tanpa reset/seed. `prisma migrate deploy` menerapkan `20261017000000_region_information` dan `prisma migrate status` memastikan skema mutakhir. Catatan penundaan sebelumnya adalah riwayat. Tidak ada kredensial/URL ditimpa atau ditampilkan, seed/akun QA/konten contoh atau tes destruktif pada database pengguna. Frontend/backend tetap manual pada 3001/4000. Prompt 11/Tahap 02 tidak dimulai.
+
+Smoke aktivasi Neon: readiness serta statistics/facilities/potentials pada backend 4000 dan proxy frontend 3001 HTTP 200; ketiga daftar total 0. Beranda, /statistik, /potensi, /kontak dan /admin/wilayah HTTP 200 tanpa state gangguan wilayah. Seluruh pemeriksaan baca-saja; tidak menambahkan data resmi atau contoh. **SIAP REVIEW Prompt 10 termasuk aktivasi Neon.**
