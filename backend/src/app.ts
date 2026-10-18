@@ -4,6 +4,8 @@ import { attachAuditContext } from './lib/audit-context.js';
 import { regionAdminRouter, publicRegionRouter } from './modules/cms/region.js';
 import { contentAdminRouter, publicContentRouter } from './modules/cms/content.js';
 import express from 'express';
+import helmet from 'helmet';
+import { env } from './config/env.js';
 import { newsAdminRouter } from './modules/cms/news.js';
 import { publicNewsRouter } from './modules/cms/public-news.js';
 import { mediaAdminRouter, publicMediaRouter } from './modules/cms/media.js';
@@ -20,25 +22,33 @@ import { authRouter } from './modules/auth/routes.js';
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
-  app.set('trust proxy', 1);
-  app.use(pinoHttp({ logger, serializers: { req: (request) => ({ id: request.id, method: request.method, url: String(request.url).split('?')[0] }) }, genReqId: (req, res) => {
+  // Next rewrites preserve untrusted forwarding headers. Use the socket address;
+  // rate limits are shared behind the local proxy until a verified edge is configured.
+  app.set('trust proxy', false);
+  app.use(helmet({ strictTransportSecurity: env.APP_ORIGIN.startsWith('https:') ? { maxAge: 31536000 } : false }));
+  app.use(pinoHttp({ logger, serializers: { res: (response) => ({ statusCode: response.statusCode }), req: (request) => ({ id: request.id, method: request.method }) }, genReqId: (req, res) => {
     const id = randomUUID();
     res.setHeader('X-Request-Id', id);
     return id;
   } }));
+  app.use((req, res, next) => {
+    if (/^\/api\/v1\/(?:auth|account|admin)(?:\/|$)/.test(req.path)) res.setHeader('Cache-Control', 'private, no-store');
+    next();
+  });
   app.use(express.json({ limit: '100kb' }));
   app.use(cookieParser());
   app.use(attachAuditContext);
 
   app.get('/api/v1/health', (req, res) => {
-    res.json({ success: true, data: { status: 'ok' }, requestId: req.id });
+    res.json({ success: true, data: { status: 'ok', uptimeSeconds: Math.floor(process.uptime()) }, requestId: req.id });
   });
   app.get('/api/v1/ready', async (req, res) => {
     try {
       await prisma.$queryRaw`SELECT 1`;
       res.json({ success: true, data: { status: 'ready' }, requestId: req.id });
     } catch (error) {
-      logger.warn({ err: error }, 'Database is not ready');
+      void error;
+      logger.warn({ event: 'database_not_ready', requestId: req.id }, 'Database is not ready');
       res.status(503).json({ success: false, error: { code: 'NOT_READY', message: 'Database unavailable' }, requestId: req.id });
     }
   });

@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import { createServer } from 'node:http';
 import { lockAccount } from '../modules/auth/account-lock.js';
 import './db-safety.js';
@@ -7,6 +8,8 @@ import request from 'supertest';
 import { hash, compare } from 'bcryptjs';
 import { prisma } from '../lib/prisma.js';
 import { createApp } from '../app.js';
+// Observe blocked connections outside the deliberately small application pool.
+const observer = new PrismaClient();
 const app = createApp(); const server = createServer(app); const admin = request.agent(server); const lurah = request.agent(server); const citizen = request.agent(server);
 const ids: string[] = []; const password = randomUUID() + '-Aa1!'; let headers: Record<string, string>; let target: { id: string; updatedAt: Date; email: string };
 async function login(agent: ReturnType<typeof request.agent>, email: string, secret = password) {
@@ -27,7 +30,8 @@ beforeAll(async () => {
     ids.push(user.id); const h = await login(agent, user.email); if (agent === admin) headers = h; if (agent === citizen) target = user;
   }
 }, 15000);
-afterAll(async () => { await prisma.mediaAsset.deleteMany({ where: { ownerId: { in: ids } } }); await prisma.auditLog.deleteMany({ where: { actorId: { in: ids } } }); await prisma.user.deleteMany({ where: { id: { in: ids } } }); await prisma.$disconnect(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); });
+afterAll(async () => {
+  await observer.$disconnect(); await prisma.mediaAsset.deleteMany({ where: { ownerId: { in: ids } } }); await prisma.auditLog.deleteMany({ where: { actorId: { in: ids } } }); await prisma.user.deleteMany({ where: { id: { in: ids } } }); await prisma.$disconnect(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); });
 describe('Prompt 11 direct dashboard API security', () => {
   it('blocks guests/citizens and allows monitoring only for lurah', async () => {
     for (const path of ['', '/users', '/audit', '/uploads']) {
@@ -110,7 +114,7 @@ describe('Prompt 11 direct dashboard API security', () => {
     await acquired;
     async function waitForLocks(count: number) {
       for (let i = 0; i < 150; i++) {
-        const rows = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) AS count FROM pg_stat_activity WHERE datname = current_database() AND wait_event_type = 'Lock'`;
+        const rows = await observer.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) AS count FROM pg_stat_activity WHERE datname = current_database() AND wait_event_type = 'Lock'`;
         if (Number(rows[0].count) >= count) return;
         await new Promise(resolve => setTimeout(resolve, 10));
       }

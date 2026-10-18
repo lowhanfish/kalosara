@@ -1,0 +1,13 @@
+# Reference only: install with the service operator's real user/group and log paths.
+/var/log/kalosara/*.log {
+    daily
+    rotate 7
+    maxsize 10M
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+    su kalosara kalosara
+    create 0640 kalosara kalosara
+}

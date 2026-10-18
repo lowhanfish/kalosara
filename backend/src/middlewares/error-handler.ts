@@ -26,6 +26,7 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _nex
     res.status(413).json({ success: false, error: { code: 'BODY_TOO_LARGE', message: 'Request body too large' }, requestId: req.id });
     return;
   }
-  logger.error({ err: error, requestId: req.id }, 'Unhandled request error');
+  // Prisma and parser error messages can contain query arguments or submitted data.
+  logger.error({ event: 'unhandled_request_error', requestId: req.id }, 'Unhandled request error');
   res.status(500).json({ success: false, error: { code: 'INTERNAL_ERROR', message: 'Internal server error' }, requestId: req.id });
 };

@@ -36,7 +36,7 @@ export async function drainInvalidations() {
     const events = await prisma.cacheInvalidation.findMany({ where: { deliveredAt: null, nextAttemptAt: { lte: new Date() } }, take: 10, orderBy: { createdAt: 'asc' }, select: { id: true } });
     for (const event of events) await deliverInvalidation(event.id);
     await prisma.cacheInvalidation.deleteMany({ where: { deliveredAt: { lt: new Date(Date.now() - 7 * 86400000) } } });
-  } catch (error) { logger.warn({ err: error }, 'Public cache retry unavailable'); }
+  } catch { logger.warn({ event: 'cache_retry_unavailable' }, 'Public cache retry unavailable'); }
   finally { draining = false; }
 }
 // Notification failure must never turn an already committed CMS save into an HTTP error.

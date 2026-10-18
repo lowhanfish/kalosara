@@ -14,7 +14,7 @@ const env = { ...process.env, DATABASE_URL: url, NODE_ENV: 'test', LOG_LEVEL: 's
 let code = 0;
 try {
   const suites = process.argv.slice(2);
-  const defaults = ['src/tests/schema.db.test.ts', 'src/tests/auth-flow.db.test.ts', 'src/tests/profile.db.test.ts', 'src/tests/cms.db.test.ts', 'src/tests/public-news.db.test.ts', 'src/tests/content.db.test.ts', 'src/tests/region.db.test.ts', 'src/tests/dashboard.db.test.ts', 'src/tests/account.db.test.ts'];
+  const defaults = ['src/tests/schema.db.test.ts', 'src/tests/auth-flow.db.test.ts', 'src/tests/profile.db.test.ts', 'src/tests/cms.db.test.ts', 'src/tests/public-news.db.test.ts', 'src/tests/content.db.test.ts', 'src/tests/region.db.test.ts', 'src/tests/dashboard.db.test.ts', 'src/tests/account.db.test.ts', 'src/tests/security.db.test.ts'];
   for (const args of [['prisma', 'migrate', 'deploy'], ['vitest', 'run', '--no-file-parallelism', ...(suites.length ? suites : defaults)]]) {
     const result = spawnSync('npx', args, { env, stdio: 'inherit' });
     if (result.status !== 0) { code = result.status ?? 1; break; }

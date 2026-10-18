@@ -4,9 +4,16 @@ import { env } from './config/env.js';
 import { logger } from './lib/logger.js';
 import { prisma } from './lib/prisma.js';
 
-const server = createApp().listen(env.PORT, '0.0.0.0', () => {
+const server = createApp().listen(env.PORT, '127.0.0.1', () => {
   logger.info({ port: env.PORT }, 'KALOSARA API listening');
 });
+
+// Bound slow connections and idle keep-alives on the manual API process.
+server.maxConnections = 64;
+server.requestTimeout = 60_000;
+server.headersTimeout = 15_000;
+server.keepAliveTimeout = 5_000;
+server.maxRequestsPerSocket = 100;
 
 const cacheTimer = setInterval(() => void drainInvalidations(), 30000);
 cacheTimer.unref();

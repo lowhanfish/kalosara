@@ -16,6 +16,10 @@ import { CmsError, idSchema, pagination, transaction, mediaUrl } from './common.
 import { uploadRoot as root, uploadSources, storageKey as makeStorageKey, filePath, variantKey } from './storage.js';
 export { filePath } from './storage.js';
 
+// Bound native image CPU/cache in the single API process.
+sharp.concurrency(1);
+sharp.cache({ memory: 16, files: 0, items: 20 });
+
 export const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const fields = z.object({ visibility: z.enum(['PUBLIC', 'PRIVATE']), alt: z.string().trim().max(300), caption: z.string().trim().max(1000) }).strict();
 const uploadFields = fields.extend({ source: z.enum(uploadSources).default('general') });

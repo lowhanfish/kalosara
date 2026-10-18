@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 12 siap review termasuk aktivasi Neon
+# Checkpoint KALOSARA — Prompt 13 siap review
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -18,7 +18,8 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 09 — pengumuman, agenda, galeri, informasi publik | Selesai; migrasi Neon diterapkan dengan persetujuan | lihat laporan Prompt 09 |
 | 10 — statistik, potensi/fasilitas, lokasi/kontak | Selesai; migrasi Neon diterapkan dengan izin pengguna | lihat laporan Prompt 10 |
 | 11 — dashboard admin/lurah, pengguna, audit | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | lihat laporan Prompt 11 |
-| 12 — dashboard masyarakat, profil, keamanan | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | lihat laporan Prompt 12 |
+| 12 — dashboard masyarakat, profil, keamanan | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | `e3aff03` |
+| 13 — hardening, tes sistem, observabilitas | Selesai/teruji untuk review kode; temuan operasi/dependency dicatat | lihat laporan Prompt 13 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -264,3 +265,19 @@ Pengguna memberi izin khusus migrasi Prompt12 melalui pertanyaan persetujuan set
 QA3002/4002 dan PostgreSQL55439 beserta database/akun/kredensial/upload sementara dibersihkan. Build akhir kembali env utama/proxy4000. Runtime utama sempat dihentikan sebelum migrasi, kemudian aktif kembali manual3001/4000 setelah persetujuan/deploy. Cache dev Turbopack di volume ini rusak saat restart; hanya `.next/dev/cache/turbopack` dibersihkan dan smoke diulang lulus. Origin/CSRF/invalidation3001 dan secret cocok; port3000 proyek lain, Docker dan Redis6380 tidak disentuh.
 
 Smoke utama baca-saja: readiness backend/proxy200, tiga shell masyarakat dan halaman review admin200, API profil/review anonim401, private/no-store dan robots mengecualikan `/masyarakat/`. Tidak login/mengubah akun pengguna Neon. Batasan: verifikasi kontak melalui petugas, tanpa email/SMS/MFA/reset email/retensi pending otomatis; penghapusan telepon belum tersedia. **SIAP REVIEW Prompt12 termasuk aktivasi Neon.** Commit/push origin/main kemudian berhenti; jangan mulai Prompt13/Tahap02.
+
+## Prompt 13 — hardening, tes sistem dan observabilitas, 18 Oktober 2026
+
+Audit mulai `e3aff03`, main sinkron dan working tree bersih. CHECKPOINT, README, kedua PDF Tahap 01, frontend/AGENTS dan panduan Next 16.4 terpasang dibaca. Hanya Prompt 13. Identitas Watundehoa/Puriala/Konawe, AMIRULAH, S.Si, hero/potret/lambang/desain dipertahankan. Laporan delapan bagian, threat model, matriks OWASP dan temuan: `backend/docs/security-hardening.md`; rancangan data/akses/retensi/backup/restore/insiden: `backend/docs/data-backup-policy.md`.
+
+Helmet API dan headers/CSP frontend, no-store awal pada auth/account/admin, log metode/status/requestId/durasi tanpa URL/body/header/query/raw IP serta pesan error DB. Health memuat uptime; ready memakai SELECT1 dan error generik. API bind loopback, timeout dan 64 koneksi; pool Prisma 3 dengan timeout 10 detik pada URL runtime, env asli dipertahankan. Optimizer hanya `/images/**`, menolak remote/API/private, input25MP/response20MiB/cache128MiB/concurrency1; Sharp concurrency1/cache16MiB. Upload tetap20MiB/file, dua job, single-file, validasi signature/MIME/isi, izin PUBLIC/PRIVATE/owner, proteksi referensi dan path fisik/legacy. Nginx hanya referensi host manual3001/4000, cap upload21MiB/default1MiB dan timeout, tidak diaktifkan. Buffer clone Next21MiB bukan hard413 transport.
+
+Trust proxy false menutup forwarding spoof terhadap limiter; konsekuensinya kuota login/register berbagi per proxy lokal dan hash IP audit merepresentasikan proxy. Trusted edge/per-IP/per-akun perlu desain dan pengujian sebelum akses publik. CSP unsafe-inline dipertahankan untuk statis/ISR, unsafe-eval hanya development; bukan strict nonce CSP. Docker tetap hanya Redis6380 dengan rotasi log10MiB×3, tidak direcreate. Monitor host CPU/RSS/load/memori/disk/health/ready/frontend dan contoh logrotate7hari tersedia, belum diinstal otomatis. Snapshot pengembang memberi alert disk97%/memori99% (memori heuristik cache), bukan bukti kapasitas VPS. Retensi/purge/backup offsite masih usulan; tidak menjalankan operasi data Neon.
+
+Tidak ada migration/env wajib baru. Dependency baru Helmet8.1; alat tes/lint diperbarui ke Vitest5.0.5, TS-ESLint8.71 dan tipe Node22. Tooling dianjurkan Node24 LTS/22.13+ karena lint transitif memberi engine warning22.12; API tetap minimal22.12. Audit backend16 menjadi4high/0critical (Prisma CLI/config/deepmerge-ts/effect, juga terhitung optional peer saat omitdev); frontend1high braces3.0.3 pada lint tooling, registry belum menyediakan patch. Jangan menyatakan runtime0 atau aman sempurna; Prisma7 mayor ditunda, temuan terbuka di laporan.
+
+Hasil akhir: backend lint/typecheck/build,35 tes unit/HTTP dan52 tes DB dalam10 suite; frontend lint/typecheck/build dan36 tes; browser Chrome hasil build QA6 kelompok kritis lulus. Cakupan: hero360/768/1440, headers/CSP/optimizer, login/profil/reload/escaping/IDOR/RBAC/logout/open redirect, CMS kategori/draft404/publish/metadata SSR dan CMS seluler tanpa overflow/pageerror/CSP violation. Screenshot artikel desktop dan CMS360 diperiksa. Regresi PDF20MiB/+1byte/disguise/traversal/PRIVATE antar-admin/draft/expired/session/concurrency lulus. Log QA tidak memuat email/password/alamat fixture. Pool3 mengharuskan observer tes race memakai koneksi terpisah; barrier refresh/reset lulus. Sandbox socket/shared memory dan cache Turbopack macOS korup ditangani; hanya cache build/dev terkait dibersihkan.
+
+Semua mutasi tes memakai PostgreSQL native18.4 disposable55439, database regresi/browser berbeda dan upload sementara; tanpa PostgreSQL Docker/Neon. DATABASE_URL/env tidak ditimpa/ditampilkan, tanpa reset/seed/migrasi atau data QA Neon. QA3002/4002, database/fixture/kredensial/upload sementara dibersihkan setelah verifikasi. Build akhir kembali env utama/proxy4000; frontend3001/backend4000 manual tersedia untuk review. Smoke utama baca-saja health/ready/proxy200 dan admin/account anonim401/no-store lulus. Redis/proyek lain pada3000 tidak dioperasikan.
+
+**SIAP REVIEW Prompt 13 untuk kode/pengujian lokal dengan batasan dependency dan operasional tercatat.** Belum TLS domain, Nginx executable, backup offsite/restore, load test/VPS, strict nonce CSP, antivirus, kuota total atau retensi otomatis. Commit/push origin/main kemudian berhenti; jangan mulai Prompt14/Tahap02.

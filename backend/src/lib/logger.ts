@@ -3,5 +3,7 @@ import { env } from '../config/env.js';
 
 export const logger = pino({
   level: env.LOG_LEVEL,
+  // Never serialize database/parser messages or stacks containing submitted values.
+  serializers: { err: () => ({ type: 'InternalError' }) },
   redact: ['req.headers.authorization', 'req.headers.cookie', 'req.headers.x-csrf-token', 'res.headers.set-cookie'],
 });
