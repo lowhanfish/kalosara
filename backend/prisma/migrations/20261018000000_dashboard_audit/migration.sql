@@ -1,0 +1,1 @@
+ALTER TABLE "AuditLog" ADD COLUMN "requestId" VARCHAR(36), ADD COLUMN "ipHash" CHAR(64);

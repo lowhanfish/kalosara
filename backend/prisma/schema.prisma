@@ -83,6 +83,8 @@ model AuditLog {
   action       String   @db.VarChar(100)
   resourceType String?  @db.VarChar(100)
   resourceId   String?  @db.VarChar(100)
+  requestId    String?  @db.VarChar(36)
+  ipHash       String?  @db.Char(64)
   createdAt    DateTime @default(now())
   actor        User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
 

@@ -1,3 +1,4 @@
+import { lockAccount } from './account-lock.js';
 import type { Request } from 'express';
 import { z } from 'zod';
 import { randomBytes } from 'node:crypto';
@@ -24,11 +25,17 @@ export async function login(input: unknown, req: Request) {
   if (!user.isActive) throw new AccessError(403, 'ACCOUNT_INACTIVE', 'Account is inactive');
   const refresh = newRefreshToken();
   const expiresAt = new Date(Date.now() + REFRESH_TTL_MS);
-  const session = await prisma.refreshSession.create({
-    data: { userId: user.id, tokenHash: tokenHash(refresh), expiresAt, ...metadata(req) },
-  });
-  const access = await signAccessToken(user.id, session.id, expiresAt);
-  return { access, refresh, expiresAt, user: { id: user.id, email: user.email, role: user.role } };
+  const { session, current } = await prisma.$transaction(async tx => {
+    await lockAccount(tx, user.id);
+    const current = await tx.user.findUniqueOrThrow({ where: { id: user.id } });
+    if (!current.isActive || current.passwordHash !== user.passwordHash) throw new AccessError(403, 'ACCOUNT_CHANGED', 'Account changed; sign in again');
+    const session = await tx.refreshSession.create({
+      data: { userId: current.id, tokenHash: tokenHash(refresh), expiresAt, ...metadata(req) },
+    });
+    return { session, current };
+  }, { isolationLevel: 'ReadCommitted' });
+  const access = await signAccessToken(current.id, session.id, expiresAt);
+  return { access, refresh, expiresAt, user: { id: current.id, email: current.email, role: current.role } };
 }
 
 async function rejectReusedSession(userId: string, rotatedAt: Date | null) {
@@ -55,6 +62,9 @@ export async function refreshSession(rawToken: unknown, req: Request) {
   if (old.expiresAt <= now) throw new AccessError(401, 'TOKEN_EXPIRED', 'Refresh token expired');
   const refresh = newRefreshToken();
   const result = await prisma.$transaction(async (tx) => {
+    await lockAccount(tx, old.userId);
+    const current = await tx.user.findUniqueOrThrow({ where: { id: old.userId } });
+    if (!current.isActive) throw new AccessError(403, 'ACCOUNT_INACTIVE', 'Account is inactive');
     const updated = await tx.refreshSession.updateMany({
       where: { id: old.id, revokedAt: null, rotatedAt: null, expiresAt: { gt: now } },
       data: { revokedAt: now, rotatedAt: now },
@@ -64,7 +74,7 @@ export async function refreshSession(rawToken: unknown, req: Request) {
       data: { userId: old.userId, tokenHash: tokenHash(refresh), expiresAt: old.expiresAt, ...metadata(req) },
     });
     return session;
-  });
+  }, { isolationLevel: 'ReadCommitted' });
   if (!result) throw new AccessError(409, 'REFRESH_RACE', 'Refresh already in progress');
   const access = await signAccessToken(old.userId, result.id, result.expiresAt);
   return { access, refresh, expiresAt: result.expiresAt };

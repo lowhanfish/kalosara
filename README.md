@@ -44,7 +44,7 @@ Compose hanya menjalankan Redis: `docker compose up -d redis`, lalu `docker comp
 
 ## Penyimpanan upload
 
-File fisik berada di `backend/public/uploads/<asal>/<images|documents>/`. UPLOAD_ROOT default public/uploads, jalankan backend dari folder backend. Asal tervalidasi pada pustaka media: news, profile, officials, settings, general, announcements, events, galleries, documents. Turunan gambar berada bersama original. File lama dipindahkan ke legacy tanpa mengubah ID/URL database. Upload diabaikan Git; backup file bersama database Neon.
+File fisik berada di `backend/public/uploads/<asal>/<images|documents>/`. UPLOAD_ROOT default public/uploads, jalankan backend dari folder backend. Asal tervalidasi pada pustaka media: news, profile, officials, settings, general, announcements, events, galleries, documents, facilities, potentials. Turunan gambar berada bersama original. File lama dipindahkan ke legacy tanpa mengubah ID/URL database. Upload diabaikan Git; backup file bersama database Neon.
 
 Database hanya menyimpan metadata, path dan relasi, tanpa blob/base64 gambar/PDF. Public ini folder backend, bukan Next.js. API tetap memeriksa PUBLIC/PRIVATE, owner dan arsip; jangan pasang static server tanpa pembatasan pada seluruh folder karena akan membuka file privat.
 
@@ -59,11 +59,11 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 
 ## Batasan tahap ini
 
-Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum dan layanan surat belum dibuat. CMS berita tersedia sejak Prompt 07. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). UI akun umum dan dashboard lengkap belum dibuat.
+Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum dan layanan surat belum dibuat. CMS berita tersedia sejak Prompt 07. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). Dashboard admin/lurah tersedia sejak Prompt 11; UI akun umum dan dashboard masyarakat masih menunggu Prompt 12.
 
 ## Layout publik — Prompt 05
 
-Sepuluh halaman publik, design system responsif, pencarian menu, dan state loading/404/500/maintenance sudah tersedia. Identitas dibaca dari `GET /api/v1/public/settings` dengan fallback yang bertanda contoh. Kontrak pengaturan, daftar file, hasil tes, dan batasan tersedia di [laporan Prompt 05](frontend/docs/public-layout.md). CMS dan konten resmi belum dibuat.
+Sepuluh halaman publik, design system responsif, pencarian menu, dan state loading/404/500/maintenance sudah tersedia. Identitas dibaca dari `GET /api/v1/public/settings` dengan fallback yang bertanda contoh. Kontrak pengaturan, daftar file, hasil tes, dan batasan tersedia di [laporan Prompt 05](frontend/docs/public-layout.md). CMS tersedia sejak Prompt 06–10; konten resmi diisi pengelola setelah disetujui.
 
 Revisi desain memakai foto kantor dan Lurah **AMIRULAH, S.Si** untuk Kelurahan Watundehoa, Kecamatan Puriala, Kabupaten Konawe. Foto lokal yang sudah dikompresi tersedia di `frontend/public/images/watundehoa/`; sumber identitas frontend berada di `frontend/lib/site-identity.ts`.
 
@@ -119,3 +119,14 @@ CMS `/admin/wilayah` menyediakan snapshot statistik agregat per tahun/bulan deng
 Peta kantor memakai koordinat dari `/admin/profil` dan dimuat setelah pengunjung menyetujui koneksi OpenStreetMap; alamat dan tautan menjadi fallback. Tidak ada API key atau pengiriman pesan kontak. Form pemilih topik hanya navigasi, tidak mengirim pesan. Statistik berisi markup tabel server, tetapi pembukaan streaming dinamis Next.js masih memerlukan JavaScript.
 
 Migration `20261017000000_region_information` menambah StatisticSnapshot/Facility/Potential. Migrasi telah diterapkan ke Neon setelah persetujuan khusus Prompt 10 pada 17 Oktober 2026; jangan menjalankan reset/seed/tes DB pada Neon. Source upload facilities/potentials tervalidasi, file tetap fisik dan akses PUBLIC/PRIVATE tidak berubah. Tidak ada env/dependency aplikasi baru. Rincian delapan bagian dan hasil pemeriksaan: [laporan Prompt 10](backend/docs/region-cms.md).
+
+
+## Dashboard admin/lurah, pengguna dan audit — Prompt 11
+
+Buka `/admin`: ADMIN_KELURAHAN dan LURAH melihat hitungan CMS dan aktivitas terbatas. Admin membuka `/admin/pengguna` untuk search/pagination akun, aktif/nonaktif, cabut sesi/reset password setelah verifikasi identitas/password admin/CSRF, audit rinci dan inventory upload. Lurah hanya monitoring; approval belum diaktifkan. Masyarakat ditolak dari admin/API dashboard; profil akun sendiri tetap melalui `/auth/me`, tanpa dashboard/edit profil Prompt12.
+
+Perubahan role memakai operasi backend khusus yang memeriksa izin, tanpa dropdown role bebas. Semua perubahan akses diaudit dalam transaksi dan mencabut seluruh sesi/token reset lama, sehingga JWT akses aktif ikut ditolak. Lock akun bersama login/refresh mencegah sesi baru tertinggal saat reset bersamaan. Audit menyimpan requestId dan IP pseudonim harian; tidak menyimpan password/cookie/token atau IP mentah. Log HTTP juga tidak memuat header/query/IP mentah.
+
+Inventory mempertahankan PRIVATE milik sendiri; batas upload tetap20MiB/file dan dua upload serentak. Penggunaan fisik original/varian/legacy dihitung; kuota total storage belum ditetapkan, ditampilkan jujur sebagai belum tersedia. Tidak membuka static folder backend/public.
+
+Migrasi `20261018000000_dashboard_audit` menambah dua kolom nullable AuditLog, tanpa reset/seed/env/dependency baru. **Aktivasi Neon Prompt11 menunggu izin khusus pengguna**, jangan menyamakan dengan izin Prompt09/10 atau menjalankan backend baru untuk mutasi sebelum migrasi. Tes memakai PostgreSQL native sementara lokal, bukan Neon/Docker. Hasil akhir: backend30 unit +41 tes DB, frontend34 tes, lint/typecheck/build dan13 pemeriksaan browser lulus. Matriks izin, kontrak/prosedur role/reset, delapan bagian laporan dan batasan: [laporan Prompt 11](backend/docs/dashboard-admin.md). Berhenti untuk review, tidak mulai Prompt12 atau Tahap02.

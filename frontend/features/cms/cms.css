@@ -435,3 +435,37 @@ input[type="file"].cms-input {
 .public-content-filters button {
   flex: 0 0 auto;
 }
+.cms-dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-block: 1.5rem;
+}
+.cms-dashboard-cards > div {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: #fff;
+}
+.cms-dashboard-cards dt {
+  font-weight: 600;
+  color: #334155;
+}
+.cms-dashboard-cards dd {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0b2545;
+  margin: 0.5rem 0 0;
+}
+.cms-content-row code,
+.cms-content-row span {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.cms-management-list .cms-content-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  gap: 0.65rem;
+}

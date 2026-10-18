@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 10 siap review
+# Checkpoint KALOSARA — Prompt 11 siap review kode; aktivasi Neon tertunda
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -17,6 +17,7 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | Revisi runtime manual/Neon/upload | Selesai dan di-push | `867f095` |
 | 09 — pengumuman, agenda, galeri, informasi publik | Selesai; migrasi Neon diterapkan dengan persetujuan | lihat laporan Prompt 09 |
 | 10 — statistik, potensi/fasilitas, lokasi/kontak | Selesai; migrasi Neon diterapkan dengan izin pengguna | lihat laporan Prompt 10 |
+| 11 — dashboard admin/lurah, pengguna, audit | Kode selesai/teruji; migrasi Neon menunggu izin khusus | lihat laporan Prompt 11 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -24,8 +25,8 @@ Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt
 
 - `frontend/`: Next.js App Router dengan TypeScript strict, Tailwind, shadcn/ui dasar, TanStack Query, dan Zustand terpasang. Bootstrap sesi, AuthProvider, RouteGuard, HTTP client, store auth minimal dan query cache tersedia. Login khusus editor tersedia; UI akun umum belum dibuat. **Sebelum mengubah frontend, baca `frontend/AGENTS.md` dan dokumentasi Next yang dirujuk di sana.**
 - `backend/`: Express, Prisma/PostgreSQL, Zod, Pino. Model akun dan sesi sudah bermigrasi. API auth ada di `/api/v1/auth`; daftar endpoint, contoh request, dan error ada di `backend/docs/auth-api.md`. Lifecycle, RBAC, cookie, dan key rotation ada di `backend/docs/auth-design.md`.
-- `compose.yaml`: proxy Nginx, frontend, backend, PostgreSQL, serta volume database dan upload. Hanya proxy dipublikasikan. File `.env` berisi rahasia lokal dan tidak boleh di-commit.
-- Migrasi terbaru: `backend/prisma/migrations/20261016020000_news_media/`. Terapkan sebelum menjalankan versi Prompt 07. Backend memerlukan Node >=22.12; Docker backend Node 22.
+- `compose.yaml`: hanya Redis KALOSARA localhost6380; frontend/backend manual3001/4000, PostgreSQL Neon. Tidak menghidupkan kembali image aplikasi/PostgreSQL Docker. File `.env` berisi rahasia lokal dan tidak boleh di-commit.
+- Migrasi terbaru: `backend/prisma/migrations/20261018000000_dashboard_audit/`. Belum diterapkan ke Neon; tunggu izin khusus Prompt11. Backend memerlukan Node >=22.12.
 
 ## Verifikasi terakhir
 
@@ -217,3 +218,20 @@ Cleanup Prompt 10: runtime QA 3002/4002 dan PostgreSQL native 55439 dihentikan; 
 Pengguna memberi persetujuan eksplisit menerapkan migrasi Prompt 10 ke Neon memakai DATABASE_URL yang ada tanpa reset/seed. `prisma migrate deploy` menerapkan `20261017000000_region_information` dan `prisma migrate status` memastikan skema mutakhir. Catatan penundaan sebelumnya adalah riwayat. Tidak ada kredensial/URL ditimpa atau ditampilkan, seed/akun QA/konten contoh atau tes destruktif pada database pengguna. Frontend/backend tetap manual pada 3001/4000. Prompt 11/Tahap 02 tidak dimulai.
 
 Smoke aktivasi Neon: readiness serta statistics/facilities/potentials pada backend 4000 dan proxy frontend 3001 HTTP 200; ketiga daftar total 0. Beranda, /statistik, /potensi, /kontak dan /admin/wilayah HTTP 200 tanpa state gangguan wilayah. Seluruh pemeriksaan baca-saja; tidak menambahkan data resmi atau contoh. **SIAP REVIEW Prompt 10 termasuk aktivasi Neon.**
+
+
+## Prompt 11 — dashboard admin/lurah, pengguna dan audit, 18 Oktober 2026
+
+Audit dimulai HEAD `d2a0546`, working tree bersih dan main sinkron origin. Kedua PDF Tahap01, README/CHECKPOINT, frontend/AGENTS serta dokumentasi Next16.4 terpasang dibaca. Hanya Prompt11; desain navy/kuning, hero/potret/logo dan identitas Watundehoa/Puriala/Konawe, AMIRULAH,S.Si dipertahankan. Laporan delapan bagian/matriks akses/prosedur: `backend/docs/dashboard-admin.md`.
+
+`/admin` ringkasan angka CMS nyata untuk admin/lurah, tanpa metrik layanan surat. `/admin/pengguna` khusus admin: pagination/search, aktif/nonaktif/cabut sesi/reset password, audit rinci dan inventory upload. Operasi role hanya backend terautentikasi/terotorisasi dengan verifikasi ulang, bukan dropdown bebas. Lurah monitoring saja; approval belum diaktifkan. Masyarakat ditolak halaman/data admin, API403; `/auth/me` hanya akun sendiri, edit profil/dashboard masyarakat tetap Prompt12.
+
+Setiap perubahan akses memerlukan password admin/identitas terverifikasi/Origin/CSRF/body strict/versi terbaru, mencabut semua sesi dan reset token dalam transaksi bersama audit. Self change dan kehilangan admin aktif terakhir dicegah. Login/refresh berbagi row lock akun dengan reset, sehingga sesi refresh yang bersamaan ikut dicabut; tes barrier PostgreSQL membuktikannya. Audit lama/CLI nullable, audit HTTP baru requestIdUUID+IP HMAC harian; tidak mencatat rahasia/rawIP. Log HTTP dibatasi ID/metode/path tanpa header/query.
+
+Migration `20261018000000_dashboard_audit` hanya menambah requestId/ipHash nullable. Tidak ada env/dependency baru, reset atau seed Neon. Izin sebelumnya hanya Prompt09/10; pertanyaan izin Prompt11 disampaikan setelah implementasi/tes terisolasi. **Neon belum diubah.**
+
+Hasil akhir: backend lint/typecheck/build,30 unit dan41 tes DB/8suite lulus; frontend lint/typecheck/build dan34 tes lulus. Browser QA13 pemeriksaan lulus: admin/lurah/masyarakat, API403, konfirmasi batal/terima, status nonaktif, audit, upload kosong/quota, error/retry dan mobile390 tanpa overflow. Screenshot desktop1440/mobile390 diperiksa. Regresi draft/expired tersembunyi, PDF20MiB/oversize/MIME palsu dan PUBLIC/PRIVATE/antar-admin lulus. Kegagalan socket sandbox/ephemeral dan hasil query lock void sempat ditemukan, diperbaiki dan pengulangan final lulus.
+
+Tes memakai PostgreSQL native18.4 port55439 dengan dua database disposable lokal +upload sementara, tidak Docker atau Neon. QA3002/4002/database/akun/kredensial/upload sementara dibersihkan; build akhir kembali konfigurasi utama3001/4000. Konfigurasi Origin/CSRF/invalidation3001 dan API4000 serta secret cocok, tidak ditimpa. Pada audit awal hanya port3000 proyek lain aktif; runtime utama3001/4000/Redis6380 tidak listening, tidak dijalankan ulang sebelum migrasi disetujui. Docker tidak dioperasikan, proses proyek lain tidak disentuh.
+
+Batasan: kuota yang ditegakkan20MiB/file dan dua upload serentak; kuota total storage belum ditetapkan (UI menyatakan belum tersedia). Reset email/MFA/forced password change/retensi audit/backup belum ditambahkan. Tidak ada konten/akun QA buatan pada Neon. **SIAP REVIEW kode Prompt11; aktivasi Neon menunggu persetujuan khusus.** Commit/push setelah pemeriksaan lulus, lalu berhenti; jangan mulai Prompt12/Tahap02.

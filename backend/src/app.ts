@@ -1,3 +1,5 @@
+import { dashboardRouter } from './modules/dashboard.js';
+import { attachAuditContext } from './lib/audit-context.js';
 import { regionAdminRouter, publicRegionRouter } from './modules/cms/region.js';
 import { contentAdminRouter, publicContentRouter } from './modules/cms/content.js';
 import express from 'express';
@@ -18,13 +20,14 @@ export function createApp() {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
-  app.use(pinoHttp({ logger, genReqId: (req, res) => {
+  app.use(pinoHttp({ logger, serializers: { req: (request) => ({ id: request.id, method: request.method, url: String(request.url).split('?')[0] }) }, genReqId: (req, res) => {
     const id = randomUUID();
     res.setHeader('X-Request-Id', id);
     return id;
   } }));
   app.use(express.json({ limit: '100kb' }));
   app.use(cookieParser());
+  app.use(attachAuditContext);
 
   app.get('/api/v1/health', (req, res) => {
     res.json({ success: true, data: { status: 'ok' }, requestId: req.id });
@@ -39,6 +42,7 @@ export function createApp() {
     }
   });
 
+  app.use('/api/v1/admin/dashboard', dashboardRouter);
   app.use('/api/v1/admin/region', regionAdminRouter);
   app.use('/api/v1/public/region', publicRegionRouter);
   app.use('/api/v1/admin/content', contentAdminRouter);
