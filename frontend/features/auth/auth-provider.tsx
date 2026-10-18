@@ -12,9 +12,10 @@ const AuthContext = createContext<ReturnType<typeof createAuthRuntime> | null>(
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [runtime] = useState(() =>
-    createAuthRuntime(fetch, (error, hadIdentity) => {
-      // Guest access to public pages is valid. RouteGuard handles protected routes.
-      if (!hadIdentity && error?.code === "UNAUTHENTICATED") return;
+    createAuthRuntime(fetch, (_error, hadIdentity) => {
+      // A fresh visitor may carry expired/revoked cookies but no cached identity.
+      // Leave the login gate visible; known-identity invalidation still returns home.
+      if (!hadIdentity) return;
       if (window.location.pathname !== "/") router.replace("/");
       router.refresh();
     }),

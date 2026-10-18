@@ -178,5 +178,13 @@ export function createAuthRuntime(
     });
     return bootstrapFlight;
   }
-  return { store, queryClient, request, bootstrap };
+  async function logout() {
+    const { csrfToken } = await http<{ csrfToken: string }>("/auth/csrf");
+    await http("/auth/logout", {
+      method: "POST",
+      headers: { "X-CSRF-Token": csrfToken },
+    });
+    guest();
+  }
+  return { store, queryClient, request, bootstrap, logout };
 }

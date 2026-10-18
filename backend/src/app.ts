@@ -1,3 +1,4 @@
+import { accountRouter, contactReviewRouter } from './modules/account.js';
 import { dashboardRouter } from './modules/dashboard.js';
 import { attachAuditContext } from './lib/audit-context.js';
 import { regionAdminRouter, publicRegionRouter } from './modules/cms/region.js';
@@ -42,6 +43,8 @@ export function createApp() {
     }
   });
 
+  app.use('/api/v1/account', accountRouter);
+  app.use('/api/v1/admin/contact-changes', contactReviewRouter);
   app.use('/api/v1/admin/dashboard', dashboardRouter);
   app.use('/api/v1/admin/region', regionAdminRouter);
   app.use('/api/v1/public/region', publicRegionRouter);

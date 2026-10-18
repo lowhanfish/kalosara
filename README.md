@@ -59,7 +59,7 @@ Migrasi pertama membuat `AppSetting`; migrasi kedua menambah akun, profil, sesi,
 
 ## Batasan tahap ini
 
-Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum dan layanan surat belum dibuat. CMS berita tersedia sejak Prompt 07. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). Dashboard admin/lurah tersedia sejak Prompt 11; UI akun umum dan dashboard masyarakat masih menunggu Prompt 12.
+Endpoint autentikasi dasar tersedia sejak Prompt 03. Pengiriman dan penyelesaian reset password, UI akun umum dan layanan surat belum dibuat. CMS berita tersedia sejak Prompt 07. Login khusus editor profil tersedia sejak Prompt 06. Bootstrap autentikasi frontend tersedia sejak Prompt 04; lihat [rancangan, diagram state, pengujian dan kontrak pemakaian](frontend/docs/auth-bootstrap.md). Dashboard admin/lurah tersedia sejak Prompt11; login/daftar, dashboard/profil/keamanan masyarakat tersedia sejak Prompt12.
 
 ## Layout publik — Prompt 05
 
@@ -123,10 +123,21 @@ Migration `20261017000000_region_information` menambah StatisticSnapshot/Facilit
 
 ## Dashboard admin/lurah, pengguna dan audit — Prompt 11
 
-Buka `/admin`: ADMIN_KELURAHAN dan LURAH melihat hitungan CMS dan aktivitas terbatas. Admin membuka `/admin/pengguna` untuk search/pagination akun, aktif/nonaktif, cabut sesi/reset password setelah verifikasi identitas/password admin/CSRF, audit rinci dan inventory upload. Lurah hanya monitoring; approval belum diaktifkan. Masyarakat ditolak dari admin/API dashboard; profil akun sendiri tetap melalui `/auth/me`, tanpa dashboard/edit profil Prompt12.
+Buka `/admin`: ADMIN_KELURAHAN dan LURAH melihat hitungan CMS dan aktivitas terbatas. Admin membuka `/admin/pengguna` untuk search/pagination akun, aktif/nonaktif, cabut sesi/reset password setelah verifikasi identitas/password admin/CSRF, audit rinci dan inventory upload. Lurah hanya monitoring; approval belum diaktifkan. Masyarakat ditolak dari admin/API dashboard; `/auth/me` tetap membaca akun sendiri. Dashboard/edit profil masyarakat tersedia sejak Prompt12 di bawah.
 
 Perubahan role memakai operasi backend khusus yang memeriksa izin, tanpa dropdown role bebas. Semua perubahan akses diaudit dalam transaksi dan mencabut seluruh sesi/token reset lama, sehingga JWT akses aktif ikut ditolak. Lock akun bersama login/refresh mencegah sesi baru tertinggal saat reset bersamaan. Audit menyimpan requestId dan IP pseudonim harian; tidak menyimpan password/cookie/token atau IP mentah. Log HTTP juga tidak memuat header/query/IP mentah.
 
 Inventory mempertahankan PRIVATE milik sendiri; batas upload tetap20MiB/file dan dua upload serentak. Penggunaan fisik original/varian/legacy dihitung; kuota total storage belum ditetapkan, ditampilkan jujur sebagai belum tersedia. Tidak membuka static folder backend/public.
 
 Migrasi `20261018000000_dashboard_audit` menambah dua kolom nullable AuditLog, tanpa reset/seed/env/dependency baru. **Migrasi Prompt11 telah diterapkan ke Neon setelah persetujuan khusus pengguna pada18 Oktober2026**, tanpa reset/seed. Status Prisma dan kedua kolom nullable diverifikasi; frontend/backend manual aktif3001/4000. Tes memakai PostgreSQL native sementara lokal, bukan Neon/Docker. Hasil akhir: backend30 unit +41 tes DB, frontend34 tes, lint/typecheck/build dan13 pemeriksaan browser lulus. Matriks izin, kontrak/prosedur role/reset, delapan bagian laporan dan batasan: [laporan Prompt 11](backend/docs/dashboard-admin.md). Berhenti untuk review, tidak mulai Prompt12 atau Tahap02.
+
+
+## Dashboard masyarakat, profil dan keamanan — Prompt 12
+
+Buka `/masyarakat/dashboard` melalui tautan **Akun masyarakat** di footer. Daftar dengan nama/email/password lalu masuk; membaca website publik tetap tanpa akun. `/masyarakat/profil` mengelola nama dan alamat opsional, tanpa NIK/KK/KTP/upload. API GET/PATCH `/api/v1/account/profile` selalu mengambil identitas dari sesi, menolak userId/role/kontak dari body serta query/URL manipulatif. Seluruh area pribadi noindex, API private/no-store, cache frontend terpisah per akun. Logout terkonfirmasi membersihkan store/query/mutasi sebelum kembali ke beranda.
+
+Perubahan email/nomor kontak menggunakan permintaan pending7hari: kontak lama tetap berlaku, pemilik harus memverifikasi identitas dan kepemilikan kontak baru kepada petugas. Admin meninjau melalui `/admin/pengguna` → `/admin/verifikasi-kontak`, dengan password admin, CSRF dan dua konfirmasi verifikasi. Tidak ada pengiriman email/SMS otomatis atau kode palsu. Approval mencabut semua sesi dan mengharuskan login kembali; duplikat/expired/stale ditolak, pemilik dapat mengganti/membatalkan permintaan. `/masyarakat/keamanan` mengganti password dengan pilihan cabut sesi lain (default aktif); sesi saat ini dipertahankan.
+
+Katalog/status pengajuan hanya komponen berlabel **belum aktif**, tanpa tombol pengajuan, endpoint sukses palsu atau data pelayanan buatan. Kontrak extension Tahap02 didokumentasikan, tanpa form builder/surat.
+
+Migrasi `20261018010000_citizen_account` menambah alamat nullable UserProfile dan tabel ContactChange. Telah diterapkan ke Neon dengan persetujuan khusus pengguna pada18 Oktober2026, tanpa reset/seed/data QA. Tidak ada env/dependency aplikasi baru. Pemeriksaan akhir: backend31 unit +50 tes DB, frontend36 tes, lint/typecheck/build,18 pemeriksaan browser dan smoke utama baca-saja lulus. Runtime manual3001/4000 aktif; Docker/Redis/proyek lain tidak diubah. Matriks izin, API, prosedur verifikasi, kontrak extension dan batasan: [laporan Prompt12](backend/docs/citizen-account.md). Berhenti untuk review, tidak mulai Prompt13 atau Tahap02.

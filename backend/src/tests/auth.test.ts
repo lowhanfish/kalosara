@@ -32,6 +32,14 @@ describe('public registration policy', () => {
   });
 });
 
+describe('citizen email bounds', () => {
+  it('rejects email beyond the database field before persistence', async () => {
+    const create = vi.fn<PublicAccountRepository['create']>();
+    await expect(registerPublicAccount({ email: 'a'.repeat(245) + '@example.invalid', password: 'long-dummy-password' }, { repository: { create }, hash: async () => 'unused' })).rejects.toThrow();
+    expect(create).not.toHaveBeenCalled();
+  });
+});
+
 describe('authorization policy', () => {
   const citizen = { id: 'user-a', role: Role.MASYARAKAT, isActive: true };
   it('denies missing and inactive accounts', () => {

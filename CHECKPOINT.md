@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 11 siap review termasuk aktivasi Neon
+# Checkpoint KALOSARA — Prompt 12 siap review termasuk aktivasi Neon
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -18,6 +18,7 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 09 — pengumuman, agenda, galeri, informasi publik | Selesai; migrasi Neon diterapkan dengan persetujuan | lihat laporan Prompt 09 |
 | 10 — statistik, potensi/fasilitas, lokasi/kontak | Selesai; migrasi Neon diterapkan dengan izin pengguna | lihat laporan Prompt 10 |
 | 11 — dashboard admin/lurah, pengguna, audit | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | lihat laporan Prompt 11 |
+| 12 — dashboard masyarakat, profil, keamanan | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | lihat laporan Prompt 12 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -26,7 +27,7 @@ Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt
 - `frontend/`: Next.js App Router dengan TypeScript strict, Tailwind, shadcn/ui dasar, TanStack Query, dan Zustand terpasang. Bootstrap sesi, AuthProvider, RouteGuard, HTTP client, store auth minimal dan query cache tersedia. Login khusus editor tersedia; UI akun umum belum dibuat. **Sebelum mengubah frontend, baca `frontend/AGENTS.md` dan dokumentasi Next yang dirujuk di sana.**
 - `backend/`: Express, Prisma/PostgreSQL, Zod, Pino. Model akun dan sesi sudah bermigrasi. API auth ada di `/api/v1/auth`; daftar endpoint, contoh request, dan error ada di `backend/docs/auth-api.md`. Lifecycle, RBAC, cookie, dan key rotation ada di `backend/docs/auth-design.md`.
 - `compose.yaml`: hanya Redis KALOSARA localhost6380; frontend/backend manual3001/4000, PostgreSQL Neon. Tidak menghidupkan kembali image aplikasi/PostgreSQL Docker. File `.env` berisi rahasia lokal dan tidak boleh di-commit.
-- Migrasi terbaru: `backend/prisma/migrations/20261018000000_dashboard_audit/`. Telah diterapkan ke Neon dengan izin khusus Prompt11; tanpa reset/seed. Backend memerlukan Node >=22.12.
+- Migrasi terbaru: `backend/prisma/migrations/20261018010000_citizen_account/`. Telah diterapkan ke Neon dengan izin khusus Prompt12; tanpa reset/seed. Backend memerlukan Node >=22.12.
 
 ## Verifikasi terakhir
 
@@ -244,3 +245,22 @@ Pengguna memberi izin eksplisit menerapkan migrasi Prompt11 ke Neon melalui DATA
 Backend/frontend dijalankan manual4000/3001 dan tetap aktif untuk review. Origin/CSRF/invalidation3001, proxyAPI4000 dan secret cocok. Cache Turbopack dev rusak sempat membuat frontend berhenti; hanya `.next/dev/cache/turbopack` dibersihkan, kemudian startup dan seluruh smoke diulang lulus. Redis6380 tidak aktif dan tidak diperlukan modul ini; Docker/proses3000 proyek lain tidak disentuh.
 
 Smoke baca-saja: readiness backend4000/proxy3001 HTTP200; shell `/admin` dan `/admin/pengguna`200; API dashboard/users/audit/uploads anonim401; path static `/uploads/test.pdf`404; statistik publik melalui proxy200. Tidak memakai kredensial staf atau mengubah status/role/password akun Neon. Matriks izin penuh/reset/concurrency sudah diuji pada database lokal terisolasi pada implementasi `8d38f94`; tidak diulang pada data pengguna. Dokumentasi README/laporan Prompt11 diperbarui, commit/push lalu berhenti. **SIAP REVIEW Prompt11 termasuk aktivasi Neon.** Jangan mulai Prompt12/Tahap02.
+
+
+## Prompt 12 — dashboard masyarakat/profil/keamanan, 18 Oktober2026
+
+Audit awal HEAD `0641a3a`, working tree bersih/main sinkron origin. Acuan kedua PDF Tahap01, README/CHECKPOINT, frontend/AGENTS dan dokumentasi authentication/data-security Next16.4 terpasang dibaca. Hanya Prompt12, bukan Prompt13/Tahap02; desain, hero/potret/lambang dan identitas Watundehoa/Puriala/Konawe, AMIRULAH,S.Si dipertahankan. Laporan delapan bagian, API, matriks izin dan kontrak extension: `backend/docs/citizen-account.md`.
+
+Tiga halaman `/masyarakat/dashboard`, `/masyarakat/profil`, `/masyarakat/keamanan` dilindungi bootstrap sesi/role dan API; login/daftar tersedia di gate, tautan Akun masyarakat ditambahkan footer. Profil nama/alamat opsional, email/nomor akun, tanpa NIK/KK/KTP/upload. GET/PATCH profil hanya session identity, query/body/URL IDOR dan field sensitif ditolak; expectedUpdatedAt mencegah stale update. Data pribadi no-store/cache per-user/noindex. Logout terkonfirmasi membersihkan store/query/mutasi dan kembali ke beranda; cookie dicabut pada kunjungan baru tidak menghalangi form login.
+
+Kontak penting tidak langsung ditimpa. Satu ContactChange pending per pemilik berlaku7hari, bisa diganti/dibatalkan pemilik. Admin khusus `/admin/verifikasi-kontak` melakukan verifikasi identitas **dan kepemilikan kontak baru nyata melalui prosedur kantor**, password admin/CSRF/body strict/konfirmasi. Tidak ada email/SMS otomatis/kode palsu. Approval memeriksa expired/baseline/keunikan/role/akun aktif dan mencabut semua sesi. Password change punya pilihan cabut sesi lain(defaultaktif), mempertahankan sesi ini, membatalkan token reset/pending kontak; reset admin/nonaktif/perubahan role juga menghapus pending. Audit tidak berisi kontak/alamat/password/token; aktivitas akun warga disaring dari monitoring CMS lurah. Lock akun sama dengan login/refresh, transaksi membatasi balapan/perubahan state.
+
+Placeholder katalog/status pengajuan hanya NOT_ACTIVE, tidak ada angka/status pengajuan buatan, tombol pengajuan semu atau endpoint sukses palsu. Kontrak extension dijelaskan, tidak mengerjakan tabel/form builder/surat/upload warga Tahap02.
+
+Migrasi `20261018010000_citizen_account`: alamat UserProfile nullable dan ContactChange; tidak ada env/dependency aplikasi baru. Seluruh pengujian mutasi hanya PostgreSQL native18.4 port55439, DB regresi/browser berbeda dan upload sementara. Backend lint/typecheck/build,31 unit +50 tes DB/9suite lulus; frontend lint/typecheck/build dan36 tes lulus. Browser18 pemeriksaan lulus: daftar/login/edit/reload, pending/batal/approval kontak, sesi dicabut/login email baru, password/logout/login baru, layanan belum aktif, akses admin ditolak, error/retry, mobile390 tanpa overflow dan tanpa pageerror. Screenshot desktop1440/mobile390 diperiksa; regresi draft/expired, PDF20MiB/oversize dan PUBLIC/PRIVATE tetap lulus. Label textarea yang ikut memuat nilai alamat diperbaiki lalu QA diulang.
+
+Pengguna memberi izin khusus migrasi Prompt12 melalui pertanyaan persetujuan setelah implementasi/tes terisolasi. Preflight memastikan hanya migrasi ini tertunda, deploy berhasil dan Prisma status mutakhir. Metadata baca-saja memastikan alamat nullable/kolom ContactChange tersedia, tanpa membaca data warga. DATABASE_URL/env tidak ditimpa atau ditampilkan, tanpa reset/seed/akun atau konten QA/tes destruktif Neon.
+
+QA3002/4002 dan PostgreSQL55439 beserta database/akun/kredensial/upload sementara dibersihkan. Build akhir kembali env utama/proxy4000. Runtime utama sempat dihentikan sebelum migrasi, kemudian aktif kembali manual3001/4000 setelah persetujuan/deploy. Cache dev Turbopack di volume ini rusak saat restart; hanya `.next/dev/cache/turbopack` dibersihkan dan smoke diulang lulus. Origin/CSRF/invalidation3001 dan secret cocok; port3000 proyek lain, Docker dan Redis6380 tidak disentuh.
+
+Smoke utama baca-saja: readiness backend/proxy200, tiga shell masyarakat dan halaman review admin200, API profil/review anonim401, private/no-store dan robots mengecualikan `/masyarakat/`. Tidak login/mengubah akun pengguna Neon. Batasan: verifikasi kontak melalui petugas, tanpa email/SMS/MFA/reset email/retensi pending otomatis; penghapusan telepon belum tersedia. **SIAP REVIEW Prompt12 termasuk aktivasi Neon.** Commit/push origin/main kemudian berhenti; jangan mulai Prompt13/Tahap02.

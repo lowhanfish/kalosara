@@ -87,6 +87,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               { label: "Informasi publik", href: "/informasi-publik" },
               { label: "Panduan pelayanan", href: "/pelayanan" },
               { label: "Kontak kelurahan", href: "/kontak" },
+              { label: "Akun masyarakat", href: "/masyarakat/dashboard" },
               ...settings.relatedLinks,
             ].map((item, index) => (
               <li key={`${item.href}-${index}`}>

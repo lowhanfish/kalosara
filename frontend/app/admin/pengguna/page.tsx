@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -174,6 +175,14 @@ function Management() {
   });
   return (
     <>
+      <p>
+        <Link
+          href="/admin/verifikasi-kontak"
+          className="cms-edit-button inline-block mb-4"
+        >
+          Verifikasi perubahan kontak masyarakat
+        </Link>
+      </p>
       <div className="cms-channel-tabs">
         {(
           [

@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
     prisma.news.count({ where: { status: 'PUBLISHED' } }), prisma.news.count({ where: { status: 'DRAFT' } }),
     prisma.contentItem.count({ where: { kind: 'announcements' } }), prisma.contentItem.count({ where: { kind: 'events' } }),
     prisma.mediaAsset.count(), prisma.user.count(),
-    prisma.auditLog.findMany({ where: { resourceType: { not: 'User' } }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: 10,
+    prisma.auditLog.findMany({ where: { resourceType: { notIn: ['User', 'AccountProfile', 'ContactChange'] } }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: 10,
       select: { id: true, action: true, resourceType: true, resourceId: true, createdAt: true } }),
   ]);
   res.json({ success: true, data: { published, draft, announcements, events, media, users, activity, approvalEnabled: false }, requestId: req.id });
@@ -66,6 +66,7 @@ router.post('/users/:id/access', requireMutation, rateLimit({ windowMs: 15 * 60_
     }, select: userSelect });
     await tx.refreshSession.updateMany({ where: { userId: id, revokedAt: null }, data: { revokedAt: new Date() } });
     await tx.passwordResetToken.updateMany({ where: { userId: id, usedAt: null }, data: { usedAt: new Date() } });
+    if (['RESET_PASSWORD', 'DEACTIVATE', 'SET_ROLE'].includes(input.action)) await tx.contactChange.deleteMany({ where: { userId: id } });
     await tx.auditLog.create({ data: { actorId, action: `USER_${input.action}${input.role ? `_${input.role}` : ''}`, resourceType: 'User', resourceId: id } });
     return updated;
   }, { isolationLevel: 'ReadCommitted' });

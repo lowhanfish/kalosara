@@ -309,3 +309,49 @@ test("a business conflict after an access refresh retry does not change authenti
   assert.equal(newsCalls, 2);
   assert.equal(runtime.store.getState().status, "AUTHENTICATED");
 });
+
+test("confirmed logout clears private queries, mutations and identity before redirect", async () => {
+  let redirected = false;
+  const runtime = createAuthRuntime(
+    async (url, options) => {
+      if (url.endsWith("/me")) return ok({ user: user("citizen") });
+      if (url.endsWith("/csrf")) return ok({ csrfToken: "csrf" });
+      assert.ok(url.endsWith("/logout"));
+      assert.equal(options.method, "POST");
+      assert.equal(options.headers.get("X-CSRF-Token"), "csrf");
+      return ok({ loggedOut: true });
+    },
+    () => {
+      assert.equal(runtime.store.getState().user, null);
+      assert.equal(runtime.queryClient.getQueryCache().getAll().length, 0);
+      assert.equal(runtime.queryClient.getMutationCache().getAll().length, 0);
+      redirected = true;
+    },
+  );
+  await runtime.bootstrap();
+  runtime.queryClient.setQueryData(userQueryKey("citizen", "profile"), {
+    address: "private",
+  });
+  runtime.queryClient
+    .getMutationCache()
+    .build(runtime.queryClient, { mutationFn: async () => {} });
+  await runtime.logout();
+  assert.equal(runtime.store.getState().status, "GUEST");
+  assert.equal(redirected, true);
+});
+test("failed logout keeps identity and does not claim successful sign out", async () => {
+  let redirects = 0;
+  const runtime = createAuthRuntime(
+    async (url) =>
+      url.endsWith("/me")
+        ? ok({ user: user("citizen") })
+        : url.endsWith("/csrf")
+          ? ok({ csrfToken: "csrf" })
+          : fail(503, "UNAVAILABLE"),
+    () => redirects++,
+  );
+  await runtime.bootstrap();
+  await assert.rejects(runtime.logout());
+  assert.equal(runtime.store.getState().status, "AUTHENTICATED");
+  assert.equal(redirects, 0);
+});
