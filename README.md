@@ -4,6 +4,11 @@ KALOSARA (Kanal Layanan Online Surat dan Administrasi Rakyat) dimulai sebagai we
 
 Untuk melanjutkan pekerjaan di sesi baru, mulai dari [CHECKPOINT.md](CHECKPOINT.md).
 
+Dokumentasi utama:
+
+- [Panduan instalasi](docs/PANDUAN_INSTALASI.md) untuk pengembang/operator.
+- [Manual penggunaan aplikasi](docs/MANUAL_APLIKASI.md) untuk pengunjung, masyarakat, admin dan lurah.
+
 ## Struktur
 
 - `frontend/`: Next.js App Router, TypeScript strict, Tailwind CSS, fondasi shadcn/ui, TanStack Query, dan Zustand. Folder `app`, `components`, `features`, `hooks`, `lib`, `services`, dan `store` disiapkan untuk modul berikutnya.
