@@ -59,7 +59,7 @@ Upload tetap backend/public/uploads per source/images|documents, legacy kompatib
 
 Audit runtime awal: hanya port3000 proyek lain aktif; frontend3001/backend4000/Redis6380 tidak listening. Konfigurasi utama diperiksa tanpa mengungkap kredensial: APP_ORIGIN/SITE_ORIGIN/FRONTEND_INTERNAL_URL=3001, API=4000, secret HMAC cocok. Docker tidak dioperasikan. QA terpisah memakai frontend3002/backend4002, PostgreSQL native18.4 port55439 dan dua DB disposable lokal, bukan Neon/Docker PostgreSQL.
 
-**Aktivasi Neon: menunggu jawaban persetujuan khusus Prompt 11.** Izin terdahulu hanya Prompt09/10. Jangan menjalankan reset/seed atau tes DB pada DATABASE_URL pengguna.
+**Aktivasi Neon selesai pada18 Oktober2026 setelah persetujuan khusus pengguna untuk Prompt11.** Preflight memastikan hanya migrasi ini yang tertunda; `prisma migrate deploy` menerapkannya dan `prisma migrate status` menyatakan skema mutakhir. Query baca-saja memastikan kedua kolom AuditLog tersedia/nullable dan riwayat migrasi selesai. Tidak ada reset/seed/tes DB/akun atau konten QA pada Neon; URL/kredensial tidak ditimpa atau ditampilkan.
 
 ## 5. Hasil lint/typecheck/test/build
 
@@ -101,4 +101,6 @@ Approval lurah belum diaktifkan karena belum ada kebijakan resmi. Tidak ada MFA/
 
 ## 8. Status
 
-**SIAP REVIEW kode Prompt 11; aktivasi Neon menunggu persetujuan khusus.** Seluruh pemeriksaan final lulus. Runtime QA3002/4002 dan PostgreSQL native55439 dihentikan, database/akun/kredensial/upload sementara dibersihkan; build akhir kembali ke konfigurasi utama3001/4000. Runtime utama3001/4000/Redis6380 tidak dijalankan ulang sebelum migrasi disetujui. Port3000 proyek lain tetap dibiarkan. Berhenti setelah commit/push untuk review; tidak mulai Prompt12/Tahap02.
+**SIAP REVIEW Prompt11 termasuk aktivasi Neon.** Seluruh pemeriksaan implementasi final lulus; commit kode `8d38f94` sudah di origin/main. Runtime QA3002/4002 dan PostgreSQL native55439/data sementara dibersihkan. Setelah migrasi disetujui/diterapkan, frontend/backend dijalankan manual3001/4000 dan tetap aktif untuk review; konfigurasi Origin/CSRF/invalidation cocok. Cache Turbopack dev sempat rusak (`invalid digit found in string`), hanya `.next/dev/cache/turbopack` dibersihkan dan startup/smoke diulang hingga lulus. Redis6380 tetap tidak aktif, Docker tidak dioperasikan. Port3000 proyek lain tetap dibiarkan.
+
+Smoke aktivasi baca-saja: readiness backend dan proxy frontend200; shell `/admin` dan `/admin/pengguna`200; empat API dashboard/users/audit/uploads anonim401; `/uploads/test.pdf`404; statistik publik melalui proxy200. Tidak melakukan perubahan akun/role/reset password pada Neon atau memakai kredensial staf. Pengujian matriks izin/autentikasi penuh tetap hasil database terisolasi yang dilaporkan pada bagian5. Berhenti setelah commit/push dokumentasi aktivasi untuk review; tidak mulai Prompt12/Tahap02.
