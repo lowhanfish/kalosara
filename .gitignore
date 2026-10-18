@@ -157,3 +157,9 @@ uploads/
 
 # Runtime files under backend public (metadata only is stored in PostgreSQL)
 backend/public/uploads/
+
+# Native release and operational backup artifacts
+native-releases/
+reports/
+*.kalosara-backup
+*.receipt.json

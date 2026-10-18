@@ -1,4 +1,4 @@
-# Checkpoint KALOSARA — Prompt 13 siap review
+# Checkpoint KALOSARA — Prompt 14 native siap review lokal; VPS ditunda pengguna
 
 Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowhanfish/kalosara`, branch `main`. Pengguna memilih satu repo untuk `frontend/` dan `backend/`, meskipun dokumen awal menyebut dua repo. Setiap prompt yang selesai harus diuji, di-commit, dan di-push sebelum berhenti untuk review. Jangan otomatis lanjut ke prompt berikutnya.
 
@@ -19,7 +19,8 @@ Tanggal: 16 Oktober 2026 (Asia/Makassar). Repo tunggal: `https://github.com/lowh
 | 10 — statistik, potensi/fasilitas, lokasi/kontak | Selesai; migrasi Neon diterapkan dengan izin pengguna | lihat laporan Prompt 10 |
 | 11 — dashboard admin/lurah, pengguna, audit | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | lihat laporan Prompt 11 |
 | 12 — dashboard masyarakat, profil, keamanan | Selesai/teruji; migrasi Neon diterapkan dengan izin khusus | `e3aff03` |
-| 13 — hardening, tes sistem, observabilitas | Selesai/teruji untuk review kode; temuan operasi/dependency dicatat | lihat laporan Prompt 13 |
+| 13 — hardening, tes sistem, observabilitas | Selesai/teruji untuk review kode; temuan operasi/dependency dicatat | `6a437cf` |
+| 14 — rilis native, CI, load/restore dan handoff | Paket/rehearsal lokal lulus; deployment VPS ditunda sesuai pengguna | lihat laporan Prompt 14 |
 
 Sumber kebutuhan adalah `reff/KALOSARA_PDF1_Prompt_Website_Tahap_01.pdf` (prompt berurutan) dan `reff/KALOSARA_PDF2_Buku_Petunjuk_Website_Tahap_01.pdf`. Dokumen Tahap 02 ada di `reff/`, tetapi pekerjaan belum mencapai tahap itu.
 
@@ -281,3 +282,22 @@ Hasil akhir: backend lint/typecheck/build,35 tes unit/HTTP dan52 tes DB dalam10 
 Semua mutasi tes memakai PostgreSQL native18.4 disposable55439, database regresi/browser berbeda dan upload sementara; tanpa PostgreSQL Docker/Neon. DATABASE_URL/env tidak ditimpa/ditampilkan, tanpa reset/seed/migrasi atau data QA Neon. QA3002/4002, database/fixture/kredensial/upload sementara dibersihkan setelah verifikasi. Build akhir kembali env utama/proxy4000; frontend3001/backend4000 manual tersedia untuk review. Smoke utama baca-saja health/ready/proxy200 dan admin/account anonim401/no-store lulus. Redis/proyek lain pada3000 tidak dioperasikan.
 
 **SIAP REVIEW Prompt 13 untuk kode/pengujian lokal dengan batasan dependency dan operasional tercatat.** Belum TLS domain, Nginx executable, backup offsite/restore, load test/VPS, strict nonce CSP, antivirus, kuota total atau retensi otomatis. Commit/push origin/main kemudian berhenti; jangan mulai Prompt14/Tahap02.
+
+
+## Prompt 14 — rilis native, CI, load/restore dan handoff, 18 Oktober 2026
+
+Pengguna mengizinkan melanjutkan sisa Tahap 01, **Tahap 02 jangan disentuh**, serta menegaskan **hanya Redis boleh memakai Docker**. Prompt14 PDF disesuaikan ke proses native, bukan menghidupkan kembali Docker aplikasi/PostgreSQL/Nginx. Baseline `6a437cf` main sinkron dan bersih. Kedua PDF Tahap01, README/CHECKPOINT/frontendAGENTS serta panduan self-hosting/standalone Next16.4 dibaca. Aset/desain/identitas tetap; source aplikasi/schema/dependency/compose tidak berubah.
+
+Panduan operator: `ops/README.md`; laporan delapan bagian: `ops/docs/prompt14-report.md`; bukti angka: `ops/docs/local-rehearsal.json`. Workflow GitHub pin action SHA untuk lint/typecheck/unit/build, native PostgreSQL regression, guard ops, browser/load/backup-restore pada artefak dan dispatch HTTPS-origin untuk arsip+checksum per commit. Belum ada hasil hosted CI terkonfirmasi, tidak deploy SSH otomatis. Node24/pnpm10; artefak harus cocok platform/arsitektur/libc/OpenSSL VPS. Runtime compiled API+standalone mengecualikan env/upload/cache/seed/compiler/dev tools backend. Optional peer PrismaCLI/TypeScript sempat terbawa npm, diperbaiki dengan pruning closure dependency lock sambil mempertahankan Sharp/Prisma engine.
+
+Manifest SHA256/commit40hex/platform/Node dan guard symlink/secret tersedia. Native deployment memerlukan path SHA yang tepercaya, origin/env cocok, receipt backup offsite terbaru/approvedForCommit, review migrasi dan konfirmasi schema kompatibel rollback; switch current atomik, start/readiness dan fallback aplikasi lama. Tidak migrate/restore DB otomatis. Konfigurasi systemd/heap/memori/CPU dan Nginx HTTPS host disiapkan, belum dipasang/dijalankan di VPS. Verifikasi checksum ditujukan ke artefak fresh; cache ISR runtime bisa berubah, rollback terencana memakai ekstraksi ulang arsip lama tepercaya. Limiter aplikasi masih berbagi kuota proxy; batasan ini tetap terbuka untuk go-live.
+
+Backup AES256GCM menyatukan custom pg_dump+original/varian/legacy upload+manifest, key0600 terpisah, TLS/channel binding remote, checksum chunk1MiB dan cleanup temp private. Konfirmasi maintenance bukan pause otomatis; operator harus menghentikan mutasi/jobs. Receipt default offsitefalse; tidak memalsukan persetujuan transfer. Restore script hanya menerima DB localhost disposable kalosara_*_test tanpa query/--clean, tag/path/link/checksum diperiksa sebelum restore. Tidak mengakses backup/data warga Neon.
+
+Pemeriksaan: backend lint/typecheck/build dan35 unit/HTTP; frontend lint/typecheck/build dan36 unit;52 tes DB dalam10suite/9migration;4 guard ops;6 kelompok browser terhadap artefak compiled/standalone, tanpa overflow/pageerror/CSP violation. Nginx native sementara config/TLS lokal/cap proxy6 pemeriksaan lulus (mock4101/4103, proxy3080/3443), cert lokal SANlocalhost dipercaya eksplisit, bukan HTTPS domain publik. Upload20MiB+8192 diterima,21MiB+1 ditolak413, cap default1MiB+1 ditolak413, webhook internal404, redirect tetap domain konfigurasi saat Host dipalsukan.
+
+Beban baca lokal warm cache500request/concurrency4/pause100ms menghasilkan500×200/0error dalam15,25detik, p95=31,95ms (p50=19,32/p99=34,33). CPU/RSS17snapshot: API168,19MiB/23%, frontend279,52MiB/40,5%; maksimum4koneksi termasuk observer, pool aplikasi3. Angka macOS arm64 ini **bukan kapasitas VPS1CPU/2GB**. Roundtrip dump/restore fixture kecil0,27detik, arsip tampered ditolak,4file original/varian dipulihkan, PRIVATE anonim404/pemilik200 dan PUBLIC200 terverifikasi. Belum RPO/RTO/offsite produksi.
+
+Seluruh mutasi QA di PostgreSQL native18.4 localhost55439 dengan database regresi/browser/restore terpisah. pg_dump/pg_restore18.4 dan Nginx1.28 hanya utility sementara dari sumber resmi untuk tes, bukan instalasi host atau rekomendasi versi produksi. QA3002/4002 dan data/credential/key/upload/backup/tools sementara dibersihkan; build akhir dikembalikan ke API4000/origin3001. Runtime utama manual3001/4000 dipertahankan, Docker/Redis6380/proyek3000 lain tidak dioperasikan. DATABASE_URL/env pengguna tidak diubah/ditampilkan; tanpa reset/seed/migrasi/data QA Neon.
+
+**SIAP REVIEW paket native dan pengujian lokal Prompt14. Pengguna menetapkan VPS belum diperlukan; matangkan di lokal dahulu.** Lingkup lokal sudah diuji dan tidak perlu menunggu domain/SSH/offsite untuk commit/review. Produksi nanti tetap memerlukan hosted CI Linux, staging systemd/rollback/restart, HTTPS publik/renewal/firewall, backup offsite+restore aktual, keputusan advisory/limiter/retensi dan benchmark VPS. Jangan mengklaim hasil operasional itu atau memakai Neon untuk tes. Commit/push origin/main, lalu berhenti untuk review lokal. **Tahap02 tetap tidak dimulai**; checklist antartahap hanya dokumentasi fondasi yang ada, tanpa tabel/form builder/pengajuan/surat/QR/queue.

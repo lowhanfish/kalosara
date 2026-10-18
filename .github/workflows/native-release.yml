@@ -1,0 +1,97 @@
+name: Native checks and release
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      site_origin:
+        description: "Production HTTPS origin (no trailing slash); no deployment is performed"
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: native-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: postgresql://test:isolated-ci-only@127.0.0.1:5432/kalosara_ci_test
+      SITE_ORIGIN: http://localhost:3002
+      API_INTERNAL_URL: http://127.0.0.1:4002
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24.19.0"
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+        with:
+          version: 10.18.3
+      - name: Install locked dependencies
+        run: |
+          npm ci --prefix backend
+          npm --prefix backend run db:generate
+          pnpm --dir frontend install --frozen-lockfile
+      - name: Static checks, unit tests and builds
+        run: |
+          npm --prefix backend run lint
+          npm --prefix backend run typecheck
+          npm --prefix backend test
+          npm --prefix backend run build
+          pnpm --dir frontend lint
+          pnpm --dir frontend typecheck
+          pnpm --dir frontend test
+          pnpm --dir frontend build
+          node --test ops/tests/*.test.mjs
+      - name: Native PostgreSQL regression (no Docker, no Neon)
+        run: |
+          sudo systemctl start postgresql
+          sudo -u postgres psql -v ON_ERROR_STOP=1 -c "CREATE ROLE test LOGIN PASSWORD 'isolated-ci-only';"
+          sudo -u postgres createdb -O test kalosara_ci_test
+          TEST_DATABASE_URL=postgresql://test:isolated-ci-only@127.0.0.1:5432/kalosara_ci_test npm --prefix backend run test:db
+      - name: Rehearse packaged runtime, browser, load and encrypted restore
+        run: |
+          sudo -u postgres createdb -O test kalosara_ci_browser_test
+          sudo -u postgres createdb -O test kalosara_ci_restore_test
+          npm install --prefix "$RUNNER_TEMP/qa-tools" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+          "$RUNNER_TEMP/qa-tools/node_modules/.bin/playwright" install --with-deps chromium
+          node ops/package-release.mjs "$RUNNER_TEMP/qa-release"
+          TEST_DATABASE_URL=postgresql://test:isolated-ci-only@127.0.0.1:5432/kalosara_ci_browser_test TEST_RESTORE_DATABASE_URL=postgresql://test:isolated-ci-only@127.0.0.1:5432/kalosara_ci_restore_test QA_RELEASE_DIR="$RUNNER_TEMP/qa-release" PLAYWRIGHT_MODULE="$RUNNER_TEMP/qa-tools/node_modules/playwright/index.mjs" QA_REPORT_FILE="$RUNNER_TEMP/qa-report.json" node ops/qa-run.mjs
+      - name: Read-only dependency audit evidence
+        continue-on-error: true # Known findings remain visible; not a zero-vulnerability claim.
+        run: |
+          mkdir -p reports
+          npm audit --prefix backend --json > reports/backend-audit.json || true
+          pnpm --dir frontend audit --json > reports/frontend-audit.json || true
+      - name: Build production-origin artifact only on explicit dispatch
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          SITE_ORIGIN: ${{ inputs.site_origin }}
+          API_INTERNAL_URL: http://127.0.0.1:4000
+        run: |
+          node --input-type=module -e 'const u=new URL(process.env.SITE_ORIGIN);if(u.protocol!=="https:"||u.origin!==process.env.SITE_ORIGIN||u.username||u.password)process.exit(1)'
+          pnpm --dir frontend build
+          node ops/package-release.mjs "$RUNNER_TEMP/kalosara-release"
+          tar -czf kalosara-native-${{ github.sha }}.tgz -C "$RUNNER_TEMP/kalosara-release" .
+          sha256sum kalosara-native-${{ github.sha }}.tgz > kalosara-native-${{ github.sha }}.tgz.sha256
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: kalosara-native-${{ github.sha }}
+          path: |
+            kalosara-native-*.tgz
+            kalosara-native-*.tgz.sha256
+          retention-days: 7
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: verification-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/qa-report.json
+            reports/*-audit.json
+          retention-days: 7
+          if-no-files-found: ignore

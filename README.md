@@ -151,3 +151,12 @@ Jalankan pemeriksaan biasa kedua aplikasi serta `npm run test:db` dengan TEST_DA
 `cd backend && npm run monitor -- PID_API PID_FRONTEND` memberi snapshot baca-saja CPU/RSS/load/memori/disk dan health/ready/frontend; exit1 ketika threshold terlampaui. Rotasi Redis10MiB×3 tercantum di Compose (tetap hanya Redis6380); contoh rotasi log manual di `ops/kalosara.logrotate`, belum dipasang. Kebijakan backup DB+upload berpasangan/offsite/restore terisolasi dan usulan retensi harus disahkan instansi, belum menjalankan backup/purge data pengguna.
 
 Tidak ada migration/env wajib baru, reset/seed/mutasi QA Neon atau perubahan desain. Lint/typecheck/build,35 tes backend,52 tes DB,36 tes frontend dan6 kelompok browser lulus. Audit masih4high pada Prisma CLI/config optional peer dan1high braces tooling frontend; tidak mengklaim aman sempurna/siap produksi. Laporan delapan bagian, threat model, temuan dan batas pengujian: [Prompt13](backend/docs/security-hardening.md). Rancangan tata kelola: [data dan backup](backend/docs/data-backup-policy.md). Berhenti untuk review; Prompt14/Tahap02 belum dimulai.
+
+
+## Rilis native, CI dan handoff — Prompt 14
+
+Sesuai instruksi pengguna, **hanya Redis memakai Docker**. Paket backend compiled JS + frontend standalone dibangun di luar VPS, dipin ke commit/checksum/platform; Prisma CLI/compiler/dev tools tidak dibawa backend runtime. Workflow `.github/workflows/native-release.yml` menyiapkan checks dan artefak saat dispatch origin HTTPS, tanpa deploy otomatis. Konfigurasi host systemd/Nginx, aktivasi/rollback dengan guard backup/migration review, backup AES-GCM serta restore uji terisolasi tersedia di [panduan operator](ops/README.md).
+
+Backend35 tes, frontend36 tes, DB52 tes/10suite,4 guard ops, browser artefak6 kelompok dan proxy TLS lokal6 pemeriksaan lulus. Uji baca lokal500request/concurrency4 menghasilkan500×200,p95=31,95ms; backup/restore ke DB uji lain, tamper rejection dan izin media hasil restore lulus. **Ini hasil macOS lokal, bukan kapasitas VPS atau bukti HTTPS/offsite produksi.** Tidak ada migration/env/dependency aplikasi baru, perubahan desain atau mutasi QA Neon.
+
+**SIAP REVIEW paket/rehearsal lokal. Pengguna menunda deployment VPS agar dimatangkan di lokal dahulu.** Hosted CI, staging systemd/rollback, TLS publik/firewall, restore offsite dan benchmark VPS tetap gate operasional nanti; tidak diklaim sebagai hasil pengujian lokal. [Laporan Prompt14](ops/docs/prompt14-report.md) dan [angka pengujian](ops/docs/local-rehearsal.json) mencatat hasil/batasan. Tahap02 tidak dimulai.

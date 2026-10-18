@@ -1,0 +1,70 @@
+{
+  "browser": {
+    "passed": 6,
+    "checks": [
+      "headers, preserved hero and three responsive widths",
+      "anonymous API and optimizer private/remote URL rejection",
+      "citizen login, edit, reload, escaped content, RBAC and IDOR",
+      "logout clears access and hostile return URL stays local",
+      "CMS category, draft404, publish and SEO in raw server HTML",
+      "hydration and CSP console, CMS mobile layout"
+    ]
+  },
+  "load": {
+    "environment": "local QA; not VPS capacity",
+    "requests": 500,
+    "concurrency": 4,
+    "pauseMs": 100,
+    "elapsedSeconds": 15.250190499999999,
+    "statuses": {
+      "200": 500
+    },
+    "p50ms": 19.32,
+    "p95ms": 31.95,
+    "p99ms": 34.33,
+    "maxDatabaseConnectionsIncludingObserver": 4,
+    "processes": [
+      {
+        "pid": 79694,
+        "samples": 17,
+        "peakRssMiB": 168.19,
+        "peakCpuPercent": 23
+      },
+      {
+        "pid": 79695,
+        "samples": 17,
+        "peakRssMiB": 279.52,
+        "peakCpuPercent": 40.5
+      }
+    ],
+    "observationError": false
+  },
+  "backup": {
+    "event": "encrypted_backup_created",
+    "version": 1,
+    "createdAt": "2026-10-18T15:14:43.044Z",
+    "sourceCommit": "6a437cfcdffec8216f098fc87e999b48556979cf",
+    "sha256": "6b9fc9c7497c1967bdaaa5b14e2444c8b1caff34b3ae78e1777a22027752e757",
+    "offsiteVerified": false,
+    "archiveSha256": "6b9fc9c7497c1967bdaaa5b14e2444c8b1caff34b3ae78e1777a22027752e757"
+  },
+  "restore": {
+    "event": "isolated_restore_completed",
+    "sourceCommit": "6a437cfcdffec8216f098fc87e999b48556979cf",
+    "files": 4,
+    "elapsedSeconds": 0.27,
+    "tamperedArchiveRejected": true,
+    "privateAndPublicAccessVerified": true
+  },
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "v24.19.0",
+    "releaseCommit": "6a437cfcdffec8216f098fc87e999b48556979cf",
+    "realOffsiteTested": false,
+    "publicHttpsTested": false,
+    "cpuLogicalCount": 8,
+    "cpuModel": "Apple M2",
+    "totalMemoryGiB": 8
+  }
+}
