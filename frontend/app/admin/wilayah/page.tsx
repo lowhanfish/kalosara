@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { MediaLibrary } from "@/features/cms/media-library";
@@ -299,6 +299,19 @@ function Workspace() {
   const [status, setStatus] = useState("");
   const [selected, setSelected] = useState<Row | null | undefined>();
   const [epoch, setEpoch] = useState(0);
+  useEffect(() => {
+    const sync = () => {
+      const key = window.location.hash.slice(1);
+      if (["statistics", "facilities", "potentials"].includes(key)) {
+        setKind(key as Kind);
+        setPage(1);
+        setSelected(undefined);
+      }
+    };
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
   const [notice, setNotice] = useState("");
   const query = useQuery({
     queryKey: ["user", auth.user?.id, "region", kind, page, search, status],
@@ -319,6 +332,7 @@ function Workspace() {
             aria-pressed={kind === key}
             onClick={() => {
               if (leave()) {
+                window.location.hash = key;
                 setKind(key as Kind);
                 setPage(1);
                 setSelected(undefined);

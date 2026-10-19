@@ -17,7 +17,7 @@ export const settingSchema = z.object({
   logoUrl: media.nullable(), heroUrl: media.nullable(),
   relatedLinks: z.array(z.object({ label: text, href: httpsUrl }).strict()).max(10),
 }).strict().refine(v => (v.latitude === null) === (v.longitude === null), 'Coordinates must be paired');
-export const pageSlug = z.enum(['sejarah', 'visi-misi', 'tugas-fungsi', 'struktur-organisasi', 'sambutan-lurah']);
+export const pageSlug = z.enum(['sejarah', 'visi-misi', 'tugas-fungsi', 'struktur-organisasi', 'sambutan-lurah', 'pelayanan']);
 export const pageSchema = z.object({ title: z.string().trim().min(1).max(160), content: z.string().trim().max(30000), status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']) }).strict();
 export const officialSchema = z.object({
   name: z.string().trim().min(1).max(160), position: z.string().trim().min(1).max(160), unit: z.string().trim().min(1).max(160),

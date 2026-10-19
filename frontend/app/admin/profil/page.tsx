@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
+import { cmsError } from "@/features/cms/client";
 import type { MediaAsset, List } from "@/features/cms/client";
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
-import { createHttpClient, ApiError } from "@/services/http-client";
+import { createHttpClient } from "@/services/http-client";
 import type { ProfilePage, Official } from "@/lib/profile";
 const http = createHttpClient();
 const assets = [
@@ -50,9 +51,7 @@ async function mutate(
   });
 }
 function message(error: unknown) {
-  return error instanceof ApiError
-    ? `${error.message} (${error.code}; ${error.requestId})`
-    : "Permintaan gagal";
+  return cmsError(error);
 }
 function Field({
   label,
@@ -207,7 +206,9 @@ function Editor({ data, reload }: { data: Data; reload: () => void }) {
           save.mutate({ path: "/admin/profile/settings", body: settings });
         }}
       >
-        <h2 className="text-2xl font-semibold">Pengaturan website</h2>
+        <h2 id="pengaturan" className="text-2xl font-semibold">
+          Pengaturan website
+        </h2>
         {(
           [
             ["name", "Nama kelurahan"],
@@ -315,7 +316,9 @@ function Editor({ data, reload }: { data: Data; reload: () => void }) {
           });
         }}
       >
-        <h2 className="text-2xl font-semibold">Halaman profil</h2>
+        <h2 id="halaman-profil" className="text-2xl font-semibold">
+          Halaman profil
+        </h2>
         <label>
           Bagian
           <select
@@ -497,19 +500,6 @@ function Editor({ data, reload }: { data: Data; reload: () => void }) {
 export default function ProfileAdmin() {
   const auth = useAuth();
   const runtime = useAuthRuntime();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const login = useMutation({
-    mutationFn: () => mutate("/auth/login", { email, password }, "POST"),
-    onSuccess: async () => {
-      setPassword("");
-      await runtime.bootstrap();
-    },
-  });
-  const logout = useMutation({
-    mutationFn: () => mutate("/auth/logout", {}, "POST"),
-    onSuccess: () => runtime.bootstrap(),
-  });
   const query = useQuery({
     queryKey: ["user", auth.user?.id, "profile-editor"],
     enabled:
@@ -518,64 +508,32 @@ export default function ProfileAdmin() {
   });
   return (
     <main id="konten" tabIndex={-1} className="container py-10">
-      <Link className="mb-4 inline-block underline" href="/admin/berita">
-        Kelola berita dan media
-      </Link>
-      <h1 className="mb-6 text-3xl font-bold">Kelola profil kelurahan</h1>
-      {auth.user && (
-        <button
-          type="button"
-          className="mb-6 underline"
-          disabled={logout.isPending}
-          onClick={() => logout.mutate()}
-        >
-          Keluar
-        </button>
+      <h1>Profil & pengaturan website</h1>
+      <p className="admin-intro">
+        Perbarui identitas kelurahan, kontak, gambar beranda, profil, dan
+        aparatur.
+      </p>
+      {auth.user?.role !== "ADMIN_KELURAHAN" && (
+        <p role="alert">
+          Akun Anda tidak memiliki izin untuk mengelola profil.
+        </p>
       )}
-      {logout.isError && <p role="alert">{message(logout.error)}</p>}
-      {auth.status === "INITIALIZING" && <p>Memeriksa sesi…</p>}
-      {auth.status === "GUEST" && (
-        <form
-          className="max-w-md space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            login.mutate();
-          }}
-        >
-          <p>Masuk menggunakan akun admin yang telah diprovisikan.</p>
-          <Field label="Email" type="email" value={email} onChange={setEmail} />
-          <Field
-            label="Kata sandi"
-            type="password"
-            value={password}
-            onChange={setPassword}
-          />
-          <button className="yellow-button" disabled={login.isPending}>
-            Masuk
-          </button>
-          {login.isError && <p role="alert">{message(login.error)}</p>}
-        </form>
+      {auth.user?.role === "ADMIN_KELURAHAN" && query.isPending && (
+        <p role="status">Memuat pengaturan…</p>
       )}
-      {auth.status === "AUTHENTICATED" &&
-        auth.user?.role !== "ADMIN_KELURAHAN" && (
-          <p role="alert">Akses kelola profil hanya untuk ADMIN_KELURAHAN.</p>
-        )}
-      {query.isLoading && <p>Memuat editor…</p>}
       {query.isError && (
         <p role="alert">
           {message(query.error)}{" "}
           <button onClick={() => void query.refetch()}>Coba lagi</button>
         </p>
       )}
-      {query.data &&
-        auth.status !== "GUEST" &&
-        auth.user?.role === "ADMIN_KELURAHAN" && (
-          <Editor
-            key={auth.user.id}
-            data={query.data}
-            reload={() => void query.refetch()}
-          />
-        )}
+      {query.data && auth.user?.role === "ADMIN_KELURAHAN" && (
+        <Editor
+          key={auth.user.id}
+          data={query.data}
+          reload={() => void query.refetch()}
+        />
+      )}
     </main>
   );
 }

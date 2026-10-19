@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import { adminLinks } from "@/features/cms/admin-shell";
 import { useQuery } from "@tanstack/react-query";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -29,10 +31,7 @@ function SummaryDashboard() {
   });
   return (
     <>
-      <p>
-        {auth.user?.role === "LURAH" ? "Monitoring lurah" : "Ringkasan admin"}.
-        Persetujuan konten oleh lurah belum diaktifkan.
-      </p>
+      <p>Pantau publikasi, pengguna, dan aktivitas pengelolaan website.</p>
       {data.isPending && <p role="status">Memuat ringkasan…</p>}
       {data.isError && (
         <p role="alert">
@@ -60,10 +59,7 @@ function SummaryDashboard() {
             ))}
           </dl>
           <h2>Aktivitas CMS terbaru</h2>
-          <p>
-            Sepuluh aktivitas terbaru; tidak memuat identitas akun atau isi
-            dokumen privat.
-          </p>
+          <p>Riwayat pembaruan terbaru oleh pengelola kelurahan.</p>
           {data.data.activity.length === 0 && <p>Belum ada aktivitas CMS.</p>}
           <ul className="cms-content-list">
             {data.data.activity.map((item) => (
@@ -84,9 +80,28 @@ function SummaryDashboard() {
   );
 }
 export default function DashboardPage() {
+  const auth = useAuth();
   return (
     <main className="container py-8">
-      <h1>Dashboard kelurahan</h1>
+      <h1>Kelola website kelurahan</h1>
+      <p className="admin-intro">
+        Pilih menu untuk memperbarui informasi yang tampil di website.
+      </p>
+      {auth.user?.role === "ADMIN_KELURAHAN" && (
+        <div className="admin-shortcuts">
+          {adminLinks
+            .filter(
+              (link) => link.group !== "Administrasi" && link.href !== "/admin",
+            )
+            .slice(0, 11)
+            .map((link) => (
+              <Link key={link.href} href={link.href}>
+                <link.icon size={20} />
+                {link.label}
+              </Link>
+            ))}
+        </div>
+      )}
       <AdminAccess monitoring>
         <SummaryDashboard />
       </AdminAccess>

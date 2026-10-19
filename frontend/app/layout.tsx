@@ -7,6 +7,7 @@ import "@/components/site/reference-design.css";
 import "@/components/site/readability.css";
 import "@/components/site/hero.css";
 import { getSiteSettings } from "@/lib/site-settings";
+import { PublicChrome } from "@/components/site/public-chrome";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { ToastProvider } from "@/components/ui/toast";
@@ -29,10 +30,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           <ToastProvider>
-            <SiteHeader settings={settings} />
-            <AuthRecovery />
+            <PublicChrome>
+              <SiteHeader settings={settings} />
+            </PublicChrome>
+            <PublicChrome>
+              <AuthRecovery />
+            </PublicChrome>
             {children}
-            <SiteFooter settings={settings} />
+            <PublicChrome>
+              <SiteFooter settings={settings} />
+            </PublicChrome>
           </ToastProvider>
         </AuthProvider>
       </body>
