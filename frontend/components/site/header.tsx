@@ -21,26 +21,36 @@ const navigation = [
 ];
 export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const path = usePathname();
-  const links = navigation.map((item) => (
-    <Link
-      key={item.href}
-      href={item.href}
-      aria-current={
-        (item.href === "/" ? path === "/" : path.startsWith(item.href))
-          ? "page"
-          : undefined
-      }
-      className={`flex min-h-12 items-center border-b-2 px-1 py-3 text-sm font-semibold transition-colors ${(item.href === "/" ? path === "/" : path.startsWith(item.href)) ? "border-amber-400 text-primary" : "border-transparent text-slate-500 hover:border-slate-300 hover:text-primary"}`}
-    >
-      {item.title}
-    </Link>
-  ));
+  const links = navigation.map((item) => {
+    const isActive =
+      item.href === "/" ? path === "/" : path.startsWith(item.href);
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-current={isActive ? "page" : undefined}
+        className={`relative flex min-h-12 items-center px-2.5 py-3 text-sm font-semibold transition-colors ${
+          isActive
+            ? "text-primary"
+            : "text-slate-500 hover:text-primary"
+        }`}
+      >
+        {item.title}
+        {isActive && (
+          <span
+            className="absolute inset-x-1.5 bottom-0 h-0.5 rounded-full bg-amber-400"
+            aria-hidden="true"
+          />
+        )}
+      </Link>
+    );
+  });
   return (
     <>
       <a className="skip-link" href="#konten">
         Langsung ke konten
       </a>
-      <header className="border-b border-slate-200 bg-white">
+      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all duration-300">
         <div className="hidden border-b border-slate-100 bg-slate-50/80 sm:block">
           <div className="container flex min-h-9 items-center justify-between gap-4 text-xs text-slate-500">
             <p className="flex items-center gap-2">

@@ -71,49 +71,56 @@ export async function ContentPage({
           }[kind]
         }
       />
-      <form className="public-content-filters">
-        <label>
+      <form className="public-content-filters rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs sm:p-6">
+        <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
           Cari judul
           <input
-            className="cms-input"
+            className="cms-input mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             name="search"
+            placeholder="Ketik kata kunci pencarian…"
             maxLength={100}
             defaultValue={search}
           />
         </label>
         {kind === "events" && (
-          <label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
             Waktu acara
-            <select className="cms-input" name="period" defaultValue={period}>
+            <select
+              className="cms-input mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+              name="period"
+              defaultValue={period}
+            >
               <option value="upcoming">Mendatang / berlangsung</option>
               <option value="past">Lampau</option>
             </select>
           </label>
         )}
         {kind === "documents" && (
-          <label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
             Kategori
             <input
-              className="cms-input"
+              className="cms-input mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               name="category"
               maxLength={120}
               defaultValue={category}
-              placeholder="Misalnya standar pelayanan"
+              placeholder="Misalnya: standar pelayanan"
             />
           </label>
         )}
-        <button className="yellow-button">Tampilkan</button>
+        <button className="yellow-button inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-hover">
+          Tampilkan
+        </button>
       </form>
       {failed && (
-        <p
+        <div
           role="alert"
-          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
+          className="my-6 rounded-2xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
         >
           Informasi sementara tidak dapat dimuat.{" "}
-          <Link className="underline" href={channel.path}>
+          <Link className="font-semibold underline" href={channel.path}>
             Coba lagi
           </Link>
-        </p>
+        </div>
       )}
       {data?.items.length === 0 && (
         <EmptyState
@@ -134,64 +141,77 @@ export async function ContentPage({
           <article
             id={item.id}
             key={item.id}
-            className="min-w-0 rounded-xl border border-border p-5"
+            className="group min-w-0 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-300 hover:border-slate-300 hover:shadow-md sm:p-7"
           >
-            <h2 className="break-words text-xl font-bold">
-              {item.announcement?.pinned && (
-                <span aria-label="Disematkan">📌 </span>
-              )}
-              {item.title}
-            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="break-words text-xl font-bold text-primary">
+                {item.announcement?.pinned && (
+                  <span aria-label="Disematkan" className="mr-1">📌 </span>
+                )}
+                {item.title}
+              </h2>
+            </div>
             {item.announcement?.expiredAt && (
-              <p className="mt-2 text-[15px]">
-                Berlaku sampai {formatContentDate(item.announcement.expiredAt)}
+              <p className="mt-2 text-xs font-medium text-amber-700">
+                Berlaku sampai: {formatContentDate(item.announcement.expiredAt)}
               </p>
             )}
             {item.event && (
-              <p className="mt-2 text-[15px]">
-                {formatContentDate(item.event.start)} –{" "}
-                {formatContentDate(item.event.end)}
-                <br />
-                {item.event.location}
-              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs font-medium text-slate-500">
+                <span>
+                  {formatContentDate(item.event.start)} –{" "}
+                  {formatContentDate(item.event.end)}
+                </span>
+                <span>•</span>
+                <span>{item.event.location}</span>
+              </div>
             )}
-            <p className="my-4 whitespace-pre-wrap break-words">
+            <p className="my-4 whitespace-pre-wrap break-words text-[15px] leading-7 text-slate-600">
               {item.content}
             </p>
             {item.gallery && (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {item.gallery.photos.map((photo) => (
-                  <figure key={photo.mediaId}>
+                  <figure
+                    key={photo.mediaId}
+                    className="group/img overflow-hidden rounded-xl border border-slate-200/70"
+                  >
                     <a
                       href={`/api/v1/public/media/${photo.mediaId}?variant=display`}
+                      className="relative block aspect-[3/2] overflow-hidden bg-slate-100"
                     >
                       <Image
                         src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
                         alt={photo.alt}
-                        width={480}
-                        height={320}
+                        fill
                         loading="lazy"
                         unoptimized
-                        className="aspect-[3/2] w-full rounded object-cover"
+                        className="object-cover transition-transform duration-500 ease-out group-hover/img:scale-105"
                       />
                     </a>
-                    <figcaption className="mt-2 break-words text-[15px]">
-                      {photo.alt}
-                    </figcaption>
+                    {photo.alt && (
+                      <figcaption className="bg-white p-3 text-xs text-muted">
+                        {photo.alt}
+                      </figcaption>
+                    )}
                   </figure>
                 ))}
               </div>
             )}
             {item.document && (
-              <p>
-                {item.document.category} ·{" "}
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Kategori: {item.document.category}
+                </span>
                 <a
-                  className="underline"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-primary-hover"
                   href={`/api/v1/public/media/${item.document.fileId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Unduh PDF — {item.title}
+                  Unduh Dokumen PDF ↗
                 </a>
-              </p>
+              </div>
             )}
           </article>
         ))}

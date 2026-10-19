@@ -15,6 +15,8 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { NewsCards } from "@/features/news/cards";
 import { ArticleShare } from "@/features/news/share";
 import "@/features/news/news.css";
+import { MotionFadeIn } from "@/components/ui/motion";
+
 export async function generateMetadata({
   params,
 }: {
@@ -53,6 +55,7 @@ export async function generateMetadata({
     },
   };
 }
+
 export default async function Page({
   params,
 }: {
@@ -111,54 +114,56 @@ export default async function Page({
           { label: news.title },
         ]}
       />
-      <article className="mx-auto max-w-3xl py-7">
-        <Link
-          href={categoryPath(news.category.slug)}
-          className="text-[15px] font-semibold text-primary underline"
-        >
-          {news.category.name}
-        </Link>
-        <h1 className="display-title mt-4 break-words text-3xl leading-tight sm:text-5xl">
-          {news.title}
-        </h1>
-        <p className="mt-5 text-[15px] text-muted">
-          {settings.name} ·{" "}
-          <time dateTime={news.publishedAt}>{newsDate(news.publishedAt)}</time>
-        </p>
-        <p className="mt-6 break-words text-lg leading-8 text-muted">
-          {news.excerpt}
-        </p>
-        <figure className="mt-7">
-          <Image
-            src={coverImage(news)}
-            width={1200}
-            height={675}
-            alt={
-              news.cover?.alt ?? "Foto kantor kelurahan sebagai gambar bawaan"
-            }
-            unoptimized
-            preload
-            className="h-auto w-full rounded-xl"
+      <MotionFadeIn>
+        <article className="mx-auto max-w-3xl py-7">
+          <Link
+            href={categoryPath(news.category.slug)}
+            className="text-[15px] font-semibold text-primary underline"
+          >
+            {news.category.name}
+          </Link>
+          <h1 className="display-title mt-4 break-words text-3xl leading-tight sm:text-5xl">
+            {news.title}
+          </h1>
+          <p className="mt-5 text-[15px] text-muted">
+            {settings.name} ·{" "}
+            <time dateTime={news.publishedAt}>{newsDate(news.publishedAt)}</time>
+          </p>
+          <p className="mt-6 break-words text-lg leading-8 text-muted">
+            {news.excerpt}
+          </p>
+          <figure className="mt-7">
+            <Image
+              src={coverImage(news)}
+              width={1200}
+              height={675}
+              alt={
+                news.cover?.alt ?? "Foto kantor kelurahan sebagai gambar bawaan"
+              }
+              unoptimized
+              preload
+              className="h-auto w-full rounded-2xl shadow-sm"
+            />
+            {news.cover?.caption && (
+              <figcaption className="mt-3 text-[15px] text-muted">
+                {news.cover.caption}
+              </figcaption>
+            )}
+          </figure>
+          <div
+            className="news-body mt-8"
+            dangerouslySetInnerHTML={{ __html: news.bodyHtml }}
           />
-          {news.cover?.caption && (
-            <figcaption className="mt-3 text-[15px] text-muted">
-              {news.cover.caption}
-            </figcaption>
-          )}
-        </figure>
-        <div
-          className="news-body mt-8"
-          dangerouslySetInnerHTML={{ __html: news.bodyHtml }}
-        />
-        <div className="mt-8 border-t border-border pt-6">
-          <ArticleShare url={url} title={news.title} />
-        </div>
-      </article>
+          <div className="mt-8 border-t border-border pt-6">
+            <ArticleShare url={url} title={news.title} />
+          </div>
+        </article>
+      </MotionFadeIn>
       {data.related.length > 0 && (
-        <section className="mt-10">
-          <h2 className="mb-6 text-2xl font-semibold">Berita terkait</h2>
+        <MotionFadeIn delay={0.2} className="mt-12">
+          <h2 className="mb-6 text-2xl font-bold text-slate-900">Berita terkait</h2>
           <NewsCards items={data.related} />
-        </section>
+        </MotionFadeIn>
       )}
       <script
         type="application/ld+json"
