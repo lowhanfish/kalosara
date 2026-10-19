@@ -32,8 +32,17 @@ export default async function Page() {
         <div className="grid items-start gap-8 lg:grid-cols-[1fr_340px]">
           <div>
             {page ? (
-              <article className="whitespace-pre-wrap rounded-2xl border border-slate-200/90 bg-white p-6 text-[15px] leading-8 text-slate-600 shadow-xs sm:p-8">
-                {page.content}
+              <article className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
+                {page.content.includes("<") ? (
+                  <div
+                    className="cms-rich text-[15px] leading-8 text-slate-600"
+                    dangerouslySetInnerHTML={{ __html: page.content }}
+                  />
+                ) : (
+                  <div className="whitespace-pre-wrap text-[15px] leading-8 text-slate-600">
+                    {page.content}
+                  </div>
+                )}
               </article>
             ) : (
               <section className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
