@@ -12,6 +12,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsError, cmsMutate, type List } from "@/features/cms/client";
+import { AdminPagination } from "@/components/admin/pagination";
 type User = {
   id: string;
   email: string;
@@ -312,20 +313,13 @@ function Management() {
               </li>
             ))}
           </ul>
-          <div className="cms-pagination">
-            <button disabled={page <= 1} onClick={() => setPage(page - 1)}>
-              Sebelumnya
-            </button>
-            <span>
-              Halaman {page} · {query.data.total} data
-            </span>
-            <button
-              disabled={page * 10 >= query.data.total}
-              onClick={() => setPage(page + 1)}
-            >
-              Berikutnya
-            </button>
-          </div>
+          <AdminPagination
+            page={page}
+            total={query.data.total}
+            limit={10}
+            onPageChange={setPage}
+            itemName="data"
+          />
         </>
       )}
     </>

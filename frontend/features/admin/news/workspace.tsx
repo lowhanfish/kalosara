@@ -13,6 +13,7 @@ import { AdminAccess } from "@/features/cms/admin-access";
 import { Categories } from "@/features/cms/categories";
 import { MediaLibrary } from "@/features/cms/media-library";
 import { NewsEditor } from "@/features/cms/news-editor";
+import { AdminPagination } from "@/components/admin/pagination";
 import {
   cmsError,
   type News,
@@ -225,20 +226,13 @@ function Workspace() {
                   </li>
                 ))}
               </ul>
-              <div className="flex items-center gap-4">
-                <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-                  Sebelumnya
-                </button>
-                <span>
-                  Halaman {page} · {query.data?.total ?? 0} berita
-                </span>
-                <button
-                  disabled={!query.data || page * 10 >= query.data.total}
-                  onClick={() => setPage(page + 1)}
-                >
-                  Berikutnya
-                </button>
-              </div>
+              <AdminPagination
+                page={page}
+                total={query.data?.total ?? 0}
+                limit={10}
+                onPageChange={setPage}
+                itemName="berita"
+              />
               {open.isError && <p role="alert">{cmsError(open.error)}</p>}
             </>
           )}

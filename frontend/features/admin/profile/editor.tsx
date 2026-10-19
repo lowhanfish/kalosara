@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { cmsError } from "@/features/cms/client";
 import type { MediaAsset, List } from "@/features/cms/client";
 import { useEffect, useState } from "react";
@@ -141,6 +142,29 @@ function Media({
         />
       </label>
       {query.isError && <p role="alert">Pustaka media belum dapat dimuat.</p>}
+      {value && (
+        <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5">
+          <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-white">
+            <Image
+              src={value}
+              alt={label}
+              fill
+              unoptimized
+              className="object-cover"
+            />
+          </div>
+          <div className="min-w-0 flex-1 text-xs">
+            <p className="font-semibold text-slate-800 truncate">{value}</p>
+            <button
+              type="button"
+              onClick={() => onChange(null)}
+              className="text-red-600 hover:underline mt-1 block font-medium"
+            >
+              Hapus gambar
+            </button>
+          </div>
+        </div>
+      )}
       <p className="mt-2 text-sm text-muted">
         Maksimal 50 hasil gambar publik.{" "}
         <Link className="underline" href="/admin/berita">

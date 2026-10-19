@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsMutate, cmsError, type Category, type List } from "./client";
+import { AdminPagination } from "@/components/admin/pagination";
 export function Categories() {
   const auth = useAuth();
   const runtime = useAuthRuntime();
@@ -137,20 +138,13 @@ export function Categories() {
           </li>
         ))}
       </ul>
-      <div className="flex items-center gap-4">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-          Sebelumnya
-        </button>
-        <span>
-          Halaman {page} · {query.data?.total ?? 0} kategori
-        </span>
-        <button
-          disabled={!query.data || page * 10 >= query.data.total}
-          onClick={() => setPage(page + 1)}
-        >
-          Berikutnya
-        </button>
-      </div>
+      <AdminPagination
+        page={page}
+        total={query.data?.total ?? 0}
+        limit={10}
+        onPageChange={setPage}
+        itemName="kategori"
+      />
     </section>
   );
 }

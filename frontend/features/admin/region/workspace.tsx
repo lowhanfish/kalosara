@@ -3,6 +3,7 @@ import { AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { ChartColumn } from "lucide-react";
 import Editor from "./editor";
+import { AdminPagination } from "@/components/admin/pagination";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AdminAccess } from "@/features/cms/admin-access";
@@ -159,20 +160,13 @@ function Workspace() {
               </li>
             ))}
           </ul>
-          <nav aria-label="Halaman CMS wilayah" className="cms-pagination">
-            <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-              Sebelumnya
-            </button>
-            <span>
-              Halaman {page} · {query.data?.total ?? 0} item
-            </span>
-            <button
-              disabled={!query.data || page * 10 >= query.data.total}
-              onClick={() => setPage(page + 1)}
-            >
-              Berikutnya
-            </button>
-          </nav>
+          <AdminPagination
+            page={page}
+            total={query.data?.total ?? 0}
+            limit={10}
+            onPageChange={setPage}
+            itemName="data"
+          />
         </>
       )}
       {selected !== undefined && (

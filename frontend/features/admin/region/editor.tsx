@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -27,6 +28,7 @@ export default function Editor({
   const [mediaSearch, setMediaSearch] = useState("");
   const stat = item && "period" in item ? item : null;
   const place = item && "name" in item ? item : null;
+  const [selectedPhotoId, setSelectedPhotoId] = useState(place?.photoId ?? "");
   const media = useQuery({
     queryKey: ["user", auth.user?.id, "region-media", mediaSearch],
     enabled: kind !== "statistics",
@@ -220,7 +222,8 @@ export default function Editor({
             <select
               className="cms-input"
               name="photoId"
-              defaultValue={place?.photoId ?? ""}
+              value={selectedPhotoId}
+              onChange={(e) => setSelectedPhotoId(e.target.value)}
             >
               <option value="">Tanpa foto</option>
               {place?.photoId &&
@@ -235,6 +238,31 @@ export default function Editor({
                   </option>
                 ))}
             </select>
+            {selectedPhotoId && (
+              <div className="mt-2.5 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5">
+                <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-white">
+                  <Image
+                    src={`/api/v1/public/media/${selectedPhotoId}`}
+                    alt="Pratinjau foto fasilitas/potensi"
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0 flex-1 text-xs">
+                  <p className="font-semibold text-slate-800 truncate">
+                    Foto terpilih
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPhotoId("")}
+                    className="text-red-600 hover:underline mt-1 block"
+                  >
+                    Hapus foto
+                  </button>
+                </div>
+              </div>
+            )}
           </label>
           <label>
             Teks alternatif foto

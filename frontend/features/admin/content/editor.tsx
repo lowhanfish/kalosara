@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -270,33 +271,49 @@ export default function Editor({
                 ))}
             </select>
           </label>
-          {photos.map((p, i) => (
-            <div key={p.mediaId}>
-              <label>
-                Teks alternatif foto {i + 1}
-                <input
-                  className="cms-input"
-                  required
-                  maxLength={300}
-                  value={p.alt}
-                  onChange={(e) =>
-                    setPhotos(
-                      photos.map((v, n) =>
-                        n === i ? { ...v, alt: e.target.value } : v,
-                      ),
-                    )
-                  }
-                />
-              </label>
-              <button
-                type="button"
-                className="underline"
-                onClick={() => setPhotos(photos.filter((_, n) => n !== i))}
+          <div className="grid gap-3 sm:grid-cols-2 mt-3">
+            {photos.map((p, i) => (
+              <div
+                key={p.mediaId}
+                className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3"
               >
-                Hapus foto {i + 1} dari album
-              </button>
-            </div>
-          ))}
+                <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white">
+                  <Image
+                    src={`/api/v1/public/media/${p.mediaId}`}
+                    alt={p.alt || `Foto ${i + 1}`}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <label className="block text-xs font-semibold text-slate-700">
+                    Teks alternatif foto {i + 1}
+                    <input
+                      className="cms-input mt-1 text-xs"
+                      required
+                      maxLength={300}
+                      value={p.alt}
+                      onChange={(e) =>
+                        setPhotos(
+                          photos.map((v, n) =>
+                            n === i ? { ...v, alt: e.target.value } : v,
+                          ),
+                        )
+                      }
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-red-600 hover:underline"
+                    onClick={() => setPhotos(photos.filter((_, n) => n !== i))}
+                  >
+                    Hapus foto
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </>
       )}
       {(kind === "documents" || kind === "galleries") && (

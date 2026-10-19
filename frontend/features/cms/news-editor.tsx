@@ -12,6 +12,7 @@ import {
   type MediaAsset,
 } from "./client";
 import { RichEditor } from "./rich-editor";
+import { AdminPagination } from "@/components/admin/pagination";
 type Preview = {
   news: {
     title: string;
@@ -264,6 +265,44 @@ export function NewsEditor({
             ))}
           </select>
         </label>
+        {draft.coverId && (
+          <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-slate-200">
+              <Image
+                src={
+                  imageOptions.find((img) => img.id === draft.coverId)?.url ??
+                  `/api/v1/public/media/${draft.coverId}`
+                }
+                alt={
+                  imageOptions.find((img) => img.id === draft.coverId)?.alt ||
+                  "Pratinjau Cover"
+                }
+                fill
+                unoptimized
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0 flex-1 text-xs">
+              <p className="font-bold text-slate-900 truncate">
+                {imageOptions.find((img) => img.id === draft.coverId)?.alt ||
+                  imageOptions.find((img) => img.id === draft.coverId)
+                    ?.originalName ||
+                  "Cover terpilih"}
+              </p>
+              <p className="text-muted truncate mt-0.5">
+                {imageOptions.find((img) => img.id === draft.coverId)?.caption ||
+                  "Foto sampul yang akan tampil di halaman berita publik"}
+              </p>
+              <button
+                type="button"
+                onClick={() => change("coverId", null)}
+                className="mt-2 font-semibold text-red-600 hover:underline"
+              >
+                Hapus cover ini
+              </button>
+            </div>
+          </div>
+        )}
         {images.isError && <p role="alert">{cmsError(images.error)}</p>}
         <div>
           <p className="mb-3 font-semibold">Isi berita</p>
@@ -381,23 +420,13 @@ export function NewsEditor({
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-4">
-            <button
-              disabled={revisionPage === 1}
-              onClick={() => setRevisionPage(revisionPage - 1)}
-            >
-              Revisi sebelumnya
-            </button>
-            <span>Halaman {revisionPage}</span>
-            <button
-              disabled={
-                !revisions.data || revisionPage * 10 >= revisions.data.total
-              }
-              onClick={() => setRevisionPage(revisionPage + 1)}
-            >
-              Revisi berikutnya
-            </button>
-          </div>
+          <AdminPagination
+            page={revisionPage}
+            total={revisions.data?.total ?? 0}
+            limit={10}
+            onPageChange={setRevisionPage}
+            itemName="revisi"
+          />
           {rollback.isError && <p role="alert">{cmsError(rollback.error)}</p>}
         </section>
       )}
