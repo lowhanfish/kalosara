@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { PageHeading } from "@/components/ui/page-heading";
 import { EmptyState } from "@/components/ui/empty-state";
 import { CalendarDays, Images, Megaphone, Files } from "lucide-react";
+import { GalleryPhotoGrid } from "./gallery-lightbox";
 import {
   channels,
   getContent,
@@ -170,33 +170,10 @@ export async function ContentPage({
               {item.content}
             </p>
             {item.gallery && (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {item.gallery.photos.map((photo) => (
-                  <figure
-                    key={photo.mediaId}
-                    className="group/img overflow-hidden rounded-xl border border-slate-200/70"
-                  >
-                    <a
-                      href={`/api/v1/public/media/${photo.mediaId}?variant=display`}
-                      className="relative block aspect-[3/2] overflow-hidden bg-slate-100"
-                    >
-                      <Image
-                        src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
-                        alt={photo.alt}
-                        fill
-                        loading="lazy"
-                        unoptimized
-                        className="object-cover transition-transform duration-500 ease-out group-hover/img:scale-105"
-                      />
-                    </a>
-                    {photo.alt && (
-                      <figcaption className="bg-white p-3 text-xs text-muted">
-                        {photo.alt}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
-              </div>
+              <GalleryPhotoGrid
+                albumTitle={item.title}
+                photos={item.gallery.photos}
+              />
             )}
             {item.document && (
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4">
