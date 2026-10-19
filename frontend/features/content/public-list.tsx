@@ -166,9 +166,16 @@ export async function ContentPage({
                 <span>{item.event.location}</span>
               </div>
             )}
-            <p className="my-4 whitespace-pre-wrap break-words text-[15px] leading-7 text-slate-600">
-              {item.content}
-            </p>
+            {item.content.includes("<") ? (
+              <div
+                className="cms-rich my-4 text-[15px] leading-7 text-slate-600"
+                dangerouslySetInnerHTML={{ __html: item.content }}
+              />
+            ) : (
+              <p className="my-4 whitespace-pre-wrap break-words text-[15px] leading-7 text-slate-600">
+                {item.content}
+              </p>
+            )}
             {item.gallery && (
               <GalleryPhotoGrid
                 albumTitle={item.title}

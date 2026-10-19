@@ -10,6 +10,7 @@ import {
   type List,
   type MediaAsset,
 } from "@/features/cms/client";
+import { RichEditor } from "@/features/cms/rich-editor";
 import { channels, type ContentKind, type ContentItem } from "@/lib/content";
 
 export default function Editor({
@@ -26,6 +27,7 @@ export default function Editor({
   const [editorId] = useState(() => item?.id ?? crypto.randomUUID());
   const [mediaSearch, setMediaSearch] = useState("");
   const [photos, setPhotos] = useState(item?.gallery?.photos ?? []);
+  const [content, setContent] = useState(item?.content ?? "");
   const [notice, setNotice] = useState("");
   const [version, setVersion] = useState(item?.version ?? 0);
   const media = useQuery({
@@ -79,7 +81,7 @@ export default function Editor({
         save.mutate({
           kind,
           title: value("title"),
-          content: value("content"),
+          content,
           status,
           expectedVersion: version,
           ...(kind === "announcements"
@@ -118,16 +120,20 @@ export default function Editor({
           defaultValue={item?.title}
         />
       </label>
-      <label className="block">
-        Isi (teks aman)
-        <textarea
-          className="cms-input"
-          name="content"
-          maxLength={30000}
-          rows={5}
-          defaultValue={item?.content}
+      <div>
+        <label className="block font-semibold text-slate-800">
+          Isi Konten
+        </label>
+        <p className="mt-1 mb-2.5 text-xs text-muted">
+          Gunakan editor WYSIWYG untuk menyusun format teks (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip Gambar/Tautan).
+        </p>
+        <RichEditor
+          key={item?.id ?? kind}
+          initial={content}
+          onChange={(html) => setContent(html)}
+          images={media.data?.items ?? []}
         />
-      </label>
+      </div>
       {kind === "announcements" && (
         <>
           <label className="block">

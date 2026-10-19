@@ -140,9 +140,16 @@ export default async function Page({
                     <h2 className="break-words text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
                       {item.name}
                     </h2>
-                    <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-600 line-clamp-3">
-                      {item.description}
-                    </p>
+                    {item.description.includes("<") ? (
+                      <div
+                        className="cms-rich text-sm leading-relaxed text-slate-600 line-clamp-3"
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      />
+                    ) : (
+                      <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-600 line-clamp-3">
+                        {item.description}
+                      </p>
+                    )}
                   </div>
                   <div className="mt-5 space-y-2 border-t border-slate-100 pt-4">
                     <p className="flex items-start gap-2 text-xs text-muted">

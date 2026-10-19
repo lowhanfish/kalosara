@@ -72,9 +72,22 @@ export default async function Page() {
                     <h2 className="mt-2 text-xl font-bold text-slate-900">
                       {page?.title ?? label}
                     </h2>
-                    <p className="mt-4 whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-600">
-                      {page?.content || "Materi resmi belum dipublikasikan."}
-                    </p>
+                    {page?.content ? (
+                      page.content.includes("<") ? (
+                        <div
+                          className="cms-rich mt-4 text-sm leading-relaxed text-slate-600"
+                          dangerouslySetInnerHTML={{ __html: page.content }}
+                        />
+                      ) : (
+                        <p className="mt-4 whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-600">
+                          {page.content}
+                        </p>
+                      )
+                    ) : (
+                      <p className="mt-4 text-sm text-slate-400 italic">
+                        Materi resmi belum dipublikasikan.
+                      </p>
+                    )}
                   </div>
                 </article>
               </MotionStaggerItem>

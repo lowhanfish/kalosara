@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cmsError } from "@/features/cms/client";
 import type { MediaAsset, List } from "@/features/cms/client";
+import { RichEditor } from "@/features/cms/rich-editor";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -193,7 +194,15 @@ export default function Editor({
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
+  const auth = useAuth();
   const runtime = useAuthRuntime();
+  const mediaList = useQuery({
+    queryKey: ["user", auth.user?.id, "profile-rich-media"],
+    queryFn: () =>
+      runtime.request<List<MediaAsset>>(
+        "/admin/media?visibility=PUBLIC&limit=50",
+      ),
+  });
   const [settings, setSettings] = useState(data.settings);
   const [slug, setSlug] = useState(slugs[0]);
   const [page, setPage] = useState<ProfilePage>(
@@ -427,31 +436,51 @@ export default function Editor({
             value={page.title}
             onChange={(v) => setPage({ ...page, title: v })}
           />
-          <label className="block">
-            Isi (teks biasa)
-            <textarea
-              className="mt-2 min-h-60 w-full rounded border border-border p-3"
-              maxLength={30000}
-              value={page.content}
-              onChange={(e) => setPage({ ...page, content: e.target.value })}
+          <div>
+            <label className="block font-semibold text-slate-800">
+              Isi Halaman Profil
+            </label>
+            <p className="mt-1 mb-2.5 text-xs text-muted">
+              Gunakan editor WYSIWYG untuk menyusun format dokumen resmi (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip Gambar).
+            </p>
+            <RichEditor
+              key={slug}
+              initial={page.content}
+              onChange={(html) => setPage({ ...page, content: html })}
+              images={mediaList.data?.items ?? []}
             />
-          </label>
+          </div>
           {status(page.status, (v) => setPage({ ...page, status: v }))}
-          <button
-            type="button"
-            className="mr-5 underline"
-            onClick={() => setPreview(!preview)}
-          >
-            Lihat pratinjau
-          </button>
-          <button className="yellow-button" disabled={save.isPending}>
-            Simpan halaman
-          </button>
+          <div className="flex items-center gap-4 pt-2">
+            <button
+              type="button"
+              className="text-sm font-medium text-slate-600 underline hover:text-primary transition-colors"
+              onClick={() => setPreview(!preview)}
+            >
+              {preview ? "Sembunyikan pratinjau" : "Lihat pratinjau"}
+            </button>
+            <button className="yellow-button" disabled={save.isPending}>
+              {save.isPending ? "Menyimpan…" : "Simpan halaman"}
+            </button>
+          </div>
           {preview && (
-            <article className="break-words rounded border p-5">
-              <p>Preview privat — {page.status}</p>
-              <h3 className="text-xl font-bold">{page.title}</h3>
-              <p className="whitespace-pre-wrap">{page.content}</p>
+            <article className="break-words rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Pratinjau Halaman — Status: {page.status}
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">{page.title}</h3>
+              {page.content.includes("<") ? (
+                <div
+                  className="cms-rich text-sm leading-relaxed text-slate-600"
+                  dangerouslySetInnerHTML={{ __html: page.content }}
+                />
+              ) : (
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-600">
+                  {page.content}
+                </p>
+              )}
             </article>
           )}
         </form>
