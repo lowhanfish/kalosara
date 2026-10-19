@@ -30,7 +30,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           ? "page"
           : undefined
       }
-      className={`flex min-h-12 items-center border-b-2 px-1 py-3 text-[13px] font-semibold transition-colors ${(item.href === "/" ? path === "/" : path.startsWith(item.href)) ? "border-amber-400 text-primary" : "border-transparent text-slate-500 hover:border-slate-300 hover:text-primary"}`}
+      className={`flex min-h-12 items-center border-b-2 px-1 py-3 text-sm font-semibold transition-colors ${(item.href === "/" ? path === "/" : path.startsWith(item.href)) ? "border-amber-400 text-primary" : "border-transparent text-slate-500 hover:border-slate-300 hover:text-primary"}`}
     >
       {item.title}
     </Link>
@@ -42,7 +42,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
       </a>
       <header className="border-b border-slate-200 bg-white">
         <div className="hidden border-b border-slate-100 bg-slate-50/80 sm:block">
-          <div className="container flex min-h-9 items-center justify-between gap-4 text-[10px] text-slate-500">
+          <div className="container flex min-h-9 items-center justify-between gap-4 text-xs text-slate-500">
             <p className="flex items-center gap-2">
               <ShieldCheck size={13} className="text-primary" />
               {settings.name} · {settings.district}
@@ -71,13 +71,13 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               className="h-12 w-10 shrink-0 object-contain sm:h-14 sm:w-12"
             />
             <span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[.2em] text-slate-500">
+              <span className="block text-xs font-semibold uppercase tracking-[.2em] text-slate-500">
                 Kelurahan
               </span>
               <span className="mt-0.5 block text-lg font-extrabold uppercase leading-tight tracking-tight text-primary sm:text-xl">
                 {settings.name.replace(/^Kelurahan /, "")}
               </span>
-              <span className="mt-1 hidden text-[10px] text-slate-500 sm:block">
+              <span className="mt-1 hidden text-xs text-slate-500 sm:block">
                 {settings.regency ?? "Kabupaten Konawe"}
               </span>
             </span>
@@ -87,7 +87,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           </div>
           <Link
             href="/pelayanan"
-            className="hidden min-h-11 items-center gap-3 rounded-lg bg-amber-300 px-5 py-3 text-xs font-bold text-slate-900 transition hover:bg-amber-400 lg:flex"
+            className="hidden min-h-11 items-center gap-3 rounded-lg bg-amber-300 px-5 py-3 text-sm font-bold text-slate-900 transition hover:bg-amber-400 lg:flex"
           >
             Panduan pelayanan
             <ArrowUpRight size={16} />
@@ -96,7 +96,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             <Dialog
               title="Jelajahi KALOSARA"
               triggerLabel="Menu"
-              triggerClassName="text-xs"
+              triggerClassName="text-sm"
             >
               <nav
                 aria-label="Navigasi seluler"
@@ -107,7 +107,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               <SearchForm id="mobile-search" />
               <Link
                 href="/admin"
-                className="mt-6 block border-t border-slate-100 pt-5 text-sm text-muted"
+                className="mt-6 block border-t border-slate-100 pt-5 text-[15px] text-muted"
               >
                 Masuk sebagai pengelola ↗
               </Link>

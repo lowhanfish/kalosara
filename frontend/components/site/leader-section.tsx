@@ -34,7 +34,7 @@ export async function LeaderSection() {
             <br />
             Membangun kebersamaan.
           </h2>
-          <p className="mt-5 max-w-lg text-sm leading-7 text-muted">
+          <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted">
             Kenali Kelurahan Watundehoa dan aparatur yang melayani masyarakat di
             Kecamatan Puriala, Kabupaten Konawe. KALOSARA menjadi ruang untuk
             mengakses informasi kelurahan dan panduan pelayanan.
@@ -43,7 +43,7 @@ export async function LeaderSection() {
             <p className="text-lg font-bold tracking-wide text-foreground">
               {leader?.name ?? siteIdentity.leader}
             </p>
-            <p className="mt-1 text-xs text-muted">Lurah Watundehoa</p>
+            <p className="mt-1 text-sm text-muted">Lurah Watundehoa</p>
           </div>
         </div>
       </div>

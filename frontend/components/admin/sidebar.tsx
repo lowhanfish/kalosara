@@ -33,7 +33,7 @@ export function AdminSidebar({
           .map((item) => (
             <div key={item.href}>
               {item.group && (
-                <p className="mb-2 mt-5 px-3 text-[9px] font-bold uppercase tracking-[.18em] text-slate-400">
+                <p className="mb-2 mt-5 px-3 text-xs font-bold uppercase tracking-[.18em] text-slate-400">
                   {item.group}
                 </p>
               )}
@@ -50,7 +50,7 @@ export function AdminSidebar({
                     window.location.hash = item.href.split("#")[1];
                   }
                 }}
-                className={`my-1 flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-colors ${active?.href === item.href ? "bg-amber-300 text-slate-900 shadow-sm" : "hover:bg-white/7 hover:text-white"}`}
+                className={`my-1 flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${active?.href === item.href ? "bg-amber-300 text-slate-900 shadow-sm" : "hover:bg-white/7 hover:text-white"}`}
               >
                 <item.icon size={18} strokeWidth={1.6} aria-hidden="true" />
                 {item.label}
@@ -61,7 +61,7 @@ export function AdminSidebar({
       <div className="border-t border-white/10 p-4">
         <Link
           href="/"
-          className="flex min-h-11 items-center justify-between rounded-lg px-3 text-xs font-medium hover:bg-white/5"
+          className="flex min-h-11 items-center justify-between rounded-lg px-3 text-sm font-medium hover:bg-white/5"
         >
           Lihat website kelurahan
           <ArrowUpRight size={16} aria-hidden="true" />

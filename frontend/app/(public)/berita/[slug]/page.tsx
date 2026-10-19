@@ -114,14 +114,14 @@ export default async function Page({
       <article className="mx-auto max-w-3xl py-7">
         <Link
           href={categoryPath(news.category.slug)}
-          className="text-sm font-semibold text-primary underline"
+          className="text-[15px] font-semibold text-primary underline"
         >
           {news.category.name}
         </Link>
         <h1 className="display-title mt-4 break-words text-3xl leading-tight sm:text-5xl">
           {news.title}
         </h1>
-        <p className="mt-5 text-sm text-muted">
+        <p className="mt-5 text-[15px] text-muted">
           {settings.name} ·{" "}
           <time dateTime={news.publishedAt}>{newsDate(news.publishedAt)}</time>
         </p>
@@ -141,7 +141,7 @@ export default async function Page({
             className="h-auto w-full rounded-xl"
           />
           {news.cover?.caption && (
-            <figcaption className="mt-3 text-sm text-muted">
+            <figcaption className="mt-3 text-[15px] text-muted">
               {news.cover.caption}
             </figcaption>
           )}

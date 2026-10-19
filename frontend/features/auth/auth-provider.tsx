@@ -56,7 +56,7 @@ export function AuthRecovery() {
   return (
     <div
       role="alert"
-      className="container my-4 rounded-lg border border-[#d3b878] bg-[#fff8e5] p-4 text-sm"
+      className="container my-4 rounded-lg border border-[#d3b878] bg-[#fff8e5] p-4 text-[15px]"
     >
       <p>Sesi belum dapat diperiksa. Periksa koneksi lalu coba lagi.</p>
       <p>Referensi: {error?.requestId}</p>

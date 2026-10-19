@@ -27,7 +27,7 @@ export default async function Page() {
       <div className="grid items-start gap-8 lg:grid-cols-[1fr_320px]">
         <div>
           {page ? (
-            <article className="whitespace-pre-wrap rounded-2xl border border-slate-200 bg-white p-6 text-sm leading-8 text-slate-600 sm:p-8">
+            <article className="whitespace-pre-wrap rounded-2xl border border-slate-200 bg-white p-6 text-[15px] leading-8 text-slate-600 sm:p-8">
               {page.content}
             </article>
           ) : (
@@ -38,7 +38,7 @@ export default async function Page() {
               <h2 className="text-xl font-bold text-primary">
                 Persiapkan kunjungan Anda
               </h2>
-              <p className="mt-4 text-sm leading-7 text-muted">
+              <p className="mt-4 text-[15px] leading-7 text-muted">
                 Panduan persyaratan lengkap sedang disiapkan. Untuk memastikan
                 dokumen yang perlu dibawa, konfirmasikan kebutuhan Anda kepada
                 petugas kelurahan.
@@ -50,10 +50,10 @@ export default async function Page() {
                   "Kunjungi kantor kelurahan pada jam pelayanan.",
                 ].map((step, index) => (
                   <li key={step} className="flex items-start gap-4">
-                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-slate-100 text-xs font-bold text-primary">
+                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-slate-100 text-sm font-bold text-primary">
                       {index + 1}
                     </span>
-                    <p className="pt-0.5 text-sm leading-6 text-slate-600">
+                    <p className="pt-0.5 text-[15px] leading-6 text-slate-600">
                       {step}
                     </p>
                   </li>
@@ -61,7 +61,7 @@ export default async function Page() {
               </ol>
             </section>
           )}
-          <div className="mt-5 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-5 text-xs leading-6 text-amber-900">
+          <div className="mt-5 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
             <CheckCircle2 size={18} className="mt-1 shrink-0" />
             <p>
               Pelayanan administrasi dilakukan di kantor kelurahan. Pengajuan
@@ -74,17 +74,17 @@ export default async function Page() {
           <h2 className="mt-4 text-base font-bold text-primary">
             Kantor kelurahan
           </h2>
-          <p className="mt-3 text-sm leading-7 text-muted">
+          <p className="mt-3 text-[15px] leading-7 text-muted">
             {settings.address ?? settings.name}
           </p>
           {settings.hours && (
-            <p className="mt-4 text-xs font-medium leading-6 text-primary">
+            <p className="mt-4 text-sm font-medium leading-6 text-primary">
               {settings.hours}
             </p>
           )}
           <Link
             href="/kontak"
-            className="mt-6 inline-flex min-h-11 items-center gap-3 rounded-lg bg-primary px-5 text-xs font-semibold text-white"
+            className="mt-6 inline-flex min-h-11 items-center gap-3 rounded-lg bg-primary px-5 text-sm font-semibold text-white"
           >
             Lihat kontak & lokasi
             <ArrowUpRight size={15} />

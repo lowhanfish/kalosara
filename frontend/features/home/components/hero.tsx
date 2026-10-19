@@ -31,7 +31,7 @@ export function HomeHero({
       />
       <div className="container relative grid min-h-[520px] items-center gap-8 py-14 sm:min-h-[560px] sm:py-16 lg:grid-cols-[1.2fr_.8fr]">
         <div className="relative z-10 max-w-xl">
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[10px] font-semibold tracking-wide text-slate-200">
+          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-semibold tracking-wide text-slate-200">
             <span className="size-1.5 rounded-full bg-amber-300" />
             Selamat datang di {settings.name}
           </p>
@@ -45,27 +45,27 @@ export function HomeHero({
             <br />
             <span className="text-amber-300">Untuk warga.</span>
           </h1>
-          <p className="mt-6 max-w-[420px] text-sm leading-7 text-slate-200 sm:text-base">
+          <p className="mt-6 max-w-[420px] text-[15px] leading-7 text-slate-200 sm:text-base">
             Akses informasi kelurahan, kabar terbaru, dan panduan pelayanan.
             Satu tempat untuk kebutuhan informasi Anda.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/pelayanan"
-              className="inline-flex min-h-12 items-center gap-4 rounded-lg bg-amber-300 px-5 py-3 text-xs font-bold text-slate-900 transition hover:bg-amber-400"
+              className="inline-flex min-h-12 items-center gap-4 rounded-lg bg-amber-300 px-5 py-3 text-sm font-bold text-slate-900 transition hover:bg-amber-400"
             >
               Panduan pelayanan
               <ArrowRight size={16} />
             </Link>
             <Link
               href="/profil"
-              className="inline-flex min-h-12 items-center gap-4 rounded-lg border border-white/25 bg-white/5 px-5 py-3 text-xs font-semibold text-white transition hover:bg-white/10"
+              className="inline-flex min-h-12 items-center gap-4 rounded-lg border border-white/25 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               Kenali kelurahan
               <ArrowRight size={16} />
             </Link>
           </div>
-          <p className="mt-7 flex items-center gap-2 text-[11px] text-slate-300">
+          <p className="mt-7 flex items-center gap-2 text-[13px] text-slate-300">
             <MapPin size={13} />
             {settings.district}, {settings.regency}
           </p>
@@ -84,7 +84,7 @@ export function HomeHero({
             className="object-cover object-top"
           />
           <div className="absolute -bottom-1 inset-x-0 rounded-xl border border-white/50 bg-white/95 px-6 py-4 shadow-xl backdrop-blur-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Lurah {settings.name.replace(/^Kelurahan /, "")}
             </p>
             <p className="mt-1 text-lg font-bold text-primary">

@@ -6,7 +6,7 @@ export function Breadcrumb({
   items: { label: string; href?: string }[];
 }) {
   return (
-    <nav aria-label="Jejak halaman" className="py-5 text-xs text-muted">
+    <nav aria-label="Jejak halaman" className="py-5 text-sm text-muted">
       <ol className="flex flex-wrap items-center gap-2">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-2">

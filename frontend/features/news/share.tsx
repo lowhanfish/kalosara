@@ -36,7 +36,7 @@ export function ArticleShare({ url, title }: { url: string; title: string }) {
           Salin tautan berita
         </button>
       </div>
-      <p role="status" className="break-all text-sm">
+      <p role="status" className="break-all text-[15px]">
         {notice}
       </p>
     </div>

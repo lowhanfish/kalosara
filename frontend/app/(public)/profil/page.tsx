@@ -50,7 +50,7 @@ export default async function Page() {
               className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-7"
             >
               <h2 className="text-xl font-semibold">{page?.title ?? label}</h2>
-              <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7">
+              <p className="mt-3 whitespace-pre-wrap break-words text-[15px] leading-7">
                 {page?.content || "Materi resmi belum dipublikasikan."}
               </p>
             </article>
@@ -67,7 +67,7 @@ export default async function Page() {
                 className="rounded-xl border border-border p-5"
                 key={official.id}
               >
-                {official.photoUrl && (
+                {official.photoUrl ? (
                   <Image
                     src={official.photoUrl}
                     alt={official.name}
@@ -76,15 +76,28 @@ export default async function Page() {
                     unoptimized
                     className="h-44 w-40 object-cover object-top"
                   />
+                ) : (
+                  <div
+                    aria-hidden="true"
+                    className="grid h-44 w-40 place-items-center rounded-xl bg-slate-100 text-4xl font-bold text-slate-400"
+                  >
+                    {official.name
+                      .split(" ")
+                      .slice(0, 2)
+                      .map((part) => part[0])
+                      .join("")}
+                  </div>
                 )}
                 <h3 className="mt-3 font-semibold">{official.name}</h3>
                 <p>{official.position}</p>
                 <p>{official.unit}</p>
-                <p className="mt-2 text-sm text-muted">
-                  Masa tugas:{" "}
-                  {official.termStart?.slice(0, 10) ?? "Belum diisi"} —{" "}
-                  {official.termEnd?.slice(0, 10) ?? "Belum diisi"}
-                </p>
+                {(official.termStart || official.termEnd) && (
+                  <p className="mt-2 text-[15px] text-muted">
+                    Masa tugas:{" "}
+                    {official.termStart?.slice(0, 10) ?? "Belum diisi"} —{" "}
+                    {official.termEnd?.slice(0, 10) ?? "Belum diisi"}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -122,7 +135,7 @@ export default async function Page() {
           <h2 className="display-title mt-3 text-3xl">
             Hadir di tengah masyarakat.
           </h2>
-          <p className="mt-4 text-sm leading-7 text-muted">
+          <p className="mt-4 text-[15px] leading-7 text-muted">
             {settings.name} berada di{" "}
             {settings.district ?? siteIdentity.district},{" "}
             {settings.regency ?? siteIdentity.regency}. Informasi profil dan

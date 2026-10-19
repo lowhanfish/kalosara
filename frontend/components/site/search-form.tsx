@@ -14,7 +14,7 @@ export function SearchForm({
     <form action="/pencarian" role="search" className="w-full">
       <label
         htmlFor={id}
-        className={compact ? "sr-only" : "mb-2 block text-sm font-medium"}
+        className={compact ? "sr-only" : "mb-2 block text-[15px] font-medium"}
       >
         Cari halaman di KALOSARA
       </label>
@@ -30,7 +30,7 @@ export function SearchForm({
               ? "Cari informasi, pelayanan, halaman…"
               : "Contoh: pelayanan, kontak…"
           }
-          className={`min-w-0 flex-1 ${compact ? "border-0 bg-soft text-xs" : ""}`}
+          className={`min-w-0 flex-1 ${compact ? "border-0 bg-soft text-sm" : ""}`}
         />
         <Button type="submit" size="icon" aria-label="Cari halaman">
           <Search aria-hidden="true" className="size-5" />

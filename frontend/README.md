@@ -31,3 +31,11 @@ Gunakan `AdminPageHeader` dan komponen feedback di `components/admin` untuk fitu
 Izin tetap diperiksa backend. Menyembunyikan menu atau membatasi tampilan di frontend hanya membantu alur pengguna.
 
 Validasi: `npm run typecheck`, `npm run lint`, dan `npm test`. Saat memindahkan route, jalankan `next typegen` sebelum typecheck. Periksa juga menu publik dan admin pada lebar ponsel serta desktop, termasuk menu modal, formulir, status kosong, dan pesan kesalahan.
+
+## Tipografi dan data contoh
+
+Font Manrope variable disimpan lokal di `app/fonts/` dan dimuat melalui `next/font/local` dengan `display: swap`. Sumber: [Google Fonts Manrope](https://github.com/google/fonts/tree/main/ofl/manrope), lisensi OFL tersedia bersama berkas font. Teks isi menggunakan ukuran 15-16px, input 16px dengan tinggi minimal 48px, dan metadata 12-14px. Gunakan skala spacing Tailwind yang konsisten, bukan memperkecil teks untuk memuat konten panjang.
+
+Isi konten demo dari folder `backend` dengan `npm run db:seed:demo`. Seed ini menambahkan profil/pelayanan, aparatur, berita, pengumuman, agenda, galeri, PDF, statistik, fasilitas, dan potensi. Akun tidak dibuat atau diubah. Record konten yang sudah ada dipertahankan. ID tetap mencegah duplikasi saat seed dijalankan ulang; waktu agenda awal dihitung relatif terhadap saat pertama seed dijalankan.
+
+Seed menyalakan penanda publik `site.demoContent` agar halaman menampilkan banner data contoh. Jangan gunakan contoh kontak, angka, jadwal, atau dokumen tersebut sebagai informasi resmi. Dokumen sumber untuk seed tersedia di `backend/prisma/fixtures/`; salinan PDF yang mudah dibaca tersedia di `output/pdf/` pada root proyek. Media yang dipakai aplikasi disalin ke penyimpanan upload backend sesuai `UPLOAD_ROOT`.

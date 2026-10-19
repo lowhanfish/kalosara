@@ -18,7 +18,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               className="h-12 w-10 object-contain"
             />
             <div>
-              <p className="text-[9px] font-bold uppercase tracking-[.2em] text-amber-300">
+              <p className="text-xs font-bold uppercase tracking-[.2em] text-amber-300">
                 Kelurahan
               </p>
               <p className="mt-1 text-xl font-bold uppercase tracking-wide text-white">
@@ -26,23 +26,25 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               </p>
             </div>
           </div>
-          <p className="mt-6 max-w-xs text-sm leading-7 text-slate-400">
+          <p className="mt-6 max-w-xs text-[15px] leading-7 text-slate-400">
             Informasi yang dekat, pelayanan yang lebih mudah diakses. Hadir
             untuk warga {settings.district ?? "Kecamatan Puriala"},{" "}
             {settings.regency ?? "Kabupaten Konawe"}.
           </p>
           {settings.isExample && (
-            <p className="mt-4 text-xs text-amber-200">
+            <p className="mt-4 text-sm text-amber-200">
               Identitas contoh — belum mewakili instansi resmi.
             </p>
           )}
-          <p className="mt-5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-slate-500">
             Kanal Layanan Online Surat dan Administrasi Rakyat
           </p>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-white">Alamat & kontak</h2>
-          <ul className="mt-6 space-y-4 text-xs leading-6">
+          <h2 className="text-[15px] font-semibold text-white">
+            Alamat & kontak
+          </h2>
+          <ul className="mt-6 space-y-4 text-sm leading-6">
             <li className="flex gap-3">
               <MapPin size={16} className="mt-1 shrink-0 text-slate-500" />
               <span>{settings.address ?? "Alamat kantor belum tersedia"}</span>
@@ -80,8 +82,10 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           </ul>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-white">Akses informasi</h2>
-          <ul className="mt-5 space-y-1 text-xs">
+          <h2 className="text-[15px] font-semibold text-white">
+            Akses informasi
+          </h2>
+          <ul className="mt-5 space-y-1 text-sm">
             {[
               { label: "Profil kelurahan", href: "/profil" },
               { label: "Panduan pelayanan", href: "/pelayanan" },
@@ -104,7 +108,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="container flex flex-wrap items-center justify-between gap-3 py-5 text-[10px] text-slate-400">
+        <div className="container flex flex-wrap items-center justify-between gap-3 py-5 text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} {settings.name}. KALOSARA.
           </p>

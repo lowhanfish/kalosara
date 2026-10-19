@@ -6,7 +6,7 @@ export function ContactGuide() {
       <h2 className="text-lg font-bold text-primary">
         Informasi yang Anda perlukan
       </h2>
-      <p className="mt-3 text-sm leading-7 text-muted">
+      <p className="mt-3 text-[15px] leading-7 text-muted">
         Temukan jawaban awal melalui halaman berikut.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -25,7 +25,7 @@ export function ContactGuide() {
             className="group flex items-center gap-3 rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50"
           >
             <item.icon size={18} className="shrink-0 text-slate-400" />
-            <span className="flex-1 text-xs font-semibold text-primary">
+            <span className="flex-1 text-sm font-semibold text-primary">
               {item.label}
             </span>
             <ArrowUpRight

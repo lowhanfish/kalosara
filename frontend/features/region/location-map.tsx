@@ -20,13 +20,13 @@ export function LocationMap({
       <h2 className="text-xl font-bold">Lokasi kantor</h2>
       <p>{address}</p>
       {!urls ? (
-        <p className="text-sm text-muted">
+        <p className="text-[15px] text-muted">
           Koordinat kantor belum diisi pengelola. Gunakan alamat di atas sebagai
           acuan.
         </p>
       ) : (
         <>
-          <p className="text-sm text-muted">
+          <p className="text-[15px] text-muted">
             Peta disediakan OpenStreetMap. Memuat peta akan menghubungkan
             perangkat Anda ke layanan tersebut dan mengirim alamat IP serta
             informasi teknis browser. Peta tidak dimuat sebelum Anda memilih

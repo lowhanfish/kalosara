@@ -54,7 +54,7 @@ export function AdminLoginForm() {
           className="pointer-events-none absolute -bottom-48 -left-20 size-[600px] rounded-full border-[80px] border-white/3"
         />
         <div className="relative hidden max-w-lg py-20 lg:block">
-          <p className="text-[10px] font-bold uppercase tracking-[.22em] text-amber-300">
+          <p className="text-xs font-bold uppercase tracking-[.22em] text-amber-300">
             Ruang kerja pengelola
           </p>
           <h1 className="mt-7 text-5xl font-bold leading-[1.13] tracking-tight xl:text-6xl">
@@ -66,12 +66,12 @@ export function AdminLoginForm() {
             Satu ruang untuk merawat informasi, mendekatkan pelayanan, dan
             terhubung dengan warga.
           </p>
-          <div className="mt-10 flex items-center gap-3 text-xs text-slate-400">
+          <div className="mt-10 flex items-center gap-3 text-sm text-slate-400">
             <ShieldCheck size={18} className="text-amber-300" />
             Akses khusus pengelola kelurahan
           </div>
         </div>
-        <p className="relative hidden text-[11px] leading-6 text-slate-400 lg:block">
+        <p className="relative hidden text-[13px] leading-6 text-slate-400 lg:block">
           Kanal Layanan Online Surat dan Administrasi Rakyat
         </p>
       </section>
@@ -86,18 +86,18 @@ export function AdminLoginForm() {
           <span className="mb-7 grid size-14 place-items-center rounded-2xl border border-slate-200 bg-white text-primary shadow-sm">
             <LockKeyhole size={25} strokeWidth={1.6} />
           </span>
-          <p className="text-[10px] font-bold uppercase tracking-[.2em] text-slate-500">
+          <p className="text-xs font-bold uppercase tracking-[.2em] text-slate-500">
             Selamat datang kembali
           </p>
           <h2 className="mt-3 text-[30px] font-bold tracking-tight text-slate-900">
             Masuk ke panel admin
           </h2>
-          <p className="mt-3 text-sm leading-6 text-slate-500">
+          <p className="mt-3 text-[15px] leading-6 text-slate-500">
             Gunakan email dan kata sandi akun petugas Anda.
           </p>
           <div className="mt-8 space-y-5">
             <label
-              className="block text-sm font-semibold text-slate-700"
+              className="block text-[15px] font-semibold text-slate-700"
               htmlFor="admin-email"
             >
               Alamat email
@@ -117,7 +117,7 @@ export function AdminLoginForm() {
             </label>
             <div>
               <label
-                className="block text-sm font-semibold text-slate-700"
+                className="block text-[15px] font-semibold text-slate-700"
                 htmlFor="admin-password"
               >
                 Kata sandi
@@ -151,14 +151,14 @@ export function AdminLoginForm() {
           {login.isError && <AdminError error={login.error} />}
           <button
             disabled={login.isPending}
-            className="mt-7 flex min-h-12 w-full items-center justify-center gap-3 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover disabled:cursor-wait disabled:opacity-60"
+            className="mt-7 flex min-h-12 w-full items-center justify-center gap-3 rounded-lg bg-primary px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-primary-hover disabled:cursor-wait disabled:opacity-60"
           >
             {login.isPending ? "Sedang masuk…" : "Masuk ke panel admin"}
             <ArrowRight size={17} />
           </button>
           <Link
             href="/"
-            className="mt-7 flex min-h-11 items-center justify-center gap-2 text-xs text-slate-500 hover:text-primary"
+            className="mt-7 flex min-h-11 items-center justify-center gap-2 text-sm text-slate-500 hover:text-primary"
           >
             <ArrowLeft size={14} />
             Kembali ke website kelurahan

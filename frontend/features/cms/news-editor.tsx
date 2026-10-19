@@ -148,7 +148,7 @@ export function NewsEditor({
       <h2 id="editor-title" className="text-2xl font-semibold">
         {draft.version ? "Edit berita" : "Buat berita"}
       </h2>
-      <p className="text-sm">
+      <p className="text-[15px]">
         {draft.version
           ? `Versi ${draft.version} · ${initial.status}`
           : "Berita baru"}{" "}

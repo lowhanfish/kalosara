@@ -65,10 +65,8 @@ export function QuickLinks() {
               className="absolute right-4 top-5 text-slate-300 transition group-hover:text-primary"
             />
             <div>
-              <h2 className="text-xs font-bold text-primary">{item.label}</h2>
-              <p className="mt-1 text-[10px] text-slate-500">
-                {item.description}
-              </p>
+              <h2 className="text-sm font-bold text-primary">{item.label}</h2>
+              <p className="mt-1 text-xs text-slate-500">{item.description}</p>
             </div>
           </Link>
         ))}

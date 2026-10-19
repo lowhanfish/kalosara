@@ -13,6 +13,7 @@ export type SiteSettings = {
   logoUrl: string | null;
   relatedLinks: { label: string; href: string }[];
   isExample: boolean;
+  demoContent?: boolean;
 };
 export const fallbackSettings: SiteSettings = {
   name: siteIdentity.name,
@@ -81,6 +82,7 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
           )
           .slice(0, 10)
       : [],
+    demoContent: data.demoContent === true,
     isExample: legacyExample ? false : data.isExample !== false,
   };
 }

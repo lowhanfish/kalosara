@@ -18,7 +18,7 @@ export function AdminBrand() {
       />
       <span className="text-lg font-extrabold tracking-[.14em] text-white">
         KALOSARA
-        <small className="mt-1 block text-[9px] font-medium tracking-[.19em] text-slate-400">
+        <small className="mt-1 block text-xs font-medium tracking-[.19em] text-slate-400">
           PANEL KELOLA KELURAHAN
         </small>
       </span>

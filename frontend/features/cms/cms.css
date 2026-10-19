@@ -3,21 +3,21 @@
   display: block;
   width: 100%;
   min-width: 0;
-  min-height: 44px;
+  min-height: 48px;
   margin-top: 0.45rem;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   background: white;
   padding: 0.65rem 0.85rem;
   color: #1e293b;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.6;
   transition:
     border-color 0.15s,
     box-shadow 0.15s;
 }
 .cms-input::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 .cms-input:focus {
   outline: 2px solid #dbeafe;
@@ -36,7 +36,7 @@ textarea.cms-input {
   background: #f1f5f9;
   color: #334155;
   font: inherit;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 .public-content-filters {
   display: flex;
@@ -52,13 +52,13 @@ textarea.cms-input {
 .public-content-filters label {
   flex: 1 1 200px;
   min-width: 0;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #475569;
 }
 .public-content-filters button {
   flex: 0 0 auto;
-  min-height: 44px;
+  min-height: 48px;
 }
 /* Editor/list primitives shared across administrative features and citizen forms. */
 .cms-shell {
@@ -70,12 +70,12 @@ textarea.cms-input {
   padding: 0;
 }
 .cms-shell h2 {
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.5;
 }
 .cms-shell label {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #475569;
   min-width: 0;
@@ -91,19 +91,19 @@ textarea.cms-input {
   accent-color: #0b294e;
 }
 .cms-shell button {
-  min-height: 40px;
-  font-size: 0.8125rem;
+  min-height: 44px;
+  font-size: 0.9375rem;
 }
 .cms-shell button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 .cms-shell .yellow-button {
-  min-height: 44px;
+  min-height: 48px;
   background: #0b294e;
   color: white;
   padding: 11px 18px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 .cms-shell .yellow-button:hover {
   background: #164575;
@@ -114,11 +114,11 @@ textarea.cms-input {
   background: #fef2f2;
   padding: 14px 18px;
   color: #991b1b;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   line-height: 1.8;
 }
 .cms-shell [role="status"] {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   line-height: 1.8;
 }
 .cms-shell form.space-y-4 {
@@ -131,7 +131,7 @@ textarea.cms-input {
 .cms-shell form select,
 .cms-shell form textarea {
   max-width: 100%;
-  font-size: 0.8125rem;
+  font-size: 1rem;
 }
 .cms-shell p {
   line-height: 1.8;
@@ -140,7 +140,7 @@ textarea.cms-input {
   margin: 40px auto;
   background: white;
   border: 1px solid #e2e8f0;
-  padding: 28px;
+  padding: 32px;
   border-radius: 16px;
 }
 .cms-navigation {
@@ -158,7 +158,7 @@ textarea.cms-input {
 .cms-navigation button {
   padding: 10px 16px;
   border-radius: 8px;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 .cms-navigation a[aria-current="page"] {
@@ -186,7 +186,7 @@ textarea.cms-input {
   border: 1px solid transparent;
   padding: 8px 18px;
   border-radius: 7px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #64748b;
 }
@@ -220,8 +220,8 @@ textarea.cms-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 20px 24px;
+  gap: 24px;
+  padding: 24px;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   background: white;
@@ -242,7 +242,7 @@ textarea.cms-input {
   background: #f1f5f9;
   color: #64748b;
   border-radius: 20px;
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
 }
 .cms-status[data-status="PUBLISHED"] {
@@ -260,7 +260,7 @@ textarea.cms-input {
   border-radius: 8px;
   background: white;
   color: #334155;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 .cms-edit-button:hover {
@@ -274,7 +274,7 @@ textarea.cms-input {
   justify-content: flex-end;
   gap: 12px;
   padding-block: 20px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: #64748b;
 }
 .cms-pagination button {
@@ -286,9 +286,9 @@ textarea.cms-input {
 .cms-editor {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  gap: 24px;
   margin-top: 28px;
-  padding: 28px;
+  padding: 32px;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   background: white;
@@ -309,7 +309,7 @@ textarea.cms-input {
   color: #0b294e;
 }
 .cms-editor > p {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   color: #64748b;
   line-height: 1.8;
 }
@@ -332,7 +332,7 @@ textarea.cms-input {
 .cms-media-drawer > summary span {
   display: block;
   margin-top: 5px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 400;
   color: #64748b;
 }
@@ -360,7 +360,7 @@ textarea.cms-input {
 .cms-media-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  gap: 24px;
 }
 .cms-media-grid > form {
   background: white;
@@ -467,7 +467,7 @@ textarea.cms-input {
   .cms-navigation button {
     margin: 0;
     padding: 9px;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
 }
 

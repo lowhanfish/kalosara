@@ -76,7 +76,7 @@ export default async function Page({
       {failed && (
         <p
           role="alert"
-          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"
+          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
         >
           Informasi wilayah sementara tidak dapat dimuat.{" "}
           <Link className="underline" href="/potensi">
@@ -110,12 +110,14 @@ export default async function Page({
                 />
               )}
               <div className="space-y-3 p-5">
-                <p className="text-sm text-muted">{item.category}</p>
+                <p className="text-[15px] text-muted">{item.category}</p>
                 <h2 className="break-words text-xl font-bold">{item.name}</h2>
                 <p className="whitespace-pre-wrap break-words">
                   {item.description}
                 </p>
-                <p className="break-words text-sm">Lokasi: {item.location}</p>
+                <p className="break-words text-[15px]">
+                  Lokasi: {item.location}
+                </p>
                 {map && (
                   <a
                     href={map.link}

@@ -131,7 +131,7 @@ function Media({
           ))}
         </select>
       </label>
-      <label className="mt-2 block text-sm">
+      <label className="mt-2 block text-[15px]">
         Cari gambar untuk {label}
         <input
           className="mt-1 w-full rounded border border-border p-2"
@@ -141,7 +141,7 @@ function Media({
         />
       </label>
       {query.isError && <p role="alert">Pustaka media belum dapat dimuat.</p>}
-      <p className="mt-2 text-xs text-muted">
+      <p className="mt-2 text-sm text-muted">
         Maksimal 50 hasil gambar publik.{" "}
         <Link className="underline" href="/admin/berita">
           Unggah atau kelola media

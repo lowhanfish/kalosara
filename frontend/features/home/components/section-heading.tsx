@@ -14,7 +14,7 @@ export function SectionHeading({
   return (
     <div className="mb-6 flex items-end justify-between gap-4">
       <div>
-        <p className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.18em] text-slate-500">
+        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-slate-500">
           <Icon size={14} aria-hidden="true" />
           {eyebrow}
         </p>
@@ -25,7 +25,7 @@ export function SectionHeading({
       {href && (
         <Link
           href={href}
-          className="flex min-h-10 shrink-0 items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+          className="flex min-h-10 shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
         >
           Lihat semua
           <ArrowUpRight size={15} />

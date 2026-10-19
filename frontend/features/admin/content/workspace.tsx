@@ -183,7 +183,7 @@ function Workspace() {
       {selected !== undefined && (
         <button
           type="button"
-          className="mb-4 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary"
+          className="mb-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"
           onClick={() => {
             if (leave()) setSelected(undefined);
           }}

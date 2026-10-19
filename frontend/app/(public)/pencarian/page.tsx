@@ -33,7 +33,7 @@ export default async function SearchPage({
         <SearchForm id="results-search" defaultValue={query} />
       </div>
       {query && (
-        <p role="status" className="mb-5 text-sm text-muted">
+        <p role="status" className="mb-5 text-[15px] text-muted">
           {results.length} halaman ditemukan untuk “{query}”.
         </p>
       )}
@@ -47,7 +47,7 @@ export default async function SearchPage({
               >
                 <span>
                   <span className="block font-semibold">{page.title}</span>
-                  <span className="mt-1 block text-sm text-muted">
+                  <span className="mt-1 block text-[15px] text-muted">
                     {page.description}
                   </span>
                 </span>

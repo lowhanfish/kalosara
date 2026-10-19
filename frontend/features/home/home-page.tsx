@@ -89,10 +89,10 @@ export default async function HomePage() {
                     <Megaphone size={17} />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <time className="text-[10px] text-slate-500">
+                    <time className="text-xs text-slate-500">
                       {formatContentDate(item.updatedAt)}
                     </time>
-                    <h3 className="mt-1.5 text-sm font-semibold leading-6 text-primary">
+                    <h3 className="mt-1.5 text-[15px] font-semibold leading-6 text-primary">
                       {item.title}
                     </h3>
                   </div>
@@ -119,19 +119,19 @@ export default async function HomePage() {
       <section className="border-y border-slate-200 bg-[#f4f7fb]">
         <div className="container grid items-center gap-10 py-14 sm:py-16 lg:grid-cols-2">
           <div>
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[.18em] text-slate-500">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[.18em] text-slate-500">
               Mengenal wilayah kita
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-primary">
               Hadir di tengah masyarakat.
             </h2>
-            <p className="mt-5 max-w-lg text-sm leading-7 text-muted">
+            <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted">
               {identity.name} berada di {identity.district}, {identity.regency}.
               Kenali wilayah, aparatur, dan informasi resmi kelurahan Anda.
             </p>
             <Link
               href="/profil"
-              className="mt-6 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary"
+              className="mt-6 inline-flex min-h-11 items-center gap-3 text-[15px] font-semibold text-primary"
             >
               Tentang kelurahan
               <ArrowUpRight size={16} />
@@ -170,14 +170,14 @@ export default async function HomePage() {
                     strokeWidth={1.6}
                     className="mb-4 text-slate-400"
                   />
-                  <dt className="text-[11px] text-slate-500">{label}</dt>
+                  <dt className="text-[13px] text-slate-500">{label}</dt>
                   <dd className="mt-1 text-3xl font-bold tracking-tight text-primary">
                     {value}
                   </dd>
                 </div>
               ))}
             </dl>
-            <p className="mt-4 text-[11px] leading-6 text-muted">
+            <p className="mt-4 text-[13px] leading-6 text-muted">
               {metric
                 ? `Periode ${metric.period} · Sumber: ${metric.source}`
                 : statistics.status === "rejected"
@@ -218,7 +218,7 @@ export default async function HomePage() {
                           }).format(new Date(item.event.start))
                         : "—"}
                     </strong>
-                    <span className="text-[10px] uppercase">
+                    <span className="text-xs uppercase">
                       {item.event
                         ? new Intl.DateTimeFormat("id-ID", {
                             month: "short",
@@ -228,10 +228,10 @@ export default async function HomePage() {
                     </span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-sm font-semibold leading-6 text-primary">
+                    <h3 className="text-[15px] font-semibold leading-6 text-primary">
                       {item.title}
                     </h3>
-                    <p className="mt-1 text-xs text-muted">
+                    <p className="mt-1 text-sm text-muted">
                       {item.event?.location}
                     </p>
                   </div>
@@ -303,13 +303,13 @@ export default async function HomePage() {
               <MessageCircle size={26} strokeWidth={1.5} />
             </span>
             <div>
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[.15em] text-amber-300">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[.15em] text-amber-300">
                 Kami siap membantu
               </p>
               <h2 className="text-2xl font-bold tracking-tight">
                 Ada pertanyaan seputar pelayanan?
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300">
+              <p className="mt-3 max-w-xl text-[15px] leading-7 text-slate-300">
                 Pelajari persyaratan sebelum berkunjung, atau hubungi kantor
                 melalui kontak resmi kelurahan.
               </p>
@@ -318,14 +318,14 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/pelayanan"
-              className="inline-flex min-h-11 items-center gap-3 rounded-lg bg-amber-300 px-5 text-xs font-bold text-slate-900 hover:bg-amber-400"
+              className="inline-flex min-h-11 items-center gap-3 rounded-lg bg-amber-300 px-5 text-sm font-bold text-slate-900 hover:bg-amber-400"
             >
               Panduan pelayanan
               <ArrowRight size={15} />
             </Link>
             <Link
               href="/kontak"
-              className="inline-flex min-h-11 items-center gap-3 rounded-lg border border-white/25 px-5 text-xs font-semibold text-white hover:bg-white/10"
+              className="inline-flex min-h-11 items-center gap-3 rounded-lg border border-white/25 px-5 text-sm font-semibold text-white hover:bg-white/10"
             >
               Hubungi kami
               <ArrowUpRight size={15} />

@@ -55,7 +55,7 @@ export function RichEditor({
   const button = (label: string, action: () => void, active = false) => (
     <button
       type="button"
-      className="rounded border border-border px-3 py-2 text-sm"
+      className="rounded border border-border px-3 py-2 text-[15px]"
       aria-pressed={active}
       onClick={action}
     >

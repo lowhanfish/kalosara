@@ -83,6 +83,7 @@ const metrics = [
 ] as const;
 function activityLabel(action: string) {
   const labels: Record<string, string> = {
+    DEMO_CONTENT_SEEDED: "Konten contoh disiapkan",
     MEDIA_UPLOADED: "Media baru diunggah",
     NEWS_CREATED: "Berita baru dibuat",
     NEWS_UPDATED: "Berita diperbarui",
@@ -113,7 +114,7 @@ export default function Dashboard() {
         {isAdmin && (
           <Link
             href="/admin/berita"
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-semibold text-white hover:bg-primary-hover"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-hover"
           >
             <Plus size={16} />
             Kelola berita
@@ -126,7 +127,7 @@ export default function Dashboard() {
       )}{" "}
       {data.data && (
         <>
-          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6">
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 2xl:grid-cols-6">
             {metrics.map(({ key, label, icon: Icon, tone, href }) => (
               <div
                 key={key}
@@ -137,7 +138,7 @@ export default function Dashboard() {
                 >
                   <Icon size={18} strokeWidth={1.7} />
                 </span>
-                <dt className="text-[11px] font-medium text-slate-500">
+                <dt className="min-h-6 text-sm font-medium text-slate-500">
                   {label}
                 </dt>
                 <dd className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
@@ -146,7 +147,7 @@ export default function Dashboard() {
                 {isAdmin && (
                   <Link
                     href={href}
-                    className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-[10px] font-medium text-slate-500 hover:text-primary"
+                    className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-medium text-slate-500 hover:text-primary"
                   >
                     Lihat detail
                     <ArrowUpRight size={12} />
@@ -160,12 +161,12 @@ export default function Dashboard() {
           >
             <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-5">
-                <Clock3 size={18} className="text-slate-400" />
+                <Clock3 size={18} className="text-slate-500" />
                 <div>
-                  <h2 className="text-sm font-semibold text-slate-800">
+                  <h2 className="text-[15px] font-semibold text-slate-800">
                     Aktivitas terbaru
                   </h2>
-                  <p className="mt-1 text-[11px] text-slate-500">
+                  <p className="mt-1 text-[13px] text-slate-500">
                     Pembaruan terakhir pada website kelurahan
                   </p>
                 </div>
@@ -183,12 +184,12 @@ export default function Dashboard() {
                     <li key={item.id} className="flex items-start gap-3 py-5">
                       <span className="mt-1.5 size-2 shrink-0 rounded-full bg-amber-400" />
                       <div className="flex-1">
-                        <p className="text-xs font-medium capitalize text-slate-700">
+                        <p className="text-sm font-medium capitalize text-slate-700">
                           {activityLabel(item.action)}
                         </p>
                         <time
                           dateTime={item.createdAt}
-                          className="mt-1.5 block text-[10px] text-slate-400"
+                          className="mt-1.5 block text-xs text-slate-500"
                         >
                           {new Intl.DateTimeFormat("id-ID", {
                             dateStyle: "medium",
@@ -205,10 +206,10 @@ export default function Dashboard() {
             </section>
             {isAdmin && (
               <section className="rounded-2xl border border-slate-200 bg-white p-6">
-                <h2 className="text-sm font-semibold text-slate-800">
+                <h2 className="text-[15px] font-semibold text-slate-800">
                   Mulai mengelola
                 </h2>
-                <p className="mt-1 text-[11px] text-slate-500">
+                <p className="mt-1 text-[13px] text-slate-500">
                   Akses cepat ke konten website
                 </p>
                 <div className="mt-5 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
@@ -232,9 +233,9 @@ export default function Dashboard() {
                         <item.icon
                           size={17}
                           strokeWidth={1.5}
-                          className="text-slate-400"
+                          className="text-slate-500"
                         />
-                        <span className="flex-1 text-xs font-medium text-slate-700">
+                        <span className="flex-1 text-sm font-medium text-slate-700">
                           {item.label}
                         </span>
                         <ArrowUpRight

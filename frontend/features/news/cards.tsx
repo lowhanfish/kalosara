@@ -24,7 +24,7 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
           </Link>
           <div className="p-5">
             <Link
-              className="text-xs font-semibold text-primary underline"
+              className="text-sm font-semibold text-primary underline"
               href={categoryPath(news.category.slug)}
             >
               {news.category.name}
@@ -33,12 +33,12 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
               <Link href={articlePath(news.slug)}>{news.title}</Link>
             </h2>
             <time
-              className="mt-3 block text-xs text-muted"
+              className="mt-3 block text-sm text-muted"
               dateTime={news.publishedAt}
             >
               {newsDate(news.publishedAt)}
             </time>
-            <p className="mt-3 break-words text-sm leading-7 text-muted">
+            <p className="mt-3 break-words text-[15px] leading-7 text-muted">
               {news.excerpt}
             </p>
           </div>

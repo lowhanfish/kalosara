@@ -16,7 +16,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "staff:provision": "tsx src/cli/provision-staff.ts",
     "test:db": "node scripts/test-db.mjs",
-    "monitor": "node scripts/monitor.mjs"
+    "monitor": "node scripts/monitor.mjs",
+    "db:seed:demo": "tsx prisma/seed-demo.ts"
   },
   "keywords": [],
   "author": "",

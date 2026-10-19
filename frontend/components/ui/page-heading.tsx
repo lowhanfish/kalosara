@@ -23,9 +23,9 @@ export function PageHeading({
           breadcrumbs ?? [{ label: "Beranda", href: "/" }, { label: title }]
         }
       />
-      <header className="mb-8 flex flex-col gap-5 border-b border-slate-200 pb-8 pt-5 sm:mb-10 sm:flex-row sm:items-end sm:justify-between sm:pb-10">
+      <header className="mb-6 flex flex-col gap-5 border-b border-slate-200 pb-6 pt-3 sm:mb-7 sm:flex-row sm:items-end sm:justify-between sm:pb-7">
         <div className="max-w-3xl">
-          <p className="mb-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.18em] text-slate-500">
+          <p className="mb-3 flex items-center gap-2 text-[13px] font-bold uppercase tracking-[.18em] text-slate-500">
             {Icon && <Icon size={16} aria-hidden="true" />}
             {eyebrow}
           </p>
@@ -33,7 +33,7 @@ export function PageHeading({
             {title}
           </h1>
           {description && (
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted sm:text-base">
+            <p className="mt-4 max-w-2xl text-[15px] leading-7 text-muted sm:text-base">
               {description}
             </p>
           )}

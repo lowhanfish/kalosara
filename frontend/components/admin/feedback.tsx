@@ -15,7 +15,7 @@ export function AdminEmptyState({
         <FolderOpen size={26} strokeWidth={1.5} />
       </span>
       <h2 className="text-base font-semibold text-slate-800">{title}</h2>
-      <p className="mt-2 max-w-md text-sm leading-6 text-slate-500">
+      <p className="mt-2 max-w-md text-[15px] leading-6 text-slate-500">
         {description}
       </p>
       {children && <div className="mt-5">{children}</div>}
@@ -30,7 +30,7 @@ export function AdminLoading({
   return (
     <div
       role="status"
-      className="my-6 flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500"
+      className="my-6 flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-6 text-[15px] text-slate-500"
     >
       <LoaderCircle size={18} className="animate-spin" />
       {label}
@@ -47,7 +47,7 @@ export function AdminError({
   return (
     <div
       role="alert"
-      className="my-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+      className="my-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-[15px] text-red-800"
     >
       <AlertCircle size={18} className="mt-0.5 shrink-0" />
       <div>

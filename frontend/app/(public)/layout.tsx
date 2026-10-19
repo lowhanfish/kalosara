@@ -1,3 +1,4 @@
+import { DemoNotice } from "@/components/site/demo-notice";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { AuthRecovery } from "@/features/auth/auth-provider";
@@ -11,6 +12,7 @@ export default async function PublicLayout({
   return (
     <>
       <SiteHeader settings={settings} />
+      {settings.demoContent && <DemoNotice />}
       <AuthRecovery />
       <div className="flex-1">{children}</div>
       <SiteFooter settings={settings} />

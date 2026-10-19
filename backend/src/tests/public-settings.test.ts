@@ -10,22 +10,60 @@ describe('public site identity', () => {
       { key: 'site.name', value: 'Kelurahan Uji' },
       { key: 'auth.secret', value: 'private' },
       { key: 'site.logoUrl', value: 'javascript:alert(1)' },
-      { key: 'site.relatedLinks', value: [{ label: 'Unsafe', href: '//evil.invalid' }] },
+      {
+        key: 'site.relatedLinks',
+        value: [{ label: 'Unsafe', href: '//evil.invalid' }],
+      },
       { key: 'site.phone', value: 'not-a-phone' },
     ]);
-    expect(settings).toMatchObject({ name: 'Kelurahan Uji', logoUrl: null, phone: null, relatedLinks: [], isExample: true });
+    expect(settings).toMatchObject({
+      name: 'Kelurahan Uji',
+      logoUrl: null,
+      phone: null,
+      relatedLinks: [],
+      isExample: true,
+    });
     expect(JSON.stringify(settings)).not.toContain('private');
   });
+  it('marks demo content only when its explicitly public flag is true', () => {
+    expect(projectPublicSettings([]).demoContent).toBe(false);
+    expect(
+      projectPublicSettings([{ key: 'site.demoContent', value: 'true' }])
+        .demoContent,
+    ).toBe(false);
+    expect(
+      projectPublicSettings([{ key: 'site.demoContent', value: true }])
+        .demoContent,
+    ).toBe(true);
+  });
   it('serves the DB identity in the standard envelope', async () => {
-    const settingSpy = vi.spyOn(prisma.siteSetting, 'findUnique').mockResolvedValue(null);
-    const spy = vi.spyOn(prisma.appSetting, 'findMany').mockResolvedValue([
-      { key: 'site.name', value: 'Kelurahan Uji', createdAt: new Date(), updatedAt: new Date() },
-    ]);
+    const settingSpy = vi
+      .spyOn(prisma.siteSetting, 'findUnique')
+      .mockResolvedValue(null);
+    const spy = vi
+      .spyOn(prisma.appSetting, 'findMany')
+      .mockResolvedValue([
+        {
+          key: 'site.name',
+          value: 'Kelurahan Uji',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
     try {
-      const response = await request(createApp()).get('/api/v1/public/settings').expect(200);
+      const response = await request(createApp())
+        .get('/api/v1/public/settings')
+        .expect(200);
       expect(response.body.data.settings.name).toBe('Kelurahan Uji');
       expect(response.body.requestId).toBe(response.headers['x-request-id']);
-      expect(spy).toHaveBeenCalledWith(expect.objectContaining({ where: { key: { in: expect.not.arrayContaining(['auth.secret']) } } }));
-    } finally { spy.mockRestore(); settingSpy.mockRestore(); }
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { key: { in: expect.not.arrayContaining(['auth.secret']) } },
+        }),
+      );
+    } finally {
+      spy.mockRestore();
+      settingSpy.mockRestore();
+    }
   });
 });

@@ -69,7 +69,7 @@ export default async function Page({
       {failed && (
         <p
           role="alert"
-          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"
+          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
         >
           Statistik sementara tidak dapat dimuat.{" "}
           <Link href="/statistik" className="underline">
@@ -90,7 +90,7 @@ export default async function Page({
             className="rounded-xl border border-border bg-white p-5 sm:p-7"
           >
             <h2 className="text-2xl font-bold">Periode {item.period}</h2>
-            <p className="my-3 break-words text-sm text-muted">
+            <p className="my-3 break-words text-[15px] text-muted">
               Sumber: {item.source}
               <br />
               Tanggal data: {regionDate(item.referenceDate)} · Diperbarui:{" "}

@@ -13,7 +13,7 @@ export function Table({
     >
       <table
         className={cn(
-          "w-full min-w-[36rem] text-left text-sm [&_th]:bg-soft [&_th]:p-4 [&_th]:font-semibold [&_td]:border-t [&_td]:border-border [&_td]:p-4",
+          "w-full min-w-[36rem] text-left text-[15px] [&_th]:bg-soft [&_th]:p-4 [&_th]:font-semibold [&_td]:border-t [&_td]:border-border [&_td]:p-4",
           className,
         )}
         {...props}

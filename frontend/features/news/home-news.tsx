@@ -43,17 +43,17 @@ export async function HomeNews() {
         <div className="p-5">
           <time
             dateTime={featured.publishedAt}
-            className="text-[10px] text-slate-500"
+            className="text-xs text-slate-500"
           >
             {newsDate(featured.publishedAt)}
           </time>
           <h3 className="mt-2 text-lg font-bold leading-7 text-primary">
             {featured.title}
           </h3>
-          <p className="mt-3 line-clamp-3 text-xs leading-6 text-muted">
+          <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted">
             {featured.excerpt}
           </p>
-          <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-primary">
+          <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
             Baca selengkapnya
             <ArrowUpRight size={14} />
           </span>
@@ -75,12 +75,12 @@ export async function HomeNews() {
               className="mb-3 aspect-[2/1] w-full rounded-lg object-cover"
             />
             <time
-              className="text-[10px] text-slate-500"
+              className="text-xs text-slate-500"
               dateTime={news.publishedAt}
             >
               {newsDate(news.publishedAt)}
             </time>
-            <h3 className="mt-2 text-sm font-semibold leading-6 text-primary">
+            <h3 className="mt-2 text-[15px] font-semibold leading-6 text-primary">
               {news.title}
             </h3>
           </Link>

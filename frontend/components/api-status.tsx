@@ -8,12 +8,21 @@ export function ApiStatus() {
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/v1/health", { signal: controller.signal })
-      .then((response) => setStatus(response.ok ? "terhubung" : "belum terhubung"))
+      .then((response) =>
+        setStatus(response.ok ? "terhubung" : "belum terhubung"),
+      )
       .catch(() => {
         if (!controller.signal.aborted) setStatus("belum terhubung");
       });
     return () => controller.abort();
   }, []);
 
-  return <p className="text-sm text-zinc-500">Status API: {status}. <a className="underline" href="/api/v1/health">Periksa endpoint health</a></p>;
+  return (
+    <p className="text-[15px] text-zinc-500">
+      Status API: {status}.{" "}
+      <a className="underline" href="/api/v1/health">
+        Periksa endpoint health
+      </a>
+    </p>
+  );
 }

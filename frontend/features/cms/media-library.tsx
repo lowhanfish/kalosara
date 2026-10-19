@@ -57,7 +57,7 @@ export function MediaLibrary() {
       <h2 id="media-title" className="text-2xl font-semibold">
         Pustaka media
       </h2>
-      <p className="text-sm text-muted">
+      <p className="text-[15px] text-muted">
         Satu file JPG/PNG/WebP/PDF, maksimal 20 MB. Gambar maksimal 25
         megapiksel. Media privat hanya dapat dibuka pengunggah; pilih publik
         hanya untuk materi yang disetujui tayang. Visibilitas tidak dapat diubah
@@ -203,7 +203,7 @@ export function MediaLibrary() {
               />
             )}
             <p className="break-all font-semibold">{asset.originalName}</p>
-            <p className="text-sm">
+            <p className="text-[15px]">
               {asset.visibility} · {(asset.size / 1024 / 1024).toFixed(2)} MB
             </p>
             <a

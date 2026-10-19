@@ -14,7 +14,7 @@ export function EmptyState({
         <FolderOpen size={25} strokeWidth={1.4} aria-hidden="true" />
       </span>
       <h2 className="text-base font-semibold text-primary">{title}</h2>
-      <p className="mt-3 max-w-md text-xs leading-6 text-muted">
+      <p className="mt-3 max-w-md text-sm leading-6 text-muted">
         {description}
       </p>
       {children && <div className="mt-6">{children}</div>}

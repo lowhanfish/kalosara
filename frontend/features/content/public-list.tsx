@@ -107,7 +107,7 @@ export async function ContentPage({
       {failed && (
         <p
           role="alert"
-          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"
+          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
         >
           Informasi sementara tidak dapat dimuat.{" "}
           <Link className="underline" href={channel.path}>
@@ -143,12 +143,12 @@ export async function ContentPage({
               {item.title}
             </h2>
             {item.announcement?.expiredAt && (
-              <p className="mt-2 text-sm">
+              <p className="mt-2 text-[15px]">
                 Berlaku sampai {formatContentDate(item.announcement.expiredAt)}
               </p>
             )}
             {item.event && (
-              <p className="mt-2 text-sm">
+              <p className="mt-2 text-[15px]">
                 {formatContentDate(item.event.start)} –{" "}
                 {formatContentDate(item.event.end)}
                 <br />
@@ -175,7 +175,7 @@ export async function ContentPage({
                         className="aspect-[3/2] w-full rounded object-cover"
                       />
                     </a>
-                    <figcaption className="mt-2 break-words text-sm">
+                    <figcaption className="mt-2 break-words text-[15px]">
                       {photo.alt}
                     </figcaption>
                   </figure>
@@ -199,7 +199,7 @@ export async function ContentPage({
       {data && (
         <nav
           aria-label="Halaman konten"
-          className="mt-8 flex flex-wrap items-center justify-center gap-5 border-t border-slate-100 pt-6 text-xs text-muted"
+          className="mt-8 flex flex-wrap items-center justify-center gap-5 border-t border-slate-100 pt-6 text-sm text-muted"
         >
           {page > 1 && <Link href={pageLink(page - 1)}>Sebelumnya</Link>}
           <span>

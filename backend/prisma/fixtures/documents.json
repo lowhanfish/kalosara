@@ -1,0 +1,39 @@
+[
+  {
+    "slug": "standar-pelayanan-administrasi",
+    "title": "Standar Pelayanan Administrasi Kelurahan",
+    "category": "Standar pelayanan",
+    "intro": "Dokumen contoh untuk memperlihatkan penyajian persyaratan dan alur pelayanan. Seluruh ketentuan di dalamnya merupakan simulasi dan bukan standar resmi Kelurahan Watundehoa.",
+    "sections": [
+      {"title": "1. Ruang lingkup pelayanan", "text": "Simulasi ini mencakup informasi pengantar administrasi kependudukan, keterangan domisili, dan keterangan usaha. Jenis layanan serta kewenangan penerbitan sebenarnya perlu dikonfirmasi kepada petugas kelurahan."},
+      {"title": "2. Persyaratan awal", "text": "Pemohon menyiapkan identitas yang masih berlaku, dokumen pendukung sesuai kebutuhan, dan informasi kontak yang dapat dihubungi. Untuk simulasi tampilan ini, tidak ada dokumen pribadi yang perlu diunggah atau dikirim melalui website."},
+      {"title": "3. Alur pelayanan", "text": "Datang ke meja informasi untuk menjelaskan kebutuhan. Petugas memeriksa kelengkapan berkas, memberikan penjelasan apabila ada kekurangan, lalu mengarahkan proses sesuai kewenangan. Pemohon menerima informasi mengenai penyelesaian dan pengambilan dokumen."},
+      {"title": "4. Waktu dan biaya", "text": "Sebagai contoh tampilan, pemeriksaan awal ditargetkan pada hari kunjungan dan penyelesaian mengikuti kelengkapan berkas. Dokumen ini tidak menetapkan tarif atau janji waktu resmi. Konfirmasikan waktu penyelesaian dan ketentuan biaya kepada petugas."},
+      {"title": "5. Informasi dan pengaduan", "text": "Warga dapat meminta penjelasan di kantor kelurahan atau menggunakan kontak resmi yang telah diverifikasi pengelola. Alamat email dan nomor telepon pada mode demo hanya merupakan contoh."}
+    ]
+  },
+  {
+    "slug": "maklumat-pelayanan",
+    "title": "Maklumat Pelayanan - Contoh Pratinjau",
+    "category": "Maklumat",
+    "intro": "Naskah simulasi untuk menguji tata letak dokumen informasi publik. Naskah ini tidak ditandatangani, tidak memiliki kekuatan hukum, dan bukan pernyataan resmi instansi.",
+    "sections": [
+      {"title": "Komitmen keterbukaan", "text": "Contoh penyelenggara pelayanan berkomitmen menyajikan informasi persyaratan secara mudah dipahami, memberi kesempatan warga bertanya, dan menjelaskan perkembangan proses sesuai kewenangan."},
+      {"title": "Pelayanan yang setara", "text": "Setiap warga dilayani dengan sopan, tanpa membedakan latar belakang. Warga yang memerlukan bantuan tambahan dapat menyampaikan kebutuhannya kepada petugas informasi."},
+      {"title": "Perlindungan data", "text": "Dokumen pribadi digunakan sesuai kebutuhan pelayanan. Dalam versi demonstrasi ini, warga tidak diminta mengirim nomor identitas, foto KTP, maupun berkas keluarga melalui website."},
+      {"title": "Evaluasi pelayanan", "text": "Saran warga digunakan sebagai bahan perbaikan informasi, kenyamanan ruang pelayanan, dan kejelasan prosedur. Contoh indikator meliputi kejelasan persyaratan, ketepatan informasi, dan keramahan petugas."}
+    ]
+  },
+  {
+    "slug": "rencana-kegiatan-warga-2026",
+    "title": "Rencana Kegiatan Warga Oktober - Desember 2026",
+    "category": "Perencanaan",
+    "intro": "Jadwal ilustratif untuk kebutuhan penilaian tampilan portal. Seluruh kegiatan, tanggal, dan target merupakan data dummy, bukan undangan atau pengumuman resmi.",
+    "sections": [
+      {"title": "Oktober: lingkungan bersih", "text": "Contoh kegiatan meliputi kerja bakti lingkungan, pemilahan sampah rumah tangga, dan diskusi kebersihan saluran air. Sasaran ilustratifnya adalah peningkatan partisipasi warga di tiap lingkungan."},
+      {"title": "November: informasi dan kesehatan", "text": "Simulasi agenda mencakup kelas literasi digital, pendampingan pencatatan usaha, serta sosialisasi kesehatan keluarga. Lokasi dan waktu pada portal hanya dipakai untuk menguji daftar agenda."},
+      {"title": "Desember: evaluasi bersama", "text": "Contoh forum warga membahas masukan pelayanan dan rencana kegiatan awal tahun berikutnya. Catatan yang dihasilkan berupa ringkasan kebutuhan lingkungan tanpa memuat data pribadi peserta."},
+      {"title": "Partisipasi warga", "text": "Pada penggunaan sebenarnya, rincian kegiatan dikonfirmasi melalui pengumuman resmi kelurahan. Mode demo tidak menerima pendaftaran, donasi, ataupun komitmen kehadiran."}
+    ]
+  }
+]

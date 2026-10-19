@@ -60,13 +60,13 @@ export async function NewsListPage({
       <nav aria-label="Kategori berita" className="mb-7 flex flex-wrap gap-2">
         <Link
           href="/berita"
-          className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white"
+          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
         >
           Semua berita
         </Link>
         {categories.map((item) => (
           <Link
-            className="rounded-full border border-slate-200 px-4 py-2 text-xs text-primary hover:bg-slate-50"
+            className="rounded-full border border-slate-200 px-4 py-2 text-sm text-primary hover:bg-slate-50"
             key={item.slug}
             href={categoryPath(item.slug)}
             aria-current={category === item.slug ? "page" : undefined}

@@ -20,7 +20,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       >
         {message && (
           <div className="flex items-start gap-4 rounded-card border border-border bg-white p-5 shadow-xl">
-            <p className="flex-1 text-sm">{message}</p>
+            <p className="flex-1 text-[15px]">{message}</p>
             <button
               type="button"
               aria-label="Tutup notifikasi"

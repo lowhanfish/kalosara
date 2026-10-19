@@ -209,7 +209,7 @@ function Workspace() {
                   >
                     <div className="min-w-0">
                       <h2 className="break-words font-semibold">{row.title}</h2>
-                      <p className="text-sm">
+                      <p className="text-[15px]">
                         {row.status} · {row.category.name} · versi {row.version}
                       </p>
                     </div>
@@ -245,7 +245,7 @@ function Workspace() {
           {selected && (
             <button
               type="button"
-              className="mb-4 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary"
+              className="mb-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"
               onClick={() => {
                 if (confirmLeave()) setSelected(null);
               }}
@@ -256,7 +256,7 @@ function Workspace() {
           {notice && (
             <p
               role="status"
-              className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
+              className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-[15px] text-emerald-800"
             >
               {notice}
             </p>
