@@ -50,7 +50,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
       <a className="skip-link" href="#konten">
         Langsung ke konten
       </a>
-      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all duration-300">
+      <header className="border-b border-slate-100 bg-white">
         <div className="hidden border-b border-slate-100 bg-slate-50/80 sm:block">
           <div className="container flex min-h-9 items-center justify-between gap-4 text-xs text-slate-500">
             <p className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             <Dialog
               title="Jelajahi KALOSARA"
               triggerLabel="Menu"
-              triggerClassName="text-sm"
+              triggerClassName="text-sm font-semibold"
             >
               <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -168,15 +168,83 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             </Dialog>
           </div>
         </div>
-        <div className="hidden border-t border-slate-100 lg:block">
-          <nav
-            aria-label="Navigasi utama"
-            className="container flex items-center justify-between gap-x-2 text-sm"
-          >
-            {links}
-          </nav>
-        </div>
       </header>
+
+      {/* Bagian menu navigasi yang STICKY */}
+      <nav
+        aria-label="Navigasi utama"
+        className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs transition-all duration-200"
+      >
+        <div className="container hidden lg:flex items-center justify-between gap-x-2 text-sm">
+          {links}
+        </div>
+        <div className="container flex h-12 items-center justify-between lg:hidden">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-primary"
+          >
+            <Image
+              src={settings.logoUrl ?? siteIdentity.logo}
+              alt=""
+              width={22}
+              height={26}
+              unoptimized
+              className="h-5 w-4 object-contain"
+            />
+            <span>{settings.name.replace(/^Kelurahan /, "")}</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/masyarakat/dashboard"
+              className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition hover:bg-primary/20"
+            >
+              Akun Warga
+            </Link>
+            <Dialog
+              title="Jelajahi KALOSARA"
+              triggerLabel="Menu"
+              triggerClassName="text-xs py-1 px-3"
+            >
+              <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Layanan Mandiri Warga
+                </p>
+                <Link
+                  href="/masyarakat/dashboard"
+                  className="mt-2.5 flex items-center justify-between rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-primary-hover"
+                >
+                  <span className="flex items-center gap-2">
+                    <User size={16} />
+                    Portal Akun Warga
+                  </span>
+                  <ArrowUpRight size={15} />
+                </Link>
+              </div>
+              <nav
+                aria-label="Navigasi seluler"
+                className="mb-6 grid grid-cols-2 gap-x-5"
+              >
+                {links}
+              </nav>
+              <SearchForm id="mobile-sticky-search" />
+              <div className="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-5 text-sm text-muted">
+                <Link
+                  href="/masyarakat/dashboard"
+                  className="flex items-center justify-between py-1 hover:text-primary"
+                >
+                  Masuk / Daftar Akun Masyarakat ↗
+                </Link>
+                <Link
+                  href="/admin"
+                  className="flex items-center justify-between py-1 hover:text-primary"
+                >
+                  Masuk sebagai pengelola ↗
+                </Link>
+              </div>
+            </Dialog>
+          </div>
+        </div>
+      </nav>
     </>
   );
 }
