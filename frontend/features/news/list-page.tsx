@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { PageHeading } from "@/components/ui/page-heading";
+import { Newspaper } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getNewsList, getCategories } from "@/lib/news";
 import { categoryPath } from "@/lib/news-seo";
@@ -33,20 +34,17 @@ export async function NewsListPage({
   };
   return (
     <main id="konten" tabIndex={-1} className="container pb-16">
-      <Breadcrumb
-        items={[
+      <PageHeading
+        title={data.category?.name ?? "Berita kelurahan"}
+        icon={Newspaper}
+        description="Kabar terbaru, cerita warga, dan informasi resmi dari kelurahan."
+        breadcrumbs={[
           { label: "Beranda", href: "/" },
           { label: "Berita", ...(category ? { href: "/berita" } : {}) },
           ...(data.category ? [{ label: data.category.name }] : []),
         ]}
       />
-      <h1 className="display-title mt-6 text-4xl sm:text-5xl">
-        {data.category?.name ?? "Berita Kelurahan"}
-      </h1>
-      <p className="mt-4 text-muted">
-        Informasi yang telah dipublikasikan oleh pengelola kelurahan.
-      </p>
-      <form action={base} className="my-7 flex gap-3">
+      <form action={base} className="public-content-filters">
         <label className="min-w-0 flex-1">
           Cari berita
           <input
@@ -54,18 +52,21 @@ export async function NewsListPage({
             type="search"
             maxLength={100}
             defaultValue={filter.search}
-            className="mt-2 w-full rounded-lg border border-border bg-white px-4 py-3"
+            className="cms-input"
           />
         </label>
         <button className="yellow-button self-end">Cari</button>
       </form>
-      <nav aria-label="Kategori berita" className="mb-7 flex flex-wrap gap-4">
-        <Link href="/berita" className="underline">
+      <nav aria-label="Kategori berita" className="mb-7 flex flex-wrap gap-2">
+        <Link
+          href="/berita"
+          className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white"
+        >
           Semua berita
         </Link>
         {categories.map((item) => (
           <Link
-            className="underline"
+            className="rounded-full border border-slate-200 px-4 py-2 text-xs text-primary hover:bg-slate-50"
             key={item.slug}
             href={categoryPath(item.slug)}
             aria-current={category === item.slug ? "page" : undefined}

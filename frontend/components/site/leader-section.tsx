@@ -1,6 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
 import { getPublicProfile } from "@/lib/profile";
 export async function LeaderSection() {
@@ -9,7 +7,7 @@ export async function LeaderSection() {
     (o) => o.position.toLowerCase() === "lurah",
   );
   return (
-    <section className="container py-14 sm:py-20" aria-labelledby="lurah-title">
+    <section className="container pb-10" aria-labelledby="lurah-title">
       <div className="grid overflow-hidden rounded-2xl border border-border bg-[#f0f5fa] md:grid-cols-[.85fr_1.15fr]">
         <div className="relative isolate min-h-80 overflow-hidden bg-[#dfebf5] md:min-h-[440px]">
           <div
@@ -47,13 +45,6 @@ export async function LeaderSection() {
             </p>
             <p className="mt-1 text-xs text-muted">Lurah Watundehoa</p>
           </div>
-          <Link
-            href="/profil"
-            className="mt-7 inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-primary"
-          >
-            Kenali kelurahan dan aparatur{" "}
-            <ArrowUpRight aria-hidden="true" className="size-4" />
-          </Link>
         </div>
       </div>
     </section>

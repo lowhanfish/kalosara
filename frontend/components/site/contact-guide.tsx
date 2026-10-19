@@ -1,48 +1,40 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { Select } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowUpRight, FileText, Landmark, Users } from "lucide-react";
 export function ContactGuide() {
-  const router = useRouter();
   return (
-    <form
-      className="rounded-card border border-border bg-white p-6"
-      onSubmit={(event) => {
-        event.preventDefault();
-        const value = new FormData(event.currentTarget).get("topic");
-        if (
-          value === "/pelayanan" ||
-          value === "/informasi-publik" ||
-          value === "/profil"
-        )
-          router.push(value);
-      }}
-    >
-      <h2 className="text-xl font-semibold">
-        Informasi apa yang Anda perlukan?
+    <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+      <h2 className="text-lg font-bold text-primary">
+        Informasi yang Anda perlukan
       </h2>
-      <p className="mt-3 text-sm text-muted">
-        Pilih topik untuk membuka halaman terkait. Formulir ini tidak mengirim
-        pesan atau data pribadi.
+      <p className="mt-3 text-sm leading-7 text-muted">
+        Temukan jawaban awal melalui halaman berikut.
       </p>
-      <div className="mt-5 flex flex-col items-start gap-4 sm:flex-row sm:items-end">
-        <div className="w-full flex-1">
-          <label
-            className="mb-2 block text-sm font-medium"
-            htmlFor="contact-topic"
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        {[
+          { label: "Panduan pelayanan", href: "/pelayanan", icon: Landmark },
+          {
+            label: "Dokumen publik",
+            href: "/informasi-publik",
+            icon: FileText,
+          },
+          { label: "Profil kelurahan", href: "/profil", icon: Users },
+        ].map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="group flex items-center gap-3 rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50"
           >
-            Topik informasi
-          </label>
-          <Select id="contact-topic" name="topic">
-            <option value="/pelayanan">Panduan pelayanan</option>
-            <option value="/informasi-publik">Informasi publik</option>
-            <option value="/profil">Profil kelurahan</option>
-          </Select>
-        </div>
-        <Button type="submit" className="shrink-0">
-          Buka informasi
-        </Button>
+            <item.icon size={18} className="shrink-0 text-slate-400" />
+            <span className="flex-1 text-xs font-semibold text-primary">
+              {item.label}
+            </span>
+            <ArrowUpRight
+              size={14}
+              className="text-slate-400 group-hover:text-primary"
+            />
+          </Link>
+        ))}
       </div>
-    </form>
+    </section>
   );
 }

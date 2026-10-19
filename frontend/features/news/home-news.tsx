@@ -1,17 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getNewsList, coverImage } from "@/lib/news";
 import { articlePath, newsDate } from "@/lib/news-seo";
 export async function HomeNews() {
   let data;
   try {
-    data = await getNewsList(1, "", undefined, 5);
+    data = await getNewsList(1, "", undefined, 3);
   } catch {
     return (
       <EmptyState
-        title="Berita sementara tidak tersedia"
+        title="Berita belum dapat dimuat"
         description="Silakan muat ulang halaman beberapa saat lagi."
       />
     );
@@ -20,73 +20,69 @@ export async function HomeNews() {
   if (!featured)
     return (
       <EmptyState
-        title="Belum ada berita yang dipublikasikan"
-        description="Berita resmi akan tampil setelah diterbitkan oleh pengelola kelurahan."
+        title="Kabar baru segera hadir"
+        description="Berita dan cerita kegiatan kelurahan akan ditampilkan di sini setelah diterbitkan."
       />
     );
-  const date = new Date(featured.publishedAt);
   return (
-    <div className="news-content">
+    <div className="grid gap-5 sm:grid-cols-[1.1fr_1fr]">
       <Link
         href={articlePath(featured.slug)}
-        className="reference-news-feature"
+        className="group overflow-hidden rounded-2xl border border-slate-200 bg-white"
       >
-        <div className="reference-news-photo">
+        <div className="relative aspect-[16/10] overflow-hidden">
           <Image
             src={coverImage(featured, "thumb")}
-            alt={
-              featured.cover?.alt ??
-              "Foto kantor kelurahan sebagai gambar bawaan"
-            }
+            alt={featured.cover?.alt ?? "Kantor kelurahan"}
             fill
             unoptimized
-            className="object-cover"
-            sizes="40vw"
+            className="object-cover transition duration-500 group-hover:scale-105"
+            sizes="(max-width:640px) 100vw, 35vw"
           />
         </div>
-        <div className="reference-news-title">
-          <span className="reference-date-box">
-            <b>
-              {new Intl.DateTimeFormat("id-ID", {
-                day: "2-digit",
-                timeZone: "Asia/Makassar",
-              }).format(date)}
-            </b>
-            <small>
-              {new Intl.DateTimeFormat("id-ID", {
-                month: "short",
-                year: "numeric",
-                timeZone: "Asia/Makassar",
-              }).format(date)}
-            </small>
-          </span>
-          <h3>{featured.title}</h3>
-          <span className="round-arrow">
-            <ArrowRight aria-hidden="true" size={17} />
+        <div className="p-5">
+          <time
+            dateTime={featured.publishedAt}
+            className="text-[10px] text-slate-500"
+          >
+            {newsDate(featured.publishedAt)}
+          </time>
+          <h3 className="mt-2 text-lg font-bold leading-7 text-primary">
+            {featured.title}
+          </h3>
+          <p className="mt-3 line-clamp-3 text-xs leading-6 text-muted">
+            {featured.excerpt}
+          </p>
+          <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-primary">
+            Baca selengkapnya
+            <ArrowUpRight size={14} />
           </span>
         </div>
-        <p>{featured.excerpt}</p>
       </Link>
-      <div className="reference-news-list">
+      <div className="space-y-4">
         {items.map((news) => (
-          <Link key={news.slug} href={articlePath(news.slug)}>
+          <Link
+            key={news.slug}
+            href={articlePath(news.slug)}
+            className="group block rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300"
+          >
             <Image
               src={coverImage(news, "thumb")}
-              alt={
-                news.cover?.alt ?? "Foto kantor kelurahan sebagai gambar bawaan"
-              }
-              width={90}
-              height={60}
+              alt={news.cover?.alt ?? "Kantor kelurahan"}
+              width={360}
+              height={180}
               unoptimized
-              className="object-cover"
+              className="mb-3 aspect-[2/1] w-full rounded-lg object-cover"
             />
-            <span>
-              <time dateTime={news.publishedAt}>
-                {newsDate(news.publishedAt)}
-              </time>
-              <h3>{news.title}</h3>
-            </span>
-            <ArrowRight aria-hidden="true" size={14} />
+            <time
+              className="text-[10px] text-slate-500"
+              dateTime={news.publishedAt}
+            >
+              {newsDate(news.publishedAt)}
+            </time>
+            <h3 className="mt-2 text-sm font-semibold leading-6 text-primary">
+              {news.title}
+            </h3>
           </Link>
         ))}
       </div>

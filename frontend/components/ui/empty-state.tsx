@@ -9,14 +9,14 @@ export function EmptyState({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center rounded-card border border-dashed border-[#a8bbae] bg-white px-6 py-14 text-center">
-      <FolderOpen
-        aria-hidden="true"
-        className="mb-5 size-9 text-primary"
-        strokeWidth={1.3}
-      />
-      <h2 className="text-xl font-semibold">{title}</h2>
-      <p className="mt-3 max-w-lg text-sm text-muted">{description}</p>
+    <div className="flex min-h-60 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 px-6 py-10 text-center">
+      <span className="mb-5 grid size-14 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-400">
+        <FolderOpen size={25} strokeWidth={1.4} aria-hidden="true" />
+      </span>
+      <h2 className="text-base font-semibold text-primary">{title}</h2>
+      <p className="mt-3 max-w-md text-xs leading-6 text-muted">
+        {description}
+      </p>
       {children && <div className="mt-6">{children}</div>}
     </div>
   );

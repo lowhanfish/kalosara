@@ -68,14 +68,16 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
   if (auth.status === "GUEST")
     return (
       <section className="cms-login max-w-xl">
-        <h1>{register ? "Daftar akun masyarakat" : "Masuk akun masyarakat"}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-primary">
+          {register ? "Daftar akun masyarakat" : "Masuk akun masyarakat"}
+        </h1>
         <p>
-          Website publik dapat dibaca tanpa akun. Pengajuan pelayanan belum
-          aktif. Tidak perlu unggah KTP.
+          Kelola data profil dan keamanan akun Anda. Informasi publik tetap
+          dapat dibaca tanpa masuk.
         </p>
         {notice && <p role="status">{notice}</p>}
         <form
-          className="space-y-4 mt-4"
+          className="mt-6 space-y-5"
           onSubmit={(e) => {
             e.preventDefault();
             const form = e.currentTarget;
@@ -128,8 +130,8 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
           </label>
           {register && (
             <p>
-              Minimal 12 karakter, maksimal 72 byte. Email dipakai untuk masuk;
-              verifikasi kontak dilakukan melalui petugas.
+              Gunakan minimal 12 karakter. Email ini digunakan untuk masuk ke
+              akun Anda.
             </p>
           )}
           <button className="yellow-button" disabled={login.isPending}>

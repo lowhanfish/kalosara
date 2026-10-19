@@ -142,7 +142,7 @@ export function NewsEditor({
     [];
   return (
     <section
-      className="space-y-6 rounded-xl border border-border p-4 sm:p-6"
+      className="space-y-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-8"
       aria-labelledby="editor-title"
     >
       <h2 id="editor-title" className="text-2xl font-semibold">
@@ -154,8 +154,8 @@ export function NewsEditor({
           : "Berita baru"}{" "}
         ·{" "}
         {dirty ? "Ada perubahan belum disimpan." : "Belum ada perubahan baru."}{" "}
-        Simpan sebelum preview. Mengubah status ke DRAFT atau ARCHIVED menarik
-        berita dari API publik. Pemulihan revisi selalu menghasilkan DRAFT baru.
+        Simpan untuk melihat pratinjau. Berita draft dan arsip tidak ditampilkan
+        pada website.
       </p>
       <form
         className="space-y-5"
@@ -281,9 +281,9 @@ export function NewsEditor({
             value={draft.status}
             onChange={(e) => change("status", e.target.value as News["status"])}
           >
-            <option>DRAFT</option>
-            <option>PUBLISHED</option>
-            <option>ARCHIVED</option>
+            <option value="DRAFT">Draft</option>
+            <option value="PUBLISHED">Terbit</option>
+            <option value="ARCHIVED">Arsip</option>
           </select>
         </label>
         <div className="flex flex-wrap gap-4">

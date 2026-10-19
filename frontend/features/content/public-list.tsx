@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { PageHeading } from "@/components/ui/page-heading";
+import { EmptyState } from "@/components/ui/empty-state";
+import { CalendarDays, Images, Megaphone, Files } from "lucide-react";
 import {
   channels,
   getContent,
@@ -48,19 +50,27 @@ export async function ContentPage({
   };
   return (
     <main id="konten" tabIndex={-1} className="container pb-16">
-      <Breadcrumb
-        items={[{ label: "Beranda", href: "/" }, { label: channel.title }]}
+      <PageHeading
+        title={channel.title}
+        icon={
+          {
+            events: CalendarDays,
+            galleries: Images,
+            announcements: Megaphone,
+            documents: Files,
+          }[kind]
+        }
+        description={
+          {
+            events: "Jadwal kegiatan dan ruang kebersamaan warga kelurahan.",
+            galleries: "Cerita dan dokumentasi kegiatan warga dalam gambar.",
+            announcements:
+              "Informasi penting dan pemberitahuan terbaru dari kelurahan.",
+            documents:
+              "Temukan dokumen dan informasi resmi yang telah diterbitkan kelurahan.",
+          }[kind]
+        }
       />
-      <h1 className="display-title py-8 text-4xl">{channel.title}</h1>
-      {kind === "documents" && (
-        <p className="mb-6">
-          Standar pelayanan, maklumat, kontak, dan dokumen resmi ditampilkan
-          setelah disetujui serta diterbitkan pengelola.{" "}
-          <Link href="/kontak" className="underline">
-            Kontak kelurahan
-          </Link>
-        </p>
-      )}
       <form className="public-content-filters">
         <label>
           Cari judul
@@ -95,7 +105,10 @@ export async function ContentPage({
         <button className="yellow-button">Tampilkan</button>
       </form>
       {failed && (
-        <p role="alert">
+        <p
+          role="alert"
+          className="my-6 rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"
+        >
           Informasi sementara tidak dapat dimuat.{" "}
           <Link className="underline" href={channel.path}>
             Coba lagi
@@ -103,10 +116,18 @@ export async function ContentPage({
         </p>
       )}
       {data?.items.length === 0 && (
-        <p>
-          Belum ada {channel.title.toLowerCase()} yang sesuai dan telah
-          diterbitkan.
-        </p>
+        <EmptyState
+          title={
+            search
+              ? "Hasil belum ditemukan"
+              : `Belum ada ${channel.title.toLowerCase()}`
+          }
+          description={
+            search
+              ? "Coba kata kunci lain atau hapus filter pencarian."
+              : "Informasi akan tersedia setelah diterbitkan oleh pengelola kelurahan."
+          }
+        />
       )}
       <div className="space-y-6">
         {data?.items.map((item) => (
@@ -176,7 +197,10 @@ export async function ContentPage({
         ))}
       </div>
       {data && (
-        <nav aria-label="Halaman konten" className="mt-8 flex flex-wrap gap-5">
+        <nav
+          aria-label="Halaman konten"
+          className="mt-8 flex flex-wrap items-center justify-center gap-5 border-t border-slate-100 pt-6 text-xs text-muted"
+        >
           {page > 1 && <Link href={pageLink(page - 1)}>Sebelumnya</Link>}
           <span>
             Halaman {page} · {data.total} item
