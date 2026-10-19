@@ -12,7 +12,7 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
         >
           <Link href={articlePath(news.slug)} className="block">
             <Image
-              src={coverImage(news, "thumb")}
+              src={coverImage(news, "display")}
               alt={
                 news.cover?.alt ?? "Foto kantor kelurahan sebagai gambar bawaan"
               }

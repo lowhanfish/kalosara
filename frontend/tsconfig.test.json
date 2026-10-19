@@ -7,10 +7,7 @@
     "outDir": ".test-build",
     "incremental": false,
     "isolatedModules": true,
-    "types": [
-      "node",
-      "next"
-    ]
+    "types": ["node", "next"]
   },
   "include": [
     "services/http-client.ts",
@@ -20,9 +17,8 @@
     "lib/public-pages.ts",
     "lib/news-seo.ts",
     "lib/cache-signature.ts",
-    "lib/region.ts"
+    "lib/region.ts",
+    "lib/statistics.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -166,7 +166,7 @@ export async function ContentPage({
                       href={`/api/v1/public/media/${photo.mediaId}?variant=display`}
                     >
                       <Image
-                        src={`/api/v1/public/media/${photo.mediaId}?variant=thumb`}
+                        src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
                         alt={photo.alt}
                         width={480}
                         height={320}

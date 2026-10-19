@@ -32,7 +32,7 @@ export async function HomeNews() {
       >
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
-            src={coverImage(featured, "thumb")}
+            src={coverImage(featured, "display")}
             alt={featured.cover?.alt ?? "Kantor kelurahan"}
             fill
             unoptimized
@@ -67,7 +67,7 @@ export async function HomeNews() {
             className="group block rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300"
           >
             <Image
-              src={coverImage(news, "thumb")}
+              src={coverImage(news, "display")}
               alt={news.cover?.alt ?? "Kantor kelurahan"}
               width={360}
               height={180}

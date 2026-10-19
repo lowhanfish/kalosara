@@ -100,7 +100,7 @@ export default async function Page({
             >
               {item.photoId && (
                 <Image
-                  src={`/api/v1/public/media/${item.photoId}?variant=thumb`}
+                  src={`/api/v1/public/media/${item.photoId}?variant=display`}
                   alt={item.photoAlt}
                   width={480}
                   height={320}

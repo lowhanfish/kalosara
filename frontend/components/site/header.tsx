@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, ShieldCheck, User } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
 import type { SiteSettings } from "@/lib/site-settings";
 import { Dialog } from "@/components/ui/dialog";
@@ -47,13 +47,25 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               <ShieldCheck size={13} className="text-primary" />
               {settings.name} · {settings.district}
             </p>
-            <Link
-              href="/kontak"
-              className="flex items-center gap-1.5 font-medium hover:text-primary"
-            >
-              Informasi & bantuan
-              <ArrowUpRight size={12} />
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/masyarakat/dashboard"
+                className="flex items-center gap-1.5 font-medium text-slate-600 transition-colors hover:text-primary"
+              >
+                <User size={13} className="text-primary" />
+                Akun Warga
+              </Link>
+              <span className="text-slate-200" aria-hidden="true">
+                |
+              </span>
+              <Link
+                href="/kontak"
+                className="flex items-center gap-1.5 font-medium transition-colors hover:text-primary"
+              >
+                Informasi & bantuan
+                <ArrowUpRight size={12} />
+              </Link>
+            </div>
           </div>
         </div>
         <div className="container flex min-h-[88px] items-center justify-between gap-6 py-4">
@@ -85,19 +97,43 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           <div className="hidden w-full max-w-sm lg:block">
             <SearchForm id="desktop-search" compact />
           </div>
-          <Link
-            href="/pelayanan"
-            className="hidden min-h-11 items-center gap-3 rounded-lg bg-amber-300 px-5 py-3 text-sm font-bold text-slate-900 transition hover:bg-amber-400 lg:flex"
-          >
-            Panduan pelayanan
-            <ArrowUpRight size={16} />
-          </Link>
+          <div className="hidden items-center gap-3 lg:flex">
+            <Link
+              href="/masyarakat/dashboard"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-primary transition hover:border-slate-300 hover:bg-slate-50"
+            >
+              <User size={15} />
+              Akun Warga
+            </Link>
+            <Link
+              href="/pelayanan"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-amber-300 px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-amber-400"
+            >
+              Panduan pelayanan
+              <ArrowUpRight size={16} />
+            </Link>
+          </div>
           <div className="lg:hidden">
             <Dialog
               title="Jelajahi KALOSARA"
               triggerLabel="Menu"
               triggerClassName="text-sm"
             >
+              <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Layanan Mandiri Warga
+                </p>
+                <Link
+                  href="/masyarakat/dashboard"
+                  className="mt-2.5 flex items-center justify-between rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-primary-hover"
+                >
+                  <span className="flex items-center gap-2">
+                    <User size={16} />
+                    Portal Akun Warga
+                  </span>
+                  <ArrowUpRight size={15} />
+                </Link>
+              </div>
               <nav
                 aria-label="Navigasi seluler"
                 className="mb-6 grid grid-cols-2 gap-x-5"
@@ -105,19 +141,27 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
                 {links}
               </nav>
               <SearchForm id="mobile-search" />
-              <Link
-                href="/admin"
-                className="mt-6 block border-t border-slate-100 pt-5 text-[15px] text-muted"
-              >
-                Masuk sebagai pengelola ↗
-              </Link>
+              <div className="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-5 text-sm text-muted">
+                <Link
+                  href="/masyarakat/dashboard"
+                  className="flex items-center justify-between py-1 hover:text-primary"
+                >
+                  Masuk / Daftar Akun Masyarakat ↗
+                </Link>
+                <Link
+                  href="/admin"
+                  className="flex items-center justify-between py-1 hover:text-primary"
+                >
+                  Masuk sebagai pengelola ↗
+                </Link>
+              </div>
             </Dialog>
           </div>
         </div>
         <div className="hidden border-t border-slate-100 lg:block">
           <nav
             aria-label="Navigasi utama"
-            className="container flex flex-wrap items-center justify-between gap-x-4"
+            className="container flex items-center justify-between gap-x-2 text-sm"
           >
             {links}
           </nav>

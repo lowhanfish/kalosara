@@ -270,7 +270,7 @@ export default async function HomePage() {
                   className="relative aspect-[4/3] overflow-hidden rounded-xl"
                 >
                   <Image
-                    src={`/api/v1/public/media/${photo.mediaId}?variant=thumb`}
+                    src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
                     alt={photo.alt}
                     fill
                     unoptimized

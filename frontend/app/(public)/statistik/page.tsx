@@ -1,3 +1,4 @@
+import { StatisticCharts } from "@/features/region/statistic-charts";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -83,13 +84,16 @@ export default async function Page({
           description="Data resmi akan ditampilkan setelah diterbitkan. Coba periode lain atau kunjungi kembali nanti."
         />
       )}
-      <div className="space-y-8">
+      {data && data.items.length > 0 && <StatisticCharts items={data.items} />}
+      <div className="space-y-5">
         {data?.items.map((item) => (
-          <section
+          <details
             key={item.id}
             className="rounded-xl border border-border bg-white p-5 sm:p-7"
           >
-            <h2 className="text-2xl font-bold">Periode {item.period}</h2>
+            <summary className="cursor-pointer text-lg font-bold">
+              Tabel data · {item.period}
+            </summary>
             <p className="my-3 break-words text-[15px] text-muted">
               Sumber: {item.source}
               <br />
@@ -125,7 +129,7 @@ export default async function Page({
                 </tbody>
               </table>
             </div>
-          </section>
+          </details>
         ))}
       </div>
       {data && (

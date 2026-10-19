@@ -44,12 +44,31 @@ const relativeDate = (days: number, hour = 9) => {
 };
 async function imageAsset(name: string, ownerId: string) {
   const mediaId = id(`image:${name}`);
-  if (await prisma.mediaAsset.findUnique({ where: { id: mediaId } }))
-    return mediaId;
+  const replacements: Record<string, string> = {
+    'news-main.webp': 'meeting.webp',
+    'news-2.webp': 'business.webp',
+    'gallery-1.webp': 'cleanup.webp',
+    'gallery-2.webp': 'digital.webp',
+    'gallery-3.webp': 'meeting.webp',
+    'gallery-4.webp': 'business.webp',
+    'gallery-5.webp': 'garden.webp',
+  };
+  const replacement = replacements[name];
+  const originalName = replacement
+    ? `contoh-ai-v2-${replacement}`
+    : `contoh-${name}`;
+  const existing = await prisma.mediaAsset.findUnique({
+    where: { id: mediaId },
+  });
+  if (existing) {
+    // Refresh only untouched, deterministically seeded media. Preserve later admin edits.
+    if (!replacement || existing.originalName !== `contoh-${name}`)
+      return mediaId;
+  }
   const source = resolve(
     imageRoot,
-    name.includes('kantor') ? 'watundehoa' : 'reference',
-    name,
+    replacement ? 'demo' : 'watundehoa',
+    replacement ?? name,
   );
   const key = storageKey('general', mediaId, 'webp', true);
   const original = await sharp(await readFile(source))
@@ -69,16 +88,24 @@ async function imageAsset(name: string, ownerId: string) {
         .toBuffer(),
     );
   }
-  await prisma.mediaAsset.create({
-    data: {
+  await prisma.mediaAsset.upsert({
+    where: { id: mediaId },
+    update: {
+      originalName,
+      size: original.length,
+      caption:
+        'Ilustrasi AI untuk konten dummy; bukan dokumentasi kegiatan nyata.',
+    },
+    create: {
       id: mediaId,
       storageKey: key,
-      originalName: `contoh-${name}`,
+      originalName,
       mimeType: 'image/webp',
       size: original.length,
       alt: 'Ilustrasi kegiatan dan lingkungan untuk konten contoh KALOSARA',
-      caption:
-        'Foto referensi visual; bukan dokumentasi terverifikasi dari kegiatan dalam narasi dummy.',
+      caption: replacement
+        ? 'Ilustrasi AI untuk konten dummy; bukan dokumentasi kegiatan nyata.'
+        : 'Foto kantor untuk pratinjau konten contoh.',
       visibility: 'PUBLIC',
       ownerId,
     },
