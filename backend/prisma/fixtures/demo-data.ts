@@ -165,6 +165,50 @@ export const newsItems = [
       ],
     ],
   },
+  {
+    slug: 'kebun-pekarangan-pangan-keluarga',
+    title: 'Pekarangan hijau, ruang tumbuh untuk kebersamaan warga',
+    category: 'Lingkungan',
+    excerpt:
+      'Cerita ilustratif pemanfaatan lahan pekarangan sebagai kebun bersama, tempat belajar, dan ruang bertemu antarwarga.',
+    image: 'gallery-5.webp',
+    sections: [
+      [
+        'Menata ruang hijau di sekitar rumah',
+        'Pada contoh kegiatan ini, warga membagi area tanam dan menyusun jadwal perawatan bersama. Pot, bedeng kecil, dan papan informasi membuat kebun lebih mudah dirawat.',
+      ],
+      [
+        'Belajar dan berbagi pengalaman',
+        'Kebun menjadi ruang bertukar pengalaman tentang penataan pekarangan. Foto bersifat ilustratif; tidak menunjukkan program atau capaian produksi yang telah diverifikasi.',
+      ],
+      [
+        'Rencana perawatan berkelanjutan',
+        'Catatan kegiatan disiapkan untuk evaluasi contoh. Narasi ini tidak mewakili kegiatan resmi dan akan diganti setelah informasi sebenarnya tersedia.',
+      ],
+    ],
+  },
+  {
+    slug: 'ruang-kreasi-produk-warga',
+    title: 'Ruang kreasi warga: mengenalkan karya dan produk lokal',
+    category: 'Pemberdayaan',
+    excerpt:
+      'Contoh kegiatan berbagi cerita di balik produk rumahan dan kerajinan, dari gagasan sederhana hingga cara memperkenalkannya.',
+    image: 'gallery-4.webp',
+    sections: [
+      [
+        'Mengangkat cerita di balik karya',
+        'Dalam simulasi ini, setiap kelompok menyiapkan deskripsi produk, bahan, dan proses pengerjaan. Seluruh usaha yang diceritakan merupakan contoh, bukan pelaku usaha terdaftar.',
+      ],
+      [
+        'Foto yang membantu mengenali produk',
+        'Penataan foto dan keterangan singkat membantu pembaca memahami karya warga. Gambar dipakai untuk kebutuhan pratinjau dan bukan katalog penjualan.',
+      ],
+      [
+        'Membangun jejaring lingkungan',
+        'Forum contoh ditutup dengan diskusi tentang kebutuhan pendampingan. Jadwal dan peserta tidak menggambarkan acara yang benar-benar diselenggarakan.',
+      ],
+    ],
+  },
 ];
 export const announcements = [
   {

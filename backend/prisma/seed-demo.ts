@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { createHash } from 'node:crypto';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -36,6 +36,14 @@ const html = (value: string) =>
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
 const today = new Date();
+const demoPeriod = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Makassar',
+  year: 'numeric',
+  month: '2-digit',
+}).format(today);
+const previousMonth = new Date(`${demoPeriod}-01T00:00:00Z`);
+previousMonth.setUTCMonth(previousMonth.getUTCMonth() - 1);
+const statisticPeriods = [demoPeriod, previousMonth.toISOString().slice(0, 7)];
 const relativeDate = (days: number, hour = 9) => {
   const date = new Date(today);
   date.setUTCDate(date.getUTCDate() + days);
@@ -54,6 +62,7 @@ async function imageAsset(name: string, ownerId: string) {
     'gallery-5.webp': 'garden.webp',
   };
   const replacement = replacements[name];
+  const portrait = name.startsWith('aparatur-');
   const originalName = replacement
     ? `contoh-ai-v2-${replacement}`
     : `contoh-${name}`;
@@ -62,14 +71,32 @@ async function imageAsset(name: string, ownerId: string) {
   });
   if (existing) {
     // Refresh only untouched, deterministically seeded media. Preserve later admin edits.
-    if (!replacement || existing.originalName !== `contoh-${name}`)
+    if (
+      existing.originalName !== `contoh-${name}` &&
+      existing.originalName !== originalName
+    )
       return mediaId;
+    try {
+      await Promise.all(
+        [
+          existing.storageKey,
+          variantKey(existing.storageKey, 'thumb'),
+          variantKey(existing.storageKey, 'display'),
+        ].map((key) => access(filePath(key))),
+      );
+      if (!replacement || existing.originalName === originalName)
+        return mediaId;
+    } catch {
+      // Restore missing demo files after a fresh checkout without replacing edited media.
+    }
   }
-  const source = resolve(
-    imageRoot,
-    replacement ? 'demo' : 'watundehoa',
-    replacement ?? name,
-  );
+  const source = portrait
+    ? resolve(sourceRoot, 'fixtures/images', name.replace('.webp', '.svg'))
+    : resolve(
+        imageRoot,
+        replacement ? 'demo' : 'watundehoa',
+        replacement ?? name,
+      );
   const key = storageKey('general', mediaId, 'webp', true);
   const original = await sharp(await readFile(source))
     .webp({ quality: 88 })
@@ -93,8 +120,11 @@ async function imageAsset(name: string, ownerId: string) {
     update: {
       originalName,
       size: original.length,
-      caption:
-        'Ilustrasi AI untuk konten dummy; bukan dokumentasi kegiatan nyata.',
+      caption: portrait
+        ? 'Ilustrasi aparatur fiktif; bukan foto orang nyata.'
+        : replacement
+          ? 'Ilustrasi AI untuk konten dummy; bukan dokumentasi kegiatan nyata.'
+          : 'Foto kantor untuk pratinjau konten contoh.',
     },
     create: {
       id: mediaId,
@@ -102,10 +132,14 @@ async function imageAsset(name: string, ownerId: string) {
       originalName,
       mimeType: 'image/webp',
       size: original.length,
-      alt: 'Ilustrasi kegiatan dan lingkungan untuk konten contoh KALOSARA',
-      caption: replacement
-        ? 'Ilustrasi AI untuk konten dummy; bukan dokumentasi kegiatan nyata.'
-        : 'Foto kantor untuk pratinjau konten contoh.',
+      alt: portrait
+        ? 'Ilustrasi aparatur kelurahan untuk data contoh'
+        : 'Ilustrasi kegiatan dan lingkungan untuk konten contoh KALOSARA',
+      caption: portrait
+        ? 'Ilustrasi aparatur fiktif; bukan foto orang nyata.'
+        : replacement
+          ? 'Ilustrasi AI untuk konten dummy; bukan dokumentasi kegiatan nyata.'
+          : 'Foto kantor untuk pratinjau konten contoh.',
       visibility: 'PUBLIC',
       ownerId,
     },
@@ -121,16 +155,27 @@ interface DemoDocument {
 }
 async function documentAsset(document: DemoDocument, ownerId: string) {
   const mediaId = id(`pdf:${document.slug}`);
-  if (await prisma.mediaAsset.findUnique({ where: { id: mediaId } }))
-    return mediaId;
+  const existing = await prisma.mediaAsset.findUnique({
+    where: { id: mediaId },
+  });
+  if (existing) {
+    try {
+      await access(filePath(existing.storageKey));
+      return mediaId;
+    } catch {
+      /* Restore missing seeded PDF below. */
+    }
+  }
   const bytes = await readFile(
     resolve(sourceRoot, 'fixtures/documents', `${document.slug}.pdf`),
   );
   const key = storageKey('documents', mediaId, 'pdf', false);
   await mkdir(dirname(filePath(key)), { recursive: true });
   await writeFile(filePath(key), bytes);
-  await prisma.mediaAsset.create({
-    data: {
+  await prisma.mediaAsset.upsert({
+    where: { id: mediaId },
+    update: {},
+    create: {
       id: mediaId,
       storageKey: key,
       originalName: `contoh-${document.slug}.pdf`,
@@ -166,6 +211,9 @@ try {
     'gallery-3.webp',
     'gallery-4.webp',
     'gallery-5.webp',
+    'aparatur-sekretariat.webp',
+    'aparatur-pelayanan.webp',
+    'aparatur-pemberdayaan.webp',
   ])
     images.set(name, await imageAsset(name, owner.id));
   const documents = JSON.parse(
@@ -237,22 +285,34 @@ try {
           name: 'Petugas Sekretariat (Contoh)',
           position: 'Sekretaris',
           unit: 'Sekretariat kelurahan',
-          photoUrl: null,
+          photoUrl: `/api/v1/public/media/${images.get('aparatur-sekretariat.webp')}`,
         },
         {
           name: 'Petugas Pelayanan (Contoh)',
           position: 'Koordinator Pelayanan',
           unit: 'Pelayanan administrasi',
-          photoUrl: null,
+          photoUrl: `/api/v1/public/media/${images.get('aparatur-pelayanan.webp')}`,
         },
         {
           name: 'Petugas Pemberdayaan (Contoh)',
           position: 'Koordinator Pemberdayaan',
           unit: 'Pemberdayaan masyarakat',
-          photoUrl: null,
+          photoUrl: `/api/v1/public/media/${images.get('aparatur-pemberdayaan.webp')}`,
         },
       ];
-      for (const [index, official] of officials.entries())
+      for (const [index, official] of officials.entries()) {
+        if (index > 0)
+          await tx.official.updateMany({
+            where: {
+              id: id(`official:${index}`),
+              name: official.name,
+              OR: [
+                { photoUrl: null },
+                { photoUrl: `${official.photoUrl}?variant=display` },
+              ],
+            },
+            data: { photoUrl: official.photoUrl },
+          });
         await tx.official.upsert({
           where: { id: id(`official:${index}`) },
           update: {},
@@ -264,6 +324,7 @@ try {
             active: true,
           },
         });
+      }
       for (const [index, item] of newsItems.entries()) {
         const categoryId = id(`category:${item.category}`);
         await tx.newsCategory.upsert({
@@ -382,6 +443,17 @@ try {
         const contentId = id(`event:${index}`);
         const start = relativeDate(item.days, item.hour);
         const end = new Date(start.getTime() + 2 * 3600000);
+        // Refresh only untouched deterministic demo events; preserve editorial changes.
+        const existingEvent = await tx.contentItem.findUnique({
+          where: { id: contentId },
+        });
+        if (
+          existingEvent?.title === item.title &&
+          existingEvent.version === 1 &&
+          existingEvent.content === `${item.content}\n\n${demoNotice}`
+        ) {
+          await tx.event.update({ where: { contentId }, data: { start, end } });
+        }
         await tx.contentItem.upsert({
           where: { id: contentId },
           update: {},
@@ -451,7 +523,7 @@ try {
             },
           },
         });
-      for (const [index, period] of ['2026-10', '2026-09'].entries())
+      for (const [index, period] of statisticPeriods.entries())
         await tx.statisticSnapshot.upsert({
           where: { period },
           update: {},
