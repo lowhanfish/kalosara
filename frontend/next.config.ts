@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   cacheMaxMemorySize: 16 * 1024 * 1024,
   experimental: {
+    agentUpgrade: false,
     proxyClientMaxBodySize: "21mb",
     imgOptConcurrency: 1,
     imgOptMaxInputPixels: 25_000_000,

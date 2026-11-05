@@ -33,7 +33,11 @@ function equalToken(left: unknown, right: unknown): boolean {
 }
 
 export function validateMutation(req: Request): void {
-  if (req.get('origin') !== env.APP_ORIGIN) throw new AccessError(403, 'ORIGIN_FORBIDDEN', 'Origin is not allowed');
+  const origin = req.get('origin');
+  const allowed = env.NODE_ENV === 'development'
+    ? [env.APP_ORIGIN, 'http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001']
+    : [env.APP_ORIGIN];
+  if (!origin || !allowed.includes(origin)) throw new AccessError(403, 'ORIGIN_FORBIDDEN', 'Origin is not allowed');
   if (!equalToken(req.cookies?.[CSRF_COOKIE], req.get('x-csrf-token'))) {
     throw new AccessError(403, 'CSRF_INVALID', 'CSRF token is missing or invalid');
   }
