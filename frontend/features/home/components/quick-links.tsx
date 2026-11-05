@@ -10,7 +10,7 @@ import {
   ChartColumn,
   Megaphone,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 const links = [
   {
@@ -58,14 +58,16 @@ const links = [
 ];
 
 export function QuickLinks() {
+  const reduced = useReducedMotion();
   return (
     <section
+      id="akses-cepat"
       aria-label="Akses cepat"
-      className="relative z-20 -mt-6 border-b border-slate-200/80 bg-slate-50/50 py-4 sm:-mt-8 sm:py-6"
+      className="portal-quick-links relative z-20"
     >
       <div className="container">
         <motion.div
-          initial="hidden"
+          initial={reduced ? false : "hidden"}
           whileInView="show"
           viewport={{ once: true, margin: "-20px" }}
           variants={{
@@ -90,13 +92,17 @@ export function QuickLinks() {
                   transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
                 },
               }}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              whileHover={
+                reduced
+                  ? undefined
+                  : { y: -5, rotateX: 3, transition: { duration: 0.3 } }
+              }
               whileTap={{ scale: 0.98 }}
               className="h-full"
             >
               <Link
                 href={item.href}
-                className={`group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4.5 shadow-xs transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/60 sm:p-5 ${item.accent}`}
+                className={`portal-quick-card group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4.5 shadow-xs transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/60 sm:p-5 ${item.accent}`}
               >
                 <div className="flex items-center justify-between">
                   <span className="grid size-11 place-items-center rounded-xl bg-slate-100 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-amber-300 group-hover:shadow-md group-hover:shadow-primary/20">
@@ -111,7 +117,9 @@ export function QuickLinks() {
                   <h2 className="text-sm font-bold text-primary transition-colors group-hover:text-primary">
                     {item.label}
                   </h2>
-                  <p className="mt-1 text-xs text-slate-500">{item.description}</p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {item.description}
+                  </p>
                 </div>
               </Link>
             </motion.div>
@@ -121,4 +129,3 @@ export function QuickLinks() {
     </section>
   );
 }
-

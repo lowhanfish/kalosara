@@ -1,3 +1,4 @@
+import "@/components/site/cinematic.css";
 import { DemoNotice } from "@/components/site/demo-notice";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -10,12 +11,12 @@ export default async function PublicLayout({
 }) {
   const settings = await getSiteSettings();
   return (
-    <>
+    <div className="public-portal flex min-h-screen flex-col">
       <SiteHeader settings={settings} />
       {settings.demoContent && <DemoNotice />}
       <AuthRecovery />
       <div className="flex-1">{children}</div>
       <SiteFooter settings={settings} />
-    </>
+    </div>
   );
 }
