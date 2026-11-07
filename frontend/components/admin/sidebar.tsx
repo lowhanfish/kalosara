@@ -18,13 +18,13 @@ export function AdminSidebar({
     adminLinks.find((item) => item.href === path + hash) ??
     adminLinks.find((item) => item.href.split("#")[0] === path);
   return (
-    <div className="flex h-full flex-col bg-[#0c2038] text-slate-300">
-      <div className="px-6 pb-7 pt-8">
+    <div className="admin-sidebar flex h-full flex-col">
+      <div className="admin-sidebar-brand">
         <AdminBrand />
       </div>
       <nav
         aria-label="Menu admin"
-        className="min-h-0 flex-1 overflow-y-auto px-3 pb-5"
+        className="admin-sidebar-nav min-h-0 flex-1 overflow-y-auto"
       >
         {adminLinks
           .filter(
@@ -32,11 +32,7 @@ export function AdminSidebar({
           )
           .map((item) => (
             <div key={item.href}>
-              {item.group && (
-                <p className="mb-2 mt-5 px-3 text-xs font-bold uppercase tracking-[.18em] text-slate-400">
-                  {item.group}
-                </p>
-              )}
+              {item.group && <p className="admin-nav-group">{item.group}</p>}
               <Link
                 href={item.href}
                 aria-current={active?.href === item.href ? "page" : undefined}
@@ -50,7 +46,7 @@ export function AdminSidebar({
                     window.location.hash = item.href.split("#")[1];
                   }
                 }}
-                className={`my-1 flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${active?.href === item.href ? "bg-amber-300 text-slate-900 shadow-sm" : "hover:bg-white/7 hover:text-white"}`}
+                className="admin-nav-link"
               >
                 <item.icon size={18} strokeWidth={1.6} aria-hidden="true" />
                 {item.label}
@@ -58,11 +54,8 @@ export function AdminSidebar({
             </div>
           ))}
       </nav>
-      <div className="border-t border-white/10 p-4">
-        <Link
-          href="/"
-          className="flex min-h-11 items-center justify-between rounded-lg px-3 text-sm font-medium hover:bg-white/5"
-        >
+      <div className="admin-sidebar-footer">
+        <Link href="/" className="admin-website-link">
           Lihat website kelurahan
           <ArrowUpRight size={16} aria-hidden="true" />
         </Link>

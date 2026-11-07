@@ -17,6 +17,8 @@ export type SiteSettings = {
 };
 export const fallbackSettings: SiteSettings = {
   name: siteIdentity.name,
+  district: siteIdentity.district,
+  regency: siteIdentity.regency,
   address: siteIdentity.location,
   phone: null,
   email: null,

@@ -41,69 +41,56 @@ export function AdminLoginForm() {
     },
   });
   return (
-    <main
-      id="konten"
-      className="grid min-h-dvh bg-[#f6f8fb] lg:grid-cols-[1fr_1.05fr]"
-    >
-      <section className="relative flex flex-col justify-between overflow-hidden bg-[#0c2038] p-7 text-white sm:p-12 lg:min-h-dvh lg:p-16">
-        <div className="relative z-10">
+    <main id="konten" className="admin-auth">
+      <section className="admin-auth-story" aria-label="Kelurahan Watundehoa">
+        <div className="admin-auth-brand">
           <AdminBrand />
         </div>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-48 -left-20 size-[600px] rounded-full border-[80px] border-white/3"
-        />
-        <div className="relative hidden max-w-lg py-20 lg:block">
-          <p className="text-xs font-bold uppercase tracking-[.22em] text-amber-300">
-            Ruang kerja pengelola
-          </p>
-          <h1 className="mt-7 text-5xl font-bold leading-[1.13] tracking-tight xl:text-6xl">
-            Informasi yang baik
+        <div className="admin-auth-story-copy">
+          <span className="admin-auth-story-label">
+            PEMERINTAH KELURAHAN WATUNDEHOA
+          </span>
+          <h1>
+            Informasi terkelola.
             <br />
-            dimulai dari sini.
+            Pelayanan lebih dekat.
           </h1>
-          <p className="mt-7 max-w-sm text-base leading-8 text-slate-300">
-            Satu ruang untuk merawat informasi, mendekatkan pelayanan, dan
-            terhubung dengan warga.
+          <p>
+            Ruang kerja bersama untuk mengelola informasi dan melayani
+            masyarakat Kelurahan Watundehoa.
           </p>
-          <div className="mt-10 flex items-center gap-3 text-sm text-slate-400">
-            <ShieldCheck size={18} className="text-amber-300" />
-            Akses khusus pengelola kelurahan
+          <div className="admin-auth-location">
+            Kecamatan Puriala <span /> Kabupaten Konawe
           </div>
         </div>
-        <p className="relative hidden text-[13px] leading-6 text-slate-400 lg:block">
-          Kanal Layanan Online Surat dan Administrasi Rakyat
+        <p className="admin-auth-copyright">
+          KALOSARA · Kanal Layanan Online Surat dan Administrasi Rakyat
         </p>
       </section>
-      <section className="flex items-center justify-center px-6 py-12 sm:px-12">
-        <form
-          className="w-full max-w-[390px]"
-          onSubmit={(e) => {
-            e.preventDefault();
-            login.mutate();
-          }}
-        >
-          <span className="mb-7 grid size-14 place-items-center rounded-2xl border border-slate-200 bg-white text-primary shadow-sm">
-            <LockKeyhole size={25} strokeWidth={1.6} />
+      <section className="admin-auth-main">
+        <Link href="/" className="admin-auth-back">
+          <ArrowLeft size={16} /> Kembali ke website
+        </Link>
+        <div className="admin-auth-form-wrap">
+          <span className="admin-auth-label">
+            <LockKeyhole size={15} /> AKSES PENGELOLA
           </span>
-          <p className="text-xs font-bold uppercase tracking-[.2em] text-slate-500">
-            Selamat datang kembali
+          <h2>Selamat datang.</h2>
+          <p className="admin-auth-intro">
+            Masuk untuk mengelola informasi
+            <br className="hidden sm:block" /> dan layanan kelurahan.
           </p>
-          <h2 className="mt-3 text-[30px] font-bold tracking-tight text-slate-900">
-            Masuk ke panel admin
-          </h2>
-          <p className="mt-3 text-[15px] leading-6 text-slate-500">
-            Gunakan email dan kata sandi akun petugas Anda.
-          </p>
-          <div className="mt-8 space-y-5">
-            <label
-              className="block text-[15px] font-semibold text-slate-700"
-              htmlFor="admin-email"
-            >
-              Alamat email
+          <form
+            className="admin-auth-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              login.mutate();
+            }}
+          >
+            <div className="admin-auth-field">
+              <label htmlFor="admin-email">Alamat email</label>
               <input
                 id="admin-email"
-                className="field mt-2"
                 type="email"
                 required
                 autoComplete="username"
@@ -114,21 +101,16 @@ export function AdminLoginForm() {
                   login.reset();
                 }}
               />
-            </label>
-            <div>
-              <label
-                className="block text-[15px] font-semibold text-slate-700"
-                htmlFor="admin-password"
-              >
-                Kata sandi
-              </label>
-              <div className="relative mt-2">
+            </div>
+            <div className="admin-auth-field">
+              <label htmlFor="admin-password">Kata sandi</label>
+              <div className="admin-auth-password">
                 <input
                   id="admin-password"
-                  className="field pr-12"
                   type={visible ? "text" : "password"}
                   required
                   autoComplete="current-password"
+                  placeholder="Masukkan kata sandi"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -137,33 +119,29 @@ export function AdminLoginForm() {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 grid w-12 place-items-center rounded-r-lg text-slate-500 hover:text-primary"
                   aria-label={
                     visible ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"
                   }
+                  aria-pressed={visible}
                   onClick={() => setVisible(!visible)}
                 >
                   {visible ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
-          </div>
-          {login.isError && <AdminError error={login.error} />}
-          <button
-            disabled={login.isPending}
-            className="mt-7 flex min-h-12 w-full items-center justify-center gap-3 rounded-lg bg-primary px-5 py-3 text-[15px] font-semibold text-white transition hover:bg-primary-hover disabled:cursor-wait disabled:opacity-60"
-          >
-            {login.isPending ? "Sedang masuk…" : "Masuk ke panel admin"}
-            <ArrowRight size={17} />
-          </button>
-          <Link
-            href="/"
-            className="mt-7 flex min-h-11 items-center justify-center gap-2 text-sm text-slate-500 hover:text-primary"
-          >
-            <ArrowLeft size={14} />
-            Kembali ke website kelurahan
-          </Link>
-        </form>
+            {login.isError && <AdminError error={login.error} />}
+            <button className="admin-auth-submit" disabled={login.isPending}>
+              {login.isPending ? "Sedang masuk…" : "Masuk ke panel admin"}
+              <ArrowRight size={18} />
+            </button>
+          </form>
+          <p className="admin-auth-security">
+            <ShieldCheck size={17} /> Khusus akun petugas yang memiliki akses.
+          </p>
+        </div>
+        <p className="admin-auth-footer">
+          Pemerintah Kelurahan Watundehoa <span>·</span> KALOSARA
+        </p>
       </section>
     </main>
   );

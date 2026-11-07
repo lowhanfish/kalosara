@@ -84,6 +84,16 @@ const metrics = [
 function activityLabel(action: string) {
   const labels: Record<string, string> = {
     DEMO_CONTENT_SEEDED: "Konten contoh disiapkan",
+    LEGACY_HISTORY_CLARIFIED: "Riwayat kelurahan diperbarui",
+    LEGACY_SETTINGS_IMPORTED: "Identitas website diperbarui",
+    LEGACY_DOCUMENT_IMPORTED: "Dokumen website lama ditambahkan",
+    LEGACY_GALLERY_IMPORTED: "Galeri website lama ditambahkan",
+    LEGACY_NEWS_IMPORTED: "Berita website lama ditambahkan",
+    LEGACY_OFFICIAL_IMPORTED: "Arsip aparatur ditambahkan",
+    LEGACY_POTENTIAL_IMPORTED: "Potensi kelurahan ditambahkan",
+    LEGACY_FACILITY_IMPORTED: "Fasilitas publik ditambahkan",
+    LEGACY_PROFILE_IMPORTED: "Profil kelurahan diperbarui",
+    LEGACY_MEDIA_IMPORTED: "Media website lama ditambahkan",
     MEDIA_UPLOADED: "Media baru diunggah",
     NEWS_CREATED: "Berita baru dibuat",
     NEWS_UPDATED: "Berita diperbarui",
@@ -105,7 +115,7 @@ export default function Dashboard() {
   });
   const isAdmin = auth.user?.role === "ADMIN_KELURAHAN";
   return (
-    <main id="konten" className="min-w-0">
+    <main id="konten" className="admin-dashboard min-w-0">
       <AdminPageHeader
         title="Ringkasan kelurahan"
         description="Selamat datang. Pantau konten dan kelola informasi untuk warga."
@@ -127,28 +137,18 @@ export default function Dashboard() {
       )}{" "}
       {data.data && (
         <>
-          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 2xl:grid-cols-6">
+          <dl className="admin-metrics">
             {metrics.map(({ key, label, icon: Icon, tone, href }) => (
-              <div
-                key={key}
-                className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-200/10 sm:p-5"
-              >
-                <span
-                  className={`mb-5 grid size-9 place-items-center rounded-xl ${tone}`}
-                >
+              <div key={key} className="admin-metric">
+                <span className={`admin-metric-icon ${tone}`}>
                   <Icon size={18} strokeWidth={1.7} />
                 </span>
-                <dt className="min-h-6 text-sm font-medium text-slate-500">
-                  {label}
-                </dt>
-                <dd className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                <dt className="admin-metric-label">{label}</dt>
+                <dd className="admin-metric-value">
                   {data.data[key].toLocaleString("id-ID")}
                 </dd>
                 {isAdmin && (
-                  <Link
-                    href={href}
-                    className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-medium text-slate-500 hover:text-primary"
-                  >
+                  <Link href={href} className="admin-metric-link">
                     Lihat detail
                     <ArrowUpRight size={12} />
                   </Link>
@@ -157,9 +157,9 @@ export default function Dashboard() {
             ))}
           </dl>
           <div
-            className={`mt-7 grid gap-6 ${isAdmin ? "xl:grid-cols-[1.2fr_1fr]" : ""}`}
+            className={`admin-dashboard-panels ${isAdmin ? "admin-dashboard-panels-pair" : ""}`}
           >
-            <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <section className="admin-activity-panel overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-5">
                 <Clock3 size={18} className="text-slate-500" />
                 <div>
@@ -179,7 +179,7 @@ export default function Dashboard() {
                   />
                 </div>
               ) : (
-                <ul className="divide-y divide-slate-100 px-6">
+                <ul className="admin-activity-list divide-y divide-slate-100 px-6">
                   {data.data.activity.map((item) => (
                     <li key={item.id} className="flex items-start gap-3 py-5">
                       <span className="mt-1.5 size-2 shrink-0 rounded-full bg-amber-400" />
@@ -205,14 +205,14 @@ export default function Dashboard() {
               )}
             </section>
             {isAdmin && (
-              <section className="rounded-2xl border border-slate-200 bg-white p-6">
+              <section className="admin-shortcuts rounded-2xl border border-slate-200 bg-white p-6">
                 <h2 className="text-[15px] font-semibold text-slate-800">
                   Mulai mengelola
                 </h2>
                 <p className="mt-1 text-[13px] text-slate-500">
                   Akses cepat ke konten website
                 </p>
-                <div className="mt-5 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
+                <div className="admin-shortcut-grid">
                   {adminLinks
                     .filter((item) =>
                       [

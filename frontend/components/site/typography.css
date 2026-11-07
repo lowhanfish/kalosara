@@ -1,0 +1,348 @@
+/* Public design rhythm: Manrope, a restrained weight scale, and fluid spacing. */
+.public-portal {
+  --portal-caption: 0.8125rem;
+  --portal-small: 0.875rem;
+  --portal-body: 1rem;
+  --portal-card-title: 1.125rem;
+  --portal-section-title: clamp(1.5rem, 2.6vw, 2rem);
+  --portal-page-title: clamp(2rem, 4vw, 3rem);
+  --portal-section-space: clamp(3rem, 5.5vw, 5rem);
+  --portal-card-space: clamp(1.25rem, 2.5vw, 2rem);
+  font-size: var(--portal-body);
+  font-weight: 400;
+  line-height: 1.7;
+}
+.public-portal .container {
+  width: min(100% - 3rem, 76rem);
+}
+.public-portal :is(h1, h2, h3, h4) {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.public-portal h1 {
+  line-height: 1.12;
+}
+.public-portal h2 {
+  line-height: 1.25;
+}
+.public-portal :is(h3, h4) {
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+}
+.public-portal .font-extrabold {
+  font-weight: 700;
+}
+.public-portal main :is(p, li) {
+  text-wrap: pretty;
+}
+.public-portal main p {
+  line-height: 1.75;
+}
+.public-portal main p.text-sm {
+  font-size: 0.9375rem;
+}
+.public-portal main :is(.text-xs, .text-\[13px\]) {
+  font-size: var(--portal-caption);
+  line-height: 1.6;
+}
+.public-portal main .text-slate-400 {
+  color: #62748a;
+}
+.public-portal main .text-slate-500 {
+  color: #52667c;
+}
+.public-portal main.container {
+  padding-bottom: var(--portal-section-space);
+}
+.public-portal .portal-breadcrumb {
+  padding-block: 1.5rem 1rem;
+  font-size: var(--portal-small);
+  line-height: 1.6;
+}
+.public-portal .portal-breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+.public-portal .portal-page-heading {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  padding-block: 0.75rem 2rem;
+  gap: 1.5rem;
+}
+.public-portal .portal-page-heading h1 {
+  font-size: var(--portal-page-title);
+}
+.public-portal .portal-page-heading p:first-child,
+.public-portal .portal-section-heading p:first-child {
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+}
+.public-portal .portal-page-heading p + h1 + p {
+  margin-top: 1rem;
+  max-width: 65ch;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.public-portal .portal-section-heading {
+  align-items: end;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+.public-portal .portal-section-heading h2 {
+  font-size: var(--portal-section-title);
+}
+.public-portal .portal-section-heading > a {
+  min-height: 2.75rem;
+  font-size: var(--portal-small);
+}
+.public-portal
+  .portal-home
+  > section:not(.cinema-hero):not(.portal-quick-links) {
+  padding-block: var(--portal-section-space);
+}
+.public-portal .portal-home > section:last-child {
+  padding-block: 0;
+}
+.public-portal .portal-home > section:last-child > .container {
+  padding-block: var(--portal-section-space);
+}
+.public-portal .portal-card:is(.p-6, .p-5) {
+  padding: var(--portal-card-space);
+}
+.public-portal .portal-card h3 {
+  font-size: var(--portal-card-title);
+}
+.public-portal .portal-card :is(h2, h3) + p {
+  margin-top: 0.75rem;
+}
+.public-portal .portal-card time {
+  font-size: var(--portal-caption);
+  line-height: 1.5;
+}
+.public-portal .portal-card > .p-6 {
+  padding: var(--portal-card-space);
+}
+.public-portal .portal-card dd {
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  margin-top: 0.5rem;
+}
+.public-portal .portal-quick-card {
+  padding: 1.25rem;
+}
+.public-portal .portal-quick-card h2 {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.public-portal .portal-quick-card p {
+  font-size: var(--portal-caption);
+  line-height: 1.6;
+  margin-top: 0.375rem;
+}
+.public-portal .portal-section-index {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+}
+.public-portal .portal-nav-link {
+  font-size: var(--portal-small);
+  padding: 0.625rem 0.875rem;
+  line-height: 1.5;
+}
+.public-portal .portal-brand-kicker {
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+}
+.public-portal .portal-account {
+  font-size: var(--portal-caption);
+  line-height: 1.5;
+}
+.public-portal .portal-search-trigger {
+  font-size: var(--portal-small);
+  min-height: 2.75rem;
+}
+.public-portal .portal-header-inner {
+  min-height: 5.5rem;
+}
+.public-portal .cinema-eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  margin-bottom: 1.5rem;
+}
+.public-portal .cinema-title {
+  font-size: clamp(2.75rem, 5.4vw, 4.75rem);
+  line-height: 1.12;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+.public-portal .cinema-description {
+  max-width: 43ch;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #b4c1cf;
+}
+.public-portal :is(.cinema-button, .cinema-text-link) {
+  font-size: var(--portal-small);
+  line-height: 1.5;
+  min-height: 3rem;
+}
+.public-portal .cinema-actions {
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.public-portal .cinema-location {
+  font-size: var(--portal-caption);
+  margin-top: 2rem;
+  color: #a8b8c8;
+}
+.public-portal .cinema-nameplate > span:first-child {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+}
+.public-portal .cinema-nameplate > strong {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  line-height: 1.4;
+  font-weight: 600;
+}
+.public-portal .cinema-seal span {
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.public-portal .cinema-bottom {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+}
+.public-portal .cinema-bottom a {
+  font-size: 0.8125rem;
+  min-height: 2.75rem;
+}
+.public-portal .cinema-arch-label {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+}
+.public-portal .cinema-coordinate {
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+}
+.public-portal :is(input, select, textarea) {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.public-portal :is(.cms-input, .field) {
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+}
+.public-portal .public-content-filters {
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+.public-portal .news-body {
+  max-width: 70ch;
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.85;
+}
+.public-portal .news-body p {
+  margin-block: 1.25rem;
+  line-height: 1.85;
+}
+.public-portal .news-body h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  margin-block: 2.5rem 1rem;
+}
+.public-portal .news-body h3 {
+  font-size: 1.375rem;
+  margin-block: 2rem 0.75rem;
+}
+.public-portal .cms-rich {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+.public-portal footer > .container {
+  padding-block: var(--portal-section-space);
+  gap: 3rem;
+}
+.public-portal footer h2 {
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+.public-portal footer li a {
+  min-height: 2.75rem;
+}
+.public-portal footer .text-slate-500 {
+  color: #98a9bc;
+}
+@media (max-width: 1100px) {
+  .public-portal .portal-nav-link {
+    padding-inline: 0.625rem;
+  }
+  .public-portal .portal-header-inner {
+    gap: 1rem;
+  }
+}
+@media (max-width: 640px) {
+  .public-portal .container {
+    width: calc(100% - 2rem);
+  }
+  .public-portal .portal-header-inner {
+    min-height: 4.75rem;
+  }
+  .public-portal .portal-brand strong {
+    font-size: 1rem;
+  }
+  .public-portal .portal-mobile-menu > summary {
+    min-height: 2.75rem;
+    font-size: 0.875rem;
+  }
+  .public-portal .portal-page-heading {
+    padding-block: 0.5rem 1.5rem;
+  }
+  .public-portal .portal-section-heading {
+    flex-wrap: wrap;
+    align-items: start;
+    gap: 0.5rem 1rem;
+  }
+  .public-portal .portal-section-heading > div {
+    flex: 1 1 12rem;
+  }
+  .public-portal .portal-section-heading > a {
+    align-self: end;
+  }
+  .public-portal .cinema-composition {
+    padding-top: 2.5rem;
+    gap: 2.5rem;
+  }
+  .public-portal .cinema-description {
+    max-width: 40ch;
+  }
+  .public-portal .cinema-actions {
+    gap: 1rem 1.5rem;
+  }
+  .public-portal .cinema-bottom {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .public-portal .cinema-bottom > span {
+    max-width: 100%;
+    font-size: 0.625rem;
+  }
+  .public-portal .portal-quick-card {
+    padding: 1.125rem;
+  }
+  .public-portal .portal-quick-links {
+    padding-block: 1.5rem 2rem;
+  }
+  .public-portal .portal-section-index {
+    margin-bottom: 1rem;
+  }
+  .public-portal footer > .container {
+    gap: 2rem;
+  }
+}

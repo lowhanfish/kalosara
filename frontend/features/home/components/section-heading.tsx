@@ -12,7 +12,7 @@ export function SectionHeading({
   icon: LucideIcon;
 }) {
   return (
-    <div className="mb-6 flex items-end justify-between gap-4">
+    <div className="portal-section-heading mb-6 flex items-end justify-between gap-4">
       <div>
         <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-slate-500">
           <Icon size={14} aria-hidden="true" />

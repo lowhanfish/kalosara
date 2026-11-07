@@ -270,7 +270,7 @@ export default function Editor({
       </nav>
       {section === "pengaturan" && (
         <form
-          className="space-y-4 rounded-xl border border-border p-5"
+          className="admin-settings-form space-y-4 rounded-xl border border-border p-5"
           onSubmit={(e) => {
             e.preventDefault();
             save.mutate({ path: "/admin/profile/settings", body: settings });
@@ -279,45 +279,54 @@ export default function Editor({
           <h2 id="pengaturan" className="text-2xl font-semibold">
             Pengaturan website
           </h2>
-          {(
-            [
-              ["name", "Nama kelurahan"],
-              ["district", "Kecamatan"],
-              ["regency", "Kabupaten"],
-              ["address", "Alamat"],
-              ["phone", "Telepon"],
-              ["email", "Email"],
-              ["hours", "Jam kerja"],
-            ] as const
-          ).map(([key, label]) => (
-            <Field
-              key={key}
-              label={label}
-              value={settings[key] ?? ""}
-              onChange={(v) => setSettings({ ...settings, [key]: v || null })}
+          <div className="admin-settings-fields">
+            {(
+              [
+                ["name", "Nama kelurahan"],
+                ["district", "Kecamatan"],
+                ["regency", "Kabupaten"],
+                ["address", "Alamat"],
+                ["phone", "Telepon"],
+                ["email", "Email"],
+                ["hours", "Jam kerja"],
+              ] as const
+            ).map(([key, label]) => (
+              <Field
+                key={key}
+                label={label}
+                value={settings[key] ?? ""}
+                onChange={(v) => setSettings({ ...settings, [key]: v || null })}
+              />
+            ))}
+          </div>
+          <div className="admin-settings-fields">
+            {(["latitude", "longitude"] as const).map((key) => (
+              <Field
+                key={key}
+                label={key === "latitude" ? "Lintang" : "Bujur"}
+                type="number"
+                value={settings[key]?.toString() ?? ""}
+                onChange={(v) =>
+                  setSettings({
+                    ...settings,
+                    [key]: v === "" ? null : Number(v),
+                  })
+                }
+              />
+            ))}
+          </div>
+          <div className="admin-settings-fields">
+            <Media
+              label="Logo"
+              value={settings.logoUrl}
+              onChange={(v) => setSettings({ ...settings, logoUrl: v })}
             />
-          ))}
-          {(["latitude", "longitude"] as const).map((key) => (
-            <Field
-              key={key}
-              label={key === "latitude" ? "Lintang" : "Bujur"}
-              type="number"
-              value={settings[key]?.toString() ?? ""}
-              onChange={(v) =>
-                setSettings({ ...settings, [key]: v === "" ? null : Number(v) })
-              }
+            <Media
+              label="Gambar utama beranda"
+              value={settings.heroUrl}
+              onChange={(v) => setSettings({ ...settings, heroUrl: v })}
             />
-          ))}
-          <Media
-            label="Logo"
-            value={settings.logoUrl}
-            onChange={(v) => setSettings({ ...settings, logoUrl: v })}
-          />
-          <Media
-            label="Gambar utama beranda"
-            value={settings.heroUrl}
-            onChange={(v) => setSettings({ ...settings, heroUrl: v })}
-          />
+          </div>
           <h3 className="font-semibold">
             Tautan terkait / media sosial (HTTPS)
           </h3>
@@ -441,7 +450,9 @@ export default function Editor({
               Isi Halaman Profil
             </label>
             <p className="mt-1 mb-2.5 text-xs text-muted">
-              Gunakan editor WYSIWYG untuk menyusun format dokumen resmi (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip Gambar).
+              Gunakan editor WYSIWYG untuk menyusun format dokumen resmi
+              (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring,
+              dan Sisip Gambar).
             </p>
             <RichEditor
               key={slug}
@@ -470,7 +481,9 @@ export default function Editor({
                   Pratinjau Halaman — Status: {page.status}
                 </span>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{page.title}</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">
+                {page.title}
+              </h3>
               {page.content.includes("<") ? (
                 <div
                   className="cms-rich text-sm leading-relaxed text-slate-600"

@@ -1,4 +1,5 @@
 import "@/components/site/cinematic.css";
+import "@/components/site/typography.css";
 import { CardEffects } from "@/components/site/card-effects";
 import { DemoNotice } from "@/components/site/demo-notice";
 import { SiteHeader } from "@/components/site/header";

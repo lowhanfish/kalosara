@@ -5,7 +5,7 @@ export function AdminBrand() {
   return (
     <Link
       href="/admin"
-      className="flex items-center gap-3"
+      className="admin-brand flex items-center gap-3"
       aria-label="KALOSARA — ringkasan admin"
     >
       <Image
@@ -16,11 +16,9 @@ export function AdminBrand() {
         unoptimized
         className="h-10 w-9 object-contain"
       />
-      <span className="text-lg font-extrabold tracking-[.14em] text-white">
+      <span className="admin-brand-name">
         KALOSARA
-        <small className="mt-1 block text-xs font-medium tracking-[.19em] text-slate-400">
-          PANEL KELOLA KELURAHAN
-        </small>
+        <small className="admin-brand-caption">Kelurahan Watundehoa</small>
       </span>
     </Link>
   );

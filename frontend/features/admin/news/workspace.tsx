@@ -99,33 +99,35 @@ function Workspace() {
         <>
           {!selected && (
             <>
-              <p>
-                Buat dan kelola berita yang akan dibaca warga. Pilih status
-                Terbit untuk menampilkannya pada website.
-              </p>
-              <button
-                className="yellow-button"
-                onClick={() => {
-                  if (confirmLeave()) {
-                    setSelected({
-                      id: crypto.randomUUID(),
-                      slug: "",
-                      title: "",
-                      excerpt: "",
-                      bodyHtml: "<p></p>",
-                      categoryId: "",
-                      coverId: null,
-                      status: "DRAFT",
-                      version: 0,
-                    });
-                    setNotice("");
-                  }
-                }}
-              >
-                Buat berita baru
-              </button>
+              <div className="admin-news-toolbar">
+                <p>
+                  Buat dan kelola berita yang akan dibaca warga. Pilih status
+                  Terbit untuk menampilkannya pada website.
+                </p>
+                <button
+                  className="yellow-button"
+                  onClick={() => {
+                    if (confirmLeave()) {
+                      setSelected({
+                        id: crypto.randomUUID(),
+                        slug: "",
+                        title: "",
+                        excerpt: "",
+                        bodyHtml: "<p></p>",
+                        categoryId: "",
+                        coverId: null,
+                        status: "DRAFT",
+                        version: 0,
+                      });
+                      setNotice("");
+                    }
+                  }}
+                >
+                  Buat berita baru
+                </button>
+              </div>
               <form
-                className="grid items-end gap-4 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2 lg:grid-cols-4"
+                className="admin-news-filters"
                 onSubmit={(e) => {
                   e.preventDefault();
                   setPage(1);
@@ -202,26 +204,34 @@ function Workspace() {
                   description="Buat berita pertama untuk berbagi kabar dengan warga, atau ubah filter pencarian."
                 />
               )}
-              <ul className="space-y-3">
+              <ul className="admin-news-list">
                 {query.data?.items.map((row) => (
-                  <li
-                    className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-4"
-                    key={row.id}
-                  >
-                    <div className="min-w-0">
+                  <li className="cms-content-row" key={row.id}>
+                    <div className="cms-row-title">
                       <h2 className="break-words font-semibold">{row.title}</h2>
-                      <p className="text-[15px]">
-                        {row.status} · {row.category.name} · versi {row.version}
+                      <p className="admin-row-meta">
+                        <span className="cms-status" data-status={row.status}>
+                          {
+                            {
+                              PUBLISHED: "Terbit",
+                              DRAFT: "Draft",
+                              ARCHIVED: "Arsip",
+                            }[row.status]
+                          }
+                        </span>
+                        <span>{row.category.name}</span>
+                        <span>Versi {row.version}</span>
                       </p>
                     </div>
                     <button
-                      className="underline"
+                      className="cms-edit-button"
+                      aria-label={`Edit ${row.title}`}
                       disabled={open.isPending}
                       onClick={() => {
                         if (confirmLeave()) open.mutate(row.id);
                       }}
                     >
-                      Edit {row.title}
+                      Edit berita
                     </button>
                   </li>
                 ))}

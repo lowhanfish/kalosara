@@ -23,7 +23,7 @@ export function PageHeading({
           breadcrumbs ?? [{ label: "Beranda", href: "/" }, { label: title }]
         }
       />
-      <header className="mb-6 flex flex-col gap-5 border-b border-slate-200 pb-6 pt-3 sm:mb-7 sm:flex-row sm:items-end sm:justify-between sm:pb-7">
+      <header className="portal-page-heading mb-6 flex flex-col gap-5 border-b border-slate-200 pb-6 pt-3 sm:mb-7 sm:flex-row sm:items-end sm:justify-between sm:pb-7">
         <div className="max-w-3xl">
           <p className="mb-3 flex items-center gap-2 text-[13px] font-bold uppercase tracking-[.18em] text-slate-500">
             {Icon && <Icon size={16} aria-hidden="true" />}

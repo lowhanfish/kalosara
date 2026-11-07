@@ -1,3 +1,4 @@
+import "@/components/admin/admin.css";
 import { getSiteSettings } from "@/lib/site-settings";
 import { AdminShell } from "@/features/cms/admin-shell";
 import type { Metadata } from "next";

@@ -66,8 +66,8 @@ export function AdminShell({
     adminLinks.find((item) => item.href.split("#")[0] === path);
   const closeMenu = () => mobileMenu.current?.close();
   return (
-    <div className="flex min-h-dvh bg-[#f4f6fa] text-slate-800">
-      <aside className="sticky top-0 hidden h-dvh w-[272px] shrink-0 lg:block">
+    <div className="admin-app flex min-h-dvh">
+      <aside className="admin-desktop-sidebar sticky top-0 hidden h-dvh shrink-0 lg:block">
         <AdminSidebar
           path={path}
           hash={hash}
@@ -82,12 +82,12 @@ export function AdminShell({
         onClick={(e) => {
           if (e.target === e.currentTarget) closeMenu();
         }}
-        className="fixed inset-y-0 left-0 m-0 h-dvh max-h-dvh w-[290px] max-w-[90vw] border-0 bg-[#0c2038] p-0 shadow-2xl"
+        className="admin-mobile-menu fixed inset-y-0 left-0 m-0 h-dvh max-h-dvh w-[290px] max-w-[90vw] border-0 bg-white p-0 shadow-2xl"
       >
         <button
           type="button"
           aria-label="Tutup menu admin"
-          className="absolute right-2 top-2 z-10 grid size-10 place-items-center rounded-lg text-slate-300 hover:bg-white/10"
+          className="absolute right-2 top-2 z-10 grid size-10 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
           onClick={closeMenu}
         >
           <X size={20} />
@@ -100,7 +100,7 @@ export function AdminShell({
         />
       </dialog>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-20 shrink-0 items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 backdrop-blur-xl sm:px-7">
+        <header className="admin-topbar sticky top-0 z-20 flex shrink-0 items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
@@ -153,16 +153,16 @@ export function AdminShell({
             </button>
           </div>
         </header>
-        <div className="mx-auto w-full max-w-[1560px] flex-1 px-4 py-7 sm:px-8 lg:px-10 lg:py-9">
+        <div className="admin-content mx-auto w-full flex-1">
           {logout.isError && <AdminError error={logout.error} />}
           {demoContent && (
-            <div className="mb-7 overflow-hidden rounded-xl border border-amber-200">
+            <div className="admin-demo-notice">
               <DemoNotice />
             </div>
           )}
           <div className="cms-shell">{children}</div>
         </div>
-        <footer className="flex flex-wrap justify-between gap-2 border-t border-slate-200 px-6 py-4 text-xs text-slate-400">
+        <footer className="admin-footer flex flex-wrap justify-between gap-2">
           <span>KALOSARA · Ruang kerja pengelola kelurahan</span>
           <Link href="/" className="hover:text-primary">
             Lihat website ↗
