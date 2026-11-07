@@ -47,10 +47,34 @@ export function HomeHero({
       </div>
       <div className="cinema-light" aria-hidden="true" />
       <div className="cinema-grid" aria-hidden="true" />
+      <svg
+        className="cinema-contours"
+        viewBox="0 0 1440 800"
+        fill="none"
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        {Array.from({ length: 7 }, (_, i) => (
+          <ellipse
+            key={i}
+            cx="1140"
+            cy="350"
+            rx={280 + i * 48}
+            ry={170 + i * 38}
+            transform="rotate(-28 1140 350)"
+          />
+        ))}
+        <path
+          className="cinema-trace"
+          d="M0 720C300 720 340 490 630 490S940 140 1440 140"
+        />
+      </svg>
       <div className="container cinema-composition">
         <div className="cinema-copy">
           <p className="cinema-eyebrow">
-            <span /> DARI WATUNDEHOA, UNTUK WARGA
+            <span /> DARI{" "}
+            {settings.name.replace(/^Kelurahan /, "").toUpperCase()}, UNTUK
+            WARGA
           </p>
           <h1 id="hero-title" className="cinema-title">
             Lebih dekat.
@@ -99,6 +123,17 @@ export function HomeHero({
               rotateY: reduced ? 0 : rotateY,
             }}
           >
+            <div
+              className="cinema-orbital cinema-orbital-one"
+              aria-hidden="true"
+            />
+            <div
+              className="cinema-orbital cinema-orbital-two"
+              aria-hidden="true"
+            />
+            <span className="cinema-coordinate" aria-hidden="true">
+              01 / RUANG KEBERSAMAAN
+            </span>
             <div className="cinema-arch">
               <div className="cinema-orbit" />
               <span className="cinema-arch-label">

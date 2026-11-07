@@ -44,7 +44,10 @@ export default async function Page() {
 
       <section className="container pb-14">
         {profile.unavailable && (
-          <p role="status" className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+          <p
+            role="status"
+            className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+          >
             Profil resmi sementara tidak dapat dimuat. Silakan coba lagi.
           </p>
         )}
@@ -53,8 +56,16 @@ export default async function Page() {
           {[
             ["sejarah", "Sejarah", "Perjalanan dan rekam jejak kelurahan"],
             ["visi-misi", "Visi dan misi", "Arah pembangunan dan pengabdian"],
-            ["tugas-fungsi", "Tugas dan fungsi", "Peran dalam tata kelola pelayanan"],
-            ["struktur-organisasi", "Struktur organisasi", "Tata susunan perangkat kelurahan"],
+            [
+              "tugas-fungsi",
+              "Tugas dan fungsi",
+              "Peran dalam tata kelola pelayanan",
+            ],
+            [
+              "struktur-organisasi",
+              "Struktur organisasi",
+              "Tata susunan perangkat kelurahan",
+            ],
             ["sambutan-lurah", "Sambutan lurah", "Pesan dari pimpinan wilayah"],
           ].map(([slug, label, subtitle]) => {
             const page = profile.pages.find((p) => p.slug === slug);
@@ -62,7 +73,7 @@ export default async function Page() {
               <MotionStaggerItem key={slug}>
                 <article
                   id={slug}
-                  className="flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs hover:shadow-md transition-shadow"
+                  className="portal-card flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs hover:shadow-md transition-shadow"
                 >
                   <div>
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
@@ -95,12 +106,14 @@ export default async function Page() {
           })}
 
           <MotionStaggerItem>
-            <article className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs hover:shadow-md transition-shadow">
+            <article className="portal-card flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs hover:shadow-md transition-shadow">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
                 <MapPin className="h-4 w-4" />
                 <span>Lokasi Kantor</span>
               </div>
-              <h2 className="mt-2 text-xl font-bold text-slate-900">Alamat dan peta</h2>
+              <h2 className="mt-2 text-xl font-bold text-slate-900">
+                Alamat dan peta
+              </h2>
               <p className="mt-4 text-sm leading-relaxed text-slate-600">
                 {settings.address ?? "Alamat belum diisi."}
               </p>
@@ -116,7 +129,9 @@ export default async function Page() {
                     Buka peta kantor di OpenStreetMap
                   </a>
                 ) : (
-                  <p className="text-xs text-muted">Koordinat kantor belum diisi.</p>
+                  <p className="text-xs text-muted">
+                    Koordinat kantor belum diisi.
+                  </p>
                 )}
               </div>
             </article>
@@ -125,19 +140,23 @@ export default async function Page() {
 
         <div className="mt-8">
           <MotionFadeIn delay={0.15}>
-            <article className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+            <article className="portal-card rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div>
                   <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
                     <Users className="h-4 w-4" />
                     <span>Perangkat Kelurahan</span>
                   </div>
-                  <h2 className="mt-1 text-2xl font-bold text-slate-900">Aparatur Kelurahan</h2>
+                  <h2 className="mt-1 text-2xl font-bold text-slate-900">
+                    Aparatur Kelurahan
+                  </h2>
                 </div>
               </div>
 
               {profile.officials.length === 0 && (
-                <p className="mt-4 text-sm text-muted">Daftar aparatur resmi belum dipublikasikan.</p>
+                <p className="mt-4 text-sm text-muted">
+                  Daftar aparatur resmi belum dipublikasikan.
+                </p>
               )}
 
               <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -171,12 +190,15 @@ export default async function Page() {
                     <h3 className="mt-4 font-bold text-slate-900 group-hover:text-primary transition-colors">
                       {official.name}
                     </h3>
-                    <p className="text-xs font-semibold text-primary">{official.position}</p>
+                    <p className="text-xs font-semibold text-primary">
+                      {official.position}
+                    </p>
                     <p className="text-xs text-muted mt-0.5">{official.unit}</p>
                     {(official.termStart || official.termEnd) && (
                       <p className="mt-3 flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-[11px] text-muted">
                         <Calendar className="h-3 w-3" />
-                        {official.termStart?.slice(0, 10) ?? "—"} s/d {official.termEnd?.slice(0, 10) ?? "—"}
+                        {official.termStart?.slice(0, 10) ?? "—"} s/d{" "}
+                        {official.termEnd?.slice(0, 10) ?? "—"}
                       </p>
                     )}
                   </MotionHoverCard>
@@ -189,7 +211,7 @@ export default async function Page() {
 
       <section className="container pb-16">
         <MotionFadeIn delay={0.2}>
-          <div className="grid items-center gap-8 rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-10 shadow-xs md:grid-cols-2">
+          <div className="portal-card grid items-center gap-8 rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-10 shadow-xs md:grid-cols-2">
             <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 shadow-inner">
               <Image
                 src={siteIdentity.officeSignPhoto}
@@ -207,9 +229,15 @@ export default async function Page() {
               </h2>
               <p className="mt-4 text-sm leading-relaxed text-muted">
                 {settings.name} berada di{" "}
-                <span className="font-medium text-slate-800">{settings.district ?? siteIdentity.district}</span>,{" "}
-                <span className="font-medium text-slate-800">{settings.regency ?? siteIdentity.regency}</span>. Informasi profil dan
-                aparatur yang sudah dipublikasikan tersedia pada bagian di atas.
+                <span className="font-medium text-slate-800">
+                  {settings.district ?? siteIdentity.district}
+                </span>
+                ,{" "}
+                <span className="font-medium text-slate-800">
+                  {settings.regency ?? siteIdentity.regency}
+                </span>
+                . Informasi profil dan aparatur yang sudah dipublikasikan
+                tersedia pada bagian di atas.
               </p>
             </div>
           </div>

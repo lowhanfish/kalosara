@@ -64,7 +64,7 @@ export default async function HomePage() {
     v == null ? "—" : new Intl.NumberFormat("id-ID").format(v);
 
   return (
-    <main id="konten" tabIndex={-1}>
+    <main id="konten" tabIndex={-1} className="portal-home">
       <HomeHero settings={identity} leader={leader} />
       <QuickLinks />
 
@@ -89,7 +89,7 @@ export default async function HomePage() {
               icon={Megaphone}
             />
             {notices.length ? (
-              <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200/90 bg-white shadow-xs">
+              <div className="portal-card divide-y divide-slate-100 rounded-2xl border border-slate-200/90 bg-white shadow-xs">
                 {notices.map((item) => (
                   <Link
                     key={item.id}
@@ -133,7 +133,7 @@ export default async function HomePage() {
       </section>
 
       {/* Region Overview & Statistics Section */}
-      <section className="border-y border-slate-200/80 bg-[#f4f7fb]/80 py-14 sm:py-18">
+      <section className="portal-region border-y border-slate-200/80 bg-[#f4f7fb]/80 py-14 sm:py-18">
         <div className="container grid items-center gap-10 lg:grid-cols-2">
           <MotionFadeIn direction="left">
             <p className="mb-3 text-xs font-bold uppercase tracking-[.18em] text-slate-500">
@@ -144,7 +144,8 @@ export default async function HomePage() {
             </h2>
             <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted">
               {identity.name} berada di {identity.district}, {identity.regency}.
-              Kenali wilayah, aparatur, dan keterbukaan informasi kelurahan Anda.
+              Kenali wilayah, aparatur, dan keterbukaan informasi kelurahan
+              Anda.
             </p>
             <Link
               href="/profil"
@@ -180,7 +181,7 @@ export default async function HomePage() {
                 },
               ].map(({ label, value, icon: Icon }) => (
                 <MotionStaggerItem key={label}>
-                  <div className="group rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/60 sm:p-6">
+                  <div className="portal-card group rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/60 sm:p-6">
                     <div className="mb-4 grid size-11 place-items-center rounded-xl bg-slate-100 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-amber-300 group-hover:scale-105">
                       <Icon size={20} strokeWidth={1.7} />
                     </div>
@@ -227,7 +228,7 @@ export default async function HomePage() {
                 <Link
                   key={item.id}
                   href={`/agenda#${item.id}`}
-                  className="group flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                  className="portal-card group flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                 >
                   <div className="grid size-14 shrink-0 place-content-center rounded-xl bg-slate-100/80 text-center text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
                     <strong className="text-xl font-extrabold leading-none">
@@ -291,7 +292,7 @@ export default async function HomePage() {
                 <Link
                   key={photo.mediaId}
                   href="/galeri"
-                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 shadow-xs"
+                  className="portal-card group relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 shadow-xs"
                 >
                   <Image
                     src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
@@ -373,4 +374,3 @@ export default async function HomePage() {
     </main>
   );
 }
-

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, FileText, Landmark, Users } from "lucide-react";
 export function ContactGuide() {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+    <section className="portal-card rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
       <h2 className="text-lg font-bold text-primary">
         Informasi yang Anda perlukan
       </h2>

@@ -1,4 +1,5 @@
 import "@/components/site/cinematic.css";
+import { CardEffects } from "@/components/site/card-effects";
 import { DemoNotice } from "@/components/site/demo-notice";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -12,6 +13,7 @@ export default async function PublicLayout({
   const settings = await getSiteSettings();
   return (
     <div className="public-portal flex min-h-screen flex-col">
+      <CardEffects />
       <SiteHeader settings={settings} />
       {settings.demoContent && <DemoNotice />}
       <AuthRecovery />

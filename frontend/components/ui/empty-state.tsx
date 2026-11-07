@@ -9,7 +9,7 @@ export function EmptyState({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-60 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 px-6 py-10 text-center">
+    <div className="portal-card flex min-h-60 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 px-6 py-10 text-center">
       <span className="mb-5 grid size-14 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-400">
         <FolderOpen size={25} strokeWidth={1.4} aria-hidden="true" />
       </span>

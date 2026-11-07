@@ -15,7 +15,7 @@ export function LocationMap({
   return (
     <section
       aria-label="Lokasi kantor kelurahan"
-      className="space-y-4 rounded-xl border border-border bg-soft p-6"
+      className="portal-card space-y-4 rounded-xl border border-border bg-soft p-6"
     >
       <h2 className="text-xl font-bold">Lokasi kantor</h2>
       <p>{address}</p>

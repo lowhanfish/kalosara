@@ -35,7 +35,10 @@ interface GalleryPhotoGridProps {
  * GalleryPhotoGrid renders a responsive photo grid and opens a full-screen,
  * professional lightbox with next/prev navigation when any photo is clicked.
  */
-export function GalleryPhotoGrid({ photos, albumTitle }: GalleryPhotoGridProps) {
+export function GalleryPhotoGrid({
+  photos,
+  albumTitle,
+}: GalleryPhotoGridProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleOpen = (index: number) => {
@@ -52,7 +55,7 @@ export function GalleryPhotoGrid({ photos, albumTitle }: GalleryPhotoGridProps) 
         {photos.map((photo, index) => (
           <figure
             key={photo.mediaId}
-            className="group/img overflow-hidden rounded-xl border border-slate-200/70 bg-white transition-all duration-300 hover:border-slate-300 hover:shadow-md"
+            className="portal-card group/img overflow-hidden rounded-xl border border-slate-200/70 bg-white transition-all duration-300 hover:border-slate-300 hover:shadow-md"
           >
             <button
               type="button"

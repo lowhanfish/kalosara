@@ -114,7 +114,7 @@ export async function ContentPage({
       {failed && (
         <div
           role="alert"
-          className="my-6 rounded-2xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
+          className="portal-card my-6 rounded-2xl border border-red-200 bg-red-50 p-5 text-[15px] text-red-800"
         >
           Informasi sementara tidak dapat dimuat.{" "}
           <Link className="font-semibold underline" href={channel.path}>
@@ -141,12 +141,14 @@ export async function ContentPage({
           <article
             id={item.id}
             key={item.id}
-            className="group min-w-0 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-300 hover:border-slate-300 hover:shadow-md sm:p-7"
+            className="portal-card group min-w-0 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-300 hover:border-slate-300 hover:shadow-md sm:p-7"
           >
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="break-words text-xl font-bold text-primary">
                 {item.announcement?.pinned && (
-                  <span aria-label="Disematkan" className="mr-1">📌 </span>
+                  <span aria-label="Disematkan" className="mr-1">
+                    📌{" "}
+                  </span>
                 )}
                 {item.title}
               </h2>

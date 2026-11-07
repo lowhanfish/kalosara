@@ -61,7 +61,7 @@ export default async function SearchPage({
               <MotionHoverCard>
                 <Link
                   href={page.href}
-                  className="group flex items-center justify-between gap-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary/40 hover:shadow-md"
+                  className="portal-card group flex items-center justify-between gap-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary/40 hover:shadow-md"
                 >
                   <div>
                     <span className="block font-bold text-slate-900 group-hover:text-primary transition-colors">

@@ -358,9 +358,15 @@
 }
 .cinema-portrait {
   position: absolute;
-  inset: 70px 12px 20px;
+  inset: 38px 12px 20px;
+  overflow: hidden;
   transform: translateZ(35px);
   filter: drop-shadow(12px 15px 15px #0005);
+}
+.cinema-portrait > img {
+  object-position: center top;
+  transform: scale(2.05);
+  transform-origin: center top;
 }
 .cinema-seal {
   position: absolute;
@@ -605,7 +611,7 @@
     inset-inline: 30px;
   }
   .cinema-portrait {
-    top: 65px;
+    top: 38px;
   }
   .cinema-nameplate {
     left: 8px;
@@ -671,4 +677,317 @@
 .portal-mobile-panel .portal-nav-link {
   color: #294158;
   background: #f3f5f7;
+}
+
+/* Sculptural depth and animated fine-line landscapes. */
+.cinema-hero {
+  background: radial-gradient(ellipse at 78% 40%, #203b49, #091725 65%);
+}
+.cinema-backdrop {
+  opacity: 0.2;
+}
+.cinema-grid {
+  background-size: 72px 72px;
+}
+.cinema-description {
+  font-size: 15px;
+}
+.cinema-eyebrow {
+  font-size: 10px;
+  line-height: 1.8;
+}
+.cinema-location {
+  font-size: 12px;
+}
+.cinema-button,
+.cinema-text-link {
+  font-size: 12px;
+}
+.cinema-contours {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  stroke: #d7c396;
+  stroke-width: 0.65;
+  opacity: 0.16;
+}
+.cinema-trace {
+  stroke: #f3dab0;
+  stroke-width: 1.5;
+  stroke-dasharray: 120 1600;
+  animation: cinema-trace 18s linear infinite;
+}
+.cinema-arch {
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    #a2b6b844,
+    #213a4977 45%,
+    #0b1e2e
+  );
+  box-shadow:
+    inset 0 1px 25px #ead9b011,
+    14px 16px 0 #102636,
+    14px 16px 0 1px #d6c19430,
+    28px 32px 0 #10233188,
+    28px 32px 0 1px #d6c19418,
+    0 45px 90px #0006;
+}
+.cinema-orbital {
+  position: absolute;
+  left: -9%;
+  top: 16%;
+  width: 118%;
+  height: 65%;
+  border: 1px solid #d9c59945;
+  border-radius: 50%;
+  transform: translateZ(-40px) rotate(-32deg);
+  pointer-events: none;
+}
+.cinema-orbital::after {
+  content: "";
+  position: absolute;
+  top: 16%;
+  left: 12%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e8d5ac;
+  box-shadow: 0 0 22px #ead3a9aa;
+}
+.cinema-orbital-two {
+  transform: translateZ(15px) rotate(38deg);
+  border-color: #9fbcc326;
+  animation: cinema-orbit-drift 10s ease-in-out infinite alternate;
+}
+.cinema-orbital-two::after {
+  background: #93bfca;
+  top: auto;
+  bottom: 12%;
+  left: 17%;
+}
+.cinema-coordinate {
+  position: absolute;
+  right: -15px;
+  top: 20px;
+  writing-mode: vertical-rl;
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  color: #94a5b4;
+}
+.cinema-nameplate {
+  border-top-color: #ead6aa66;
+}
+.cinema-bottom a svg {
+  animation: cinema-scroll 2s ease-in-out infinite;
+}
+.portal-quick-links {
+  background: linear-gradient(120deg, #e9edf1, #f8f9fb 55%, #eceff3);
+  padding-block: 30px 42px;
+}
+.portal-section-index {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: #5c6e80;
+}
+.portal-section-index > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0.03em;
+}
+.portal-quick-card {
+  overflow: hidden;
+  min-height: 172px;
+  border-radius: 12px 12px 25px 12px;
+}
+.portal-quick-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #a88b58, #ead7b2, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s;
+}
+.portal-quick-card:hover::after,
+.portal-quick-card:focus-visible::after {
+  transform: scaleX(1);
+}
+.portal-card-index {
+  position: absolute;
+  top: 55px;
+  right: 14px;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  color: #0b294e07;
+  pointer-events: none;
+}
+.portal-home > section.container {
+  position: relative;
+}
+.portal-home > section.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(90deg, #ab8e58, transparent);
+}
+.portal-region {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(120deg, #e8eef2, #f7f9fb 65%);
+}
+.portal-region::before {
+  content: "";
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  left: -280px;
+  top: -180px;
+  border: 1px solid #9caeb533;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 45px #9caeb509,
+    0 0 0 90px #9caeb509,
+    0 0 0 135px #9caeb509;
+  z-index: -1;
+}
+@keyframes cinema-trace {
+  to {
+    stroke-dashoffset: -1720;
+  }
+}
+@keyframes cinema-orbit-drift {
+  to {
+    transform: translateZ(15px) rotate(45deg) translateY(-9px);
+  }
+}
+@keyframes cinema-scroll {
+  50% {
+    transform: translateY(4px);
+  }
+}
+@media (max-width: 640px) {
+  .cinema-description {
+    font-size: 14px;
+  }
+  .cinema-coordinate {
+    right: 0;
+  }
+  .cinema-orbital {
+    left: 0;
+    width: 100%;
+  }
+  .portal-section-index {
+    font-size: 8px;
+    letter-spacing: 0.09em;
+  }
+  .portal-section-index > span:last-child {
+    display: none;
+  }
+  .portal-quick-card {
+    min-height: 160px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinema-trace,
+  .cinema-orbital-two,
+  .cinema-bottom a svg {
+    animation: none;
+  }
+}
+
+/* Shared card treatment across the public portal. */
+.public-portal .portal-card {
+  position: relative;
+  isolation: isolate;
+  border-color: #b8c6d478;
+  background-image:
+    radial-gradient(
+      ellipse at var(--card-x, 0%) var(--card-y, 0%),
+      #e4cf9e22,
+      transparent 60%
+    ),
+    linear-gradient(135deg, #ffffff45, #ffffff00 55%, #8da7c00c);
+  box-shadow:
+    0 2px 0 #fff inset,
+    0 -3px 0 #173d6010 inset,
+    0 7px 16px #112e4d08,
+    0 18px 38px -24px #112e4d38;
+  transform: perspective(1000px) rotateX(var(--card-rx, 0deg))
+    rotateY(var(--card-ry, 0deg));
+  transition:
+    transform 0.35s ease-out,
+    box-shadow 0.35s,
+    border-color 0.35s;
+}
+.public-portal .portal-card::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-top: 1px solid #b99a6055;
+  border-right: 1px solid #b99a6055;
+  border-top-right-radius: 7px;
+  transition:
+    width 0.4s,
+    height 0.4s,
+    border-color 0.4s;
+}
+.public-portal .portal-card:focus-within {
+  border-color: #b69a67;
+  box-shadow:
+    0 2px 0 #fff inset,
+    0 -3px 0 #b99a6020 inset,
+    0 18px 40px -20px #193e5e38;
+}
+@media (hover: hover) and (pointer: fine) {
+  .public-portal .portal-card:hover {
+    border-color: #b69a67;
+    box-shadow:
+      0 2px 0 #fff inset,
+      0 -4px 0 #b99a6020 inset,
+      0 12px 24px #173d6010,
+      0 28px 48px -22px #173d6045;
+  }
+  .public-portal .portal-card:hover::before {
+    width: 42px;
+    height: 42px;
+    border-color: #b99a60aa;
+  }
+  .public-portal .portal-card[data-tilting] {
+    transition:
+      transform 0.12s ease-out,
+      box-shadow 0.35s,
+      border-color 0.35s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-portal .portal-card {
+    transform: none;
+    transition: none;
+  }
+  .public-portal .portal-card::before {
+    transition: none;
+  }
 }

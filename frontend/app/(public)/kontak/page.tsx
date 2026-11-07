@@ -22,8 +22,10 @@ export default async function Page() {
       />
       <MotionFadeIn direction="up">
         <div className="grid gap-8 lg:grid-cols-2">
-          <section className="space-y-6 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
-            <h2 className="text-xl font-bold text-primary">Informasi pelayanan</h2>
+          <section className="portal-card space-y-6 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
+            <h2 className="text-xl font-bold text-primary">
+              Informasi pelayanan
+            </h2>
             <dl className="space-y-5">
               <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-4">
                 <dt className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -62,7 +64,10 @@ export default async function Page() {
                 </dt>
                 <dd className="mt-1 font-semibold text-primary">
                   {settings.email ? (
-                    <a className="hover:underline" href={`mailto:${settings.email}`}>
+                    <a
+                      className="hover:underline"
+                      href={`mailto:${settings.email}`}
+                    >
                       {settings.email}
                     </a>
                   ) : (

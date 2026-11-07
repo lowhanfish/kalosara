@@ -72,7 +72,7 @@ export function StatisticCharts({ items }: { items: Statistic[] }) {
         {summaries.map(({ key, label, unit, icon: Icon }) => (
           <div
             key={key}
-            className="rounded-2xl border border-border bg-white p-4 sm:p-6"
+            className="portal-card rounded-2xl border border-border bg-white p-4 sm:p-6"
           >
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm font-medium text-muted">{label}</p>
@@ -100,7 +100,7 @@ export function StatisticCharts({ items }: { items: Statistic[] }) {
         ))}
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-border bg-white p-5 sm:p-7">
+        <section className="portal-card rounded-2xl border border-border bg-white p-5 sm:p-7">
           <h3 className="text-xl font-bold">Komposisi penduduk</h3>
           <p className="mt-1 text-sm text-muted">
             Menurut jenis kelamin · {statisticPeriod(selected.period)}
@@ -185,7 +185,7 @@ export function StatisticCharts({ items }: { items: Statistic[] }) {
             </p>
           )}
         </section>
-        <section className="rounded-2xl border border-border bg-white p-5 sm:p-7">
+        <section className="portal-card rounded-2xl border border-border bg-white p-5 sm:p-7">
           <div className="flex items-center justify-between gap-3">
             <h3 id={titleId} className="text-xl font-bold">
               Perbandingan periode

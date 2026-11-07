@@ -10,7 +10,7 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
       {items.map((news) => (
         <article
           key={news.slug}
-          className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50"
+          className="portal-card group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50"
         >
           <Link
             href={articlePath(news.slug)}
@@ -45,9 +45,15 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
             </div>
 
             <h2 className="mt-3.5 break-words text-lg font-bold leading-snug text-primary transition-colors group-hover:text-primary">
-              <Link href={articlePath(news.slug)} className="flex items-start justify-between gap-2">
+              <Link
+                href={articlePath(news.slug)}
+                className="flex items-start justify-between gap-2"
+              >
                 <span>{news.title}</span>
-                <ArrowUpRight size={16} className="mt-1 shrink-0 text-slate-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+                <ArrowUpRight
+                  size={16}
+                  className="mt-1 shrink-0 text-slate-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+                />
               </Link>
             </h2>
 
@@ -60,4 +66,3 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
     </div>
   );
 }
-

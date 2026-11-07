@@ -45,13 +45,19 @@ export default function CitizenDashboard() {
       </div>
 
       {query.isPending && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500" role="status">
+        <div
+          className="portal-card rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500"
+          role="status"
+        >
           <p className="animate-pulse">Memuat data akun warga…</p>
         </div>
       )}
 
       {query.isError && (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-800" role="alert">
+        <div
+          className="portal-card rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-800"
+          role="alert"
+        >
           <p className="font-semibold">{cmsError(query.error)}</p>
           <button
             onClick={async () => {
@@ -67,7 +73,7 @@ export default function CitizenDashboard() {
 
       {query.data && (
         <>
-          <section className="cms-content-row rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
+          <section className="portal-card cms-content-row rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
                 <div
@@ -93,7 +99,9 @@ export default function CitizenDashboard() {
                       </span>
                     )}
                   </div>
-                  <p className="mt-1 text-sm text-muted">{query.data.user.email}</p>
+                  <p className="mt-1 text-sm text-muted">
+                    {query.data.user.email}
+                  </p>
                 </div>
               </div>
 
@@ -116,18 +124,22 @@ export default function CitizenDashboard() {
           </section>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+            <div className="portal-card rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
               <span className="grid size-10 place-items-center rounded-xl bg-slate-100 text-primary">
                 <ShieldCheck size={20} />
               </span>
               <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Peran Pengguna
               </p>
-              <p className="mt-1 text-base font-bold text-primary">Masyarakat</p>
-              <p className="mt-1 text-xs text-muted">Akses mandiri informasi & layanan warga</p>
+              <p className="mt-1 text-base font-bold text-primary">
+                Masyarakat
+              </p>
+              <p className="mt-1 text-xs text-muted">
+                Akses mandiri informasi & layanan warga
+              </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+            <div className="portal-card rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
               <span className="grid size-10 place-items-center rounded-xl bg-slate-100 text-primary">
                 <FileText size={20} />
               </span>
@@ -138,19 +150,25 @@ export default function CitizenDashboard() {
                 {query.data.user.phone ?? "Belum ada no. telp"}
               </p>
               <p className="mt-1 text-xs text-muted">
-                {query.data.user.verifiedAt ? "Terverifikasi oleh kelurahan" : "Verifikasi di kantor"}
+                {query.data.user.verifiedAt
+                  ? "Terverifikasi oleh kelurahan"
+                  : "Verifikasi di kantor"}
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+            <div className="portal-card rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
               <span className="grid size-10 place-items-center rounded-xl bg-slate-100 text-primary">
                 <Building size={20} />
               </span>
               <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Status Pelayanan
               </p>
-              <p className="mt-1 text-base font-bold text-primary">Tahap 01 (Fondasi)</p>
-              <p className="mt-1 text-xs text-muted">Pelayanan surat saat ini langsung di kantor</p>
+              <p className="mt-1 text-base font-bold text-primary">
+                Tahap 01 (Fondasi)
+              </p>
+              <p className="mt-1 text-xs text-muted">
+                Pelayanan surat saat ini langsung di kantor
+              </p>
             </div>
           </div>
         </>
@@ -163,4 +181,3 @@ export default function CitizenDashboard() {
     </div>
   );
 }
-

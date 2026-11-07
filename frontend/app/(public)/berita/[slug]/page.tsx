@@ -127,7 +127,9 @@ export default async function Page({
           </h1>
           <p className="mt-5 text-[15px] text-muted">
             {settings.name} ·{" "}
-            <time dateTime={news.publishedAt}>{newsDate(news.publishedAt)}</time>
+            <time dateTime={news.publishedAt}>
+              {newsDate(news.publishedAt)}
+            </time>
           </p>
           <p className="mt-6 break-words text-lg leading-8 text-muted">
             {news.excerpt}
@@ -161,7 +163,9 @@ export default async function Page({
       </MotionFadeIn>
       {data.related.length > 0 && (
         <MotionFadeIn delay={0.2} className="mt-12">
-          <h2 className="mb-6 text-2xl font-bold text-slate-900">Berita terkait</h2>
+          <h2 className="mb-6 text-2xl font-bold text-slate-900">
+            Berita terkait
+          </h2>
           <NewsCards items={data.related} />
         </MotionFadeIn>
       )}

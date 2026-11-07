@@ -1,12 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import {
-  KeyRound,
-  CheckCircle2,
-  AlertCircle,
-  Lock,
-} from "lucide-react";
+import { KeyRound, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { accountMutation } from "@/features/account/client";
 import { cmsError } from "@/features/cms/client";
@@ -41,17 +36,20 @@ export default function SecurityPage() {
 
       {notice && (
         <div
-          className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
+          className="portal-card flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
           role="status"
         >
-          <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-600" />
+          <CheckCircle2
+            size={18}
+            className="mt-0.5 shrink-0 text-emerald-600"
+          />
           <p>{notice}</p>
         </div>
       )}
 
       {change.isError && (
         <div
-          className="flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
+          className="portal-card flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
           role="alert"
         >
           <AlertCircle size={18} className="mt-0.5 shrink-0 text-rose-600" />
@@ -86,16 +84,23 @@ export default function SecurityPage() {
           </span>
           <div>
             <h2 className="text-lg font-bold text-primary">Ubah kata sandi</h2>
-            <p className="text-xs text-muted">Perbarui kata sandi untuk melindungi akun Anda</p>
+            <p className="text-xs text-muted">
+              Perbarui kata sandi untuk melindungi akun Anda
+            </p>
           </div>
         </div>
 
         <div className="mt-5 rounded-xl border border-slate-100 bg-slate-50/70 p-4 text-xs leading-5 text-slate-600">
-          <p className="font-semibold text-slate-700">Ketentuan Keamanan Sandi:</p>
+          <p className="font-semibold text-slate-700">
+            Ketentuan Keamanan Sandi:
+          </p>
           <ul className="mt-1.5 list-disc pl-4 space-y-0.5">
             <li>Gunakan minimal 12 karakter (maksimal 72 byte).</li>
             <li>Kombinasikan huruf besar, kecil, angka, dan simbol.</li>
-            <li>Sesi login pada perangkat yang sedang Anda gunakan saat ini akan tetap aktif.</li>
+            <li>
+              Sesi login pada perangkat yang sedang Anda gunakan saat ini akan
+              tetap aktif.
+            </li>
           </ul>
         </div>
 
@@ -173,4 +178,3 @@ export default function SecurityPage() {
     </div>
   );
 }
-

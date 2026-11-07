@@ -47,16 +47,19 @@ function ProfileForms({ user }: { user: Account }) {
     <div className="space-y-6">
       {notice && (
         <div
-          className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
+          className="portal-card flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
           role="status"
         >
-          <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-600" />
+          <CheckCircle2
+            size={18}
+            className="mt-0.5 shrink-0 text-emerald-600"
+          />
           <p>{notice}</p>
         </div>
       )}
       {save.isError && (
         <div
-          className="flex items-start justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
+          className="portal-card flex items-start justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
           role="alert"
         >
           <div className="flex items-start gap-3">
@@ -100,12 +103,16 @@ function ProfileForms({ user }: { user: Account }) {
           </span>
           <div>
             <h2 className="text-lg font-bold text-primary">Profil saya</h2>
-            <p className="text-xs text-muted">Data identitas tampilan akun warga</p>
+            <p className="text-xs text-muted">
+              Data identitas tampilan akun warga
+            </p>
           </div>
         </div>
 
         <p className="mt-4 text-xs text-slate-500">
-          Isi data nama tampilan. Alamat bersifat opsional; demi keamanan data pribadi, jangan masukkan NIK, nomor KK atau mengunggah dokumen identitas di formulir ini.
+          Isi data nama tampilan. Alamat bersifat opsional; demi keamanan data
+          pribadi, jangan masukkan NIK, nomor KK atau mengunggah dokumen
+          identitas di formulir ini.
         </p>
 
         <div className="mt-5 space-y-4">
@@ -150,14 +157,16 @@ function ProfileForms({ user }: { user: Account }) {
       </form>
 
       {/* Kontak Akun */}
-      <section className="cms-editor rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
+      <section className="portal-card cms-editor rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
         <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
           <span className="grid size-10 place-items-center rounded-xl bg-slate-100 text-primary">
             <Mail size={20} />
           </span>
           <div>
             <h2 className="text-lg font-bold text-primary">Kontak akun</h2>
-            <p className="text-xs text-muted">Email dan nomor telepon resmi yang terdaftar</p>
+            <p className="text-xs text-muted">
+              Email dan nomor telepon resmi yang terdaftar
+            </p>
           </div>
         </div>
 
@@ -196,7 +205,7 @@ function ProfileForms({ user }: { user: Account }) {
         </div>
 
         {pending && (
-          <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50/70 p-5">
+          <div className="portal-card mt-5 rounded-2xl border border-amber-200 bg-amber-50/70 p-5">
             <div className="flex items-center gap-2 font-bold text-amber-900">
               <Clock size={18} className="text-amber-700" />
               <h3>
@@ -206,9 +215,24 @@ function ProfileForms({ user }: { user: Account }) {
               </h3>
             </div>
             <div className="mt-3 space-y-1 text-sm text-amber-900">
-              <p>Email baru: <span className="font-semibold">{pending.newEmail ?? "Tidak diubah"}</span></p>
-              <p>Nomor baru: <span className="font-semibold">{pending.newPhone ?? "Tidak diubah"}</span></p>
-              <p>Batas verifikasi: <span className="font-semibold">{new Date(pending.expiresAt).toLocaleString("id-ID")}</span></p>
+              <p>
+                Email baru:{" "}
+                <span className="font-semibold">
+                  {pending.newEmail ?? "Tidak diubah"}
+                </span>
+              </p>
+              <p>
+                Nomor baru:{" "}
+                <span className="font-semibold">
+                  {pending.newPhone ?? "Tidak diubah"}
+                </span>
+              </p>
+              <p>
+                Batas verifikasi:{" "}
+                <span className="font-semibold">
+                  {new Date(pending.expiresAt).toLocaleString("id-ID")}
+                </span>
+              </p>
             </div>
             <button
               className="cms-edit-button mt-4 inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-amber-900 hover:bg-amber-100 disabled:opacity-50"
@@ -257,13 +281,20 @@ function ProfileForms({ user }: { user: Account }) {
             <Phone size={20} />
           </span>
           <div>
-            <h2 className="text-lg font-bold text-primary">Ajukan perubahan kontak</h2>
-            <p className="text-xs text-muted">Perbarui email atau nomor telepon resmi warga</p>
+            <h2 className="text-lg font-bold text-primary">
+              Ajukan perubahan kontak
+            </h2>
+            <p className="text-xs text-muted">
+              Perbarui email atau nomor telepon resmi warga
+            </p>
           </div>
         </div>
 
         <p className="mt-4 text-xs leading-5 text-slate-500">
-          Isi email atau nomor baru. Demi keamanan, hubungi petugas kelurahan untuk memverifikasi identitas Anda. Setelah disetujui, seluruh sesi perangkat lama akan dicabut dan Anda masuk kembali menggunakan data terbaru.
+          Isi email atau nomor baru. Demi keamanan, hubungi petugas kelurahan
+          untuk memverifikasi identitas Anda. Setelah disetujui, seluruh sesi
+          perangkat lama akan dicabut dan Anda masuk kembali menggunakan data
+          terbaru.
         </p>
 
         <div className="mt-5 space-y-4">
@@ -346,13 +377,19 @@ export default function ProfilePage() {
       </div>
 
       {query.isPending && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500" role="status">
+        <div
+          className="portal-card rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500"
+          role="status"
+        >
           <p className="animate-pulse">Memuat profil warga…</p>
         </div>
       )}
 
       {query.isError && (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-800" role="alert">
+        <div
+          className="portal-card rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-800"
+          role="alert"
+        >
           <p className="font-semibold">{cmsError(query.error)}</p>
           <button
             onClick={async () => {
@@ -372,4 +409,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

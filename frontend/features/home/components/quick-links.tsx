@@ -66,6 +66,12 @@ export function QuickLinks() {
       className="portal-quick-links relative z-20"
     >
       <div className="container">
+        <div className="portal-section-index">
+          <span>01 / TERHUBUNG LEBIH MUDAH</span>
+          <span>
+            Ruang digital warga <ArrowUpRight size={13} />
+          </span>
+        </div>
         <motion.div
           initial={reduced ? false : "hidden"}
           whileInView="show"
@@ -81,7 +87,7 @@ export function QuickLinks() {
           }}
           className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6"
         >
-          {links.map((item) => (
+          {links.map((item, index) => (
             <motion.div
               key={item.href}
               variants={{
@@ -102,7 +108,7 @@ export function QuickLinks() {
             >
               <Link
                 href={item.href}
-                className={`portal-quick-card group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4.5 shadow-xs transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/60 sm:p-5 ${item.accent}`}
+                className={`portal-card portal-quick-card group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4.5 shadow-xs transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/60 sm:p-5 ${item.accent}`}
               >
                 <div className="flex items-center justify-between">
                   <span className="grid size-11 place-items-center rounded-xl bg-slate-100 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-amber-300 group-hover:shadow-md group-hover:shadow-primary/20">
@@ -113,6 +119,9 @@ export function QuickLinks() {
                     className="text-slate-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
                   />
                 </div>
+                <span className="portal-card-index" aria-hidden="true">
+                  0{index + 1}
+                </span>
                 <div className="mt-4">
                   <h2 className="text-sm font-bold text-primary transition-colors group-hover:text-primary">
                     {item.label}

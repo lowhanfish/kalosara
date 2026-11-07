@@ -12,7 +12,7 @@ export async function LeaderSection() {
   return (
     <section className="container pb-12" aria-labelledby="lurah-title">
       <MotionFadeIn direction="up">
-        <div className="grid overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-[#f1f6fa] to-[#e4eef7] shadow-sm md:grid-cols-[.85fr_1.15fr]">
+        <div className="portal-card grid overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-[#f1f6fa] to-[#e4eef7] shadow-sm md:grid-cols-[.85fr_1.15fr]">
           <div className="relative isolate min-h-80 overflow-hidden bg-gradient-to-t from-[#c8dbea]/80 to-[#dfebf5] md:min-h-[460px]">
             <div
               aria-hidden="true"
@@ -45,11 +45,12 @@ export async function LeaderSection() {
               Membangun kebersamaan.
             </h2>
             <p className="mt-5 max-w-lg text-[15px] leading-7 text-muted">
-              Kenali Kelurahan Watundehoa dan aparatur yang melayani masyarakat di
-              Kecamatan Puriala, Kabupaten Konawe. KALOSARA menjadi ruang terpadu untuk
-              mengakses informasi kelurahan dan panduan pelayanan publik yang transparan.
+              Kenali Kelurahan Watundehoa dan aparatur yang melayani masyarakat
+              di Kecamatan Puriala, Kabupaten Konawe. KALOSARA menjadi ruang
+              terpadu untuk mengakses informasi kelurahan dan panduan pelayanan
+              publik yang transparan.
             </p>
-            <div className="mt-8 rounded-2xl border border-white/60 bg-white/80 p-5 shadow-xs backdrop-blur-md">
+            <div className="portal-card mt-8 rounded-2xl border border-white/60 bg-white/80 p-5 shadow-xs backdrop-blur-md">
               <p className="text-lg font-extrabold text-primary">
                 {leader?.name ?? siteIdentity.leader}
               </p>
@@ -63,4 +64,3 @@ export async function LeaderSection() {
     </section>
   );
 }
-

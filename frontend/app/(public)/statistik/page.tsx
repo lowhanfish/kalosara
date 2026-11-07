@@ -58,9 +58,9 @@ export default async function Page({
           description="Mengenal kelurahan melalui data penduduk, keluarga, dan lingkungan."
         />
         <p className="mb-6 max-w-3xl text-sm leading-relaxed text-muted">
-          Data penduduk dan RT/RW ditampilkan dalam bentuk agregat, dengan periode
-          dan sumber dari pengelola. Tidak memuat identitas atau nomor dokumen
-          kependudukan individu.
+          Data penduduk dan RT/RW ditampilkan dalam bentuk agregat, dengan
+          periode dan sumber dari pengelola. Tidak memuat identitas atau nomor
+          dokumen kependudukan individu.
         </p>
         <form className="public-content-filters mb-8">
           <label>
@@ -106,14 +106,17 @@ export default async function Page({
       <MotionStagger className="space-y-4">
         {data?.items.map((item) => (
           <MotionStaggerItem key={item.id}>
-            <details className="group rounded-2xl border border-slate-200 bg-white p-5 sm:p-7 shadow-xs transition-all open:shadow-md">
+            <details className="portal-card group rounded-2xl border border-slate-200 bg-white p-5 sm:p-7 shadow-xs transition-all open:shadow-md">
               <summary className="flex cursor-pointer items-center justify-between text-lg font-bold text-slate-900 group-hover:text-primary transition-colors">
                 <span>Tabel data · Periode {item.period}</span>
                 <ChevronDown className="h-5 w-5 text-slate-400 transition-transform duration-300 group-open:rotate-180" />
               </summary>
               <div className="mt-4 border-t border-slate-100 pt-4">
                 <p className="mb-4 break-words text-xs text-muted">
-                  Sumber: <span className="font-medium text-slate-700">{item.source}</span>
+                  Sumber:{" "}
+                  <span className="font-medium text-slate-700">
+                    {item.source}
+                  </span>
                   {" · "}
                   Tanggal data: {regionDate(item.referenceDate)} · Diperbarui:{" "}
                   {regionDate(item.updatedAt)}
@@ -128,7 +131,10 @@ export default async function Page({
                         <th scope="col" className="p-3.5 font-semibold">
                           Indikator
                         </th>
-                        <th scope="col" className="p-3.5 font-semibold text-right">
+                        <th
+                          scope="col"
+                          className="p-3.5 font-semibold text-right"
+                        >
                           Jumlah
                         </th>
                       </tr>
@@ -139,11 +145,16 @@ export default async function Page({
                           key={key}
                           className="hover:bg-slate-50/50 transition-colors"
                         >
-                          <th scope="row" className="p-3.5 font-normal text-slate-800">
+                          <th
+                            scope="row"
+                            className="p-3.5 font-normal text-slate-800"
+                          >
                             {label}
                           </th>
                           <td className="p-3.5 text-right font-medium tabular-nums text-slate-900">
-                            {aggregateText(item[key as keyof typeof metricLabels])}
+                            {aggregateText(
+                              item[key as keyof typeof metricLabels],
+                            )}
                           </td>
                         </tr>
                       ))}

@@ -32,7 +32,7 @@ export default async function Page() {
         <div className="grid items-start gap-8 lg:grid-cols-[1fr_340px]">
           <div>
             {page ? (
-              <article className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
+              <article className="portal-card rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
                 {page.content.includes("<") ? (
                   <div
                     className="cms-rich text-[15px] leading-8 text-slate-600"
@@ -45,7 +45,7 @@ export default async function Page() {
                 )}
               </article>
             ) : (
-              <section className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
+              <section className="portal-card rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs sm:p-8">
                 <span className="mb-5 grid size-12 place-items-center rounded-xl bg-slate-100 text-primary">
                   <FileText size={24} strokeWidth={1.6} />
                 </span>
@@ -79,11 +79,15 @@ export default async function Page() {
               </section>
             )}
 
-            <div className="mt-6 flex gap-3.5 rounded-2xl border border-amber-200 bg-amber-50/80 p-5 text-sm leading-6 text-amber-900 shadow-xs">
-              <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-amber-700" />
+            <div className="portal-card mt-6 flex gap-3.5 rounded-2xl border border-amber-200 bg-amber-50/80 p-5 text-sm leading-6 text-amber-900 shadow-xs">
+              <CheckCircle2
+                size={18}
+                className="mt-0.5 shrink-0 text-amber-700"
+              />
               <p>
-                Pelayanan administrasi saat ini dilakukan langsung di kantor kelurahan.
-                Pengajuan surat melalui website akan tersedia pada tahap berikutnya.
+                Pelayanan administrasi saat ini dilakukan langsung di kantor
+                kelurahan. Pengajuan surat melalui website akan tersedia pada
+                tahap berikutnya.
               </p>
             </div>
           </div>
@@ -101,7 +105,9 @@ export default async function Page() {
             {settings.hours && (
               <div className="mt-4 rounded-xl bg-slate-50 p-3.5 text-xs font-semibold leading-relaxed text-slate-700">
                 <span className="text-slate-400">Jam Operasional:</span>
-                <p className="mt-0.5 text-sm font-bold text-primary">{settings.hours}</p>
+                <p className="mt-0.5 text-sm font-bold text-primary">
+                  {settings.hours}
+                </p>
               </div>
             )}
             <Link

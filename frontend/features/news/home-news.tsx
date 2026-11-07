@@ -28,7 +28,7 @@ export async function HomeNews() {
     <div className="grid gap-5 sm:grid-cols-[1.1fr_1fr]">
       <Link
         href={articlePath(featured.slug)}
-        className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50"
+        className="portal-card group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50"
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
           <Image
@@ -67,7 +67,7 @@ export async function HomeNews() {
           <Link
             key={news.slug}
             href={articlePath(news.slug)}
-            className="group flex items-start gap-4 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+            className="portal-card group flex items-start gap-4 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
           >
             <div className="relative aspect-square size-24 shrink-0 overflow-hidden rounded-xl bg-slate-100">
               <Image
