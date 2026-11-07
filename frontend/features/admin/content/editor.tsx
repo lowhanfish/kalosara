@@ -99,7 +99,11 @@ export default function Editor({
               }
             : {}),
           ...(kind === "documents"
-            ? { category: value("category"), fileId: value("fileId") }
+            ? {
+                category: value("category"),
+                classification: value("classification") || null,
+                fileId: value("fileId"),
+              }
             : {}),
           ...(kind === "galleries"
             ? { photos: photos.map(({ mediaId, alt }) => ({ mediaId, alt })) }
@@ -121,11 +125,11 @@ export default function Editor({
         />
       </label>
       <div>
-        <label className="block font-semibold text-slate-800">
-          Isi Konten
-        </label>
+        <label className="block font-semibold text-slate-800">Isi Konten</label>
         <p className="mt-1 mb-2.5 text-xs text-muted">
-          Gunakan editor WYSIWYG untuk menyusun format teks (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip Gambar/Tautan).
+          Gunakan editor WYSIWYG untuk menyusun format teks (Heading Bab H2/H3,
+          Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip
+          Gambar/Tautan).
         </p>
         <RichEditor
           key={item?.id ?? kind}
@@ -197,6 +201,19 @@ export default function Editor({
       )}
       {kind === "documents" && (
         <>
+          <label>
+            Klasifikasi PPID
+            <select
+              className="cms-input"
+              name="classification"
+              defaultValue={item?.document?.classification ?? ""}
+            >
+              <option value="">Belum diklasifikasikan</option>
+              <option value="BERKALA">Informasi berkala</option>
+              <option value="SERTA_MERTA">Informasi serta-merta</option>
+              <option value="SETIAP_SAAT">Informasi setiap saat</option>
+            </select>
+          </label>
           <label className="block">
             Kategori
             <input

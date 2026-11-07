@@ -14,6 +14,48 @@ import { motion, useReducedMotion } from "motion/react";
 
 const links = [
   {
+    label: "Anggaran",
+    description: "Transparansi keuangan",
+    href: "/anggaran",
+    icon: ChartColumn,
+    accent: "hover:border-blue-300",
+  },
+  {
+    label: "PPID",
+    description: "Permohonan informasi",
+    href: "/ppid",
+    icon: FileText,
+    accent: "hover:border-blue-300",
+  },
+  {
+    label: "Wisata",
+    description: "Jelajahi sekitar",
+    href: "/wisata",
+    icon: Landmark,
+    accent: "hover:border-emerald-300",
+  },
+  {
+    label: "UMKM",
+    description: "Beli dari kelurahan",
+    href: "/belanja",
+    icon: Landmark,
+    accent: "hover:border-amber-300",
+  },
+  {
+    label: "Peta fasilitas",
+    description: "Temukan lokasi",
+    href: "/listing",
+    icon: Landmark,
+    accent: "hover:border-emerald-300",
+  },
+  {
+    label: "Pengaduan",
+    description: "Sampaikan aspirasi",
+    href: "/pengaduan",
+    icon: Megaphone,
+    accent: "hover:border-amber-300",
+  },
+  {
     label: "Pelayanan",
     description: "Alur & persyaratan",
     href: "/pelayanan",

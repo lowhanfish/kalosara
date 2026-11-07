@@ -165,3 +165,13 @@ Sesuai instruksi pengguna, **hanya Redis memakai Docker**. Paket backend compile
 Backend35 tes, frontend36 tes, DB52 tes/10suite,4 guard ops, browser artefak6 kelompok dan proxy TLS lokal6 pemeriksaan lulus. Uji baca lokal500request/concurrency4 menghasilkan500×200,p95=31,95ms; backup/restore ke DB uji lain, tamper rejection dan izin media hasil restore lulus. **Ini hasil macOS lokal, bukan kapasitas VPS atau bukti HTTPS/offsite produksi.** Tidak ada migration/env/dependency aplikasi baru, perubahan desain atau mutasi QA Neon.
 
 **SIAP REVIEW paket/rehearsal lokal. Pengguna menunda deployment VPS agar dimatangkan di lokal dahulu.** Hosted CI, staging systemd/rollback, TLS publik/firewall, restore offsite dan benchmark VPS tetap gate operasional nanti; tidak diklaim sebagai hasil pengujian lokal. [Laporan Prompt14](ops/docs/prompt14-report.md) dan [angka pengujian](ops/docs/local-rehearsal.json) mencatat hasil/batasan. Tahap02 tidak dimulai.
+
+## Kanal tambahan dari website lama — 7 November 2026
+
+Halaman khusus `/wisata`, `/belanja`, `/fasilitas`, `/listing`, `/infografis`, `/anggaran`, `/bansos`, `/stunting`, `/ppid`, `/pengaduan` dan `/ppid/permintaan` melengkapi konten hasil migrasi. Detail potensi/fasilitas sekarang dapat dibaca lengkap; menu, pencarian halaman, sorotan beranda dan sitemap diperbarui.
+
+Admin mengelola agregat anggaran/bansos/stunting di `/admin/infografis`, klasifikasi PPID di editor dokumen, wisata/UMKM pada modul Potensi, dan pesan privat di `/admin/kotak-masuk`. Formulir pengaduan/PPID menerima teks dan kontak, belum menerima lampiran atau mengirim email/WhatsApp otomatis. Data resmi yang belum tersedia tetap kosong hingga diterbitkan dengan periode dan sumber.
+
+Instalasi lain perlu `cd backend && npm run db:generate && npm run db:deploy` untuk migrasi `20261107090000_community_requests` sebelum menjalankan versi ini. Tabel pesan terpisah dari konten publik; hanya ADMIN_KELURAHAN aktif yang dapat membacanya. Lurah aktif tetap AMIRULAH, S.Si. Tahap 02 layanan surat tidak berubah.
+
+[Rincian perbandingan, cakupan, penyimpanan dan verifikasi](docs/PERBANDINGAN_WEBSITE_LAMA.md).

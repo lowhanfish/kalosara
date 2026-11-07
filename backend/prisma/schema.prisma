@@ -290,6 +290,7 @@ model GalleryPhoto {
 model PublicDocument {
   contentId String @id @db.Uuid
   category String @db.VarChar(120)
+  classification String? @db.VarChar(20)
   fileId String @db.Uuid
   item ContentItem @relation(fields: [contentId], references: [id], onDelete: Cascade)
   file MediaAsset @relation(fields: [fileId], references: [id], onDelete: Restrict)
@@ -363,4 +364,22 @@ model ContactChange {
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([expiresAt])
+}
+
+// Private messages from public complaint and PPID forms. Never exposed by public listings.
+model PublicRequest {
+  id String @id @default(uuid()) @db.Uuid
+  kind String @db.VarChar(20)
+  name String @db.VarChar(120)
+  organization String? @db.VarChar(200)
+  email String? @db.VarChar(254)
+  phone String? @db.VarChar(30)
+  subject String @db.VarChar(200)
+  message String @db.Text
+  status String @default("NEW") @db.VarChar(20)
+  internalNote String @default("") @db.Text
+  version Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([kind, status, createdAt])
 }

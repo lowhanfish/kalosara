@@ -20,7 +20,7 @@ export async function GET() {
         "/kontak",
         "/pelayanan",
         "/statistik",
-        "/potensi",
+        "/potensi", "/wisata", "/belanja", "/fasilitas", "/listing", "/infografis", "/anggaran", "/bansos", "/stunting", "/ppid", "/ppid/berkala", "/ppid/serta-merta", "/ppid/setiap-saat", "/ppid/dasar-hukum",
       ].map((path) => ({
         path,
         updatedAt: null as string | null,

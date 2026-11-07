@@ -1,3 +1,4 @@
+import { sanitizeBody } from './sanitize.js';
 import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../../lib/prisma.js';
@@ -44,7 +45,7 @@ function list(router: Router, admin: boolean) {
     const where = { ...(admin ? q.status ? { status: q.status } : {} : { status: 'PUBLISHED' as const }), ...(q.category ? { category: q.category } : {}), name: { contains: q.search, mode: 'insensitive' as const }, ...(!admin ? { OR: [{ photoId: null }, { photo: { visibility: 'PUBLIC' as const, archived: false } }] } : {}) };
     const args = { where, select: placeSelect, orderBy: [{ name: 'asc' as const }, { id: 'asc' as const }], take: q.limit, skip: (q.page - 1) * q.limit };
     const [items, total] = kind === 'facilities' ? await prisma.$transaction([prisma.facility.findMany(args), prisma.facility.count({ where })]) : await prisma.$transaction([prisma.potential.findMany(args), prisma.potential.count({ where })]);
-    res.setHeader('Cache-Control', 'no-store'); res.json({ success: true, data: { items, total, page: q.page, limit: q.limit }, requestId: req.id });
+    res.setHeader('Cache-Control', 'no-store'); res.json({ success: true, data: { items: admin ? items : items.map(item => ({ ...item, description: sanitizeBody(item.description).html })), total, page: q.page, limit: q.limit }, requestId: req.id });
   });
 }
 list(regionAdminRouter, true); list(publicRegionRouter, false);
@@ -72,4 +73,13 @@ regionAdminRouter.put('/:kind/:id', requireMutation, async (req, res) => {
     return { item, event: await enqueueInvalidation(tx, ['public-content']) };
   });
   res.json({ success: true, data: { item: saved.item, cacheInvalidated: await notifyInvalidation(saved.event.id) }, requestId: req.id });
+});
+
+publicRegionRouter.get('/:kind/:id', async (req, res) => {
+  const kind = kindSchema.parse(req.params.kind); const id = idSchema.parse(req.params.id);
+  const where = { id, status: 'PUBLISHED' as const, OR: [{ photoId: null }, { photo: { visibility: 'PUBLIC' as const, archived: false } }] };
+  const item = kind === 'facilities' ? await prisma.facility.findFirst({ where, select: placeSelect }) : await prisma.potential.findFirst({ where, select: placeSelect });
+  if (!item) throw new CmsError(404, 'NOT_FOUND', 'Place not found');
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({ success: true, data: { item: { ...item, description: sanitizeBody(item.description).html } }, requestId: req.id });
 });

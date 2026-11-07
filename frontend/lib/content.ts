@@ -22,7 +22,11 @@ export type ContentItem = {
   gallery: {
     photos: { mediaId: string; alt: string; sortOrder: number }[];
   } | null;
-  document: { category: string; fileId: string } | null;
+  document: {
+    category: string;
+    fileId: string;
+    classification?: string | null;
+  } | null;
 };
 export type ContentList = {
   items: ContentItem[];

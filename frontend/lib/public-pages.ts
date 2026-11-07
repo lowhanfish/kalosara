@@ -55,6 +55,52 @@ export const publicPages = [
     title: "Pelayanan",
     description: "Pelajari alur dan persyaratan sebelum datang ke kantor.",
   },
+  {
+    href: "/wisata",
+    title: "Wisata",
+    description: "Destinasi wisata di sekitar kelurahan dan detailnya.",
+  },
+  {
+    href: "/belanja",
+    title: "Beli dari kelurahan",
+    description: "Katalog produk UMKM dan potensi ekonomi lokal.",
+  },
+  {
+    href: "/listing",
+    title: "Peta fasilitas",
+    description: "Peta interaktif fasilitas dan usaha di sekitar kelurahan.",
+  },
+  {
+    href: "/infografis",
+    title: "Infografis",
+    description: "Data penduduk, anggaran, bansos dan stunting.",
+  },
+  {
+    href: "/anggaran",
+    title: "Anggaran",
+    description: "Pendapatan, belanja dan pembiayaan kelurahan.",
+  },
+  {
+    href: "/bansos",
+    title: "Bantuan sosial",
+    description: "Rekapitulasi program dan cek bansos resmi.",
+  },
+  {
+    href: "/stunting",
+    title: "Stunting",
+    description: "Data agregat penanganan stunting kelurahan.",
+  },
+  {
+    href: "/ppid",
+    title: "PPID",
+    description:
+      "Informasi berkala, serta-merta, setiap saat dan permohonan informasi.",
+  },
+  {
+    href: "/pengaduan",
+    title: "Pengaduan",
+    description: "Sampaikan pengaduan dan masukan kepada pengelola.",
+  },
 ] as const;
 export type PublicPath = (typeof publicPages)[number]["href"];
 export function searchPages(query: string) {

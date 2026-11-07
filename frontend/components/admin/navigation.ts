@@ -51,4 +51,11 @@ export const adminLinks = [
     group: "Administrasi",
   },
   { label: "Verifikasi kontak", href: "/admin/verifikasi-kontak", icon: Users },
+  {
+    label: "Infografis & program",
+    href: "/admin/infografis",
+    icon: ChartColumn,
+    group: "Informasi & aspirasi",
+  },
+  { label: "Kotak masuk warga", href: "/admin/kotak-masuk", icon: FileText },
 ];

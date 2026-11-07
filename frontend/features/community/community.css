@@ -1,0 +1,19 @@
+.public-portal .portal-dropdown {
+  max-height: min(70dvh, 620px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.community-form label {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+}
+.community-form input:not([type="checkbox"]),
+.community-form textarea {
+  font-size: 16px;
+  font-weight: 400;
+}
+.community-form button {
+  min-height: 48px;
+}

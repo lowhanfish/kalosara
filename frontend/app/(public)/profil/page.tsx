@@ -147,7 +147,7 @@ export default async function Page() {
                     <Users className="h-4 w-4" />
                     <span>Perangkat Kelurahan</span>
                   </div>
-                  <h2 className="mt-1 text-2xl font-bold text-slate-900">
+                  <h2 id="aparatur" className="mt-1 text-2xl font-bold text-slate-900">
                     Aparatur Kelurahan
                   </h2>
                 </div>

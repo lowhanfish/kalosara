@@ -19,6 +19,7 @@ function Workspace() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const [category, setCategory] = useState("");
   const [selected, setSelected] = useState<Row | null | undefined>();
   const [epoch, setEpoch] = useState(0);
   const editorOpen = selected !== undefined;
@@ -30,6 +31,7 @@ function Workspace() {
       const key = window.location.hash.slice(1);
       if (["statistics", "facilities", "potentials"].includes(key)) {
         setKind(key as Kind);
+        setCategory("");
         setPage(1);
         setSelected(undefined);
       }
@@ -40,10 +42,19 @@ function Workspace() {
   }, []);
   const [notice, setNotice] = useState("");
   const query = useQuery({
-    queryKey: ["user", auth.user?.id, "region", kind, page, search, status],
+    queryKey: [
+      "user",
+      auth.user?.id,
+      "region",
+      kind,
+      page,
+      search,
+      status,
+      category,
+    ],
     queryFn: () =>
       runtime.request<RegionList<Row>>(
-        `/admin/region/${kind}?page=${page}&search=${encodeURIComponent(search)}${status ? `&status=${status}` : ""}`,
+        `/admin/region/${kind}?page=${page}&search=${encodeURIComponent(search)}${status ? `&status=${status}` : ""}${kind === "potentials" && category ? `&category=${encodeURIComponent(category)}` : ""}`,
       ),
   });
   const leave = () =>
@@ -60,6 +71,7 @@ function Workspace() {
               if (leave()) {
                 window.location.hash = key;
                 setKind(key as Kind);
+                setCategory("");
                 setPage(1);
                 setSelected(undefined);
                 setNotice("");
@@ -102,6 +114,24 @@ function Workspace() {
                 <option value="ARCHIVED">Arsip</option>
               </select>
             </label>
+            {kind === "potentials" && (
+              <label>
+                Jenis konten
+                <select
+                  className="cms-input"
+                  value={category}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    setPage(1);
+                  }}
+                >
+                  <option value="">Semua potensi</option>
+                  <option value="Wisata">Wisata</option>
+                  <option value="Produk UMKM">Produk UMKM</option>
+                  <option value="Potensi kelurahan">Potensi kelurahan</option>
+                </select>
+              </label>
+            )}
             <button className="yellow-button">Cari</button>
           </form>
           <button

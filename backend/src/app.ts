@@ -1,3 +1,4 @@
+import { publicCommunityRouter, adminCommunityRouter } from './modules/community.js';
 import { accountRouter, contactReviewRouter } from './modules/account.js';
 import { dashboardRouter } from './modules/dashboard.js';
 import { attachAuditContext } from './lib/audit-context.js';
@@ -53,6 +54,8 @@ export function createApp() {
     }
   });
 
+  app.use('/api/v1/public/community', publicCommunityRouter);
+  app.use('/api/v1/admin/community', adminCommunityRouter);
   app.use('/api/v1/account', accountRouter);
   app.use('/api/v1/admin/contact-changes', contactReviewRouter);
   app.use('/api/v1/admin/dashboard', dashboardRouter);

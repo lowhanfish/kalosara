@@ -169,10 +169,19 @@ export default function Editor({
             <input
               className="cms-input"
               name="category"
+              list="place-categories"
               required
               maxLength={100}
               defaultValue={place?.category}
             />
+            <datalist id="place-categories">
+              <option value="Wisata" />
+              <option value="Produk UMKM" />
+              <option value="Potensi kelurahan" />
+              <option value="Pendidikan" />
+              <option value="Kesehatan" />
+              <option value="Ibadah" />
+            </datalist>
           </label>
           <label>
             Lokasi / alamat publik

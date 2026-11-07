@@ -1,3 +1,4 @@
+import "@/features/community/community.css";
 import "@/components/site/cinematic.css";
 import "@/components/site/typography.css";
 import { CardEffects } from "@/components/site/card-effects";

@@ -19,6 +19,15 @@ const navigation = [
   { title: "Informasi publik", href: "/informasi-publik" },
   { title: "Statistik", href: "/statistik" },
   { title: "Potensi", href: "/potensi" },
+  { title: "Wisata", href: "/wisata" },
+  { title: "Beli dari kelurahan", href: "/belanja" },
+  { title: "Peta fasilitas", href: "/listing" },
+  { title: "Infografis", href: "/infografis" },
+  { title: "Anggaran", href: "/anggaran" },
+  { title: "Bantuan sosial", href: "/bansos" },
+  { title: "Stunting", href: "/stunting" },
+  { title: "PPID", href: "/ppid" },
+  { title: "Pengaduan", href: "/pengaduan" },
   { title: "Kontak", href: "/kontak" },
 ];
 

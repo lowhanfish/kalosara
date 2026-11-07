@@ -83,6 +83,10 @@ const metrics = [
 ] as const;
 function activityLabel(action: string) {
   const labels: Record<string, string> = {
+    PUBLIC_REQUEST_RECEIVED: "Pesan masyarakat diterima",
+    PUBLIC_REQUEST_UPDATED: "Tindak lanjut pesan diperbarui",
+    PUBLIC_REQUEST_VIEWED: "Pesan masyarakat ditinjau",
+    COMMUNITY_SECTION_SAVED: "Infografis kelurahan diperbarui",
     DEMO_CONTENT_SEEDED: "Konten contoh disiapkan",
     LEGACY_HISTORY_CLARIFIED: "Riwayat kelurahan diperbarui",
     LEGACY_SETTINGS_IMPORTED: "Identitas website diperbarui",

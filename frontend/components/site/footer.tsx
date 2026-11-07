@@ -90,6 +90,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               { label: "Profil kelurahan", href: "/profil" },
               { label: "Panduan pelayanan", href: "/pelayanan" },
               { label: "Informasi publik", href: "/informasi-publik" },
+              { label: "PPID & permohonan informasi", href: "/ppid" },
+              { label: "Pengaduan masyarakat", href: "/pengaduan" },
               { label: "Kontak kelurahan", href: "/kontak" },
               { label: "Akun masyarakat", href: "/masyarakat/dashboard" },
               ...settings.relatedLinks,

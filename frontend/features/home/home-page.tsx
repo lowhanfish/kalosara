@@ -1,3 +1,4 @@
+import { CommunityHighlights } from "@/features/community/home-highlights";
 import Link from "next/link";
 import Image from "next/image";
 import { connection } from "next/server";
@@ -67,6 +68,7 @@ export default async function HomePage() {
     <main id="konten" tabIndex={-1} className="portal-home">
       <HomeHero settings={identity} leader={leader} />
       <QuickLinks />
+      <CommunityHighlights />
 
       {/* News & Announcements Section */}
       <section className="container grid gap-10 py-14 sm:py-18 lg:grid-cols-[1.6fr_1fr]">

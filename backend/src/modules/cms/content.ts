@@ -13,7 +13,7 @@ export const contentInput = z.discriminatedUnion('kind', [
   z.object({ ...common, kind: z.literal('announcements'), pinned: z.boolean(), startsAt: date.nullable(), expiredAt: date.nullable() }).strict(),
   z.object({ ...common, kind: z.literal('events'), start: date, end: date, location: z.string().trim().min(1).max(300) }).strict(),
   z.object({ ...common, kind: z.literal('galleries'), photos: z.array(z.object({ mediaId: idSchema, alt: z.string().trim().min(1).max(300) }).strict()).min(1).max(12) }).strict(),
-  z.object({ ...common, kind: z.literal('documents'), category: z.string().trim().min(1).max(120), fileId: idSchema }).strict(),
+  z.object({ ...common, kind: z.literal('documents'), category: z.string().trim().min(1).max(120), classification: z.enum(['BERKALA', 'SERTA_MERTA', 'SETIAP_SAAT']).nullable().optional(), fileId: idSchema }).strict(),
 ]).superRefine((input, ctx) => {
   if (input.kind === 'events' && new Date(input.end) < new Date(input.start)) ctx.addIssue({ code: 'custom', message: 'End must follow start' });
   if (input.kind === 'announcements' && input.startsAt && input.expiredAt && new Date(input.expiredAt) <= new Date(input.startsAt)) ctx.addIssue({ code: 'custom', message: 'Expiry must follow start' });
@@ -27,12 +27,12 @@ export const publicContentRouter = Router();
 function listRouter(router: Router, admin: boolean) {
   router.get('/:kind', async (req, res) => {
     const kind = kindSchema.parse(req.params.kind);
-    const q = pagination.extend({ status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(), period: z.enum(['upcoming', 'past']).optional(), category: z.string().trim().max(120).optional() }).parse(req.query);
+    const q = pagination.extend({ status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']).optional(), period: z.enum(['upcoming', 'past']).optional(), category: z.string().trim().max(120).optional(), classification: z.enum(['BERKALA', 'SERTA_MERTA', 'SETIAP_SAAT']).optional() }).parse(req.query);
     const now = new Date();
     const where: Prisma.ContentItemWhereInput = { kind, title: { contains: q.search, mode: 'insensitive' }, ...(admin ? (q.status ? { status: q.status } : {}) : { status: 'PUBLISHED' }) };
     if (kind === 'announcements' && !admin) where.announcement = { AND: [{ OR: [{ startsAt: null }, { startsAt: { lte: now } }] }, { OR: [{ expiredAt: null }, { expiredAt: { gt: now } }] }] };
     if (kind === 'events' && q.period) where.event = { end: q.period === 'past' ? { lt: now } : { gte: now } };
-    if (kind === 'documents') where.document = { ...(q.category ? { category: q.category } : {}), ...(!admin ? { file: { visibility: 'PUBLIC', archived: false } } : {}) };
+    if (kind === 'documents') where.document = { ...(q.classification ? { classification: q.classification } : {}), ...(q.category ? { category: q.category } : {}), ...(!admin ? { file: { visibility: 'PUBLIC', archived: false } } : {}) };
     if (kind === 'galleries' && !admin) where.gallery = { photos: { every: { media: { visibility: 'PUBLIC', archived: false } } } };
     const orderBy: Prisma.ContentItemOrderByWithRelationInput[] = kind === 'announcements' ? [{ announcement: { pinned: 'desc' } }, { updatedAt: 'desc' }, { id: 'asc' }] : kind === 'events' ? [{ event: { start: q.period === 'past' ? 'desc' : 'asc' } }, { id: 'asc' }] : [{ updatedAt: 'desc' }, { id: 'asc' }];
     const [items, total] = await prisma.$transaction([prisma.contentItem.findMany({ where, include, orderBy, skip: (q.page - 1) * q.limit, take: q.limit }), prisma.contentItem.count({ where })]);
@@ -64,7 +64,7 @@ contentAdminRouter.put('/:kind/:id', requireMutation, async (req, res) => {
       const data = { start: input.start, end: input.end, location: input.location };
       await tx.event.upsert({ where: { contentId: id }, create: { contentId: id, ...data }, update: data });
     } else if (input.kind === 'documents') {
-      const data = { category: input.category, fileId: input.fileId };
+      const data = { category: input.category, classification: input.classification ?? null, fileId: input.fileId };
       await tx.publicDocument.upsert({ where: { contentId: id }, create: { contentId: id, ...data }, update: data });
     } else {
       await tx.gallery.upsert({ where: { contentId: id }, create: { contentId: id }, update: {} });
