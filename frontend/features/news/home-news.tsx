@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -7,7 +7,7 @@ import { articlePath, newsDate } from "@/lib/news-seo";
 export async function HomeNews() {
   let data;
   try {
-    data = await getNewsList(1, "", undefined, 3);
+    data = await getNewsList(1, "", undefined, 6);
   } catch {
     return (
       <EmptyState
@@ -31,7 +31,7 @@ export async function HomeNews() {
         className="portal-card group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50"
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-          <Image
+          <SkeletonImage
             src={coverImage(featured, "display")}
             alt={featured.cover?.alt ?? "Kantor kelurahan"}
             fill
@@ -40,7 +40,7 @@ export async function HomeNews() {
             sizes="(max-width:640px) 100vw, 35vw"
           />
         </div>
-        <div className="flex flex-1 flex-col p-6">
+        <div className="flex flex-1 flex-col p-5 sm:p-6">
           <time
             dateTime={featured.publishedAt}
             className="text-xs font-medium text-slate-400"
@@ -50,10 +50,10 @@ export async function HomeNews() {
           <h3 className="mt-2 text-lg font-bold leading-snug text-primary transition-colors group-hover:text-primary">
             {featured.title}
           </h3>
-          <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted">
+          <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted">
             {featured.excerpt}
           </p>
-          <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+          <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary">
             Baca selengkapnya
             <ArrowUpRight
               size={15}
@@ -62,15 +62,17 @@ export async function HomeNews() {
           </span>
         </div>
       </Link>
-      <div className="space-y-4">
-        {items.map((news) => (
+      <div className="home-news-compact flex flex-col justify-between gap-2">
+        {items.map((news, index) => (
           <Link
             key={news.slug}
             href={articlePath(news.slug)}
-            className="portal-card group flex items-start gap-4 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+            className={`portal-card group items-start gap-3 rounded-2xl border border-slate-200/90 bg-white p-2 sm:p-2.5 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md ${
+              index >= 3 ? "hidden sm:flex" : "flex"
+            }`}
           >
-            <div className="relative aspect-square size-24 shrink-0 overflow-hidden rounded-xl bg-slate-100">
-              <Image
+            <div className="relative aspect-square size-11 shrink-0 overflow-hidden rounded-lg bg-slate-100 sm:size-12">
+              <SkeletonImage
                 src={coverImage(news, "display")}
                 alt={news.cover?.alt ?? "Kantor kelurahan"}
                 fill
@@ -80,18 +82,18 @@ export async function HomeNews() {
             </div>
             <div className="min-w-0 flex-1">
               <time
-                className="text-xs font-medium text-slate-400"
+                className="!text-[9.5px] font-medium text-slate-400"
                 dateTime={news.publishedAt}
               >
                 {newsDate(news.publishedAt)}
               </time>
-              <h3 className="mt-1 text-[15px] font-bold leading-snug text-primary transition-colors group-hover:text-primary">
+              <h3 className="mt-0.5 line-clamp-2 !text-[11px] sm:!text-[11.5px] font-semibold !leading-snug text-primary transition-colors group-hover:text-primary">
                 {news.title}
               </h3>
             </div>
             <ArrowUpRight
-              size={15}
-              className="mt-1 shrink-0 text-slate-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+              size={12}
+              className="mt-0.5 shrink-0 text-slate-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
             />
           </Link>
         ))}

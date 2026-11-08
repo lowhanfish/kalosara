@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { Sparkles } from "lucide-react";
 import { siteIdentity } from "@/lib/site-identity";
 import { getPublicProfile } from "@/lib/profile";
@@ -22,7 +22,7 @@ export async function LeaderSection() {
               <Sparkles size={13} className="text-amber-500" />
               Pimpinan Wilayah
             </div>
-            <Image
+            <SkeletonImage
               src={leader?.photoUrl ?? siteIdentity.leaderPhoto}
               alt={leader?.name ?? siteIdentity.leader}
               fill

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import Link from "next/link";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { articlePath, categoryPath, newsDate } from "@/lib/news-seo";
@@ -16,7 +16,7 @@ export function NewsCards({ items }: { items: NewsSummary[] }) {
             href={articlePath(news.slug)}
             className="relative aspect-video w-full overflow-hidden bg-slate-100"
           >
-            <Image
+            <SkeletonImage
               src={coverImage(news, "display")}
               alt={
                 news.cover?.alt ?? "Foto kantor kelurahan sebagai gambar bawaan"

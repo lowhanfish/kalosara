@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { DemoNotice } from "@/components/site/demo-notice";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -17,7 +16,6 @@ import { adminLinks } from "@/components/admin/navigation";
 export { adminLinks } from "@/components/admin/navigation";
 export function AdminShell({
   children,
-  demoContent = false,
 }: {
   children: React.ReactNode;
   demoContent?: boolean;
@@ -155,11 +153,6 @@ export function AdminShell({
         </header>
         <div className="admin-content mx-auto w-full flex-1">
           {logout.isError && <AdminError error={logout.error} />}
-          {demoContent && (
-            <div className="admin-demo-notice">
-              <DemoNotice />
-            </div>
-          )}
           <div className="cms-shell">{children}</div>
         </div>
         <footer className="admin-footer flex flex-wrap justify-between gap-2">

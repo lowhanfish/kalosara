@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getArticle, coverImage } from "@/lib/news";
@@ -135,7 +135,7 @@ export default async function Page({
             {news.excerpt}
           </p>
           <figure className="mt-7">
-            <Image
+            <SkeletonImage
               src={coverImage(news)}
               width={1200}
               height={675}
@@ -143,8 +143,9 @@ export default async function Page({
                 news.cover?.alt ?? "Foto kantor kelurahan sebagai gambar bawaan"
               }
               unoptimized
-              preload
+              priority
               className="h-auto w-full rounded-2xl shadow-sm"
+              wrapperClassName="rounded-2xl"
             />
             {news.cover?.caption && (
               <figcaption className="mt-3 text-[15px] text-muted">

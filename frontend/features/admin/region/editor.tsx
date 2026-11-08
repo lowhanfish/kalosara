@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -250,7 +250,7 @@ export default function Editor({
             {selectedPhotoId && (
               <div className="mt-2.5 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5">
                 <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-white">
-                  <Image
+                  <SkeletonImage
                     src={`/api/v1/public/media/${selectedPhotoId}`}
                     alt="Pratinjau foto fasilitas/potensi"
                     fill

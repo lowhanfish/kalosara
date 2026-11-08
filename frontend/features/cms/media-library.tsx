@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -332,7 +332,7 @@ export function MediaLibrary() {
               <div>
                 {isImg ? (
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-slate-100 bg-slate-100">
-                    <Image
+                    <SkeletonImage
                       src={fileSrc}
                       fill
                       alt={asset.alt || asset.originalName}

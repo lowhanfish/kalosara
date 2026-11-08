@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import Link from "next/link";
 import { mapUrls, type Place } from "@/lib/region";
 export const loadPlace = cache(
@@ -43,7 +43,7 @@ export default async function PlaceDetail({
       </Link>
       <article className="mx-auto mt-8 max-w-4xl overflow-hidden rounded-2xl border border-slate-200 bg-white">
         {item.photoId && (
-          <Image
+          <SkeletonImage
             width={1200}
             height={680}
             unoptimized

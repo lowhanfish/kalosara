@@ -1,5 +1,10 @@
 # Rilis native KALOSARA — Prompt 14
 
+**Pembaruan 8 November 2026:** aplikasi dipasang di Cloudra NAT dengan domain
+`https://watundehoa.digital`. Konfigurasi HTTPS melalui Cloudra, hasil validasi,
+backup dan batas operasi dicatat di [catatan deployment Cloudra](docs/cloudra-deployment.md).
+Status lokal Prompt 14 di bawah merupakan catatan historis sebelum deployment.
+
 Hanya Redis boleh memakai Docker. Frontend standalone dan Express compiled JS berjalan sebagai proses Node, database tetap Neon, proxy Nginx di host. `compose.yaml` tidak menambah aplikasi/PostgreSQL/proxy. Desain dan seluruh fitur website tetap seperti Prompt13; tidak membuat modul Tahap02.
 
 **Status: SIAP REVIEW untuk pengembangan dan rehearsal lokal.** Pengguna menetapkan bahwa deployment VPS belum diperlukan dan pekerjaan dimatangkan di lokal dahulu. Konfigurasi host/offsite hanya persiapan untuk nanti; tidak perlu meminta domain/SSH untuk menutup lingkup lokal ini. HTTPS publik, deployment remote, restore offsite, CI hosted dan kapasitas VPS tidak diklaim terverifikasi. Laporan rinci: `docs/prompt14-report.md`.

@@ -8,7 +8,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 import {
   ChevronLeft,
@@ -63,7 +63,7 @@ export function GalleryPhotoGrid({
               className="relative block aspect-[3/2] w-full overflow-hidden bg-slate-100 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label={`Perbesar foto ${index + 1}${photo.alt ? `: ${photo.alt}` : ""}`}
             >
-              <Image
+              <SkeletonImage
                 src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
                 alt={photo.alt || `Foto kegiatan ${index + 1}`}
                 fill
@@ -340,7 +340,7 @@ export function GalleryLightbox({
               className="relative size-full flex items-center justify-center"
             >
               <div className="relative size-full max-h-[70vh]">
-                <Image
+                <SkeletonImage
                   src={`/api/v1/public/media/${currentPhoto.mediaId}?variant=display`}
                   alt={currentPhoto.alt || `Foto kegiatan ${currentIndex + 1}`}
                   fill
@@ -348,6 +348,7 @@ export function GalleryLightbox({
                   unoptimized
                   className="object-contain drop-shadow-2xl select-none"
                   sizes="(max-width: 1280px) 100vw, 1200px"
+                  skeletonClassName="bg-slate-900/80"
                 />
               </div>
             </motion.div>
@@ -399,12 +400,13 @@ export function GalleryLightbox({
                     : "border-white/20 opacity-40 hover:opacity-80",
                 )}
               >
-                <Image
+                <SkeletonImage
                   src={`/api/v1/public/media/${photo.mediaId}?variant=thumb`}
                   alt={photo.alt || `Thumbnail ${idx + 1}`}
                   fill
                   unoptimized
                   className="object-cover"
+                  showIcon={false}
                 />
               </button>
             ))}

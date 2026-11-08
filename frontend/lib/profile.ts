@@ -16,11 +16,13 @@ export type Official = {
   termEnd: string | null;
   status: string;
 };
-export async function getPublicProfile(): Promise<{
+export type PublicProfile = {
   pages: ProfilePage[];
   officials: Official[];
   unavailable?: boolean;
-}> {
+};
+
+export async function getPublicProfile(): Promise<PublicProfile> {
   try {
     const response = await fetch(
       `${process.env.API_INTERNAL_URL ?? "http://localhost:4000"}/api/v1/public/profile`,

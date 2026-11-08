@@ -1,7 +1,7 @@
 import { EmptyState } from "@/components/ui/empty-state";
 
 import Link from "next/link";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { PageHeading } from "@/components/ui/page-heading";
 import { MapPin, Navigation } from "lucide-react";
 import { getRegion, mapUrls, type Place } from "@/lib/region";
@@ -147,7 +147,7 @@ export default async function PlaceDirectory({
               <MotionHoverCard className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs transition-all duration-300 hover:shadow-lg hover:border-primary/30">
                 {item.photoId && (
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                    <Image
+                    <SkeletonImage
                       src={`/api/v1/public/media/${item.photoId}?variant=display`}
                       alt={item.photoAlt}
                       width={480}

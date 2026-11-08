@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight, MapPin, ShieldCheck } from "lucide-react";
 import {
@@ -35,14 +35,16 @@ export function HomeHero({
   return (
     <section aria-labelledby="hero-title" className="cinema-hero">
       <div className="cinema-backdrop" aria-hidden="true">
-        <Image
+        <SkeletonImage
           src={settings.heroUrl ?? siteIdentity.officePhoto}
           alt=""
           fill
           unoptimized
-          preload
+          priority
           sizes="100vw"
           className="object-cover"
+          showIcon={false}
+          skeletonClassName="bg-slate-900/60"
         />
       </div>
       <div className="cinema-light" aria-hidden="true" />
@@ -141,13 +143,14 @@ export function HomeHero({
               </span>
             </div>
             <div className="cinema-portrait">
-              <Image
+              <SkeletonImage
                 src={leader?.photoUrl ?? siteIdentity.leaderPhoto}
                 alt={leader?.name ?? siteIdentity.leader}
                 fill
                 unoptimized
                 sizes="(max-width: 768px) 80vw, 440px"
-                className="object-contain object-bottom"
+                className="object-contain object-top"
+                skeletonClassName="bg-slate-800/60"
               />
             </div>
             <div className="cinema-seal">

@@ -1,6 +1,6 @@
 import { CommunityHighlights } from "@/features/community/home-highlights";
 import Link from "next/link";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { connection } from "next/server";
 import {
   ArrowRight,
@@ -296,7 +296,7 @@ export default async function HomePage() {
                   href="/galeri"
                   className="portal-card group relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/60 shadow-xs"
                 >
-                  <Image
+                  <SkeletonImage
                     src={`/api/v1/public/media/${photo.mediaId}?variant=display`}
                     alt={photo.alt}
                     fill

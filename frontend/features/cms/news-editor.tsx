@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -268,7 +268,7 @@ export function NewsEditor({
         {draft.coverId && (
           <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
             <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-slate-200">
-              <Image
+              <SkeletonImage
                 src={
                   imageOptions.find((img) => img.id === draft.coverId)?.url ??
                   `/api/v1/public/media/${draft.coverId}`
@@ -367,13 +367,13 @@ export function NewsEditor({
           <p>{preview.data.news.excerpt}</p>
           {preview.data.news.cover && (
             <figure>
-              <Image
+              <SkeletonImage
                 src={`/api/v1/public/media/${preview.data.news.cover.id}`}
                 alt={preview.data.news.cover.alt}
                 width={800}
                 height={450}
                 unoptimized
-                className="h-auto w-full"
+                className="h-auto w-full rounded-xl"
               />
               <figcaption>{preview.data.news.cover.caption}</figcaption>
             </figure>

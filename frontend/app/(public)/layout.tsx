@@ -2,7 +2,6 @@ import "@/features/community/community.css";
 import "@/components/site/cinematic.css";
 import "@/components/site/typography.css";
 import { CardEffects } from "@/components/site/card-effects";
-import { DemoNotice } from "@/components/site/demo-notice";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
 import { AuthRecovery } from "@/features/auth/auth-provider";
@@ -17,7 +16,6 @@ export default async function PublicLayout({
     <div className="public-portal flex min-h-screen flex-col">
       <CardEffects />
       <SiteHeader settings={settings} />
-      {settings.demoContent && <DemoNotice />}
       <AuthRecovery />
       <div className="flex-1">{children}</div>
       <SiteFooter settings={settings} />

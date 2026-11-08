@@ -35,6 +35,10 @@
 * {
   box-sizing: border-box;
 }
+html {
+  font-size: 90%;
+  -webkit-text-size-adjust: 100%;
+}
 body {
   margin: 0;
   background: var(--background);
@@ -44,6 +48,16 @@ body {
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   line-height: 1.7;
+}
+@media (max-width: 640px) {
+  html {
+    font-size: 92%;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
 button,
 input,

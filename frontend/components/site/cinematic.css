@@ -363,9 +363,10 @@
   transform: translateZ(35px);
   filter: drop-shadow(12px 15px 15px #0005);
 }
+.cinema-portrait img,
 .cinema-portrait > img {
-  object-position: center top;
-  transform: scale(2.05);
+  object-position: center top !important;
+  transform: scale(2.15);
   transform-origin: center top;
 }
 .cinema-seal {
