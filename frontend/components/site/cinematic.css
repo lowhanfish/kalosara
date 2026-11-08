@@ -240,7 +240,10 @@
 }
 .cinema-title > span {
   display: inline-block;
-  color: #ddc697;
+  color: #5b9ef7;
+  background: linear-gradient(120deg, #93c5fd 0%, #60a5fa 45%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 400;
