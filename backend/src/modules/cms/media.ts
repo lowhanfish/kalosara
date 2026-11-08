@@ -58,7 +58,11 @@ const uploadHandler: RequestHandler = async (req, res) => {
     const supported: Record<string, string[]> = { 'image/jpeg': ['.jpg', '.jpeg'], 'image/png': ['.png'], 'image/webp': ['.webp'], 'application/pdf': ['.pdf'] };
     if (!detected || !supported[detected.mime]?.includes(extname(file.originalname).toLowerCase()) || file.mimetype !== detected.mime) throw new CmsError(400, 'INVALID_FILE_TYPE', 'Signature, MIME and extension must match JPG/PNG/WebP/PDF');
     if (detected.mime.startsWith('image/') && !input.alt) throw new CmsError(400, 'ALT_REQUIRED', 'Image alt text is required');
-    const id = randomUUID(); const storageKey = makeStorageKey(source, id, detected.ext, detected.mime.startsWith('image/'));
+    const isImage = detected.mime.startsWith('image/');
+    const finalExt = isImage ? 'webp' : detected.ext;
+    const finalMime = isImage ? 'image/webp' : detected.mime;
+    const id = randomUUID();
+    const storageKey = makeStorageKey(source, id, finalExt, isImage);
     stored = filePath(storageKey);
     await mkdir(dirname(stored), { recursive: true, mode: 0o700 });
     let size = file.size;
@@ -72,8 +76,10 @@ const uploadHandler: RequestHandler = async (req, res) => {
       await rename(file.path, stored);
     } else {
       try {
-        const image = sharp(file.path, { limitInputPixels: 25_000_000, animated: false, failOn: 'warning' }).rotate();
-        const buffer = await (detected.mime === 'image/jpeg' ? image.jpeg({ quality: 85 }) : detected.mime === 'image/png' ? image.png() : image.webp({ quality: 85 })).toBuffer();
+        const image = sharp(file.path, { limitInputPixels: 25_000_000, animated: false, failOn: 'warning' })
+          .rotate()
+          .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true });
+        const buffer = await image.webp({ quality: 85 }).toBuffer();
         size = buffer.length;
         if (size > MAX_FILE_SIZE) throw new Error('Oversized image');
         await writeFile(stored, buffer, { flag: 'wx', mode: 0o600 });
@@ -87,7 +93,7 @@ const uploadHandler: RequestHandler = async (req, res) => {
       } catch { throw new CmsError(400, 'INVALID_IMAGE', 'Image cannot be decoded safely (maximum 25 megapixels)'); }
     }
     const asset = await transaction(async tx => {
-      const result = await tx.mediaAsset.create({ data: { id, storageKey, mimeType: detected.mime, size, originalName: Array.from(basename(file.originalname)).filter(char => char.charCodeAt(0) > 31 && char.charCodeAt(0) !== 127).join('').slice(0,200), ownerId: req.auth!.userId, ...input }, select });
+      const result = await tx.mediaAsset.create({ data: { id, storageKey, mimeType: finalMime, size, originalName: Array.from(basename(file.originalname)).filter(char => char.charCodeAt(0) > 31 && char.charCodeAt(0) !== 127).join('').slice(0,200), ownerId: req.auth!.userId, ...input }, select });
       await tx.auditLog.create({ data: { actorId: req.auth!.userId, action: 'MEDIA_UPLOADED', resourceType: 'MediaAsset', resourceId: id } });
       return result;
     });
