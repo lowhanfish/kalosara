@@ -23,7 +23,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     void runtime.bootstrap();
     const revalidate = () => {
-      void runtime.bootstrap();
+      const status = runtime.store.getState().status;
+      if (status === "AUTHENTICATED" || status === "TEMPORARY_ERROR") {
+        void runtime.bootstrap();
+      }
     };
     window.addEventListener("focus", revalidate);
     window.addEventListener("online", revalidate);
