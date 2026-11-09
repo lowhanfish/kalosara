@@ -12,7 +12,7 @@ import {
 } from "@/features/cms/client";
 import { RichEditor } from "@/features/cms/rich-editor";
 import { channels, type ContentKind, type ContentItem } from "@/lib/content";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, UploadCloud, RefreshCw, AlertCircle } from "lucide-react";
 
 export default function Editor({
   kind,
@@ -30,6 +30,56 @@ export default function Editor({
   const [livePreview, setLivePreview] = useState(false);
   const [mediaSearch, setMediaSearch] = useState("");
   const [photos, setPhotos] = useState(item?.gallery?.photos ?? []);
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false);
+  const [galleryUploadError, setGalleryUploadError] = useState<string | null>(null);
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    if (photos.length + files.length > 12) {
+      setGalleryUploadError(
+        `Maksimal 12 foto galeri (saat ini sudah ada ${photos.length} foto).`,
+      );
+      return;
+    }
+    setIsUploadingGallery(true);
+    setGalleryUploadError(null);
+    try {
+      const newPhotos = [...photos];
+      for (const file of files) {
+        if (file.size > 20 * 1024 * 1024) continue;
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("visibility", "PUBLIC");
+        const alt =
+          file.name
+            .replace(/\.[^/.]+$/, "")
+            .replace(/[-_]+/g, " ")
+            .trim()
+            .slice(0, 100) || "Foto galeri";
+        formData.append("alt", alt);
+        formData.append("caption", "");
+        formData.append("source", "galleries");
+        const res = await cmsMutate<{ asset: MediaAsset }>(
+          runtime.request,
+          "/admin/media",
+          formData,
+          "POST",
+        );
+        newPhotos.push({
+          mediaId: res.asset.id,
+          alt: res.asset.alt || alt,
+          sortOrder: newPhotos.length,
+        });
+      }
+      setPhotos(newPhotos);
+    } catch (err) {
+      setGalleryUploadError(cmsError(err));
+    } finally {
+      setIsUploadingGallery(false);
+      e.target.value = "";
+    }
+  };
   const [content, setContent] = useState(item?.content ?? "");
   const [notice, setNotice] = useState("");
   const [version, setVersion] = useState(item?.version ?? 0);
@@ -268,37 +318,95 @@ export default function Editor({
         </>
       )}
       {kind === "galleries" && (
-        <>
-          <label className="block">
-            Tambah foto publik (maksimal 12)
-            <select
-              className="cms-input"
-              value=""
-              onChange={(e) => {
-                const m = media.data?.items.find(
-                  (m) => m.id === e.target.value,
-                );
-                if (
-                  m &&
-                  photos.length < 12 &&
-                  !photos.some((p) => p.mediaId === m.id)
-                )
-                  setPhotos([
-                    ...photos,
-                    { mediaId: m.id, alt: m.alt, sortOrder: photos.length },
-                  ]);
-              }}
+        <div className="space-y-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
+          <div>
+            <span className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+              Foto Album Galeri ({photos.length} / 12 Foto)
+            </span>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Unggah file foto langsung dari perangkat Anda. Setiap foto akan diproses dan disimpan ke direktori upload backend via Express & Multer.
+            </p>
+          </div>
+
+          {/* Direct File Upload Button */}
+          <div className="flex flex-wrap items-center gap-3">
+            <label
+              className={`inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors cursor-pointer ${
+                photos.length >= 12 || isUploadingGallery
+                  ? "opacity-50 pointer-events-none"
+                  : ""
+              }`}
             >
-              <option value="">Pilih gambar</option>
-              {media.data?.items
-                .filter((m) => m.mimeType.startsWith("image/"))
-                .map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.originalName}
-                  </option>
-                ))}
-            </select>
-          </label>
+              {isUploadingGallery ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" />
+                  <span>Mengunggah Foto ke Server...</span>
+                </>
+              ) : (
+                <>
+                  <UploadCloud size={14} />
+                  <span>Unggah Foto Langsung (Bisa Pilih Banyak)</span>
+                </>
+              )}
+              <input
+                type="file"
+                multiple
+                accept="image/jpeg,image/png,image/webp"
+                disabled={photos.length >= 12 || isUploadingGallery}
+                onChange={handleGalleryUpload}
+                className="sr-only"
+              />
+            </label>
+
+            {photos.length < 12 && (
+              <span className="text-xs text-slate-400">
+                JPG, PNG, WebP · Maks 20 MB / file
+              </span>
+            )}
+          </div>
+
+          {galleryUploadError && (
+            <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+              <AlertCircle size={15} className="shrink-0 text-red-600" />
+              <span>{galleryUploadError}</span>
+            </div>
+          )}
+
+          {/* Secondary: Pick from library */}
+          <details className="text-xs text-slate-500 pt-1">
+            <summary className="cursor-pointer font-medium text-slate-600 hover:text-slate-900 transition-colors">
+              Atau tambahkan dari pustaka media yang sudah ada
+            </summary>
+            <div className="mt-3">
+              <select
+                className="cms-input text-xs"
+                value=""
+                onChange={(e) => {
+                  const m = media.data?.items.find(
+                    (m) => m.id === e.target.value,
+                  );
+                  if (
+                    m &&
+                    photos.length < 12 &&
+                    !photos.some((p) => p.mediaId === m.id)
+                  )
+                    setPhotos([
+                      ...photos,
+                      { mediaId: m.id, alt: m.alt, sortOrder: photos.length },
+                    ]);
+                }}
+              >
+                <option value="">Pilih gambar dari pustaka</option>
+                {media.data?.items
+                  .filter((m) => m.mimeType.startsWith("image/"))
+                  .map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.originalName}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </details>
           <div className="grid gap-3 sm:grid-cols-2 mt-3">
             {photos.map((p, i) => (
               <div
@@ -342,7 +450,7 @@ export default function Editor({
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
       {(kind === "documents" || kind === "galleries") && (
         <>

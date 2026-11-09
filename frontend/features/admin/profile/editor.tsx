@@ -35,12 +35,8 @@ import {
 } from "lucide-react";
 
 const http = createHttpClient();
-const assets = [
-  "/images/watundehoa/amirulah.webp",
-  "/images/watundehoa/kantor.webp",
-  "/images/watundehoa/papan-kantor.webp",
-  "/images/watundehoa/konawe.png",
-];
+import { ImageUploadField } from "@/components/admin/image-upload-field";
+
 const slugs = [
   "sejarah",
   "visi-misi",
@@ -150,100 +146,23 @@ function Media({
   label,
   value,
   onChange,
+  source = "profile",
+  aspectRatio = "video",
 }: {
   label: string;
   value: string | null;
   onChange: (v: string | null) => void;
+  source?: "profile" | "settings" | "officials";
+  aspectRatio?: "square" | "video" | "wide" | "portrait";
 }) {
-  const auth = useAuth();
-  const runtime = useAuthRuntime();
-  const [search, setSearch] = useState("");
-  const query = useQuery({
-    queryKey: ["user", auth.user?.id, "cms-media", "profile-picker", search],
-    queryFn: () =>
-      runtime.request<List<MediaAsset>>(
-        `/admin/media?visibility=PUBLIC&limit=50&search=${encodeURIComponent(search)}`,
-      ),
-  });
   return (
-    <div className="space-y-3 rounded-2xl border border-slate-200/90 p-5 bg-white shadow-2xs">
-      <span className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-        {label}
-      </span>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <label className="text-xs text-slate-500 block">
-          Pilih dari aset bawaan kelurahan
-          <select
-            className="cms-input mt-1.5"
-            value={assets.includes(value ?? "") ? (value ?? "") : ""}
-            onChange={(e) => onChange(e.target.value || null)}
-          >
-            <option value="">(Tanpa gambar bawaan)</option>
-            {assets.map((path) => (
-              <option key={path} value={path}>
-                {path.split("/").pop()}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-xs text-slate-500 block">
-          Cari dari pustaka media publik
-          <input
-            className="cms-input mt-1.5"
-            placeholder="Ketik kata kunci media…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </label>
-      </div>
-      {query.data && query.data.items.length > 0 && (
-        <div className="max-h-36 overflow-y-auto rounded-xl border border-slate-200 p-2 bg-slate-50 space-y-1">
-          {query.data.items.map((m) => (
-            <button
-              type="button"
-              key={m.id}
-              className={`block w-full text-left truncate rounded-lg px-2.5 py-1.5 text-xs transition-colors ${
-                value === `/media/${m.id}`
-                  ? "bg-slate-900 text-white font-semibold"
-                  : "hover:bg-slate-200 text-slate-700"
-              }`}
-              onClick={() => onChange(`/media/${m.id}`)}
-            >
-              {m.originalName} ({m.mimeType})
-            </button>
-          ))}
-        </div>
-      )}
-      {value && (
-        <div className="flex items-center gap-4 rounded-xl border border-slate-200 p-3 bg-slate-50/80">
-          <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-slate-200 border border-slate-300">
-            <SkeletonImage
-              src={value}
-              alt={label}
-              fill
-              unoptimized
-              className="object-cover"
-            />
-          </div>
-          <div className="min-w-0 flex-1 text-xs">
-            <p className="font-semibold text-slate-800 truncate">{value}</p>
-            <button
-              type="button"
-              onClick={() => onChange(null)}
-              className="text-red-600 hover:underline mt-1.5 inline-block font-semibold"
-            >
-              Hapus gambar
-            </button>
-          </div>
-        </div>
-      )}
-      <p className="text-[11px] text-slate-400">
-        Maksimal 50 hasil media publik.{" "}
-        <Link className="underline hover:text-slate-700" href="/admin/berita">
-          Kelola pustaka media &rarr;
-        </Link>
-      </p>
-    </div>
+    <ImageUploadField
+      label={label}
+      value={value}
+      onChange={onChange}
+      source={source}
+      aspectRatio={aspectRatio}
+    />
   );
 }
 
@@ -664,11 +583,15 @@ export default function Editor({
                     label="Logo kelurahan"
                     value={settings.logoUrl}
                     onChange={(v) => setSettings({ ...settings, logoUrl: v })}
+                    source="settings"
+                    aspectRatio="square"
                   />
                   <Media
                     label="Gambar beranda utama"
                     value={settings.heroUrl}
                     onChange={(v) => setSettings({ ...settings, heroUrl: v })}
+                    source="profile"
+                    aspectRatio="wide"
                   />
                 </div>
 
@@ -1218,6 +1141,8 @@ export default function Editor({
                   label="Foto aparatur (opsional)"
                   value={official.photoUrl}
                   onChange={(v) => setOfficial({ ...official, photoUrl: v })}
+                  source="officials"
+                  aspectRatio="portrait"
                 />
 
                 <div className="grid gap-4 sm:grid-cols-2">

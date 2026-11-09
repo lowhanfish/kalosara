@@ -11,6 +11,7 @@ import {
   type MediaAsset,
 } from "@/features/cms/client";
 import { metricLabels } from "@/lib/region";
+import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { modules, type Kind, type Row } from "./types";
 
 export default function Editor({
@@ -217,62 +218,60 @@ export default function Editor({
               defaultValue={place?.longitude ?? ""}
             />
           </label>
-          <label>
-            Cari gambar publik
-            <input
-              className="cms-input"
-              value={mediaSearch}
-              maxLength={100}
-              onChange={(e) => setMediaSearch(e.target.value)}
-            />
-          </label>
-          <label>
-            Foto (opsional)
-            <select
-              className="cms-input"
-              name="photoId"
+          <div className="space-y-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
+            <div>
+              <span className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Foto {kind === "facilities" ? "Fasilitas" : "Potensi"} (Opsional)
+              </span>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Unggah file gambar langsung dari komputer yang disimpan ke server backend via Multer.
+              </p>
+            </div>
+
+            <input type="hidden" name="photoId" value={selectedPhotoId} />
+
+            <ImageUploadField
               value={selectedPhotoId}
-              onChange={(e) => setSelectedPhotoId(e.target.value)}
-            >
-              <option value="">Tanpa foto</option>
-              {place?.photoId &&
-                !media.data?.items.some((m) => m.id === place.photoId) && (
-                  <option value={place.photoId}>Foto tersimpan</option>
-                )}
-              {media.data?.items
-                .filter((m) => m.mimeType.startsWith("image/"))
-                .map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.originalName}
-                  </option>
-                ))}
-            </select>
-            {selectedPhotoId && (
-              <div className="mt-2.5 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5">
-                <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-white">
-                  <SkeletonImage
-                    src={`/api/v1/public/media/${selectedPhotoId}`}
-                    alt="Pratinjau foto fasilitas/potensi"
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                </div>
-                <div className="min-w-0 flex-1 text-xs">
-                  <p className="font-semibold text-slate-800 truncate">
-                    Foto terpilih
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedPhotoId("")}
-                    className="text-red-600 hover:underline mt-1 block"
-                  >
-                    Hapus foto
-                  </button>
-                </div>
+              onChange={(id) => setSelectedPhotoId(id ?? "")}
+              valueType="id"
+              source={kind === "facilities" ? "facilities" : "potentials"}
+              aspectRatio="video"
+            />
+
+            <details className="text-xs text-slate-500 pt-1">
+              <summary className="cursor-pointer font-medium text-slate-600 hover:text-slate-900 transition-colors">
+                Atau pilih dari pustaka media yang sudah ada
+              </summary>
+              <div className="mt-3 space-y-2 border-t border-slate-100 pt-3">
+                <input
+                  className="cms-input text-xs"
+                  placeholder="Cari gambar di pustaka..."
+                  value={mediaSearch}
+                  maxLength={100}
+                  onChange={(e) => setMediaSearch(e.target.value)}
+                />
+                <select
+                  className="cms-input text-xs"
+                  aria-label="Pilih foto dari pustaka"
+                  value={selectedPhotoId}
+                  onChange={(e) => setSelectedPhotoId(e.target.value)}
+                >
+                  <option value="">Tanpa foto</option>
+                  {place?.photoId &&
+                    !media.data?.items.some((m) => m.id === place.photoId) && (
+                      <option value={place.photoId}>Foto tersimpan</option>
+                    )}
+                  {media.data?.items
+                    .filter((m) => m.mimeType.startsWith("image/"))
+                    .map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.originalName}
+                      </option>
+                    ))}
+                </select>
               </div>
-            )}
-          </label>
+            </details>
+          </div>
           <label>
             Teks alternatif foto
             <input

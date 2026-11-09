@@ -13,6 +13,7 @@ import {
 } from "./client";
 import { RichEditor } from "./rich-editor";
 import { AdminPagination } from "@/components/admin/pagination";
+import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { Eye, EyeOff } from "lucide-react";
 type Preview = {
   news: {
@@ -238,73 +239,56 @@ export function NewsEditor({
           </select>
         </label>
         {categories.isError && <p role="alert">{cmsError(categories.error)}</p>}
-        <label className="block">
-          Cari pilihan gambar publik (maksimal 50 hasil)
-          <input
-            className="cms-input"
-            maxLength={100}
-            value={imageSearch}
-            onChange={(e) => setImageSearch(e.target.value)}
-          />
-        </label>
-        <label className="block">
-          Cover berita
-          <select
-            className="cms-input"
-            aria-label="Cover berita"
-            value={draft.coverId ?? ""}
-            onChange={(e) => change("coverId", e.target.value || null)}
-          >
-            <option value="">Tanpa cover</option>
-            {draft.coverId &&
-              !imageOptions.some((image) => image.id === draft.coverId) && (
-                <option value={draft.coverId}>Cover tersimpan</option>
-              )}
-            {imageOptions.map((image) => (
-              <option key={image.id} value={image.id}>
-                {image.alt || image.originalName}
-              </option>
-            ))}
-          </select>
-        </label>
-        {draft.coverId && (
-          <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-slate-200">
-              <SkeletonImage
-                src={
-                  imageOptions.find((img) => img.id === draft.coverId)?.url ??
-                  `/api/v1/public/media/${draft.coverId}`
-                }
-                alt={
-                  imageOptions.find((img) => img.id === draft.coverId)?.alt ||
-                  "Pratinjau Cover"
-                }
-                fill
-                unoptimized
-                className="object-cover"
-              />
-            </div>
-            <div className="min-w-0 flex-1 text-xs">
-              <p className="font-bold text-slate-900 truncate">
-                {imageOptions.find((img) => img.id === draft.coverId)?.alt ||
-                  imageOptions.find((img) => img.id === draft.coverId)
-                    ?.originalName ||
-                  "Cover terpilih"}
-              </p>
-              <p className="text-muted truncate mt-0.5">
-                {imageOptions.find((img) => img.id === draft.coverId)?.caption ||
-                  "Foto sampul yang akan tampil di halaman berita publik"}
-              </p>
-              <button
-                type="button"
-                onClick={() => change("coverId", null)}
-                className="mt-2 font-semibold text-red-600 hover:underline"
-              >
-                Hapus cover ini
-              </button>
-            </div>
+        <div className="space-y-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs">
+          <div>
+            <span className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+              Cover Berita
+            </span>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Unggah file gambar sampul (JPG, PNG, WebP) yang akan disimpan ke direktori server backend.
+            </p>
           </div>
-        )}
+
+          <ImageUploadField
+            value={draft.coverId}
+            onChange={(id) => change("coverId", id)}
+            valueType="id"
+            source="news"
+            aspectRatio="video"
+          />
+
+          <details className="text-xs text-slate-500 pt-1">
+            <summary className="cursor-pointer font-medium text-slate-600 hover:text-slate-900 transition-colors">
+              Atau pilih dari pustaka media yang sudah ada ({imageOptions.length} gambar)
+            </summary>
+            <div className="mt-3 space-y-2 border-t border-slate-100 pt-3">
+              <input
+                className="cms-input text-xs"
+                placeholder="Cari gambar di pustaka..."
+                maxLength={100}
+                value={imageSearch}
+                onChange={(e) => setImageSearch(e.target.value)}
+              />
+              <select
+                className="cms-input text-xs"
+                aria-label="Cover berita dari pustaka"
+                value={draft.coverId ?? ""}
+                onChange={(e) => change("coverId", e.target.value || null)}
+              >
+                <option value="">Tanpa cover</option>
+                {draft.coverId &&
+                  !imageOptions.some((image) => image.id === draft.coverId) && (
+                    <option value={draft.coverId}>Cover tersimpan</option>
+                  )}
+                {imageOptions.map((image) => (
+                  <option key={image.id} value={image.id}>
+                    {image.alt || image.originalName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </details>
+        </div>
         {images.isError && <p role="alert">{cmsError(images.error)}</p>}
         <div>
           <p className="mb-3 font-semibold">Isi berita</p>

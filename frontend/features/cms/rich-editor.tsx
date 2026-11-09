@@ -22,8 +22,13 @@ import {
   RemoveFormatting,
   X,
   Search,
+  UploadCloud,
+  RefreshCw,
+  AlertCircle,
+  ImageIcon,
 } from "lucide-react";
-import type { MediaAsset } from "./client";
+import { useAuthRuntime } from "@/features/auth/auth-provider";
+import { cmsMutate, cmsError, type MediaAsset } from "./client";
 
 export function RichEditor({
   initial,
@@ -34,8 +39,15 @@ export function RichEditor({
   onChange: (html: string) => void;
   images: MediaAsset[];
 }) {
+  const runtime = useAuthRuntime();
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [modalTab, setModalTab] = useState<"upload" | "library">("upload");
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploadAlt, setUploadAlt] = useState("");
+  const [uploadCaption, setUploadCaption] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [linkUrl, setLinkUrl] = useState("");
   const [imageSearch, setImageSearch] = useState("");
   const [warning, setWarning] = useState("");
@@ -123,6 +135,50 @@ export function RichEditor({
       })
       .run();
     setShowImageModal(false);
+  };
+
+  const handleUploadAndInsert = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!uploadFile) {
+      setUploadError("Pilih file gambar terlebih dahulu.");
+      return;
+    }
+    if (uploadFile.size > 20 * 1024 * 1024) {
+      setUploadError("Ukuran file gambar maksimal 20 MB.");
+      return;
+    }
+    setIsUploading(true);
+    setUploadError(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", uploadFile);
+      formData.append("visibility", "PUBLIC");
+      const cleanAlt =
+        uploadAlt.trim() ||
+        uploadFile.name
+          .replace(/\.[^/.]+$/, "")
+          .replace(/[-_]+/g, " ")
+          .trim()
+          .slice(0, 100);
+      formData.append("alt", cleanAlt || "Gambar artikel");
+      formData.append("caption", uploadCaption.trim());
+      formData.append("source", "general");
+
+      const response = await cmsMutate<{ asset: MediaAsset }>(
+        runtime.request,
+        "/admin/media",
+        formData,
+        "POST",
+      );
+      handleInsertImage(response.asset);
+      setUploadFile(null);
+      setUploadAlt("");
+      setUploadCaption("");
+    } catch (err) {
+      setUploadError(cmsError(err));
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const filteredImages = images.filter((img) =>
@@ -396,83 +452,212 @@ export function RichEditor({
         </div>
       </div>
 
-      {/* Modal Visual Media Gallery Picker */}
+      {/* Modal Visual Media Gallery Picker & Uploader */}
       {showImageModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl">
+          <div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
               <div>
-                <h3 className="font-bold text-slate-900 text-lg">Pilih Gambar dari Pustaka</h3>
+                <h3 className="font-bold text-slate-900 text-lg">Sisipkan Gambar ke Artikel</h3>
                 <p className="text-xs text-slate-500">
-                  Klik gambar untuk langsung menyisipkannya ke dalam artikel.
+                  Unggah file gambar baru dari komputer atau pilih dari pustaka media kelurahan.
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => setShowImageModal(false)}
+                onClick={() => {
+                  setShowImageModal(false);
+                  setUploadError(null);
+                  setUploadFile(null);
+                }}
                 className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="border-b border-slate-100 p-4 bg-slate-50/50">
-              <div className="relative">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Cari gambar berdasarkan nama / teks alternatif..."
-                  value={imageSearch}
-                  onChange={(e) => setImageSearch(e.target.value)}
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-xs text-slate-800 outline-none focus:border-primary"
-                />
-              </div>
+            {/* Navigation Tabs */}
+            <div className="flex border-b border-slate-100 px-6 pt-3 gap-4 bg-slate-50/50">
+              <button
+                type="button"
+                onClick={() => setModalTab("upload")}
+                className={`pb-3 text-xs font-bold transition-colors border-b-2 flex items-center gap-1.5 ${
+                  modalTab === "upload"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <UploadCloud size={15} />
+                <span>Unggah Gambar Baru</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setModalTab("library")}
+                className={`pb-3 text-xs font-bold transition-colors border-b-2 flex items-center gap-1.5 ${
+                  modalTab === "library"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <ImageIcon size={15} />
+                <span>Pilih dari Pustaka ({images.length})</span>
+              </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6">
-              {filteredImages.length === 0 ? (
-                <div className="py-12 text-center text-xs text-slate-500">
-                  Tidak ada gambar publik yang ditemukan. Silakan unggah gambar di tab Pustaka Media terlebih dahulu.
+            {modalTab === "upload" ? (
+              <form onSubmit={handleUploadAndInsert} className="flex-1 overflow-y-auto p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                    File Gambar (JPG, PNG, WebP · Maks 20 MB)
+                  </label>
+                  <input
+                    type="file"
+                    required
+                    accept="image/jpeg,image/png,image/webp"
+                    disabled={isUploading}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] ?? null;
+                      setUploadFile(file);
+                      if (file && !uploadAlt) {
+                        setUploadAlt(
+                          file.name
+                            .replace(/\.[^/.]+$/, "")
+                            .replace(/[-_]+/g, " ")
+                            .trim()
+                            .slice(0, 100),
+                        );
+                      }
+                    }}
+                    className="cms-input"
+                  />
+                  <p className="text-[11px] text-slate-400">
+                    File akan diunggah via multipart multer dan disimpan ke folder upload backend.
+                  </p>
                 </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {filteredImages.map((img) => {
-                    const imgSrc = img.url ?? `/api/v1/public/media/${img.id}`;
-                    return (
-                      <button
-                        key={img.id}
-                        type="button"
-                        onClick={() => handleInsertImage(img)}
-                        className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 text-left transition hover:border-primary hover:shadow-md"
-                      >
-                        <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-200">
-                          <Image
-                            src={imgSrc}
-                            alt={img.alt || img.originalName}
-                            fill
-                            unoptimized
-                            className="object-cover transition duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                        <div className="p-2.5">
-                          <p className="truncate text-xs font-semibold text-slate-800 group-hover:text-primary">
-                            {img.alt || img.originalName}
-                          </p>
-                          <p className="truncate text-[10px] text-slate-400 mt-0.5">
-                            {img.originalName}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                    Teks Alternatif (Alt Text)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={300}
+                    placeholder="Deskripsi singkat gambar untuk aksesibilitas dan pembaca layar"
+                    value={uploadAlt}
+                    onChange={(e) => setUploadAlt(e.target.value)}
+                    className="cms-input"
+                    disabled={isUploading}
+                  />
                 </div>
-              )}
-            </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                    Keterangan Gambar / Kapsi (Opsional)
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={1000}
+                    placeholder="Keterangan gambar yang tampil sebagai judul tooltip"
+                    value={uploadCaption}
+                    onChange={(e) => setUploadCaption(e.target.value)}
+                    className="cms-input"
+                    disabled={isUploading}
+                  />
+                </div>
+
+                {uploadError && (
+                  <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+                    <AlertCircle size={15} className="shrink-0 text-red-600" />
+                    <span>{uploadError}</span>
+                  </div>
+                )}
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={!uploadFile || isUploading}
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+                  >
+                    {isUploading ? (
+                      <>
+                        <RefreshCw size={14} className="animate-spin" />
+                        <span>Mengunggah & Menyisipkan...</span>
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud size={14} />
+                        <span>Unggah & Sisipkan ke Artikel</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <div className="border-b border-slate-100 p-4 bg-slate-50/50">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Cari gambar berdasarkan nama / teks alternatif..."
+                      value={imageSearch}
+                      onChange={(e) => setImageSearch(e.target.value)}
+                      className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-xs text-slate-800 outline-none focus:border-primary"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-6">
+                  {filteredImages.length === 0 ? (
+                    <div className="py-12 text-center text-xs text-slate-500">
+                      Tidak ada gambar publik yang ditemukan di pustaka.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {filteredImages.map((img) => {
+                        const imgSrc = img.url ?? `/api/v1/public/media/${img.id}`;
+                        return (
+                          <button
+                            key={img.id}
+                            type="button"
+                            onClick={() => handleInsertImage(img)}
+                            className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 text-left transition hover:border-primary hover:shadow-md"
+                          >
+                            <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-200">
+                              <Image
+                                src={imgSrc}
+                                alt={img.alt || img.originalName}
+                                fill
+                                unoptimized
+                                className="object-cover transition duration-300 group-hover:scale-105"
+                              />
+                            </div>
+                            <div className="p-2.5">
+                              <p className="truncate text-xs font-semibold text-slate-800 group-hover:text-primary">
+                                {img.alt || img.originalName}
+                              </p>
+                              <p className="truncate text-[10px] text-slate-400 mt-0.5">
+                                {img.originalName}
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
             <div className="flex justify-end border-t border-slate-100 px-6 py-3 bg-slate-50 rounded-b-2xl">
               <button
                 type="button"
-                onClick={() => setShowImageModal(false)}
+                onClick={() => {
+                  setShowImageModal(false);
+                  setUploadError(null);
+                  setUploadFile(null);
+                }}
                 className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 Tutup
