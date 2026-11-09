@@ -26,12 +26,48 @@ router.get('/', async (req, res) => {
   res.json({ success: true, data: { published, draft, announcements, events, media, users, activity, approvalEnabled: false }, requestId: req.id });
 });
 router.use(requireRoles('ADMIN_KELURAHAN'));
-const userSelect = { id: true, email: true, role: true, isActive: true, updatedAt: true, createdAt: true } as const;
+const userSelect = {
+  id: true,
+  email: true,
+  role: true,
+  isActive: true,
+  updatedAt: true,
+  createdAt: true,
+  profile: { select: { displayName: true } },
+} as const;
+
 router.get('/users', async (req, res) => {
   const { page, limit, search } = pagination.parse(req.query);
-  const where = { email: { contains: search, mode: 'insensitive' as const } };
-  const [items, total] = await prisma.$transaction([prisma.user.findMany({ where, select: userSelect, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (page - 1) * limit, take: limit }), prisma.user.count({ where })]);
-  res.json({ success: true, data: { items, total, page, limit }, requestId: req.id });
+  const roleQuery = typeof req.query.role === 'string' && ['ADMIN_KELURAHAN', 'LURAH', 'MASYARAKAT'].includes(req.query.role)
+    ? (req.query.role as 'ADMIN_KELURAHAN' | 'LURAH' | 'MASYARAKAT')
+    : undefined;
+  const where = {
+    email: { contains: search, mode: 'insensitive' as const },
+    ...(roleQuery ? { role: roleQuery } : {}),
+  };
+  const [items, total, adminCount, lurahCount, masyarakatCount] = await prisma.$transaction([
+    prisma.user.findMany({ where, select: userSelect, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (page - 1) * limit, take: limit }),
+    prisma.user.count({ where }),
+    prisma.user.count({ where: { role: 'ADMIN_KELURAHAN' } }),
+    prisma.user.count({ where: { role: 'LURAH' } }),
+    prisma.user.count({ where: { role: 'MASYARAKAT' } }),
+  ]);
+  res.json({
+    success: true,
+    data: {
+      items,
+      total,
+      page,
+      limit,
+      counts: {
+        total: adminCount + lurahCount + masyarakatCount,
+        admin: adminCount,
+        lurah: lurahCount,
+        masyarakat: masyarakatCount,
+      },
+    },
+    requestId: req.id,
+  });
 });
 const createUserSchema = z.object({
   email: emailSchema,
