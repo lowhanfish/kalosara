@@ -19,6 +19,8 @@ import {
   Coins,
   HeartHandshake,
   Baby,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   communitySections,
@@ -44,6 +46,7 @@ function Editor({
   const Icon = sectionIcons[slug] ?? ChartColumn;
 
   const [isEditing, setIsEditing] = useState(false);
+  const [livePreview, setLivePreview] = useState(false);
   const [form, setForm] = useState<CommunitySection>(
     initial ?? {
       title: config.title,
@@ -170,10 +173,11 @@ function Editor({
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
+                title="Edit Data Infografis"
+                aria-label="Edit Data Infografis"
+                className="inline-flex size-11 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
               >
-                <Pencil size={15} />
-                Ubah Data Infografis
+                <Pencil size={18} />
               </button>
             </div>
           </div>
@@ -460,6 +464,18 @@ function Editor({
           </button>
           <button
             type="button"
+            onClick={() => setLivePreview(!livePreview)}
+            className={`inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ${
+              livePreview
+                ? "border-slate-900 bg-slate-900 text-white shadow-xs"
+                : "border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-50"
+            }`}
+          >
+            {livePreview ? <EyeOff size={16} /> : <Eye size={16} />}
+            {livePreview ? "Tutup Pratinjau" : "Pratinjau Infografis"}
+          </button>
+          <button
+            type="button"
             onClick={() => setIsEditing(false)}
             className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
           >
@@ -478,6 +494,50 @@ function Editor({
           )}
         </div>
       </form>
+      {livePreview && (
+        <article className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-700">
+              <Eye size={13} /> Pratinjau Langsung &mdash; Status: {form.status}
+            </span>
+            <button
+              type="button"
+              onClick={() => setLivePreview(false)}
+              className="text-xs text-slate-400 hover:text-slate-700 font-medium"
+            >
+              Tutup Pratinjau &times;
+            </button>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            {form.title || "(Judul infografis)"}
+          </h2>
+          <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+            <span>Periode: {form.period || "-"}</span>
+            <span>&bull;</span>
+            <span>Sumber: {form.source || "-"}</span>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 pt-2">
+            {form.metrics.map((m, i) => (
+              <div
+                key={i}
+                className="rounded-xl border border-slate-200 p-4 bg-slate-50/50"
+              >
+                <span className="text-[11px] font-semibold uppercase text-slate-400 block">
+                  {m.label}
+                </span>
+                <span className="text-xl font-bold text-slate-900 mt-1 block">
+                  {formatMetricValue(m.value, m.unit)}
+                </span>
+              </div>
+            ))}
+          </div>
+          {form.content && (
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-600 bg-slate-50/60 p-4 rounded-xl border border-slate-100">
+              {form.content}
+            </p>
+          )}
+        </article>
+      )}
     </div>
   );
 }

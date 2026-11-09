@@ -1,7 +1,7 @@
 "use client";
 import { AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { ChartColumn, ArrowLeft } from "lucide-react";
+import { ChartColumn, ArrowLeft, Pencil } from "lucide-react";
 import Editor from "./editor";
 import { AdminPagination } from "@/components/admin/pagination";
 import { useEffect, useState } from "react";
@@ -176,7 +176,10 @@ function Workspace() {
                   </span>
                 </div>
                 <button
-                  className="cms-edit-button"
+                  type="button"
+                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                  title={`Edit ${"period" in item ? item.period : item.name}`}
+                  aria-label={`Edit ${"period" in item ? item.period : item.name}`}
                   onClick={() => {
                     if (leave()) {
                       setSelected(item);
@@ -185,7 +188,7 @@ function Workspace() {
                     }
                   }}
                 >
-                  Edit {"period" in item ? item.period : item.name}
+                  <Pencil size={15} />
                 </button>
               </li>
             ))}

@@ -12,6 +12,8 @@ import {
   AlertCircle,
   Clock,
   Sparkles,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -25,6 +27,7 @@ export default function Editor({ page }: { page?: ProfilePage }) {
   const queryClient = useQueryClient();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [livePreview, setLivePreview] = useState(false);
   const [title, setTitle] = useState(
     page?.title ?? "Panduan pelayanan kelurahan",
   );
@@ -114,10 +117,11 @@ export default function Editor({ page }: { page?: ProfilePage }) {
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
+                title="Edit Panduan Pelayanan"
+                aria-label="Edit Panduan Pelayanan"
+                className="inline-flex size-11 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
               >
-                <Pencil size={15} />
-                Ubah Panduan Pelayanan
+                <Pencil size={17} />
               </button>
             </div>
           </div>
@@ -142,9 +146,11 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
+              title="Edit Dokumen"
+              aria-label="Edit Dokumen"
+              className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition-colors"
             >
-              <Pencil size={12} /> Edit Dokumen
+              <Pencil size={14} />
             </button>
           </div>
 
@@ -274,6 +280,18 @@ export default function Editor({ page }: { page?: ProfilePage }) {
           </button>
           <button
             type="button"
+            onClick={() => setLivePreview(!livePreview)}
+            className={`inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ${
+              livePreview
+                ? "border-slate-900 bg-slate-900 text-white shadow-xs"
+                : "border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-50"
+            }`}
+          >
+            {livePreview ? <EyeOff size={16} /> : <Eye size={16} />}
+            {livePreview ? "Tutup Pratinjau" : "Pratinjau Panduan"}
+          </button>
+          <button
+            type="button"
             onClick={() => setIsEditing(false)}
             className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
           >
@@ -292,6 +310,33 @@ export default function Editor({ page }: { page?: ProfilePage }) {
           )}
         </div>
       </form>
+      {livePreview && (
+        <article className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-700">
+              <Eye size={13} /> Pratinjau Langsung &mdash; Status: {status}
+            </span>
+            <button
+              type="button"
+              onClick={() => setLivePreview(false)}
+              className="text-xs text-slate-400 hover:text-slate-700 font-medium"
+            >
+              Tutup Pratinjau &times;
+            </button>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            {title || "(Judul halaman panduan)"}
+          </h2>
+          <div
+            className="cms-rich text-slate-800 text-sm leading-relaxed"
+            dangerouslySetInnerHTML={{
+              __html:
+                content ||
+                "<p class='text-slate-400 italic'>Belum ada isi panduan pelayanan.</p>",
+            }}
+          />
+        </article>
+      )}
     </div>
   );
 }

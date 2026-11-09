@@ -12,6 +12,7 @@ import {
 } from "@/features/cms/client";
 import { RichEditor } from "@/features/cms/rich-editor";
 import { channels, type ContentKind, type ContentItem } from "@/lib/content";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Editor({
   kind,
@@ -25,6 +26,8 @@ export default function Editor({
   const runtime = useAuthRuntime();
   const auth = useAuth();
   const [editorId] = useState(() => item?.id ?? crypto.randomUUID());
+  const [title, setTitle] = useState(item?.title ?? "");
+  const [livePreview, setLivePreview] = useState(false);
   const [mediaSearch, setMediaSearch] = useState("");
   const [photos, setPhotos] = useState(item?.gallery?.photos ?? []);
   const [content, setContent] = useState(item?.content ?? "");
@@ -64,8 +67,9 @@ export default function Editor({
           .slice(0, 16)
       : "";
   return (
-    <form
-      className="cms-editor"
+    <div className="space-y-6">
+      <form
+        className="cms-editor"
       onSubmit={(e) => {
         e.preventDefault();
         const f = new FormData(e.currentTarget);
@@ -121,7 +125,8 @@ export default function Editor({
           name="title"
           required
           maxLength={200}
-          defaultValue={item?.title}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </label>
       <div>
@@ -367,16 +372,76 @@ export default function Editor({
           <option>ARCHIVED</option>
         </select>
       </label>
-      <button
-        className="yellow-button"
-        disabled={save.isPending || save.isSuccess}
-      >
-        {save.isPending ? "Menyimpan…" : "Simpan"}
-      </button>
+      <div className="flex flex-wrap items-center gap-3 pt-2">
+        <button
+          className="yellow-button"
+          disabled={save.isPending || save.isSuccess}
+        >
+          {save.isPending ? "Menyimpan…" : "Simpan Konten"}
+        </button>
+        <button
+          type="button"
+          onClick={() => setLivePreview(!livePreview)}
+          className={`inline-flex min-h-10 items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition-all ${
+            livePreview
+              ? "border-slate-900 bg-slate-900 text-white shadow-xs"
+              : "border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-50"
+          }`}
+        >
+          {livePreview ? <EyeOff size={16} /> : <Eye size={16} />}
+          {livePreview ? "Tutup Pratinjau" : "Pratinjau Konten"}
+        </button>
+      </div>
       {save.isError && <p role="alert">{cmsError(save.error)}</p>}
       {notice && (
         <p role="status">{notice} Buka ulang item untuk menyunting lagi.</p>
       )}
     </form>
+    {livePreview && (
+      <article className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-700">
+            <Eye size={13} /> Pratinjau {channels[kind].title}
+          </span>
+          <button
+            type="button"
+            onClick={() => setLivePreview(false)}
+            className="text-xs text-slate-400 hover:text-slate-700 font-medium"
+          >
+            Tutup Pratinjau &times;
+          </button>
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900">
+          {title || "(Judul konten belum diisi)"}
+        </h2>
+        <div
+          className="cms-rich text-slate-800 text-sm leading-relaxed"
+          dangerouslySetInnerHTML={{
+            __html:
+              content ||
+              "<p class='text-slate-400 italic'>Belum ada isi konten.</p>",
+          }}
+        />
+        {kind === "galleries" && photos.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 pt-3 sm:grid-cols-3">
+            {photos.map((p, i) => (
+              <div
+                key={i}
+                className="relative aspect-video rounded-lg overflow-hidden border border-slate-200 bg-slate-100"
+              >
+                <SkeletonImage
+                  src={`/media/${p.mediaId}`}
+                  alt={p.alt || "Foto"}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </article>
+    )}
+    </div>
   );
 }

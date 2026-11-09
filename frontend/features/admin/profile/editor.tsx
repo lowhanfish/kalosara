@@ -30,6 +30,8 @@ import {
   MessageSquare,
   Globe,
   ImageIcon,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 const http = createHttpClient();
@@ -416,10 +418,11 @@ export default function Editor({
                     <button
                       type="button"
                       onClick={() => setIsEditingSettings(true)}
-                      className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
+                      title="Edit Pengaturan Website"
+                      aria-label="Edit Pengaturan Website"
+                      className="inline-flex size-11 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
                     >
-                      <Pencil size={15} />
-                      Ubah Pengaturan Website
+                      <Pencil size={18} />
                     </button>
                   </div>
                 </div>
@@ -849,10 +852,11 @@ export default function Editor({
                             setEditingProfileSlug(s);
                             setPreview(false);
                           }}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-slate-800 transition-all"
+                          title={`Edit ${meta.name}`}
+                          aria-label={`Edit ${meta.name}`}
+                          className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-all"
                         >
-                          <Pencil size={12} />
-                          Ubah Halaman
+                          <Pencil size={14} />
                         </button>
                       </div>
                     </div>
@@ -941,10 +945,15 @@ export default function Editor({
                   </button>
                   <button
                     type="button"
-                    className="text-xs font-semibold text-slate-600 underline hover:text-primary transition-colors ml-auto"
                     onClick={() => setPreview(!preview)}
+                    className={`inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ml-auto ${
+                      preview
+                        ? "border-slate-900 bg-slate-900 text-white shadow-xs"
+                        : "border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-50"
+                    }`}
                   >
-                    {preview ? "Sembunyikan pratinjau" : "Lihat pratinjau tampilan"}
+                    {preview ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {preview ? "Tutup Pratinjau" : "Pratinjau Halaman"}
                   </button>
                 </div>
                 {preview && (
@@ -1096,10 +1105,11 @@ export default function Editor({
                                   setOfficial(o);
                                   setEditingOfficialId(o.id);
                                 }}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 hover:border-slate-300 transition-all"
+                                title={`Edit aparatur ${o.name}`}
+                                aria-label={`Edit aparatur ${o.name}`}
+                                className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-all"
                               >
-                                <Pencil size={12} />
-                                Ubah
+                                <Pencil size={14} />
                               </button>
                             </td>
                           </tr>

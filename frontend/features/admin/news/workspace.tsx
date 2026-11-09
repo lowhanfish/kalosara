@@ -5,7 +5,7 @@ import {
   AdminError,
 } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { Newspaper, ArrowLeft } from "lucide-react";
+import { Newspaper, ArrowLeft, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -224,14 +224,16 @@ function Workspace() {
                       </p>
                     </div>
                     <button
-                      className="cms-edit-button"
+                      type="button"
+                      className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                      title="Edit Berita"
                       aria-label={`Edit ${row.title}`}
                       disabled={open.isPending}
                       onClick={() => {
                         if (confirmLeave()) open.mutate(row.id);
                       }}
                     >
-                      Edit berita
+                      <Pencil size={15} />
                     </button>
                   </li>
                 ))}
