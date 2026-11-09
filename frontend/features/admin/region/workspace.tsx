@@ -1,7 +1,7 @@
 "use client";
 import { AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { ChartColumn } from "lucide-react";
+import { ChartColumn, ArrowLeft } from "lucide-react";
 import Editor from "./editor";
 import { AdminPagination } from "@/components/admin/pagination";
 import { useEffect, useState } from "react";
@@ -200,15 +200,20 @@ function Workspace() {
         </>
       )}
       {selected !== undefined && (
-        <button
-          type="button"
-          className="mb-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"
-          onClick={() => {
-            if (leave()) setSelected(undefined);
-          }}
-        >
-          ← Kembali ke daftar
-        </button>
+        <div className="mb-4 flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+            onClick={() => {
+              if (leave()) setSelected(undefined);
+            }}
+          >
+            <ArrowLeft size={16} /> Kembali ke daftar data
+          </button>
+          <span className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+            {selected ? `Mengedit Data` : "Tambah Data Baru"}
+          </span>
+        </div>
       )}
       {notice && (
         <p

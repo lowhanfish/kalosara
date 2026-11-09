@@ -5,7 +5,7 @@ import {
   AdminError,
 } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { Newspaper } from "lucide-react";
+import { Newspaper, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -266,18 +266,36 @@ function Workspace() {
             </p>
           )}
           {selected && (
-            <NewsEditor
-              key={`${selected.id}-${selected.version}-${editorEpoch}`}
-              initial={selected}
-              onSaved={(news, cacheInvalidated) => {
-                setEditorEpoch((value) => value + 1);
-                setSelected(news);
-                setNotice(
-                  `Berita berhasil disimpan.${cacheInvalidated === false ? " Perubahan pada website sedang disinkronkan." : ""}`,
-                );
-                void query.refetch();
-              }}
-            />
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (confirmLeave()) {
+                      setSelected(null);
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+                >
+                  <ArrowLeft size={16} /> Kembali ke Daftar Berita
+                </button>
+                <span className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full w-fit">
+                  {selected.title ? `Mengedit: ${selected.title.slice(0, 50)}` : "Menulis Berita Baru"}
+                </span>
+              </div>
+              <NewsEditor
+                key={`${selected.id}-${selected.version}-${editorEpoch}`}
+                initial={selected}
+                onSaved={(news, cacheInvalidated) => {
+                  setEditorEpoch((value) => value + 1);
+                  setSelected(news);
+                  setNotice(
+                    `Berita berhasil disimpan.${cacheInvalidated === false ? " Perubahan pada website sedang disinkronkan." : ""}`,
+                  );
+                  void query.refetch();
+                }}
+              />
+            </div>
           )}
         </>
       )}
