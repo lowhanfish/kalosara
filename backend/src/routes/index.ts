@@ -20,10 +20,18 @@ import {
 import { profileAdminRouter, publicProfileRouter } from './profile.routes.js';
 import { publicSettingsRouter } from './public-settings.routes.js';
 import { systemRouter } from './system.routes.js';
+import {
+  adminLetterRouter,
+  citizenLetterRouter,
+  publicLetterRouter,
+} from './letter.routes.js';
 
 export function createApiV1Router(): Router {
   const router = Router();
   router.use(systemRouter);
+  router.use('/citizen/letters', citizenLetterRouter);
+  router.use('/admin/letters', adminLetterRouter);
+  router.use('/public/letters', publicLetterRouter);
   router.use('/public/guestbook', publicGuestbookRouter);
   router.use('/admin/guestbook', adminGuestbookRouter);
   router.use('/public/community', publicCommunityRouter);
@@ -54,7 +62,9 @@ export {
   accountRouter,
   adminCommunityRouter,
   adminGuestbookRouter,
+  adminLetterRouter,
   authRouter,
+  citizenLetterRouter,
   contactReviewRouter,
   contentAdminRouter,
   dashboardRouter,
@@ -64,6 +74,7 @@ export {
   publicCommunityRouter,
   publicContentRouter,
   publicGuestbookRouter,
+  publicLetterRouter,
   publicMediaRouter,
   publicNewsRouter,
   publicProfileRouter,

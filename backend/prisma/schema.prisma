@@ -37,6 +37,7 @@ model User {
   refreshSessions     RefreshSession[]
   passwordResetTokens PasswordResetToken[]
   auditLogs           AuditLog[]           @relation("AuditActor")
+  letters             LetterRequest[]
 
   @@index([role, isActive])
 }
@@ -412,4 +413,71 @@ model GuestBookEntry {
 
   @@index([status, createdAt])
   @@index([createdAt])
+}
+
+enum LetterType {
+  SKU
+  SKTM
+  DOMISILI
+  PENGANTAR_SKCK
+  BELUM_MENIKAH
+  BELUM_BEKERJA
+  PENGHASILAN
+  PENGANTAR_NIKAH
+  AHLI_WARIS
+  LAINNYA
+}
+
+enum LetterStatus {
+  SUBMITTED
+  REJECTED
+  VERIFIED
+  SIGNED
+}
+
+model LetterRequest {
+  id               String             @id @default(uuid()) @db.Uuid
+  ticketNumber     String             @unique @db.VarChar(30)
+  letterNumber     String?            @unique @db.VarChar(60)
+  type             LetterType
+  status           LetterStatus       @default(SUBMITTED)
+  userId           String             @db.Uuid
+  applicantName    String             @db.VarChar(120)
+  applicantNik     String             @db.VarChar(20)
+  birthPlace       String             @db.VarChar(100)
+  birthDate        String             @db.VarChar(20)
+  gender           String             @db.VarChar(20)
+  religion         String             @db.VarChar(30)
+  maritalStatus    String             @db.VarChar(30)
+  occupation       String             @db.VarChar(100)
+  address          String             @db.VarChar(500)
+  details          Json
+  rejectionReason  String?            @db.Text
+  verifiedAt       DateTime?
+  verifiedBy       String?            @db.VarChar(120)
+  signedAt         DateTime?
+  signedBy         String?            @db.VarChar(120)
+  pdfPath          String?            @db.VarChar(500)
+  qrToken          String?            @unique @db.VarChar(64)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments      LetterAttachment[]
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
+}
+
+model LetterAttachment {
+  id           String        @id @default(uuid()) @db.Uuid
+  letterId     String        @db.Uuid
+  originalName String        @db.VarChar(255)
+  storagePath  String        @db.VarChar(500)
+  fileSize     Int
+  mimeType     String        @db.VarChar(100)
+  createdAt    DateTime      @default(now())
+  letter       LetterRequest @relation(fields: [letterId], references: [id], onDelete: Cascade)
+
+  @@index([letterId])
 }

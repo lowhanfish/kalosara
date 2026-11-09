@@ -1,6 +1,6 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { ZodError } from 'zod';
-import { AccessError, CmsError } from '../lib/errors.js';
+import { AccessError, ApiError, CmsError } from '../lib/errors.js';
 import { logger } from '../lib/logger.js';
 
 export const notFound: RequestHandler = (req, res) => {
@@ -12,7 +12,11 @@ export const notFound: RequestHandler = (req, res) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _next) => {
-  if (error instanceof AccessError || error instanceof CmsError) {
+  if (
+    error instanceof AccessError ||
+    error instanceof CmsError ||
+    error instanceof ApiError
+  ) {
     res.status(error.status).json({
       success: false,
       error: { code: error.code, message: error.message },

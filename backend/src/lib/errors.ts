@@ -21,3 +21,14 @@ export class CmsError extends Error {
     this.name = 'CmsError';
   }
 }
+
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
