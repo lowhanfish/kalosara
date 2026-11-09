@@ -9,7 +9,7 @@ import {
   filePath,
   storageKey,
   variantKey,
-} from '../src/modules/cms/storage.js';
+} from '../src/services/cms-storage.service.js';
 import {
   demoNotice,
   profilePages,

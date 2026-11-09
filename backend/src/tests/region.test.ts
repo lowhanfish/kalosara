@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { statisticInput, placeInput } from '../modules/cms/region.js';
+import { statisticInput, placeInput } from '../validators/cms.validator.js';
 const stat = { period: '2026-10', source: 'Sumber uji agregat', referenceDate: '2026-10-17', population: 10, male: 4, female: 6, households: null, rt: 2, rw: 1, status: 'DRAFT', expectedVersion: 0 };
 const place = { name: 'Fasilitas uji', description: '', category: 'Kesehatan', location: 'Lokasi publik uji', latitude: null, longitude: null, photoId: null, photoAlt: '', status: 'DRAFT', expectedVersion: 0 };
 describe('regional information validation', () => {

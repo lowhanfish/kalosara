@@ -5,8 +5,7 @@ import request from 'supertest';
 import { PrismaClient } from '@prisma/client';
 import { decodeJwt } from 'jose';
 import { createApp } from '../app.js';
-import { authCookieOptions, CSRF_COOKIE, REFRESH_COOKIE } from '../modules/auth/cookies.js';
-import { tokenHash } from '../modules/auth/tokens.js';
+import { authCookieOptions, CSRF_COOKIE, REFRESH_COOKIE, tokenHash } from '../services/auth.service.js';
 
 const db = new PrismaClient();
 const app = createApp();

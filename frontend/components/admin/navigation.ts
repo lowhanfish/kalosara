@@ -82,4 +82,9 @@ export const adminLinks = [
     href: "/admin/kotak-masuk",
     icon: InboxMailSvg,
   },
+  {
+    label: "Buku tamu digital",
+    href: "/admin/buku-tamu",
+    icon: UsersShieldSvg,
+  },
 ];

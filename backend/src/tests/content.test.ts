@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { contentInput } from '../modules/cms/content.js';
-import { filePath, storageKey } from '../modules/cms/storage.js';
+import { contentInput } from '../validators/cms.validator.js';
+import { filePath, storageKey } from '../services/cms-storage.service.js';
 const common = { title: 'Uji', content: '', status: 'DRAFT', expectedVersion: 0 };
 describe('content validation', () => {
   it('validates lifecycle, channel-specific fields, intervals, alt and limits', () => {

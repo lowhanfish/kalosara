@@ -9,11 +9,16 @@ import type { SiteSettings } from "@/lib/site-settings";
 import { Dialog } from "@/components/ui/dialog";
 import { SearchForm } from "./search-form";
 
-const navigation = [
+const primaryNavigation = [
   { title: "Beranda", href: "/" },
   { title: "Profil", href: "/profil" },
   { title: "Berita", href: "/berita" },
   { title: "Pelayanan", href: "/pelayanan" },
+];
+
+const guestbookNav = { title: "Buku Tamu", href: "/buku-tamu" };
+
+const moreNavigation = [
   { title: "Agenda", href: "/agenda" },
   { title: "Galeri", href: "/galeri" },
   { title: "Informasi publik", href: "/informasi-publik" },
@@ -31,9 +36,11 @@ const navigation = [
   { title: "Kontak", href: "/kontak" },
 ];
 
+const allNavigation = [...primaryNavigation, guestbookNav, ...moreNavigation];
+
 export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const path = usePathname();
-  const link = (item: (typeof navigation)[number]) => (
+  const link = (item: { title: string; href: string }) => (
     <Link
       key={item.href}
       href={item.href}
@@ -74,19 +81,20 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             </span>
           </Link>
           <nav aria-label="Navigasi utama" className="portal-desktop-nav">
-            {navigation.slice(0, 4).map(link)}
+            {primaryNavigation.map(link)}
             <div className="portal-more">
               <button
                 type="button"
-                className={`portal-nav-link ${navigation.slice(4).some((item) => path.startsWith(item.href)) ? "is-active" : ""}`}
+                className={`portal-nav-link ${moreNavigation.some((item) => path.startsWith(item.href)) ? "is-active" : ""}`}
                 aria-haspopup="true"
               >
                 Jelajahi <ChevronDown size={13} />
               </button>
               <div className="portal-dropdown">
-                {navigation.slice(4).map(link)}
+                {moreNavigation.map(link)}
               </div>
             </div>
+            {link(guestbookNav)}
           </nav>
           <div className="portal-header-actions">
             <div className="portal-search">
@@ -111,7 +119,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
                   aria-label="Navigasi seluler"
                   className="grid grid-cols-2 gap-2 mb-6"
                 >
-                  {navigation.map(link)}
+                  {allNavigation.map(link)}
                 </nav>
                 <SearchForm id="mobile-search" />
                 <Link href="/admin" className="mt-6 block text-sm text-muted">

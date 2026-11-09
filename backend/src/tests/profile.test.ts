@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { settingSchema, defaultSettings, officialSchema, pageSchema } from '../modules/profile.js';
+import { settingSchema, defaultSettings, officialSchema, pageSchema } from '../validators/profile.validator.js';
 describe('profile validation', () => {
   it('rejects unsafe media, links, unpaired/out-of-range coordinates and extra privilege fields', () => {
     expect(settingSchema.safeParse(defaultSettings).success).toBe(true);

@@ -6,7 +6,7 @@ import { hash } from 'bcryptjs';
 import sharp from 'sharp';
 import { prisma } from '../lib/prisma.js';
 import { createApp } from '../app.js';
-import { filePath } from '../modules/cms/storage.js';
+import { filePath } from '../services/cms-storage.service.js';
 import { stat } from 'node:fs/promises';
 const app = createApp();const admin = request.agent(app);const citizen = request.agent(app);const lurah = request.agent(app);const users:string[]=[];const ids:string[]=[];let h:Record<string,string>;let imageId:string;let privateId:string;
 const statBody = (extra={})=>({ period:'2026-10',source:'Sumber uji agregat',referenceDate:'2026-10-17',population:100,male:40,female:60,households:30,rt:2,rw:1,status:'DRAFT',expectedVersion:0,...extra });

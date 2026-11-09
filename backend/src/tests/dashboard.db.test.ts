@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { createServer } from 'node:http';
-import { lockAccount } from '../modules/auth/account-lock.js';
+import { lockAccount } from '../repositories/common.repository.js';
 import './db-safety.js';
 import { randomUUID } from 'node:crypto';
 import { beforeAll, afterAll, describe, it, expect } from 'vitest';

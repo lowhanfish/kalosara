@@ -5,7 +5,7 @@ import request from 'supertest';
 import { hash } from 'bcryptjs';
 import { prisma } from '../lib/prisma.js';
 import { createApp } from '../app.js';
-import { defaultSettings } from '../modules/profile.js';
+import { defaultSettings } from '../validators/profile.validator.js';
 const app = createApp();
 const ids: string[] = [];
 const officialId = randomUUID();

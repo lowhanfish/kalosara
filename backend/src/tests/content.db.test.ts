@@ -8,7 +8,7 @@ import { PDFDocument } from 'pdf-lib';
 import { stat } from 'node:fs/promises';
 import { prisma } from '../lib/prisma.js';
 import { createApp } from '../app.js';
-import { filePath, MAX_FILE_SIZE } from '../modules/cms/media.js';
+import { filePath, MAX_FILE_SIZE } from '../services/cms-storage.service.js';
 const url = new URL(process.env.DATABASE_URL!);
 if (!['127.0.0.1', 'localhost'].includes(url.hostname) || !url.pathname.endsWith('_test')) throw new Error('Disposable local test database required');
 const app = createApp(); const admin = request.agent(app); const other = request.agent(app); const citizen = request.agent(app); const lurah = request.agent(app);

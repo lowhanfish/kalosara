@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { sanitizeBody } from '../modules/cms/sanitize.js';
-import { mediaUrlSchema } from '../modules/cms/common.js';
-import { filePath, storageKey, variantKey } from '../modules/cms/storage.js';
+import { sanitizeBody } from '../validators/cms.validator.js';
+import { mediaUrlSchema } from '../validators/common.validator.js';
+import { filePath, storageKey, variantKey } from '../services/cms-storage.service.js';
 describe('disk media storage', () => {
   const id = '9cad3488-0dab-4b40-9537-f177765fe067';
   it('groups files by validated origin/type and keeps derivatives beside originals', () => {

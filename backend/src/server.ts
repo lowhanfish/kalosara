@@ -1,8 +1,8 @@
-import { drainInvalidations } from './modules/cms/cache-invalidation.js';
 import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { logger } from './lib/logger.js';
 import { prisma } from './lib/prisma.js';
+import { drainInvalidations } from './services/cache-invalidation.service.js';
 
 const server = createApp().listen(env.PORT, '127.0.0.1', () => {
   logger.info({ port: env.PORT }, 'KALOSARA API listening');

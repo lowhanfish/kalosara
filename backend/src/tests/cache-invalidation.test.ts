@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { prisma } from '../lib/prisma.js';
 import { env } from '../config/env.js';
-import { deliverInvalidation } from '../modules/cms/cache-invalidation.js';
+import { deliverInvalidation } from '../services/cache-invalidation.service.js';
 const original = env.CACHE_INVALIDATION_SECRET;
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); env.CACHE_INVALIDATION_SECRET = original; });
 describe('durable cache invalidation delivery', () => {

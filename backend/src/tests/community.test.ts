@@ -11,9 +11,9 @@ const db = vi.hoisted(() => ({
 }));
 vi.mock('../lib/prisma.js', () => ({ prisma: db }));
 import { createApp } from '../app.js';
-import { signAccessToken } from '../modules/auth/tokens.js';
-import { requestInput, requestUpdate, sectionInput } from '../modules/community.js';
-import { contentInput } from '../modules/cms/content.js';
+import { signAccessToken } from '../services/auth.service.js';
+import { requestInput, requestUpdate, sectionInput } from '../validators/community.validator.js';
+import { contentInput } from '../validators/cms.validator.js';
 const payload = { kind: 'COMPLAINT', name: 'Pengirim Uji', email: 'uji@example.invalid', phone: '', organization: '', subject: 'Layanan lingkungan', message: 'Pesan uji yang hanya berada di penyimpanan tiruan.', consent: true };
 const section = { title: 'Anggaran', content: '', period: '', source: '', status: 'DRAFT', version: 0, metrics: [{ label: 'Belanja', value: null, unit: 'Rp' }] };
 beforeEach(() => { vi.clearAllMocks(); db.$transaction.mockImplementation(async fn => Array.isArray(fn) ? Promise.all(fn) : fn(db)); });

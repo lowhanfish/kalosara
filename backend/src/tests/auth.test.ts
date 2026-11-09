@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Role } from '@prisma/client';
-import { AccessError, assertActive, assertOwner, assertRole } from '../modules/auth/authorization.js';
-import { registerPublicAccount, type PublicAccountRepository } from '../modules/auth/register-public.js';
+import { AccessError, assertActive, assertOwner, assertRole } from '../middlewares/auth.middleware.js';
+import { registerPublicAccount, type PublicAccountRepository } from '../services/auth.service.js';
 
 describe('public registration policy', () => {
   it('forces MASYARAKAT even when the client sends a privileged role', async () => {

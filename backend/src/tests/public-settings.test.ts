@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../app.js';
 import { prisma } from '../lib/prisma.js';
-import { projectPublicSettings } from '../modules/public-settings.js';
+import { projectPublicSettings } from '../validators/public-settings.validator.js';
 
 describe('public site identity', () => {
   it('projects only validated public fields, rejecting unsafe links and secrets', () => {
