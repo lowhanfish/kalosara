@@ -154,21 +154,36 @@ export function createAuthRuntime(
   function bootstrap(): Promise<void> {
     if (bootstrapFlight) return bootstrapFlight;
     invalid = false;
-    store.setState({ status: "INITIALIZING", error: null });
+    // Preserve an already-authenticated UI during background window-focus revalidation
+    // so open forms, modals, and editors are not unmounted while /auth/me resolves.
+    const current = store.getState();
+    if (current.status !== "AUTHENTICATED" || !current.user) {
+      store.setState({ status: "INITIALIZING", error: null });
+    } else if (current.error) {
+      store.setState({ error: null });
+    }
     bootstrapFlight = (async () => {
       try {
         const { user } = await authenticated<{ user: AuthUser }>("/auth/me");
         if (invalid) return;
+        const latest = store.getState().user;
         // Never expose an old identity's cache when cookies changed in another tab.
-        if (store.getState().user?.id !== user.id) {
+        if (latest?.id !== user.id) {
           identityVersion++;
           queryClient.clear();
         }
-        store.setState({
-          status: "AUTHENTICATED",
-          user: { id: user.id, role: user.role },
-          error: null,
-        });
+        if (
+          store.getState().status !== "AUTHENTICATED" ||
+          latest?.id !== user.id ||
+          latest?.role !== user.role ||
+          store.getState().error !== null
+        ) {
+          store.setState({
+            status: "AUTHENTICATED",
+            user: { id: user.id, role: user.role },
+            error: null,
+          });
+        }
       } catch (error) {
         if (definitive(error)) guest(error);
         else temporary(error);

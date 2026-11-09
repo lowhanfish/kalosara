@@ -355,3 +355,32 @@ test("failed logout keeps identity and does not claim successful sign out", asyn
   assert.equal(runtime.store.getState().status, "AUTHENTICATED");
   assert.equal(redirects, 0);
 });
+
+test("re-bootstrap while AUTHENTICATED does not flash INITIALIZING or unmount active forms", async () => {
+  let resolveMe;
+  let calls = 0;
+  const runtime = createAuthRuntime(async () => {
+    calls++;
+    if (calls === 1) return ok({ user: user("admin") });
+    return new Promise((resolve) => {
+      resolveMe = resolve;
+    });
+  });
+  await runtime.bootstrap();
+  assert.equal(runtime.store.getState().status, "AUTHENTICATED");
+
+  const transitions = [];
+  const unsubscribe = runtime.store.subscribe((state) => {
+    transitions.push(state.status);
+  });
+
+  const pending = runtime.bootstrap();
+  // Status must remain AUTHENTICATED while background revalidation is in-flight
+  assert.equal(runtime.store.getState().status, "AUTHENTICATED");
+  resolveMe(ok({ user: user("admin") }));
+  await pending;
+  unsubscribe();
+
+  assert.equal(runtime.store.getState().status, "AUTHENTICATED");
+  assert.equal(transitions.includes("INITIALIZING"), false);
+});

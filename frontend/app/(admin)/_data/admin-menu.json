@@ -1,0 +1,157 @@
+[
+  {
+    "id": "dashboard",
+    "title": "Dashboard",
+    "icon": "dashboard",
+    "path": "/admin",
+    "children": []
+  },
+  {
+    "id": "profil-pelayanan",
+    "title": "Profil & Pelayanan",
+    "icon": "building",
+    "path": null,
+    "children": [
+      {
+        "id": "pengaturan-beranda",
+        "title": "Beranda & Kontak",
+        "icon": "home",
+        "path": "/admin/profil#pengaturan",
+        "children": []
+      },
+      {
+        "id": "profil-kelurahan",
+        "title": "Profil Kelurahan",
+        "icon": "profil",
+        "path": "/admin/profil#halaman-profil",
+        "children": []
+      },
+      {
+        "id": "panduan-pelayanan",
+        "title": "Panduan Pelayanan",
+        "icon": "pelayanan",
+        "path": "/admin/pelayanan",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "berita",
+    "title": "Berita & Media",
+    "icon": "berita",
+    "path": "/admin/berita",
+    "children": []
+  },
+  {
+    "id": "kanal-konten",
+    "title": "Kanal Konten",
+    "icon": "layers",
+    "path": null,
+    "children": [
+      {
+        "id": "pengumuman",
+        "title": "Pengumuman",
+        "icon": "pengumuman",
+        "path": "/admin/konten#announcements",
+        "children": []
+      },
+      {
+        "id": "agenda",
+        "title": "Agenda Kegiatan",
+        "icon": "agenda",
+        "path": "/admin/konten#events",
+        "children": []
+      },
+      {
+        "id": "galeri",
+        "title": "Galeri Foto",
+        "icon": "galeri",
+        "path": "/admin/konten#galleries",
+        "children": []
+      },
+      {
+        "id": "dokumen-ppid",
+        "title": "Informasi Publik (PPID)",
+        "icon": "dokumen",
+        "path": "/admin/konten#documents",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "data-wilayah",
+    "title": "Data Wilayah",
+    "icon": "statistik",
+    "path": null,
+    "children": [
+      {
+        "id": "statistik-penduduk",
+        "title": "Statistik Penduduk",
+        "icon": "statistik",
+        "path": "/admin/wilayah#statistics",
+        "children": []
+      },
+      {
+        "id": "potensi-kelurahan",
+        "title": "Potensi Lokal",
+        "icon": "potensi",
+        "path": "/admin/wilayah#potentials",
+        "children": []
+      },
+      {
+        "id": "fasilitas-publik",
+        "title": "Fasilitas Publik",
+        "icon": "fasilitas",
+        "path": "/admin/wilayah#facilities",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "layanan-warga",
+    "title": "Informasi & Aspirasi",
+    "icon": "infografis",
+    "path": null,
+    "children": [
+      {
+        "id": "infografis-program",
+        "title": "Infografis & Program",
+        "icon": "infografis",
+        "path": "/admin/infografis",
+        "role": "ADMIN_KELURAHAN",
+        "children": []
+      },
+      {
+        "id": "kotak-masuk",
+        "title": "Kotak Masuk Warga",
+        "icon": "inbox",
+        "path": "/admin/kotak-masuk",
+        "role": "ADMIN_KELURAHAN",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "administrasi-sistem",
+    "title": "Administrasi Sistem",
+    "icon": "shield",
+    "path": null,
+    "children": [
+      {
+        "id": "pengguna-audit",
+        "title": "Pengguna & Audit",
+        "icon": "pengguna",
+        "path": "/admin/pengguna",
+        "children": []
+      },
+      {
+        "id": "verifikasi-kontak",
+        "title": "Verifikasi Kontak",
+        "icon": "verifikasi",
+        "path": "/admin/verifikasi-kontak",
+        "role": "ADMIN_KELURAHAN",
+        "children": []
+      }
+    ]
+  }
+]
