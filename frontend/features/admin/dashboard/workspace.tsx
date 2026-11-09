@@ -47,7 +47,7 @@ const metrics = [
     subtitle: "Tayang di portal publik",
     icon: NewsPaperSvg,
     href: "/admin/berita",
-    tone: "bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-md shadow-blue-600/25",
+    tone: "bg-gradient-to-b from-sky-400 to-sky-600 text-white",
   },
   {
     key: "draft",
@@ -55,7 +55,7 @@ const metrics = [
     subtitle: "Menunggu penyuntingan",
     icon: DocumentSealSvg,
     href: "/admin/berita",
-    tone: "bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-md shadow-sky-500/25",
+    tone: "bg-gradient-to-b from-cyan-400 to-sky-500 text-white",
   },
   {
     key: "announcements",
@@ -63,7 +63,7 @@ const metrics = [
     subtitle: "Siaran resmi warga",
     icon: MegaphoneSvg,
     href: "/admin/konten#announcements",
-    tone: "bg-gradient-to-br from-indigo-500 to-blue-700 text-white shadow-md shadow-indigo-500/25",
+    tone: "bg-gradient-to-b from-blue-400 to-sky-600 text-white",
   },
   {
     key: "events",
@@ -71,7 +71,7 @@ const metrics = [
     subtitle: "Jadwal acara kelurahan",
     icon: CalendarEventSvg,
     href: "/admin/konten#events",
-    tone: "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25",
+    tone: "bg-gradient-to-b from-teal-400 to-cyan-600 text-white",
   },
   {
     key: "media",
@@ -79,7 +79,7 @@ const metrics = [
     subtitle: "Foto & dokumen publik",
     icon: GalleryPhotoSvg,
     href: "/admin/berita",
-    tone: "bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-600/25",
+    tone: "bg-gradient-to-b from-sky-400 to-blue-500 text-white",
   },
   {
     key: "users",
@@ -87,7 +87,7 @@ const metrics = [
     subtitle: "Admin, Lurah & Warga",
     icon: UsersShieldSvg,
     href: "/admin/pengguna",
-    tone: "bg-gradient-to-br from-slate-700 to-blue-900 text-white shadow-md shadow-blue-900/25",
+    tone: "bg-gradient-to-b from-indigo-400 to-sky-600 text-white",
   },
 ] as const;
 
@@ -321,20 +321,20 @@ export default function Dashboard() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="group relative flex flex-col justify-between gap-3 rounded-2xl border border-blue-200/75 bg-white/80 p-4 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-blue-400 hover:bg-white hover:shadow-md hover:shadow-blue-600/10"
+                          className="group relative flex flex-col justify-between gap-3 rounded-2xl border border-sky-200/75 bg-white/85 p-4 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-sky-300 hover:bg-white hover:shadow-md hover:shadow-sky-500/10"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/80 text-blue-700 border border-blue-200/80 transition-colors group-hover:from-blue-600 group-hover:to-blue-700 group-hover:text-white group-hover:border-blue-600">
+                            <span className="glass-icon-box size-10 rounded-xl transition-all group-hover:scale-105">
                               <item.icon size={20} strokeWidth={2} />
                             </span>
                             <ArrowUpRight
                               size={16}
                               strokeWidth={2.2}
-                              className="text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-600"
+                              className="text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-600"
                             />
                           </div>
                           <div>
-                            <span className="block text-sm font-extrabold text-slate-900 group-hover:text-blue-700 transition-colors">
+                            <span className="block text-sm font-extrabold text-slate-800 group-hover:text-sky-700 transition-colors">
                               {item.label}
                             </span>
                             <span className="mt-0.5 block text-[11px] font-medium text-slate-500 line-clamp-1">

@@ -56,20 +56,24 @@ export function KalosaraEmblemSvg({
     >
       <defs>
         <linearGradient id="kalosara-bg" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#1e40af" />
-          <stop offset="50%" stopColor="#2563eb" />
-          <stop offset="100%" stopColor="#0284c7" />
+          <stop offset="0%" stopColor="#60bcfb" />
+          <stop offset="50%" stopColor="#2d92e6" />
+          <stop offset="100%" stopColor="#1879d1" />
+        </linearGradient>
+        <linearGradient id="kalosara-gloss" x1="22" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0.05" />
         </linearGradient>
         <linearGradient id="kalosara-shield" x1="10" y1="8" x2="34" y2="36" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
-          <stop offset="100%" stopColor="#dbeafe" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#e0f2fe" stopOpacity="0.92" />
         </linearGradient>
         <linearGradient id="kalosara-gold" x1="16" y1="12" x2="28" y2="28" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#fbbf24" />
-          <stop offset="100%" stopColor="#d97706" />
+          <stop offset="0%" stopColor="#fcd34d" />
+          <stop offset="100%" stopColor="#f59e0b" />
         </linearGradient>
       </defs>
-      {/* Outer Glass Squircle */}
+      {/* Outer Glossy Glass Squircle */}
       <rect
         x="2"
         y="2"
@@ -78,6 +82,11 @@ export function KalosaraEmblemSvg({
         rx="12"
         fill="url(#kalosara-bg)"
       />
+      {/* Top Specular Gloss Highlight */}
+      <path
+        d="M14 3H30C36.075 3 41 7.925 41 14V18C35 20.5 28.5 21.5 22 21.5C15.5 21.5 9 20.5 3 18V14C3 7.925 7.925 3 14 3Z"
+        fill="url(#kalosara-gloss)"
+      />
       <rect
         x="2.75"
         y="2.75"
@@ -85,7 +94,7 @@ export function KalosaraEmblemSvg({
         height="38.5"
         rx="11.25"
         stroke="white"
-        strokeOpacity="0.35"
+        strokeOpacity="0.55"
         strokeWidth="1.5"
       />
       {/* Inner Heraldic Shield */}
@@ -93,10 +102,10 @@ export function KalosaraEmblemSvg({
         d="M22 8.5L32.5 12.8V21.2C32.5 28.1 27.9 33.6 22 35.8C16.1 33.6 11.5 28.1 11.5 21.2V12.8L22 8.5Z"
         fill="url(#kalosara-shield)"
       />
-      {/* Inner Blue Core */}
+      {/* Inner Soft Sky-Blue Core */}
       <path
         d="M22 11.5L29.8 14.7V21C29.8 26.2 26.4 30.4 22 32.3C17.6 30.4 14.2 26.2 14.2 21V14.7L22 11.5Z"
-        fill="#1d4ed8"
+        fill="#0284c7"
       />
       {/* Kalosara Sacred Ring & Star */}
       <circle

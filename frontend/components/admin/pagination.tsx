@@ -52,9 +52,9 @@ export function AdminPagination({
     >
       <p className="text-xs text-slate-600 font-medium">
         Menampilkan halaman{" "}
-        <span className="font-bold text-blue-900">{page}</span> dari{" "}
-        <span className="font-bold text-blue-900">{totalPages}</span> · Total{" "}
-        <span className="inline-flex items-center rounded-md bg-blue-50 border border-blue-200/70 px-1.5 py-0.5 font-bold text-blue-700">
+        <span className="font-bold text-sky-900">{page}</span> dari{" "}
+        <span className="font-bold text-sky-900">{totalPages}</span> · Total{" "}
+        <span className="inline-flex items-center rounded-md bg-sky-50 border border-sky-200/70 px-1.5 py-0.5 font-bold text-sky-700">
           {total}
         </span>{" "}
         {itemName}
@@ -65,7 +65,7 @@ export function AdminPagination({
           type="button"
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
-          className="inline-flex h-9 items-center gap-1 rounded-xl border border-blue-200/70 bg-white/85 px-3 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-blue-300 hover:bg-blue-50/60 hover:text-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="glass-button-secondary h-9 min-h-9 px-3 py-1 text-xs disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Halaman sebelumnya"
         >
           <ChevronLeft size={16} strokeWidth={2.2} />
@@ -90,10 +90,10 @@ export function AdminPagination({
               type="button"
               aria-current={isCurrent ? "page" : undefined}
               onClick={() => onPageChange(Number(p))}
-              className={`min-w-9 h-9 rounded-xl text-xs font-bold transition ${
+              className={`min-w-9 h-9 min-h-9 rounded-xl text-xs font-bold transition ${
                 isCurrent
-                  ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md shadow-blue-600/25 border border-blue-500"
-                  : "border border-blue-200/70 bg-white/85 text-slate-700 hover:border-blue-300 hover:bg-blue-50/60 hover:text-blue-700"
+                  ? "glass-button-primary px-2.5 py-1"
+                  : "glass-button-secondary px-2.5 py-1 text-slate-700"
               }`}
             >
               {p}
@@ -105,7 +105,7 @@ export function AdminPagination({
           type="button"
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="inline-flex h-9 items-center gap-1 rounded-xl border border-blue-200/70 bg-white/85 px-3 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-blue-300 hover:bg-blue-50/60 hover:text-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="glass-button-secondary h-9 min-h-9 px-3 py-1 text-xs disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Halaman berikutnya"
         >
           <span className="hidden sm:inline">Berikutnya</span>

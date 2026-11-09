@@ -144,16 +144,16 @@ export function AdminShell({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 rounded-2xl border border-blue-200/60 bg-white/75 px-3 py-1.5 shadow-2xs backdrop-blur-md">
-              <span className="grid size-8 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-xs font-extrabold text-white shadow-xs shadow-blue-600/25">
+            <div className="flex items-center gap-2.5 rounded-2xl border border-sky-200/70 bg-white/85 px-3 py-1.5 shadow-2xs backdrop-blur-md">
+              <span className="grid size-8 place-items-center rounded-xl bg-gradient-to-b from-sky-400 to-sky-600 text-xs font-extrabold text-white shadow-xs shadow-sky-500/25 border border-sky-300/60">
                 {auth.user.role === "LURAH" ? "L" : "A"}
               </span>
               <div className="hidden sm:block pr-1">
-                <p className="text-xs font-bold text-slate-900 leading-tight flex items-center gap-1">
+                <p className="text-xs font-bold text-slate-800 leading-tight flex items-center gap-1">
                   <span>
                     {auth.user.role === "LURAH" ? "Lurah" : "Administrator"}
                   </span>
-                  <ShieldCheck size={13} className="text-blue-600" />
+                  <ShieldCheck size={13} className="text-sky-600" />
                 </p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium text-slate-500 leading-none">
                   <span className="size-1.5 rounded-full bg-emerald-500 ring-2 ring-emerald-500/20" />
@@ -166,7 +166,7 @@ export function AdminShell({
               aria-label="Keluar dari akun"
               title="Keluar dari akun"
               disabled={logout.isPending}
-              className="grid size-10 place-items-center rounded-xl border border-blue-200/60 bg-white/80 text-slate-600 shadow-2xs transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+              className="glass-button-secondary size-10 min-h-10 p-0 text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
               onClick={() => logout.mutate()}
             >
               <LogOut size={18} strokeWidth={2} />

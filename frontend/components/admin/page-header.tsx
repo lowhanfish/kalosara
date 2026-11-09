@@ -25,7 +25,7 @@ export function AdminPageHeader({
         </span>
         <div className="min-w-0">
           <p className="admin-eyebrow">
-            <span className="inline-block size-1.5 rounded-full bg-blue-600" />
+            <span className="inline-block size-1.5 rounded-full bg-sky-500" />
             <span>Panel Pengelola · Kelurahan Watundehoa</span>
           </p>
           <h1 className="admin-page-title">{title}</h1>

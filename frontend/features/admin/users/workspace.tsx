@@ -151,17 +151,17 @@ function formatRole(role: string) {
       return {
         label: "Administrator",
         subtitle: "Akses Penuh Semua Modul",
-        badge: "bg-indigo-50 text-indigo-700 border-indigo-200/80",
-        dot: "bg-indigo-500",
-        gradient: "from-indigo-600 to-blue-700",
+        badge: "bg-sky-50 text-sky-700 border-sky-200/80",
+        dot: "bg-sky-500",
+        gradient: "from-sky-400 to-blue-600",
       };
     case "LURAH":
       return {
         label: "Lurah",
         subtitle: "Akses Monitoring Eksekutif",
-        badge: "bg-purple-50 text-purple-700 border-purple-200/80",
-        dot: "bg-purple-500",
-        gradient: "from-purple-600 to-indigo-700",
+        badge: "bg-indigo-50 text-indigo-700 border-indigo-200/80",
+        dot: "bg-indigo-500",
+        gradient: "from-indigo-400 to-sky-600",
       };
     case "MASYARAKAT":
       return {
@@ -169,7 +169,7 @@ function formatRole(role: string) {
         subtitle: "Akses Layanan Publik Mandiri",
         badge: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
         dot: "bg-emerald-500",
-        gradient: "from-emerald-600 to-teal-700",
+        gradient: "from-teal-400 to-emerald-600",
       };
     default:
       return {
@@ -177,7 +177,7 @@ function formatRole(role: string) {
         subtitle: "Pengguna Terdaftar",
         badge: "bg-slate-100 text-slate-700 border-slate-200",
         dot: "bg-slate-400",
-        gradient: "from-slate-600 to-slate-700",
+        gradient: "from-slate-400 to-slate-600",
       };
   }
 }
