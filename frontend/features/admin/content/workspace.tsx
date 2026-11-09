@@ -204,9 +204,9 @@ function Workspace() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 flex-1 max-w-md">
               <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+                <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
-                  className="cms-input pl-9 text-xs"
+                  className="cms-input pl-10 pr-9 text-xs"
                   placeholder={`Cari judul ${channels[kind].title.toLowerCase()}...`}
                   value={search}
                   maxLength={100}
@@ -222,7 +222,7 @@ function Workspace() {
                       setSearch("");
                       setPage(1);
                     }}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded-md text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     <X size={14} />
                   </button>

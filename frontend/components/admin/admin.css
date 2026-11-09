@@ -229,14 +229,16 @@
 }
 .admin-app .cms-shell button {
   font-size: 14px;
+}
+.admin-app .cms-shell button:not([class*="size-"]):not([class*="h-"]):not([class*="py-"]):not(.absolute):not([aria-label*="Tutup"]):not([title*="Edit"]):not([title*="Salin"]) {
   min-height: 40px;
 }
 .admin-app .cms-input {
-  min-height: 44px;
-  margin-top: 6px;
+  min-height: 40px;
+  margin-top: 0;
   border: 1px solid #cbd5e1;
-  border-radius: 9px;
-  padding: 10px 14px;
+  border-radius: 10px;
+  padding: 8px 14px;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -244,6 +246,9 @@
   color: #1e293b;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.admin-app label > .cms-input {
+  margin-top: 6px;
 }
 .admin-app
   .cms-shell

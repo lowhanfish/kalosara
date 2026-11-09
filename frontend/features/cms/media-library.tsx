@@ -257,26 +257,26 @@ export function MediaLibrary() {
 
       {/* Filter Media Form */}
       <form
-        className="flex flex-wrap items-end gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4"
+        className="flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-2xs"
         onSubmit={(e) => {
           e.preventDefault();
           setPage(1);
           setSearch(String(new FormData(e.currentTarget).get("search") ?? ""));
         }}
       >
-        <label className="min-w-0 flex-1 text-xs font-semibold text-slate-700">
+        <label className="min-w-[200px] flex-1 text-xs font-semibold text-slate-700">
           Cari Nama / Keterangan Media
           <input
-            className="cms-input mt-1"
+            className="cms-input mt-1.5"
             name="search"
             maxLength={100}
             placeholder="Ketik kata kunci pencarian..."
           />
         </label>
-        <label className="text-xs font-semibold text-slate-700">
+        <label className="text-xs font-semibold text-slate-700 shrink-0">
           Filter Akses
           <select
-            className="cms-input mt-1"
+            className="cms-input mt-1.5 pr-8"
             aria-label="Filter akses media"
             value={visibility}
             onChange={(e) => {
@@ -289,7 +289,7 @@ export function MediaLibrary() {
             <option value="PRIVATE">Privat saya</option>
           </select>
         </label>
-        <button className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs">
+        <button className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-slate-900 px-4 text-xs font-bold text-white shadow-2xs hover:bg-slate-800 transition-colors shrink-0">
           Cari Media
         </button>
       </form>
