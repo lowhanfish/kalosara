@@ -1,7 +1,7 @@
 "use client";
 import { AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { ChartColumn, ArrowLeft, Pencil } from "lucide-react";
+import { ChartColumn, ArrowLeft, Pencil, Plus } from "lucide-react";
 import Editor from "./editor";
 import { AdminPagination } from "@/components/admin/pagination";
 import { useEffect, useState } from "react";
@@ -132,10 +132,10 @@ function Workspace() {
                 </select>
               </label>
             )}
-            <button className="yellow-button">Cari</button>
+            <button className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs">Cari</button>
           </form>
           <button
-            className="yellow-button"
+            className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
             onClick={() => {
               if (leave()) {
                 setSelected(null);
@@ -144,7 +144,8 @@ function Workspace() {
               }
             }}
           >
-            Buat {modules[kind]}
+            <Plus size={14} />
+            <span>Buat {modules[kind]}</span>
           </button>
           {query.isPending && <AdminLoading />}
           {query.isError && (

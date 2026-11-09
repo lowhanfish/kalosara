@@ -1,18 +1,37 @@
 "use client";
-import {
-  AdminEmptyState,
-  AdminLoading,
-  AdminError,
-} from "@/components/admin/feedback";
-import { AdminPageHeader } from "@/components/admin/page-header";
-import { Users } from "lucide-react";
+
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  Users,
+  ShieldCheck,
+  History,
+  HardDrive,
+  UserCheck,
+  Search,
+  RotateCw,
+  KeyRound,
+  Lock,
+  FileText,
+  ImageIcon,
+  Settings,
+  ExternalLink,
+  X,
+  AlertCircle,
+  CheckCircle2,
+  AlertTriangle,
+  User as UserIcon,
+  FileCode2,
+} from "lucide-react";
+import { AdminEmptyState, AdminLoading, AdminError } from "@/components/admin/feedback";
+import { AdminPageHeader } from "@/components/admin/page-header";
+import { AdminPagination } from "@/components/admin/pagination";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsError, cmsMutate, type List } from "@/features/cms/client";
-import { AdminPagination } from "@/components/admin/pagination";
+
 type User = {
   id: string;
   email: string;
@@ -20,6 +39,7 @@ type User = {
   isActive: boolean;
   updatedAt: string;
 };
+
 type Audit = {
   id: string;
   actorId: string | null;
@@ -30,6 +50,7 @@ type Audit = {
   ipHash: string | null;
   createdAt: string;
 };
+
 type Upload = {
   id: string;
   originalName: string;
@@ -37,6 +58,7 @@ type Upload = {
   visibility: string;
   archived: boolean;
 };
+
 type Uploads = List<Upload> & {
   quota: {
     perFileBytes: number;
@@ -45,9 +67,181 @@ type Uploads = List<Upload> & {
     totalLimitBytes: null;
   };
 };
-function AccessForm({ user, close }: { user: User; close: () => void }) {
+
+function formatRole(role: string) {
+  switch (role) {
+    case "ADMIN_KELURAHAN":
+      return {
+        label: "Administrator",
+        badge: "bg-indigo-50 text-indigo-700 border-indigo-200/80",
+        dot: "bg-indigo-500",
+      };
+    case "LURAH":
+      return {
+        label: "Lurah",
+        badge: "bg-purple-50 text-purple-700 border-purple-200/80",
+        dot: "bg-purple-500",
+      };
+    case "MASYARAKAT":
+      return {
+        label: "Warga Terdaftar",
+        badge: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
+        dot: "bg-emerald-500",
+      };
+    default:
+      return {
+        label: role.toLowerCase().replace(/_/g, " "),
+        badge: "bg-slate-100 text-slate-700 border-slate-200",
+        dot: "bg-slate-400",
+      };
+  }
+}
+
+function humanAction(action: string): { title: string; desc: string; icon: typeof FileText; tone: string } {
+  const map: Record<string, { title: string; desc: string; icon: typeof FileText; tone: string }> = {
+    AUTH_LOGIN: {
+      title: "Pengguna Masuk Akun",
+      desc: "Autentikasi sesi berhasil",
+      icon: Lock,
+      tone: "text-emerald-600 bg-emerald-50",
+    },
+    AUTH_LOGOUT: {
+      title: "Pengguna Keluar Akun",
+      desc: "Sesi autentikasi ditutup",
+      icon: Lock,
+      tone: "text-slate-600 bg-slate-50",
+    },
+    USER_SESSION_REVOKED: {
+      title: "Pencabutan Sesi Akun",
+      desc: "Semua sesi pengguna dicabut oleh administrator",
+      icon: KeyRound,
+      tone: "text-amber-600 bg-amber-50",
+    },
+    USER_DEACTIVATED: {
+      title: "Penonaktifan Akun",
+      desc: "Akun pengguna dinonaktifkan dari sistem",
+      icon: AlertTriangle,
+      tone: "text-red-600 bg-red-50",
+    },
+    USER_ACTIVATED: {
+      title: "Pengaktifan Akun",
+      desc: "Akun pengguna diaktifkan kembali",
+      icon: CheckCircle2,
+      tone: "text-emerald-600 bg-emerald-50",
+    },
+    USER_PASSWORD_RESET: {
+      title: "Reset Kata Sandi Akun",
+      desc: "Kata sandi akun diatur ulang oleh administrator",
+      icon: KeyRound,
+      tone: "text-indigo-600 bg-indigo-50",
+    },
+    NEWS_CREATED: {
+      title: "Membuat Berita Baru",
+      desc: "Draft berita kelurahan ditambahkan",
+      icon: FileText,
+      tone: "text-blue-600 bg-blue-50",
+    },
+    NEWS_UPDATED: {
+      title: "Memperbarui Berita",
+      desc: "Perubahan isi atau data berita",
+      icon: FileText,
+      tone: "text-blue-600 bg-blue-50",
+    },
+    NEWS_PUBLISHED: {
+      title: "Menerbitkan Berita",
+      desc: "Berita kelurahan dipublikasikan ke portal publik",
+      icon: FileText,
+      tone: "text-emerald-600 bg-emerald-50",
+    },
+    MEDIA_UPLOADED: {
+      title: "Mengunggah Berkas Media",
+      desc: "Berkas gambar atau dokumen baru diunggah",
+      icon: ImageIcon,
+      tone: "text-sky-600 bg-sky-50",
+    },
+    MEDIA_UPDATED: {
+      title: "Memperbarui Berkas Media",
+      desc: "Informasi metadata media diperbarui",
+      icon: ImageIcon,
+      tone: "text-sky-600 bg-sky-50",
+    },
+    PROFILE_SETTINGS_UPDATED: {
+      title: "Memperbarui Pengaturan Website",
+      desc: "Identitas kelurahan, kontak, atau tampilan diperbarui",
+      icon: Settings,
+      tone: "text-purple-600 bg-purple-50",
+    },
+    PROFILE_PAGE_SAVED: {
+      title: "Memperbarui Halaman Profil",
+      desc: "Halaman sejarah, visi-misi, atau struktur organisasi diperbarui",
+      icon: FileText,
+      tone: "text-purple-600 bg-purple-50",
+    },
+    PROFILE_OFFICIAL_SAVED: {
+      title: "Memperbarui Data Aparatur",
+      desc: "Informasi jabatan aparatur kelurahan diperbarui",
+      icon: UserIcon,
+      tone: "text-purple-600 bg-purple-50",
+    },
+    CONTENT_SAVED: {
+      title: "Memperbarui Konten Informasi",
+      desc: "Pengumuman, agenda, atau album galeri diperbarui",
+      icon: FileText,
+      tone: "text-blue-600 bg-blue-50",
+    },
+    COMMUNITY_SECTION_SAVED: {
+      title: "Memperbarui Infografis Kelurahan",
+      desc: "Data infografis atau statistik diperbarui",
+      icon: Settings,
+      tone: "text-indigo-600 bg-indigo-50",
+    },
+    PUBLIC_REQUEST_RECEIVED: {
+      title: "Pesan Warga Diterima",
+      desc: "Aspirasi atau pengaduan baru dari masyarakat",
+      icon: FileText,
+      tone: "text-amber-600 bg-amber-50",
+    },
+    PUBLIC_REQUEST_UPDATED: {
+      title: "Tindak Lanjut Pesan Diperbarui",
+      desc: "Status tindak lanjut pesan warga diperbarui",
+      icon: CheckCircle2,
+      tone: "text-emerald-600 bg-emerald-50",
+    },
+    CONTACT_CHANGE_APPROVED: {
+      title: "Persetujuan Perubahan Kontak",
+      desc: "Perubahan kontak email/telepon warga disetujui",
+      icon: CheckCircle2,
+      tone: "text-emerald-600 bg-emerald-50",
+    },
+    CONTACT_CHANGE_REJECTED: {
+      title: "Penolakan Perubahan Kontak",
+      desc: "Pengajuan perubahan kontak warga ditolak",
+      icon: AlertTriangle,
+      tone: "text-red-600 bg-red-50",
+    },
+  };
+
+  if (map[action]) return map[action];
+
+  return {
+    title: action.toLowerCase().replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+    desc: "Aktivitas pengelolaan sistem",
+    icon: FileCode2,
+    tone: "text-slate-600 bg-slate-50",
+  };
+}
+
+function AccessFormModal({
+  user,
+  onClose,
+}: {
+  user: User;
+  onClose: () => void;
+}) {
   const runtime = useAuthRuntime();
   const [action, setAction] = useState("REVOKE_SESSIONS");
+  const roleInfo = formatRole(user.role);
+
   const mutation = useMutation({
     mutationFn: async (body: {
       action: string;
@@ -70,109 +264,171 @@ function AccessForm({ user, close }: { user: User; close: () => void }) {
     },
     onSuccess: async () => {
       await runtime.queryClient.invalidateQueries({ queryKey: ["user"] });
-      close();
+      onClose();
     },
   });
+
   return (
-    <form
-      className="cms-editor"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (
-          !confirm(
-            `Konfirmasi ${action} untuk ${user.email}? Semua sesi akun ini akan dicabut.`,
-          )
-        )
-          return;
-        const form = e.currentTarget;
-        const f = new FormData(form);
-        const body = {
-          action,
-          identityVerified: f.get("verified") === "on",
-          currentPassword: String(f.get("password")),
-          expectedUpdatedAt: user.updatedAt,
-          ...(action === "RESET_PASSWORD"
-            ? { newPassword: String(f.get("newPassword")) }
-            : {}),
-        };
-        form.reset();
-        mutation.mutate(body);
-      }}
-    >
-      <h2>Ubah akses: {user.email}</h2>
-      <p>
-        Verifikasi identitas pemilik terlebih dahulu. Perubahan mencabut semua
-        sesi. Sampaikan kata sandi baru melalui saluran pribadi yang disepakati;
-        sistem tidak mengirim email reset.
-      </p>
-      <label>
-        Tindakan
-        <select
-          className="cms-input"
-          value={action}
-          onChange={(e) => setAction(e.target.value)}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <KeyRound className="h-5 w-5 text-primary" />
+              <span>Kelola Akses Pengguna</span>
+            </h2>
+            <div className="flex items-center gap-2 pt-0.5">
+              <span className="font-semibold text-slate-800 text-sm">{user.email}</span>
+              <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold ${roleInfo.badge}`}>
+                {roleInfo.label}
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (
+              !confirm(
+                `Konfirmasi tindakan ${action} untuk ${user.email}? Semua sesi aktif akun ini akan dicabut.`,
+              )
+            )
+              return;
+            const form = e.currentTarget;
+            const f = new FormData(form);
+            const body = {
+              action,
+              identityVerified: f.get("verified") === "on",
+              currentPassword: String(f.get("password")),
+              expectedUpdatedAt: user.updatedAt,
+              ...(action === "RESET_PASSWORD"
+                ? { newPassword: String(f.get("newPassword")) }
+                : {}),
+            };
+            form.reset();
+            mutation.mutate(body);
+          }}
         >
-          <option value="REVOKE_SESSIONS">Cabut semua sesi</option>
-          <option value={user.isActive ? "DEACTIVATE" : "ACTIVATE"}>
-            {user.isActive ? "Nonaktifkan akun" : "Aktifkan akun"}
-          </option>
-          <option value="RESET_PASSWORD">Reset kata sandi</option>
-        </select>
-      </label>
-      <label>
-        Kata sandi admin Anda
-        <input
-          className="cms-input"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          maxLength={72}
-        />
-      </label>
-      {action === "RESET_PASSWORD" && (
-        <label>
-          Kata sandi baru akun tujuan (12 karakter, maksimal 72 byte)
-          <input
-            className="cms-input"
-            name="newPassword"
-            type="password"
-            required
-            minLength={12}
-            maxLength={72}
-            autoComplete="new-password"
-          />
-        </label>
-      )}
-      <label>
-        <input type="checkbox" name="verified" required /> Saya telah
-        memverifikasi identitas dan permintaan pemilik akun.
-      </label>
-      <div className="cms-pagination">
-        <button className="yellow-button" disabled={mutation.isPending}>
-          Konfirmasi perubahan
-        </button>
-        <button type="button" disabled={mutation.isPending} onClick={close}>
-          Batal
-        </button>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Pilihan Tindakan Akses
+            </label>
+            <select
+              className="cms-input"
+              value={action}
+              onChange={(e) => setAction(e.target.value)}
+            >
+              <option value="REVOKE_SESSIONS">Cabut semua sesi aktif (Logout paksa)</option>
+              <option value={user.isActive ? "DEACTIVATE" : "ACTIVATE"}>
+                {user.isActive ? "Nonaktifkan akun pengguna" : "Aktifkan kembali akun"}
+              </option>
+              <option value="RESET_PASSWORD">Reset kata sandi pengguna</option>
+            </select>
+            <p className="text-[11px] text-slate-500">
+              Setiap tindakan secara otomatis mencabut seluruh sesi login aktif pengguna tersebut.
+            </p>
+          </div>
+
+          {action === "RESET_PASSWORD" && (
+            <div className="space-y-1.5 rounded-xl border border-amber-200 bg-amber-50/60 p-4">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                Kata Sandi Baru Akun
+              </label>
+              <input
+                className="cms-input bg-white"
+                name="newPassword"
+                type="password"
+                required
+                minLength={12}
+                maxLength={72}
+                placeholder="Minimal 12 karakter kombinasi kuat..."
+                autoComplete="new-password"
+              />
+              <p className="text-[11px] text-slate-500">
+                Sampaikan kata sandi baru secara langsung/pribadi kepada pemilik akun. Sistem tidak mengirim email kata sandi otomatis.
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Kata Sandi Administrator Anda
+            </label>
+            <input
+              className="cms-input"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              maxLength={72}
+              placeholder="Masukkan kata sandi login admin Anda untuk konfirmasi..."
+            />
+          </div>
+
+          <label className="flex items-start gap-2.5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 cursor-pointer">
+            <input type="checkbox" name="verified" required className="mt-0.5 rounded border-slate-300 text-primary focus:ring-primary" />
+            <span>
+              Saya telah memverifikasi identitas pemilik akun dan memastikan permintaan perubahan ini sah.
+            </span>
+          </label>
+
+          {mutation.isError && (
+            <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+              <AlertCircle size={15} className="shrink-0 text-red-600" />
+              <span>{cmsError(mutation.error)}</span>
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              disabled={mutation.isPending}
+              onClick={onClose}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+            >
+              {mutation.isPending ? (
+                <>
+                  <RotateCw size={13} className="animate-spin" />
+                  <span>Memproses Perubahan...</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck size={14} />
+                  <span>Konfirmasi Perubahan</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
-      {mutation.isPending && <p role="status">Memproses perubahan…</p>}
-      {mutation.isError && (
-        <p role="alert">
-          {cmsError(mutation.error)} Tutup form dan muat ulang daftar sebelum
-          mencoba lagi.
-        </p>
-      )}
-    </form>
+    </div>
   );
 }
+
 function Management() {
   const runtime = useAuthRuntime();
   const auth = useAuth();
   const [tab, setTab] = useState<"users" | "audit" | "uploads">("users");
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
   const query = useQuery({
     queryKey: ["user", auth.user?.id, "management", tab, page, search],
     queryFn: () =>
@@ -181,138 +437,388 @@ function Management() {
       ),
     staleTime: 0,
   });
+
   return (
-    <>
-      <p>
+    <div className="space-y-6">
+      {/* Top Action Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900">
+            {tab === "users"
+              ? "Daftar Pengguna Sistem"
+              : tab === "audit"
+                ? "Riwayat Aktivitas & Log Audit"
+                : "Penggunaan Penyimpanan Berkas"}
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            {tab === "users"
+              ? "Kelola status dan hak akses akun administrator, lurah, dan warga kelurahan."
+              : tab === "audit"
+                ? "Log aktivitas terenkripsi dan riwayat perubahan data oleh pengelola."
+                : "Daftar berkas media dan lampiran publik yang tersimpan di server."}
+          </p>
+        </div>
+
         <Link
           href="/admin/verifikasi-kontak"
-          className="cms-edit-button inline-block mb-4"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors self-start sm:self-auto"
         >
-          Verifikasi perubahan kontak masyarakat
+          <UserCheck size={14} className="text-primary" />
+          <span>Verifikasi Perubahan Kontak Warga</span>
         </Link>
-      </p>
-      <div className="cms-channel-tabs">
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="flex border-b border-slate-200 gap-2 sm:gap-6">
         {(
           [
-            ["users", "Pengguna"],
-            ["audit", "Audit"],
-            ["uploads", "Upload"],
+            ["users", "Daftar Pengguna", Users],
+            ["audit", "Riwayat Aktivitas", History],
+            ["uploads", "Penyimpanan Berkas", HardDrive],
           ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            aria-pressed={tab === key}
-            onClick={() => {
-              setTab(key);
-              setPage(1);
-              setSearch("");
-              setSelected(null);
-            }}
-          >
-            {label}
-          </button>
-        ))}
+        ).map(([key, label, Icon]) => {
+          const isActive = tab === key;
+          return (
+            <button
+              key={key}
+              aria-pressed={isActive}
+              onClick={() => {
+                setTab(key);
+                setPage(1);
+                setSearch("");
+                setSelectedUser(null);
+              }}
+              className={`pb-3 text-xs sm:text-sm font-bold transition-all border-b-2 flex items-center gap-2 ${
+                isActive
+                  ? "border-primary text-primary"
+                  : "border-transparent text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <Icon size={16} />
+              <span>{label}</span>
+            </button>
+          );
+        })}
       </div>
-      <label className="block">
-        Cari{" "}
-        {tab === "users" ? "email" : tab === "audit" ? "aksi" : "nama file"}
-        <input
-          className="cms-input"
-          value={search}
-          maxLength={100}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-        />
-      </label>
-      <button className="cms-edit-button" onClick={() => void query.refetch()}>
-        Muat ulang
-      </button>
-      {selected && (
-        <AccessForm
-          key={selected.id}
-          user={selected}
-          close={() => setSelected(null)}
+
+      {/* Quota Cards for Uploads Tab */}
+      {tab === "uploads" && query.data?.quota && (
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Total Berkas Tersimpan
+            </span>
+            <div className="text-2xl font-black text-slate-900">
+              {(query.data.quota.physicalBytes / (1024 * 1024)).toFixed(1)}{" "}
+              <span className="text-xs font-semibold text-slate-500">MB</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Ukuran fisik seluruh gambar dan dokumen di server
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Batas Ukuran Berkas
+            </span>
+            <div className="text-2xl font-black text-slate-900">
+              {Math.round(query.data.quota.perFileBytes / (1024 * 1024))}{" "}
+              <span className="text-xs font-semibold text-slate-500">MB / file</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Maksimum per berkas gambar JPG, PNG, WebP & PDF
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs space-y-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Proses Simultan
+            </span>
+            <div className="text-2xl font-black text-slate-900">
+              {query.data.quota.concurrentUploads}{" "}
+              <span className="text-xs font-semibold text-slate-500">Proses</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Kapasitas unggahan bersamaan untuk stabilitas server
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Notice info on Users Tab */}
+      {tab === "users" && (
+        <div className="flex items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 text-xs text-blue-800">
+          <ShieldCheck size={18} className="shrink-0 text-blue-600" />
+          <span>
+            Demi keamanan sistem, penambahan atau perubahan hak akses administrator dilakukan melalui verifikasi pengelola kelurahan. Akun aktif Anda sendiri dilindungi dan tidak dapat dinonaktifkan oleh sesi Anda sendiri.
+          </span>
+        </div>
+      )}
+
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+          <input
+            className="cms-input pl-9 text-xs"
+            placeholder={
+              tab === "users"
+                ? "Cari pengguna berdasarkan alamat email..."
+                : tab === "audit"
+                  ? "Cari riwayat aktivitas / aksi..."
+                  : "Cari nama berkas..."
+            }
+            value={search}
+            maxLength={100}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={() => void query.refetch()}
+          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs self-start sm:self-auto"
+        >
+          <RotateCw size={13} className={query.isFetching ? "animate-spin text-primary" : ""} />
+          <span>Segarkan Data</span>
+        </button>
+      </div>
+
+      {/* Access Form Modal */}
+      {selectedUser && (
+        <AccessFormModal
+          key={selectedUser.id}
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
         />
       )}
+
+      {/* Loading and Error States */}
       {query.isPending && <AdminLoading />}
       {query.isError && (
         <AdminError error={query.error} onRetry={() => void query.refetch()} />
       )}
+
+      {/* Query Data Results */}
       {query.data && (
-        <>
-          {query.data.quota && (
-            <p>
-              Batas file: {query.data.quota.perFileBytes / 1024 / 1024} MiB;
-              maksimum {query.data.quota.concurrentUploads} upload bersamaan.
-              Pemakaian fisik seluruh file, varian dan legacy:{" "}
-              {(query.data.quota.physicalBytes / 1024 / 1024).toFixed(2)} MiB.
-              Kuota total belum ditetapkan. File privat hanya dapat dilihat
-              pemiliknya.
-            </p>
-          )}
-          {tab === "users" && (
-            <p>
-              Perubahan role dilakukan melalui operasi backend terpisah dengan
-              pemeriksaan izin dan verifikasi ulang; lihat prosedur README. Akun
-              sendiri diubah oleh admin lain.
-            </p>
-          )}
-          {query.data.items.length === 0 && (
+        <div className="space-y-4">
+          {query.data.items.length === 0 ? (
             <AdminEmptyState
-              title="Belum ada data"
-              description="Tambahkan informasi baru atau ubah filter pencarian Anda."
+              title="Tidak ada data ditemukan"
+              description="Tidak ada data yang cocok dengan kriteria pencarian Anda. Silakan coba kata kunci lain."
             />
+          ) : (
+            <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden">
+              {/* TAB 1: USERS LIST */}
+              {tab === "users" && (
+                <div className="divide-y divide-slate-100">
+                  {query.data.items.map((item) => {
+                    if (!("email" in item)) return null;
+                    const roleInfo = formatRole(item.role);
+                    const isSelf = item.id === auth.user?.id;
+                    const initialLetter = item.email.charAt(0).toUpperCase();
+
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                      >
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl font-bold text-sm text-white ${
+                            item.role === "ADMIN_KELURAHAN"
+                              ? "bg-indigo-600"
+                              : item.role === "LURAH"
+                                ? "bg-purple-600"
+                                : "bg-emerald-600"
+                          }`}>
+                            {initialLetter}
+                          </div>
+
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-slate-900 text-sm truncate">
+                                {item.email}
+                              </span>
+                              {isSelf && (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                                  Akun Anda
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold ${roleInfo.badge}`}>
+                                <span className={`h-1.5 w-1.5 rounded-full ${roleInfo.dot}`} />
+                                {roleInfo.label}
+                              </span>
+
+                              <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                item.isActive
+                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                  : "bg-rose-50 text-rose-700 border border-rose-200"
+                              }`}>
+                                <span className={`h-1.5 w-1.5 rounded-full ${item.isActive ? "bg-emerald-500" : "bg-rose-500"}`} />
+                                {item.isActive ? "Aktif" : "Nonaktif"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 self-end sm:self-auto">
+                          {isSelf ? (
+                            <span className="text-xs text-slate-400 font-medium px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-100">
+                              Akun Sendiri
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedUser(item)}
+                              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                            >
+                              <KeyRound size={13} className="text-primary" />
+                              <span>Kelola Akses</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* TAB 2: AUDIT LOGS */}
+              {tab === "audit" && (
+                <div className="divide-y divide-slate-100">
+                  {query.data.items.map((item) => {
+                    if (!("action" in item)) return null;
+                    const meta = humanAction(item.action);
+                    const ActionIcon = meta.icon;
+                    const formattedDate = new Date(item.createdAt).toLocaleString("id-ID", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                      >
+                        <div className="flex items-start gap-3.5 min-w-0">
+                          <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${meta.tone}`}>
+                            <ActionIcon size={18} />
+                          </div>
+
+                          <div className="min-w-0 space-y-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-bold text-slate-900 text-sm">
+                                {meta.title}
+                              </span>
+                              {item.resourceType && (
+                                <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                                  {item.resourceType}
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-xs text-slate-500">
+                              {meta.desc} · Pelaku: <span className="font-semibold text-slate-700">{item.actorId ? "Administrator" : "Sistem"}</span>
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="text-xs text-slate-400 font-medium self-end sm:self-auto shrink-0">
+                          <time dateTime={item.createdAt}>{formattedDate}</time>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* TAB 3: UPLOADS LIST */}
+              {tab === "uploads" && (
+                <div className="divide-y divide-slate-100">
+                  {query.data.items.map((item) => {
+                    if (!("originalName" in item)) return null;
+                    const isImage = /\.(jpe?g|png|webp|gif|svg)$/i.test(item.originalName);
+                    const sizeInMb = (item.size / (1024 * 1024)).toFixed(2);
+                    const sizeInKb = Math.round(item.size / 1024);
+                    const sizeText = item.size >= 1024 * 1024 ? `${sizeInMb} MB` : `${sizeInKb} KB`;
+                    const fileUrl = `/api/v1/public/media/${item.id}`;
+
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                      >
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 grid place-items-center">
+                            {isImage ? (
+                              <Image
+                                src={fileUrl}
+                                alt={item.originalName}
+                                fill
+                                unoptimized
+                                className="object-cover"
+                              />
+                            ) : (
+                              <FileText size={20} className="text-slate-400" />
+                            )}
+                          </div>
+
+                          <div className="min-w-0 space-y-1">
+                            <p className="font-bold text-slate-900 text-sm truncate" title={item.originalName}>
+                              {item.originalName}
+                            </p>
+
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-xs font-semibold text-slate-500">
+                                {sizeText}
+                              </span>
+                              <span>·</span>
+                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                item.visibility === "PUBLIC"
+                                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                  : "bg-amber-50 text-amber-700 border border-amber-200"
+                              }`}>
+                                {item.visibility === "PUBLIC" ? "Publik" : "Privat"}
+                              </span>
+                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                item.archived
+                                  ? "bg-slate-100 text-slate-600 border border-slate-200"
+                                  : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              }`}>
+                                {item.archived ? "Arsip" : "Aktif"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 self-end sm:self-auto">
+                          <a
+                            href={fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                          >
+                            <ExternalLink size={13} />
+                            <span>Buka Berkas</span>
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           )}
-          <ul className="cms-content-list cms-management-list">
-            {query.data.items.map((item) => (
-              <li className="cms-content-row" key={item.id}>
-                {"email" in item ? (
-                  <>
-                    <strong>{item.email}</strong>
-                    <span>
-                      {item.role} · {item.isActive ? "Aktif" : "Nonaktif"}
-                    </span>
-                    <code>{item.id}</code>
-                    <button
-                      disabled={item.id === auth.user?.id}
-                      onClick={() => setSelected(item)}
-                    >
-                      Kelola akses
-                    </button>
-                  </>
-                ) : "action" in item ? (
-                  <>
-                    <strong>{item.action}</strong>
-                    <time dateTime={item.createdAt}>
-                      {new Date(item.createdAt).toLocaleString("id-ID")}
-                    </time>
-                    <span>
-                      Pelaku: {item.actorId ?? "Sistem"} · {item.resourceType}{" "}
-                      {item.resourceId}
-                    </span>
-                    <span>
-                      Request:{" "}
-                      {item.requestId ?? "Tidak tersedia (log lama/CLI)"}
-                    </span>
-                    <span>
-                      IP pseudonim harian: {item.ipHash ?? "Tidak tersedia"}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <strong>{item.originalName}</strong>
-                    <span>
-                      {(item.size / 1024 / 1024).toFixed(2)} MiB ·{" "}
-                      {item.visibility} · {item.archived ? "Arsip" : "Aktif"}
-                    </span>
-                    <code>{item.id}</code>
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
+
           <AdminPagination
             page={page}
             total={query.data.total}
@@ -320,17 +826,18 @@ function Management() {
             onPageChange={setPage}
             itemName="data"
           />
-        </>
+        </div>
       )}
-    </>
+    </div>
   );
 }
+
 export default function UsersPage() {
   return (
-    <main className="min-w-0">
+    <main className="min-w-0 space-y-6">
       <AdminPageHeader
-        title="Pengguna & audit"
-        description="Kelola akses pengguna dan tinjau aktivitas pengelolaan."
+        title="Pengguna & Keamanan Sistem"
+        description="Kelola akun pengguna, pantau riwayat log aktivitas, dan pantau pemakaian penyimpanan berkas."
         icon={Users}
       />
       <AdminAccess>
