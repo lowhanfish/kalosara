@@ -308,7 +308,10 @@ export default function Editor({
           <option value="ARCHIVED">Arsip</option>
         </select>
       </label>
-      <button className="yellow-button" disabled={save.isPending}>
+      <button
+        className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+        disabled={save.isPending}
+      >
         {save.isPending ? "Menyimpan…" : "Simpan"}
       </button>
       {save.isError && <p role="alert">{cmsError(save.error)}</p>}

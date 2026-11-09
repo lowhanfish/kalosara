@@ -482,7 +482,7 @@ export default function Editor({
       </label>
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button
-          className="yellow-button"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
           disabled={save.isPending || save.isSuccess}
         >
           {save.isPending ? "Menyimpan…" : "Simpan Konten"}

@@ -364,42 +364,36 @@ export default function InboxWorkspace() {
       ) : (
         <>
           {/* Filters Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="text-xs text-slate-500">
-                Jenis Pesan:
-                <select
-                  className="cms-input ml-2 text-xs py-1.5"
-                  value={kind}
-                  onChange={(e) => {
-                    setKind(e.target.value);
-                    setPage(1);
-                  }}
-                >
-                  <option value="">Semua Jenis</option>
-                  <option value="COMPLAINT">Pengaduan Masyarakat</option>
-                  <option value="INFORMATION">Permohonan Informasi (PPID)</option>
-                </select>
-              </label>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <select
+                className="cms-input text-xs font-semibold py-2 px-3 pr-8"
+                value={kind}
+                onChange={(e) => {
+                  setKind(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="">Semua Jenis Pesan</option>
+                <option value="COMPLAINT">Pengaduan Masyarakat</option>
+                <option value="INFORMATION">Permohonan Informasi (PPID)</option>
+              </select>
 
-              <label className="text-xs text-slate-500">
-                Status:
-                <select
-                  className="cms-input ml-2 text-xs py-1.5"
-                  value={status}
-                  onChange={(e) => {
-                    setStatus(e.target.value);
-                    setPage(1);
-                  }}
-                >
-                  <option value="">Semua Status</option>
-                  {Object.entries(requestLabels).map(([key, label]) => (
-                    <option key={key} value={key}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <select
+                className="cms-input text-xs font-semibold py-2 px-3 pr-8"
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="">Semua Status</option>
+                {Object.entries(requestLabels).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button
@@ -435,49 +429,67 @@ export default function InboxWorkspace() {
                     return (
                       <div
                         key={item.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4 hover:bg-slate-50/60 transition-colors"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4 hover:bg-slate-50/60 transition-colors group"
                       >
-                        <div className="min-w-0 space-y-1.5">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span
-                              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                                item.kind === "COMPLAINT"
-                                  ? "bg-amber-50 text-amber-700 border border-amber-200"
-                                  : "bg-blue-50 text-blue-700 border border-blue-200"
-                              }`}
-                            >
-                              {item.kind === "COMPLAINT"
-                                ? "Pengaduan"
-                                : "Permohonan PPID"}
-                            </span>
-
-                            <span
-                              className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${badgeInfo.badge}`}
-                            >
-                              <span
-                                className={`h-1.5 w-1.5 rounded-full ${badgeInfo.dot}`}
-                              />
-                              {badgeInfo.label}
-                            </span>
-
-                            <span className="text-xs text-slate-400">·</span>
-                            <span className="text-xs text-slate-500">
-                              {formattedDate}
-                            </span>
+                        <div className="flex items-start gap-3.5 min-w-0">
+                          <div
+                            className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${
+                              item.kind === "COMPLAINT"
+                                ? "bg-amber-50 text-amber-600 border border-amber-100/80"
+                                : "bg-blue-50 text-blue-600 border border-blue-100/80"
+                            } shadow-2xs`}
+                          >
+                            {item.kind === "COMPLAINT" ? (
+                              <MessageSquare size={18} />
+                            ) : (
+                              <FileText size={18} />
+                            )}
                           </div>
 
-                          <h3 className="font-bold text-slate-900 text-sm truncate">
-                            {item.subject}
-                          </h3>
+                          <div className="min-w-0 space-y-1.5">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span
+                                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                                  item.kind === "COMPLAINT"
+                                    ? "bg-amber-50 text-amber-700 border border-amber-200"
+                                    : "bg-blue-50 text-blue-700 border border-blue-200"
+                                }`}
+                              >
+                                {item.kind === "COMPLAINT"
+                                  ? "Pengaduan"
+                                  : "Permohonan PPID"}
+                              </span>
 
-                          <p className="text-xs text-slate-500">
-                            Pengirim:{" "}
-                            <strong className="text-slate-700">{item.name}</strong>
-                            {item.organization ? ` (${item.organization})` : ""}
-                          </p>
+                              <span
+                                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold ${badgeInfo.badge}`}
+                              >
+                                <span
+                                  className={`h-1.5 w-1.5 rounded-full ${badgeInfo.dot} ${
+                                    item.status === "NEW" ? "animate-pulse" : ""
+                                  }`}
+                                />
+                                {badgeInfo.label}
+                              </span>
+
+                              <span className="text-xs text-slate-400">·</span>
+                              <span className="text-xs text-slate-500">
+                                {formattedDate}
+                              </span>
+                            </div>
+
+                            <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-primary transition-colors break-words">
+                              {item.subject}
+                            </h3>
+
+                            <p className="text-xs text-slate-500">
+                              Pengirim:{" "}
+                              <strong className="text-slate-700">{item.name}</strong>
+                              {item.organization ? ` (${item.organization})` : ""}
+                            </p>
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-2 self-end sm:self-auto">
+                        <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                           <button
                             type="button"
                             onClick={() => setSelected(item.id)}

@@ -184,27 +184,43 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <ul className="admin-activity-list divide-y divide-slate-100 px-6">
-                  {data.data.activity.map((item) => (
-                    <li key={item.id} className="flex items-start gap-3 py-5">
-                      <span className="mt-1.5 size-2 shrink-0 rounded-full bg-amber-400" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium capitalize text-slate-700">
-                          {activityLabel(item.action)}
-                        </p>
-                        <time
-                          dateTime={item.createdAt}
-                          className="mt-1.5 block text-xs text-slate-500"
-                        >
-                          {new Intl.DateTimeFormat("id-ID", {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                            timeZone: "Asia/Makassar",
-                          }).format(new Date(item.createdAt))}{" "}
-                          WITA
-                        </time>
-                      </div>
-                    </li>
-                  ))}
+                  {data.data.activity.map((item) => {
+                    const isNews = item.action.startsWith("NEWS_");
+                    const isMedia = item.action.startsWith("MEDIA_");
+                    const isProfile = item.action.startsWith("PROFILE_");
+                    const isRequest = item.action.startsWith("PUBLIC_REQUEST_");
+                    const dotColor = isNews
+                      ? "bg-blue-500"
+                      : isMedia
+                        ? "bg-sky-500"
+                        : isProfile
+                          ? "bg-purple-500"
+                          : isRequest
+                            ? "bg-amber-500"
+                            : "bg-emerald-500";
+
+                    return (
+                      <li key={item.id} className="flex items-start gap-3 py-4 hover:bg-slate-50/50 -mx-6 px-6 transition-colors">
+                        <span className={`mt-2 size-2 shrink-0 rounded-full ${dotColor}`} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-slate-800 break-words">
+                            {activityLabel(item.action)}
+                          </p>
+                          <time
+                            dateTime={item.createdAt}
+                            className="mt-1 block text-xs text-slate-400"
+                          >
+                            {new Intl.DateTimeFormat("id-ID", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                              timeZone: "Asia/Makassar",
+                            }).format(new Date(item.createdAt))}{" "}
+                            WITA
+                          </time>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </section>
