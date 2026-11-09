@@ -87,4 +87,9 @@ export const adminLinks = [
     href: "/admin/buku-tamu",
     icon: UsersShieldSvg,
   },
+  {
+    label: "Pelayanan persuratan",
+    href: "/admin/persuratan",
+    icon: ServiceBadgeSvg,
+  },
 ];

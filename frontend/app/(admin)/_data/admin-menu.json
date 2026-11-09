@@ -135,6 +135,13 @@
         "icon": "users",
         "path": "/admin/buku-tamu",
         "children": []
+      },
+      {
+        "id": "layanan-persuratan",
+        "title": "Pelayanan Persuratan (KALOSARA)",
+        "icon": "pelayanan",
+        "path": "/admin/persuratan",
+        "children": []
       }
     ]
   },
