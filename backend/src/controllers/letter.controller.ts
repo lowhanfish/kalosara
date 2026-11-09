@@ -67,11 +67,21 @@ export class LetterController {
     if (!id) {
       throw new ApiError(400, "BAD_REQUEST", "ID permohonan diperlukan");
     }
+    const actorRole = res.locals.principal?.role;
     const actorName =
-      res.locals.principal?.role === "LURAH"
+      actorRole === "LURAH"
         ? "Lurah Watundehoa"
         : "Petugas Kelurahan";
     const { action, reason } = adminLetterActionSchema.parse(req.body);
+
+    // Guard: Only LURAH can perform electronic signature (TTE)
+    if (action === "SIGN" && actorRole !== "LURAH") {
+      throw new ApiError(
+        403,
+        "FORBIDDEN",
+        "Hanya akun Lurah yang berwenang menandatangani surat secara elektronik (TTE). Admin Kelurahan bertugas memverifikasi berkas dan meneruskannya ke meja Lurah.",
+      );
+    }
 
     const updated = await this.letterService.processAction(
       id,

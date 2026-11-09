@@ -136,18 +136,25 @@ export default function AdminPersuratanPage() {
             : "Verifikasi berkas permohonan warga dan koordinasi TTE Lurah."
         }`}
         action={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => lettersQuery.refetch()}
-            disabled={lettersQuery.isFetching}
-          >
-            <RotateCw
-              size={16}
-              className={lettersQuery.isFetching ? "animate-spin" : ""}
-            />
-            <span>Refresh</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Badge variant={auth.user?.role === "LURAH" ? "sky" : "neutral"}>
+              {auth.user?.role === "LURAH"
+                ? "Pejabat Penandatangan (Lurah)"
+                : "Admin Kelurahan (Verifikator)"}
+            </Badge>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => lettersQuery.refetch()}
+              disabled={lettersQuery.isFetching}
+            >
+              <RotateCw
+                size={16}
+                className={lettersQuery.isFetching ? "animate-spin" : ""}
+              />
+              <span>Refresh</span>
+            </Button>
+          </div>
         }
       />
 
@@ -597,18 +604,27 @@ export default function AdminPersuratanPage() {
                   </>
                 )}
 
-                {/* When VERIFIED: Lurah/Admin can sign (TTE) */}
+                {/* When VERIFIED: Only Lurah can sign (TTE). Admin Kelurahan cannot sign. */}
                 {selectedLetter.status === "VERIFIED" && (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    disabled={actionMutation.isPending}
-                    onClick={() => handleAction("SIGN")}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                  >
-                    <ShieldCheck size={16} />
-                    <span>Tandatangani Surat (TTE) & Terbitkan</span>
-                  </Button>
+                  auth.user?.role === "LURAH" ? (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      disabled={actionMutation.isPending}
+                      onClick={() => handleAction("SIGN")}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      <ShieldCheck size={16} />
+                      <span>Tandatangani Surat (TTE) &amp; Terbitkan</span>
+                    </Button>
+                  ) : (
+                    <div className="flex items-center gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2 text-xs font-medium text-amber-900">
+                      <Clock size={15} className="text-amber-600 shrink-0" />
+                      <span>
+                        Berkas telah diverifikasi. Menunggu penandatanganan elektronik (TTE) oleh <strong>Bapak/Ibu Lurah</strong>.
+                      </span>
+                    </div>
+                  )
                 )}
               </div>
             </div>

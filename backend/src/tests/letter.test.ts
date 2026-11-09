@@ -1,8 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Request, Response } from "express";
 import { citizenCreateLetterSchema, adminLetterActionSchema } from "../validators/letter.validator.js";
 import { LetterService } from "../services/letter.service.js";
 import { LetterPdfService } from "../services/letter-pdf.service.js";
 import { EmailService } from "../services/email.service.js";
+import { LetterController } from "../controllers/letter.controller.js";
+import type { LetterRepository } from "../repositories/letter.repository.js";
+import { ApiError } from "../lib/errors.js";
 
 // Mock repository
 const mockLetterRepo = {
@@ -26,7 +30,7 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
     pdfService = new LetterPdfService();
     emailService = new EmailService();
     letterService = new LetterService(
-      mockLetterRepo as any,
+      mockLetterRepo as unknown as LetterRepository,
       pdfService,
       emailService,
     );
@@ -193,6 +197,56 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
   });
 
   describe("Step 4 & 5: Lurah TTE Signing & PDF Generation", () => {
+    it("prevents Admin Kelurahan from signing (TTE) letters with 403 Forbidden", async () => {
+      const controller = new LetterController(letterService);
+      const req = {
+        params: { id: "letter-123" },
+        body: { action: "SIGN" },
+      } as unknown as Request;
+      const res = {
+        locals: {
+          principal: { role: "ADMIN_KELURAHAN", id: "admin-1" },
+        },
+      } as unknown as Response;
+
+      await expect(controller.processAdminLetterAction(req, res)).rejects.toThrowError(
+        ApiError,
+      );
+      await expect(controller.processAdminLetterAction(req, res)).rejects.toMatchObject({
+        status: 403,
+        code: "FORBIDDEN",
+      });
+    });
+
+    it("allows Lurah to sign (TTE) letters", async () => {
+      const controller = new LetterController(letterService);
+      vi.spyOn(letterService, "processAction").mockResolvedValue(
+        { id: "letter-123", status: "SIGNED" } as unknown as Awaited<
+          ReturnType<LetterService["processAction"]>
+        >,
+      );
+
+      const req = {
+        params: { id: "letter-123" },
+        body: { action: "SIGN" },
+      } as unknown as Request;
+      const res = {
+        locals: {
+          principal: { role: "LURAH", id: "lurah-1" },
+        },
+        json: vi.fn(),
+        status: vi.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await controller.processAdminLetterAction(req, res);
+      expect(letterService.processAction).toHaveBeenCalledWith(
+        "letter-123",
+        "Lurah Watundehoa",
+        "SIGN",
+        undefined,
+      );
+    });
+
     it("signs letter, generates official PDF with QR code and updates status to SIGNED", async () => {
       const sendCompletionSpy = vi.spyOn(emailService, "sendCompletionEmail").mockResolvedValue();
 
@@ -306,6 +360,8 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
         },
         status: "SIGNED" as const,
         rejectionReason: null,
+        verifiedAt: null,
+        verifiedBy: null,
         signedAt: new Date(),
         signedBy: "Lurah Watundehoa",
         pdfPath: null,
