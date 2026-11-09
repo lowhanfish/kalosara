@@ -506,7 +506,27 @@ export function NewsEditor({
             <History size={18} className="text-blue-600" />
             <span>Riwayat Revisi Artikel</span>
           </h3>
-          {revisions.isLoading && <p className="text-xs text-slate-500">Memuat revisi…</p>}
+          {revisions.isLoading && (
+            <div
+              role="status"
+              aria-label="Memuat revisi…"
+              className="grid gap-2.5 sm:grid-cols-2"
+            >
+              <span className="sr-only">Memuat revisi…</span>
+              {Array.from({ length: 2 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-sky-200/70 bg-white/80 px-4 py-3 shadow-2xs"
+                >
+                  <div className="space-y-1.5">
+                    <div className="h-3.5 w-20 animate-pulse rounded-md bg-sky-200/65" />
+                    <div className="h-3 w-32 animate-pulse rounded-md bg-sky-100/85" />
+                  </div>
+                  <div className="h-7 w-20 animate-pulse rounded-lg bg-sky-100/90" />
+                </div>
+              ))}
+            </div>
+          )}
           {revisions.isError && <p role="alert">{cmsError(revisions.error)}</p>}
           <ul className="grid gap-2.5 sm:grid-cols-2">
             {revisions.data?.items.map((revision) => (

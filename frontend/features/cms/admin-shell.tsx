@@ -40,8 +40,8 @@ export function AdminShell({
 
   if (auth.status === "INITIALIZING")
     return (
-      <div className="admin-app grid min-h-dvh place-content-center p-6">
-        <AdminLoading label="Memeriksa sesi Anda…" />
+      <div className="admin-app min-h-dvh">
+        <AdminLoading variant="shell" label="Memeriksa sesi Anda…" />
       </div>
     );
   if (auth.status === "TEMPORARY_ERROR")

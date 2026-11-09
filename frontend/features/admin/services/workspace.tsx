@@ -18,7 +18,7 @@ function Workspace() {
   });
   return (
     <>
-      {query.isPending && <AdminLoading />}
+      {query.isPending && <AdminLoading variant="detail" />}
       {query.isError && (
         <AdminError error={query.error} onRetry={() => void query.refetch()} />
       )}

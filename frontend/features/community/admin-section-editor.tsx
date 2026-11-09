@@ -599,7 +599,7 @@ export default function SectionWorkspace() {
               </button>
             ))}
           </nav>
-          {data.isPending && <AdminLoading />}
+          {data.isPending && <AdminLoading variant="cards" />}
           {data.isError && (
             <AdminError
               error={data.error}

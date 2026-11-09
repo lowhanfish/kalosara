@@ -28,7 +28,10 @@ export default function ProfileAdmin() {
         </div>
       )}
       {auth.user?.role === "ADMIN_KELURAHAN" && query.isPending && (
-        <AdminLoading label="Memuat pengaturan profil kelurahan…" />
+        <AdminLoading
+          variant="cards"
+          label="Memuat pengaturan profil kelurahan…"
+        />
       )}
       {query.isError && (
         <AdminError error={query.error} onRetry={() => void query.refetch()} />

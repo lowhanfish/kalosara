@@ -97,8 +97,31 @@ export function RichEditor({
 
   if (!editor) {
     return (
-      <div className="flex min-h-[320px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-500">
-        Memuat editor teks…
+      <div
+        role="status"
+        aria-label="Memuat editor teks…"
+        className="overflow-hidden rounded-2xl border border-sky-200/80 bg-white/85 shadow-xs backdrop-blur-md"
+      >
+        <span className="sr-only">Memuat editor teks…</span>
+        <div className="flex flex-wrap items-center gap-1.5 border-b border-sky-100/80 bg-sky-50/50 px-3 py-2.5">
+          {Array.from({ length: 9 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="size-8 animate-pulse rounded-lg bg-sky-200/60"
+            />
+          ))}
+        </div>
+        <div className="min-h-[260px] space-y-3 p-5">
+          <div className="h-5 w-2/5 animate-pulse rounded-lg bg-sky-200/60" />
+          <div className="h-3.5 w-full animate-pulse rounded-md bg-sky-100/85" />
+          <div className="h-3.5 w-11/12 animate-pulse rounded-md bg-sky-100/80" />
+          <div className="h-3.5 w-4/5 animate-pulse rounded-md bg-sky-100/75" />
+          <div className="pt-2 h-3.5 w-3/4 animate-pulse rounded-md bg-sky-100/70" />
+        </div>
+        <div className="flex items-center justify-between border-t border-sky-100/80 bg-sky-50/40 px-4 py-2">
+          <div className="h-3 w-36 animate-pulse rounded-md bg-sky-200/55" />
+          <div className="h-3 w-24 animate-pulse rounded-md bg-sky-100/80" />
+        </div>
       </div>
     );
   }

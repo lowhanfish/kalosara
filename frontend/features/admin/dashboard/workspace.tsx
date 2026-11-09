@@ -154,7 +154,7 @@ export default function Dashboard() {
         )}
       </AdminPageHeader>
 
-      {data.isPending && <AdminLoading />}
+      {data.isPending && <AdminLoading variant="dashboard" />}
       {data.isError && (
         <AdminError error={data.error} onRetry={() => void data.refetch()} />
       )}

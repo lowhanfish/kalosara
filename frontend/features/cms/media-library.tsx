@@ -317,8 +317,29 @@ export function MediaLibrary() {
       </form>
 
       {query.isLoading && (
-        <div className="glass-card py-12 text-center text-sm font-semibold text-blue-700">
-          Memuat pustaka media…
+        <div
+          role="status"
+          aria-label="Memuat pustaka media…"
+          className="cms-media-grid"
+        >
+          <span className="sr-only">Memuat pustaka media…</span>
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div key={idx} className="cms-media-card space-y-4">
+              <div className="aspect-video w-full animate-pulse rounded-2xl bg-gradient-to-r from-sky-200/55 via-sky-100/85 to-sky-200/55" />
+              <div className="space-y-3">
+                <div className="h-4 w-3/5 animate-pulse rounded-lg bg-sky-200/60" />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="h-9 w-full animate-pulse rounded-xl bg-sky-100/80" />
+                  <div className="h-9 w-full animate-pulse rounded-xl bg-sky-100/80" />
+                </div>
+                <div className="h-9 w-full animate-pulse rounded-xl bg-sky-100/70" />
+                <div className="flex items-center gap-2 pt-1">
+                  <div className="h-9 w-28 animate-pulse rounded-xl bg-sky-200/65" />
+                  <div className="h-9 w-24 animate-pulse rounded-xl bg-sky-100/85" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

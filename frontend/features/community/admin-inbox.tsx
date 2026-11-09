@@ -351,7 +351,7 @@ export default function InboxWorkspace() {
         </div>
       ) : selected ? (
         <>
-          {detail.isPending && <AdminLoading />}
+          {detail.isPending && <AdminLoading variant="detail" />}
           {detail.isError && <AdminError error={detail.error} />}
           {detail.data && (
             <RequestDetail
