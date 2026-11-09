@@ -22,7 +22,6 @@ export function AdminPagination({
   const totalPages = Math.max(1, Math.ceil(total / limit));
   if (total <= 0) return null;
 
-  // Generate numbered pages with windowing
   const getPageNumbers = () => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -49,13 +48,15 @@ export function AdminPagination({
   return (
     <nav
       aria-label="Navigasi halaman"
-      className={`flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200/80 pt-5 ${className}`}
+      className={`glass-card flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-3.5 ${className}`}
     >
-      <p className="text-xs text-slate-500 font-medium">
+      <p className="text-xs text-slate-600 font-medium">
         Menampilkan halaman{" "}
-        <span className="font-semibold text-slate-800">{page}</span> dari{" "}
-        <span className="font-semibold text-slate-800">{totalPages}</span> ·
-        Total <span className="font-semibold text-slate-800">{total}</span>{" "}
+        <span className="font-bold text-blue-900">{page}</span> dari{" "}
+        <span className="font-bold text-blue-900">{totalPages}</span> · Total{" "}
+        <span className="inline-flex items-center rounded-md bg-blue-50 border border-blue-200/70 px-1.5 py-0.5 font-bold text-blue-700">
+          {total}
+        </span>{" "}
         {itemName}
       </p>
 
@@ -64,10 +65,10 @@ export function AdminPagination({
           type="button"
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
-          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex h-9 items-center gap-1 rounded-xl border border-blue-200/70 bg-white/85 px-3 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-blue-300 hover:bg-blue-50/60 hover:text-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Halaman sebelumnya"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft size={16} strokeWidth={2.2} />
           <span className="hidden sm:inline">Sebelumnya</span>
         </button>
 
@@ -76,7 +77,7 @@ export function AdminPagination({
             return (
               <span
                 key={`ellipsis-${idx}`}
-                className="px-2 py-1 text-xs text-slate-400 select-none"
+                className="px-2 py-1 text-xs font-bold text-slate-400 select-none"
               >
                 …
               </span>
@@ -89,10 +90,10 @@ export function AdminPagination({
               type="button"
               aria-current={isCurrent ? "page" : undefined}
               onClick={() => onPageChange(Number(p))}
-              className={`min-w-8 h-8 rounded-lg text-xs font-semibold transition shadow-xs ${
+              className={`min-w-9 h-9 rounded-xl text-xs font-bold transition ${
                 isCurrent
-                  ? "bg-primary text-white shadow-sm"
-                  : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md shadow-blue-600/25 border border-blue-500"
+                  : "border border-blue-200/70 bg-white/85 text-slate-700 hover:border-blue-300 hover:bg-blue-50/60 hover:text-blue-700"
               }`}
             >
               {p}
@@ -104,11 +105,11 @@ export function AdminPagination({
           type="button"
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex h-9 items-center gap-1 rounded-xl border border-blue-200/70 bg-white/85 px-3 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-blue-300 hover:bg-blue-50/60 hover:text-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label="Halaman berikutnya"
         >
           <span className="hidden sm:inline">Berikutnya</span>
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight size={16} strokeWidth={2.2} />
         </button>
       </div>
     </nav>

@@ -10,7 +10,6 @@ import {
   X,
   CheckCircle2,
   AlertCircle,
-  Archive,
   RotateCw,
 } from "lucide-react";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
@@ -72,17 +71,21 @@ export function Categories() {
 
   return (
     <section className="space-y-6">
-      {/* Category Editor / Form Card */}
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-2xs space-y-5">
-        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
-          <div className="space-y-1">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <FolderTree className="h-4 w-4 text-primary" />
-              <span>{existing ? "Edit Kategori Berita" : "Tambah Kategori Baru"}</span>
-            </h3>
-            <p className="text-xs text-slate-500">
-              Kategori digunakan untuk mengelompokkan arsip dan publikasi berita pada portal kelurahan.
-            </p>
+      {/* Category Editor / Form Glass Card */}
+      <div className="glass-card p-6 sm:p-7 space-y-5">
+        <div className="flex items-start justify-between border-b border-blue-100/80 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="glass-icon-box size-10">
+              <FolderTree size={19} strokeWidth={2} />
+            </div>
+            <div>
+              <h3 className="text-base font-extrabold text-slate-900">
+                {existing ? "Sunting Kategori Berita" : "Tambah Kategori Berita Baru"}
+              </h3>
+              <p className="text-xs font-medium text-slate-500">
+                Kategori digunakan untuk mengelompokkan arsip dan publikasi berita pada portal kelurahan.
+              </p>
+            </div>
           </div>
           {existing && (
             <button
@@ -91,9 +94,9 @@ export function Categories() {
                 setDraft(blank());
                 setExisting(false);
               }}
-              className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="glass-button-secondary"
             >
-              <Plus size={13} />
+              <Plus size={14} strokeWidth={2.2} />
               <span>Buat Baru</span>
             </button>
           )}
@@ -108,7 +111,7 @@ export function Categories() {
         >
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
                 Nama Kategori <span className="text-red-500">*</span>
               </label>
               <input
@@ -122,7 +125,7 @@ export function Categories() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
                 Slug URL <span className="text-red-500">*</span>
               </label>
               <input
@@ -143,14 +146,14 @@ export function Categories() {
             </div>
           </div>
 
-          <label className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs text-slate-700 cursor-pointer">
+          <label className="flex items-center gap-2.5 rounded-xl border border-blue-200/70 bg-blue-50/40 p-3.5 text-xs text-slate-700 cursor-pointer">
             <input
               type="checkbox"
               checked={draft.archived}
               onChange={(e) => setDraft({ ...draft, archived: e.target.checked })}
-              className="rounded border-slate-300 text-primary focus:ring-primary"
+              className="rounded border-blue-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="font-medium">
+            <span className="font-semibold">
               Arsipkan kategori ini (tidak ditampilkan lagi pada pilihan berita baru)
             </span>
           </label>
@@ -163,7 +166,7 @@ export function Categories() {
           )}
 
           {save.isSuccess && (
-            <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-700">
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-700 font-semibold">
               <CheckCircle2 size={15} className="shrink-0 text-emerald-600" />
               <span>Kategori berhasil disimpan ke database.</span>
             </div>
@@ -177,7 +180,7 @@ export function Categories() {
                   setDraft(blank());
                   setExisting(false);
                 }}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+                className="glass-button-secondary"
               >
                 Batal Edit
               </button>
@@ -185,16 +188,16 @@ export function Categories() {
             <button
               type="submit"
               disabled={save.isPending}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+              className="glass-button-primary"
             >
               {save.isPending ? (
                 <>
-                  <RotateCw size={13} className="animate-spin" />
+                  <RotateCw size={14} className="animate-spin" />
                   <span>Menyimpan...</span>
                 </>
               ) : (
                 <>
-                  <Plus size={14} />
+                  <Plus size={15} strokeWidth={2.4} />
                   <span>{existing ? "Simpan Perubahan Kategori" : "Simpan Kategori Baru"}</span>
                 </>
               )}
@@ -203,13 +206,13 @@ export function Categories() {
         </form>
       </div>
 
-      {/* Category Search & Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+      {/* Category Search & Filter Glass Toolbar */}
+      <div className="glass-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />
           <input
             className="cms-input pl-10 pr-9 text-xs"
-            placeholder="Cari kategori berita..."
+            placeholder="Cari nama atau slug kategori berita..."
             value={search}
             maxLength={100}
             onChange={(e) => {
@@ -224,7 +227,7 @@ export function Categories() {
                 setSearch("");
                 setPage(1);
               }}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded-md text-slate-400 hover:text-slate-600 transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded-md text-slate-400 hover:text-blue-600 transition-colors"
             >
               <X size={14} />
             </button>
@@ -234,9 +237,9 @@ export function Categories() {
         <button
           type="button"
           onClick={() => void query.refetch()}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs self-start sm:self-auto"
+          className="glass-button-secondary self-start sm:self-auto"
         >
-          <RotateCw size={13} className={query.isFetching ? "animate-spin text-primary" : ""} />
+          <RotateCw size={14} className={query.isFetching ? "animate-spin text-blue-600" : ""} />
           <span>Segarkan</span>
         </button>
       </div>
@@ -254,20 +257,27 @@ export function Categories() {
 
       {query.data && query.data.items.length > 0 && (
         <div className="space-y-4">
-          <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden divide-y divide-slate-100">
+          <div className="grid gap-3 sm:grid-cols-2">
             {query.data.items.map((category) => (
               <div
                 key={category.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                className="glass-list-card flex items-center justify-between gap-3 overflow-hidden"
               >
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100/80">
-                    <FolderTree size={18} />
+                <span
+                  className={`pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b ${
+                    category.archived
+                      ? "from-slate-400 to-slate-500"
+                      : "from-blue-500 to-indigo-600"
+                  }`}
+                />
+                <div className="flex items-center gap-3.5 min-w-0 pl-1">
+                  <div className="glass-icon-box size-11">
+                    <FolderTree size={19} strokeWidth={2} />
                   </div>
 
                   <div className="min-w-0 space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-slate-900 text-sm">
+                      <span className="font-extrabold text-slate-900 text-sm truncate">
                         {category.name}
                       </span>
                       <span
@@ -281,26 +291,24 @@ export function Categories() {
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-400 font-mono">
+                    <p className="text-xs text-slate-400 font-mono truncate">
                       /berita/kategori/{category.slug}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDraft(category);
-                      setExisting(true);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
-                  >
-                    <Pencil size={13} className="text-primary" />
-                    <span>Edit Kategori</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDraft(category);
+                    setExisting(true);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="glass-button-secondary shrink-0"
+                >
+                  <Pencil size={13} strokeWidth={2.2} />
+                  <span>Sunting</span>
+                </button>
               </div>
             ))}
           </div>

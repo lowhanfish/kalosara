@@ -1,7 +1,7 @@
 "use client";
 import { AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { Landmark } from "lucide-react";
+import { ServiceBadgeSvg } from "@/components/admin/admin-icons";
 import Editor from "./editor";
 
 import { useQuery } from "@tanstack/react-query";
@@ -30,11 +30,11 @@ function Workspace() {
 }
 export default function Page() {
   return (
-    <main className="min-w-0">
+    <main className="min-w-0 space-y-6">
       <AdminPageHeader
-        title="Panduan pelayanan"
-        description="Perbarui persyaratan dan alur pelayanan pada website."
-        icon={Landmark}
+        title="Panduan Pelayanan"
+        description="Perbarui persyaratan berkas, prosedur administrasi, dan alur pelayanan kantor kelurahan."
+        icon={ServiceBadgeSvg}
       />
       <AdminAccess>
         <Workspace />

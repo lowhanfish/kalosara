@@ -80,26 +80,26 @@ export default function Editor({ page }: { page?: ProfilePage }) {
     return (
       <div className="space-y-6">
         {/* Hero Card Overview */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-          <div className="absolute top-0 right-0 -mt-6 -mr-6 size-40 rounded-full bg-gradient-to-br from-blue-50/60 to-indigo-50/40 blur-2xl pointer-events-none" />
+        <div className="glass-card relative overflow-hidden p-6 sm:p-8">
+          <div className="absolute top-0 right-0 -mt-8 -mr-8 size-48 rounded-full bg-gradient-to-br from-blue-400/20 to-indigo-400/15 blur-2xl pointer-events-none" />
 
           <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-3 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2.5">
                 <span
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${statusLabel.badge}`}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${statusLabel.badge}`}
                 >
                   <span className={`size-1.5 rounded-full ${statusLabel.dot} animate-pulse`} />
                   {statusLabel.text}
                 </span>
-                <span className="inline-flex items-center rounded-md bg-slate-100/80 px-2.5 py-0.5 font-mono text-xs text-slate-500">
+                <span className="inline-flex items-center rounded-lg border border-blue-200/70 bg-blue-50/80 px-2.5 py-0.5 font-mono text-xs font-bold text-blue-700">
                   /pelayanan
                 </span>
               </div>
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                 {title}
               </h2>
-              <p className="text-sm leading-relaxed text-slate-500">
+              <p className="text-sm leading-relaxed text-slate-600">
                 Pusat panduan resmi untuk warga. Mengatur alur pengurusan berkas, persyaratan administrasi, dan informasi loket kantor Kelurahan Watundehoa.
               </p>
             </div>
@@ -109,9 +109,9 @@ export default function Editor({ page }: { page?: ProfilePage }) {
                 href="/pelayanan"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50 transition-all"
+                className="glass-button-secondary px-4 py-2.5 text-xs"
               >
-                <ExternalLink size={16} className="text-slate-400" />
+                <ExternalLink size={16} className="text-blue-600" />
                 Buka di Website
               </Link>
               <button
@@ -119,26 +119,27 @@ export default function Editor({ page }: { page?: ProfilePage }) {
                 onClick={() => setIsEditing(true)}
                 title="Edit Panduan Pelayanan"
                 aria-label="Edit Panduan Pelayanan"
-                className="inline-flex size-11 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
+                className="glass-button-primary px-4 py-2.5 text-xs"
               >
-                <Pencil size={17} />
+                <Pencil size={16} />
+                <span>Sunting Panduan</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Content Preview Container */}
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs space-y-5">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="grid size-8 place-items-center rounded-lg bg-blue-50 text-blue-600">
-                <FileText size={18} />
+        <section className="glass-card p-6 sm:p-8 space-y-5">
+          <div className="flex items-center justify-between border-b border-blue-100/70 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="glass-icon-box size-10 rounded-xl">
+                <FileText size={20} strokeWidth={2} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-extrabold text-slate-900">
                   Isi Halaman Panduan Pelayanan
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   Pratinjau tampilan format dokumen yang dapat dibaca warga
                 </p>
               </div>
@@ -148,28 +149,28 @@ export default function Editor({ page }: { page?: ProfilePage }) {
               onClick={() => setIsEditing(true)}
               title="Edit Dokumen"
               aria-label="Edit Dokumen"
-              className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition-colors"
+              className="inline-flex size-9 items-center justify-center rounded-xl border border-blue-200/80 bg-white/90 text-blue-600 shadow-2xs hover:bg-blue-50 hover:text-blue-800 transition-colors"
             >
-              <Pencil size={14} />
+              <Pencil size={15} />
             </button>
           </div>
 
           {content ? (
             <div
-              className="cms-rich text-slate-700 leading-relaxed text-sm bg-slate-50/60 rounded-xl p-6 sm:p-8 border border-slate-100 shadow-inner"
+              className="cms-rich text-slate-700 leading-relaxed text-sm bg-white/75 rounded-2xl p-6 sm:p-8 border border-blue-100/80 shadow-inner"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           ) : (
-            <div className="py-16 text-center text-slate-400 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
-              <AlertCircle size={36} className="mx-auto mb-3 opacity-40 text-slate-500" />
-              <p className="text-sm font-semibold text-slate-700">Belum ada konten panduan yang ditulis</p>
-              <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+            <div className="py-16 text-center text-slate-400 bg-white/60 rounded-2xl border border-dashed border-blue-200">
+              <AlertCircle size={36} className="mx-auto mb-3 opacity-40 text-blue-500" />
+              <p className="text-sm font-extrabold text-slate-800">Belum ada konten panduan yang ditulis</p>
+              <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
                 Masyarakat belum dapat melihat panduan alur pelayanan. Klik tombol di bawah untuk mulai menulis.
               </p>
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary underline hover:text-primary-hover"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 underline hover:text-blue-800"
               >
                 Mulai susun alur pelayanan &rarr;
               </button>
@@ -183,7 +184,7 @@ export default function Editor({ page }: { page?: ProfilePage }) {
   return (
     <div className="space-y-6">
       {/* Navigation Header in Edit Mode */}
-      <div className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 shadow-xs">
+      <div className="glass-toolbar flex items-center justify-between p-4">
         <button
           type="button"
           onClick={() => {
@@ -196,19 +197,19 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             }
             setIsEditing(false);
           }}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
         >
           <ArrowLeft size={16} />
           Kembali ke Ringkasan
         </button>
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-          <Sparkles size={13} className="text-amber-500" />
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-3 py-1 rounded-full">
+          <Sparkles size={13} className="text-blue-600" />
           Mode Sunting Panduan
         </span>
       </div>
 
       <form
-        className="cms-editor space-y-6 rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs"
+        className="cms-editor glass-card space-y-6 p-6 sm:p-8"
         onSubmit={(e) => {
           e.preventDefault();
           save.mutate(undefined, {
@@ -218,8 +219,8 @@ export default function Editor({ page }: { page?: ProfilePage }) {
           });
         }}
       >
-        <div className="border-b border-slate-100 pb-4">
-          <h2 className="text-xl font-bold text-slate-900">
+        <div className="border-b border-blue-100/70 pb-4">
+          <h2 className="text-xl font-extrabold text-slate-900">
             Form Panduan Pelayanan
           </h2>
           <p className="mt-1 text-xs text-slate-500">
@@ -271,9 +272,9 @@ export default function Editor({ page }: { page?: ProfilePage }) {
           </select>
         </label>
 
-        <div className="pt-4 flex flex-wrap items-center gap-4 border-t border-slate-100">
+        <div className="pt-4 flex flex-wrap items-center gap-4 border-t border-blue-100/70">
           <button
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all disabled:opacity-50"
+            className="glass-button-primary px-6 py-2.5 text-sm disabled:opacity-50"
             disabled={save.isPending}
           >
             {save.isPending ? "Menyimpan…" : "Simpan Perubahan"}
@@ -281,10 +282,10 @@ export default function Editor({ page }: { page?: ProfilePage }) {
           <button
             type="button"
             onClick={() => setLivePreview(!livePreview)}
-            className={`inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ${
+            className={`px-4 py-2.5 text-xs ${
               livePreview
-                ? "border-slate-900 bg-slate-900 text-white shadow-xs"
-                : "border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-50"
+                ? "glass-button-primary"
+                : "glass-button-secondary"
             }`}
           >
             {livePreview ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -293,7 +294,7 @@ export default function Editor({ page }: { page?: ProfilePage }) {
           <button
             type="button"
             onClick={() => setIsEditing(false)}
-            className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+            className="glass-button-secondary px-5 py-2.5 text-sm"
           >
             Batal
           </button>
@@ -311,20 +312,20 @@ export default function Editor({ page }: { page?: ProfilePage }) {
         </div>
       </form>
       {livePreview && (
-        <article className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-700">
+        <article className="glass-card overflow-hidden p-6 sm:p-8 space-y-4">
+          <div className="flex items-center justify-between border-b border-blue-100/70 pb-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-0.5 text-xs font-bold text-blue-700">
               <Eye size={13} /> Pratinjau Langsung &mdash; Status: {status}
             </span>
             <button
               type="button"
               onClick={() => setLivePreview(false)}
-              className="text-xs text-slate-400 hover:text-slate-700 font-medium"
+              className="text-xs text-slate-500 hover:text-blue-700 font-bold"
             >
               Tutup Pratinjau &times;
             </button>
           </div>
-          <h2 className="text-2xl font-bold text-slate-900">
+          <h2 className="text-2xl font-extrabold text-slate-900">
             {title || "(Judul halaman panduan)"}
           </h2>
           <div

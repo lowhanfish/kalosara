@@ -1,5 +1,11 @@
-import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
+import type { ComponentType, ReactNode } from "react";
+
+type IconComponent = ComponentType<{
+  size?: number | string;
+  strokeWidth?: number | string;
+  className?: string;
+}>;
+
 export function AdminPageHeader({
   title,
   description,
@@ -8,22 +14,25 @@ export function AdminPageHeader({
 }: {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   children?: ReactNode;
 }) {
   return (
     <header className="admin-page-header">
       <div className="admin-page-heading">
-        <span className="admin-page-icon">
-          <Icon size={22} strokeWidth={1.7} aria-hidden="true" />
+        <span className="admin-page-icon" aria-hidden="true">
+          <Icon size={24} strokeWidth={2} />
         </span>
-        <div>
-          <p className="admin-eyebrow">Pengelolaan website</p>
+        <div className="min-w-0">
+          <p className="admin-eyebrow">
+            <span className="inline-block size-1.5 rounded-full bg-blue-600" />
+            <span>Panel Pengelola · Kelurahan Watundehoa</span>
+          </p>
           <h1 className="admin-page-title">{title}</h1>
           <p className="admin-page-description">{description}</p>
         </div>
       </div>
-      {children}
+      {children && <div className="admin-page-actions shrink-0">{children}</div>}
     </header>
   );
 }

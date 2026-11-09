@@ -21,6 +21,7 @@ import {
 import { AdminLoading, AdminError, AdminEmptyState } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { AdminPagination } from "@/components/admin/pagination";
+import { UserVerifiedSvg } from "@/components/admin/admin-icons";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsError, type List } from "@/features/cms/client";
@@ -56,29 +57,33 @@ function ReviewFormModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-150">
-        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
-          <div>
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <UserCheck className="h-5 w-5 text-primary" />
-              <span>Verifikasi Perubahan Kontak</span>
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Akun: <span className="font-semibold text-slate-800">{item.user.email}</span>
-            </p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+      <div className="glass-card w-full max-w-lg p-6 sm:p-8 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-150">
+        <div className="flex items-start justify-between border-b border-blue-100/70 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="glass-icon-box size-10 rounded-xl">
+              <UserCheck size={20} strokeWidth={2} />
+            </div>
+            <div>
+              <h2 className="text-lg font-extrabold text-slate-900">
+                Verifikasi Perubahan Kontak
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Akun: <span className="font-bold text-slate-800">{item.user.email}</span>
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+            className="grid h-8 w-8 place-items-center rounded-xl text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Change Comparison */}
-        <div className="grid gap-3 sm:grid-cols-2 rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 text-xs">
+        <div className="grid gap-3 sm:grid-cols-2 rounded-2xl border border-blue-200/70 bg-white/80 p-4 text-xs shadow-2xs">
           <div>
             <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               Email Pengajuan
@@ -158,20 +163,20 @@ function ReviewFormModal({
           </div>
 
           <div className="space-y-2 pt-1">
-            <label className="flex items-start gap-2.5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 cursor-pointer">
-              <input type="checkbox" name="identity" required className="mt-0.5 rounded border-slate-300 text-primary focus:ring-primary" />
+            <label className="flex items-start gap-2.5 rounded-xl border border-blue-200/70 bg-white/80 p-3 text-xs text-slate-700 cursor-pointer">
+              <input type="checkbox" name="identity" required className="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-600" />
               <span>
                 Saya telah memverifikasi identitas pemilik akun secara sah melalui prosedur pelayanan kantor.
               </span>
             </label>
 
-            <label className="flex items-start gap-2.5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 cursor-pointer">
+            <label className="flex items-start gap-2.5 rounded-xl border border-blue-200/70 bg-white/80 p-3 text-xs text-slate-700 cursor-pointer">
               <input
                 type="checkbox"
                 name="ownership"
                 required={approve}
                 disabled={!approve}
-                className="mt-0.5 rounded border-slate-300 text-primary focus:ring-primary"
+                className="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-600"
               />
               <span>
                 Kepemilikan kontak email/nomor telepon baru telah dipastikan benar milik pemohon.
@@ -186,19 +191,19 @@ function ReviewFormModal({
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-blue-100/70">
             <button
               type="button"
               disabled={mutation.isPending}
               onClick={onClose}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="glass-button-secondary px-4 py-2.5 text-xs"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+              className="glass-button-primary px-5 py-2.5 text-xs disabled:opacity-50"
             >
               {mutation.isPending ? (
                 <>
@@ -237,22 +242,22 @@ function Reviews() {
   return (
     <div className="space-y-6">
       {/* Return to Users Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+      <div className="glass-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
         <Link
           href="/admin/pengguna"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
         >
           <ArrowLeft size={16} />
           <span>Kembali ke Manajemen Pengguna</span>
         </Link>
 
-        <span className="text-xs text-slate-500">
+        <span className="text-xs font-medium text-slate-500">
           Kontak lama tetap berlaku sampai proses verifikasi selesai.
         </span>
       </div>
 
       {/* Search and Refresh */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="glass-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
         <div className="relative flex-1 max-w-md">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <input
@@ -282,9 +287,9 @@ function Reviews() {
         <button
           type="button"
           onClick={() => void query.refetch()}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs self-start sm:self-auto"
+          className="glass-button-secondary px-3.5 py-2 text-xs self-start sm:self-auto"
         >
-          <RotateCw size={13} className={query.isFetching ? "animate-spin text-primary" : ""} />
+          <RotateCw size={13} className={query.isFetching ? "animate-spin text-blue-600" : ""} />
           <span>Segarkan Data</span>
         </button>
       </div>
@@ -312,7 +317,7 @@ function Reviews() {
               description="Saat ini belum ada pengajuan perubahan email atau nomor telepon dari warga yang perlu ditinjau."
             />
           ) : (
-            <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden divide-y divide-slate-100">
+            <div className="space-y-3">
               {query.data.items.map((item) => {
                 const isExpired = new Date(item.expiresAt) <= new Date();
                 const formattedDate = new Date(item.expiresAt).toLocaleString("id-ID", {
@@ -326,16 +331,16 @@ function Reviews() {
                 return (
                   <div
                     key={item.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4 hover:bg-slate-50/60 transition-colors"
+                    className="glass-list-card flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4"
                   >
                     <div className="min-w-0 space-y-2">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-slate-900 text-sm">
+                        <span className="font-extrabold text-slate-900 text-sm">
                           {item.user.email}
                         </span>
 
                         <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
                             isExpired
                               ? "bg-slate-100 text-slate-600 border border-slate-200"
                               : "bg-amber-50 text-amber-700 border border-amber-200"
@@ -343,7 +348,7 @@ function Reviews() {
                         >
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
-                              isExpired ? "bg-slate-400" : "bg-amber-500"
+                              isExpired ? "bg-slate-400" : "bg-amber-500 animate-pulse"
                             }`}
                           />
                           {isExpired ? "Kedaluwarsa" : "Menunggu Verifikasi"}
@@ -352,7 +357,7 @@ function Reviews() {
 
                       <div className="grid gap-1.5 sm:grid-cols-2 text-xs text-slate-600">
                         <div className="flex items-center gap-1.5">
-                          <Mail size={13} className="text-slate-400 shrink-0" />
+                          <Mail size={13} className="text-blue-600 shrink-0" />
                           <span>
                             Email baru:{" "}
                             <strong className="text-slate-800">
@@ -361,7 +366,7 @@ function Reviews() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <Phone size={13} className="text-slate-400 shrink-0" />
+                          <Phone size={13} className="text-blue-600 shrink-0" />
                           <span>
                             Nomor baru:{" "}
                             <strong className="text-slate-800">
@@ -381,9 +386,9 @@ function Reviews() {
                       <button
                         type="button"
                         onClick={() => setSelected(item)}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                        className="glass-button-secondary px-3.5 py-2 text-xs"
                       >
-                        <UserCheck size={14} className="text-primary" />
+                        <UserCheck size={14} className="text-blue-600" />
                         <span>Tinjau Permintaan</span>
                       </button>
                     </div>
@@ -412,7 +417,7 @@ export default function ContactReviewPage() {
       <AdminPageHeader
         title="Verifikasi Perubahan Kontak"
         description="Tinjau dan verifikasi pengajuan perubahan alamat email atau nomor telepon dari warga terdaftar."
-        icon={UserCheck}
+        icon={UserVerifiedSvg}
       />
       <AdminAccess>
         <Reviews />

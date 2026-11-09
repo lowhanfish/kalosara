@@ -23,6 +23,7 @@ import { cmsMutate, cmsError, type List } from "@/features/cms/client";
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { AdminLoading, AdminError, AdminEmptyState } from "@/components/admin/feedback";
 import { AdminPagination } from "@/components/admin/pagination";
+import { InboxMailSvg } from "@/components/admin/admin-icons";
 import { requestLabels, type CitizenRequest } from "@/lib/community";
 
 function statusBadge(status: CitizenRequest["status"]) {
@@ -100,11 +101,11 @@ function RequestDetail({
   return (
     <div className="space-y-6">
       {/* Top Back Navigation Bar */}
-      <div className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 shadow-xs">
+      <div className="glass-toolbar flex items-center justify-between p-4">
         <button
           type="button"
           onClick={onClose}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
         >
           <ArrowLeft size={16} />
           <span>Kembali ke Daftar Pesan</span>
@@ -116,10 +117,10 @@ function RequestDetail({
         </span>
       </div>
 
-      <section className="space-y-6 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-        <div className="border-b border-slate-100 pb-4 space-y-2">
+      <section className="glass-card space-y-6 p-6 sm:p-8">
+        <div className="border-b border-blue-100/70 pb-4 space-y-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="inline-flex items-center rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-700">
+            <span className="inline-flex items-center rounded-lg border border-blue-200/80 bg-blue-50/80 px-2.5 py-1 text-xs font-bold text-blue-700">
               {item.kind === "COMPLAINT" ? "Pengaduan Masyarakat" : "Permohonan Informasi PPID"}
             </span>
             <span className="text-xs text-slate-400">·</span>
@@ -129,13 +130,13 @@ function RequestDetail({
             </span>
           </div>
 
-          <h2 className="text-2xl font-bold text-slate-900">{item.subject}</h2>
+          <h2 className="text-2xl font-extrabold text-slate-900">{item.subject}</h2>
         </div>
 
         {/* Sender details card */}
-        <div className="grid gap-4 sm:grid-cols-2 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5">
+        <div className="grid gap-4 sm:grid-cols-2 rounded-2xl border border-blue-200/70 bg-white/75 p-5 shadow-2xs">
           <div className="flex items-start gap-3">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white border border-slate-200/80 text-slate-500 shadow-2xs">
+            <div className="glass-icon-box size-9 rounded-xl">
               <User size={16} />
             </div>
             <div>
@@ -147,7 +148,7 @@ function RequestDetail({
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white border border-slate-200/80 text-slate-500 shadow-2xs">
+            <div className="glass-icon-box size-9 rounded-xl">
               <Building size={16} />
             </div>
             <div>
@@ -161,7 +162,7 @@ function RequestDetail({
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white border border-slate-200/80 text-slate-500 shadow-2xs">
+            <div className="glass-icon-box size-9 rounded-xl">
               <Mail size={16} />
             </div>
             <div>
@@ -172,7 +173,7 @@ function RequestDetail({
                 {item.email ? (
                   <a
                     href={`mailto:${item.email}`}
-                    className="text-primary hover:underline break-all"
+                    className="text-blue-600 hover:underline break-all"
                   >
                     {item.email}
                   </a>
@@ -184,7 +185,7 @@ function RequestDetail({
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white border border-slate-200/80 text-slate-500 shadow-2xs">
+            <div className="glass-icon-box size-9 rounded-xl">
               <Phone size={16} />
             </div>
             <div>
@@ -197,7 +198,7 @@ function RequestDetail({
                     href={`https://wa.me/${item.phone.replace(/[^0-9]/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary hover:underline"
+                    className="text-blue-600 hover:underline"
                   >
                     {item.phone}
                   </a>
@@ -214,14 +215,14 @@ function RequestDetail({
           <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
             Isi Pesan Masyarakat
           </label>
-          <div className="whitespace-pre-wrap rounded-2xl border border-slate-200 bg-white p-5 text-sm leading-relaxed text-slate-800 shadow-2xs">
+          <div className="whitespace-pre-wrap rounded-2xl border border-blue-200/70 bg-white/85 p-5 text-sm leading-relaxed text-slate-800 shadow-2xs">
             {item.message}
           </div>
         </div>
 
         {/* Form Follow-up */}
         <form
-          className="space-y-4 pt-4 border-t border-slate-100"
+          className="space-y-4 pt-4 border-t border-blue-100/70"
           onSubmit={(e) => {
             e.preventDefault();
             setNotice("");
@@ -284,7 +285,7 @@ function RequestDetail({
             <button
               type="submit"
               disabled={save.isPending}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+              className="glass-button-primary px-5 py-2.5 text-xs disabled:opacity-50"
             >
               {save.isPending ? (
                 <>
@@ -340,11 +341,11 @@ export default function InboxWorkspace() {
       <AdminPageHeader
         title="Kotak Masuk Masyarakat"
         description="Kelola pengaduan warga dan permohonan informasi publik (PPID). Identitas dan nomor kontak terjaga aman."
-        icon={Inbox}
+        icon={InboxMailSvg}
       />
 
       {auth.user?.role !== "ADMIN_KELURAHAN" ? (
-        <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
+        <div className="glass-card flex items-center gap-2 p-5 text-xs font-semibold text-amber-800 border-amber-200/80 bg-amber-50/75">
           <AlertCircle size={16} className="text-amber-600" />
           <span>Halaman ini khusus untuk administrator kelurahan.</span>
         </div>
@@ -364,7 +365,7 @@ export default function InboxWorkspace() {
       ) : (
         <>
           {/* Filters Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="glass-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
             <div className="flex flex-wrap items-center gap-2.5">
               <select
                 className="cms-input text-xs font-semibold py-2 px-3 pr-8"
@@ -399,9 +400,9 @@ export default function InboxWorkspace() {
             <button
               type="button"
               onClick={() => void query.refetch()}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs self-start sm:self-auto"
+              className="glass-button-secondary px-3.5 py-2 text-xs self-start sm:self-auto"
             >
-              <RotateCw size={13} className={query.isFetching ? "animate-spin text-primary" : ""} />
+              <RotateCw size={13} className={query.isFetching ? "animate-spin text-blue-600" : ""} />
               <span>Segarkan</span>
             </button>
           </div>
@@ -417,7 +418,7 @@ export default function InboxWorkspace() {
                   description="Saat ini belum ada pengaduan atau permohonan informasi yang sesuai dengan filter yang dipilih."
                 />
               ) : (
-                <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden divide-y divide-slate-100">
+                <div className="space-y-3">
                   {query.data.items.map((item) => {
                     const badgeInfo = statusBadge(item.status);
                     const formattedDate = new Intl.DateTimeFormat("id-ID", {
@@ -429,20 +430,20 @@ export default function InboxWorkspace() {
                     return (
                       <div
                         key={item.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4 hover:bg-slate-50/60 transition-colors group"
+                        className="glass-list-card flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-4 group"
                       >
                         <div className="flex items-start gap-3.5 min-w-0">
                           <div
-                            className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${
+                            className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl ${
                               item.kind === "COMPLAINT"
-                                ? "bg-amber-50 text-amber-600 border border-amber-100/80"
-                                : "bg-blue-50 text-blue-600 border border-blue-100/80"
+                                ? "bg-amber-50 text-amber-600 border border-amber-200/80"
+                                : "glass-icon-box"
                             } shadow-2xs`}
                           >
                             {item.kind === "COMPLAINT" ? (
-                              <MessageSquare size={18} />
+                              <MessageSquare size={20} strokeWidth={2} />
                             ) : (
-                              <FileText size={18} />
+                              <FileText size={20} strokeWidth={2} />
                             )}
                           </div>
 
@@ -477,7 +478,7 @@ export default function InboxWorkspace() {
                               </span>
                             </div>
 
-                            <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-primary transition-colors break-words">
+                            <h3 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-blue-700 transition-colors break-words">
                               {item.subject}
                             </h3>
 
@@ -493,9 +494,9 @@ export default function InboxWorkspace() {
                           <button
                             type="button"
                             onClick={() => setSelected(item.id)}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                            className="glass-button-secondary px-3.5 py-2 text-xs"
                           >
-                            <Eye size={14} className="text-primary" />
+                            <Eye size={14} className="text-blue-600" />
                             <span>Buka Pesan</span>
                           </button>
                         </div>

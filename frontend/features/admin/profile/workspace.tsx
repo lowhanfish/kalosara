@@ -1,10 +1,11 @@
 "use client";
 import { AdminPageHeader } from "@/components/admin/page-header";
-import { Settings } from "lucide-react";
+import { AdminLoading, AdminError } from "@/components/admin/feedback";
+import { BuildingShieldSvg } from "@/components/admin/admin-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
-import { cmsError as message } from "@/features/cms/client";
 import Editor, { type Data } from "./editor";
+
 export default function ProfileAdmin() {
   const auth = useAuth();
   const runtime = useAuthRuntime();
@@ -15,25 +16,22 @@ export default function ProfileAdmin() {
     queryFn: () => runtime.request<Data>("/admin/profile"),
   });
   return (
-    <main id="konten" tabIndex={-1} className="min-w-0">
+    <main id="konten" tabIndex={-1} className="min-w-0 space-y-6">
       <AdminPageHeader
-        title="Profil & pengaturan"
-        description="Atur identitas, kontak, gambar beranda, profil, dan aparatur."
-        icon={Settings}
+        title="Profil & Pengaturan Website"
+        description="Atur identitas resmi kelurahan, kontak darurat, logo, gambar beranda, naskah profil, dan struktur aparatur."
+        icon={BuildingShieldSvg}
       />
       {auth.user?.role !== "ADMIN_KELURAHAN" && (
-        <p role="alert">
+        <div role="alert" className="glass-card p-6 text-sm font-semibold text-amber-800 border-amber-200/80 bg-amber-50/75">
           Akun Anda tidak memiliki izin untuk mengelola profil.
-        </p>
+        </div>
       )}
       {auth.user?.role === "ADMIN_KELURAHAN" && query.isPending && (
-        <p role="status">Memuat pengaturan…</p>
+        <AdminLoading label="Memuat pengaturan profil kelurahan…" />
       )}
       {query.isError && (
-        <p role="alert">
-          {message(query.error)}{" "}
-          <button onClick={() => void query.refetch()}>Coba lagi</button>
-        </p>
+        <AdminError error={query.error} onRetry={() => void query.refetch()} />
       )}
       {query.data && auth.user?.role === "ADMIN_KELURAHAN" && (
         <Editor

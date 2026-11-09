@@ -1,18 +1,18 @@
 "use client";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowUpRight, Plus, Clock3, Sparkles } from "lucide-react";
 import {
-  LayoutDashboard,
-  Newspaper,
-  FilePenLine,
-  Megaphone,
-  CalendarDays,
-  Images,
-  Users,
-  ArrowUpRight,
-  Plus,
-  Clock3,
-} from "lucide-react";
+  DashboardSvg,
+  NewsPaperSvg,
+  DocumentSealSvg,
+  MegaphoneSvg,
+  CalendarEventSvg,
+  GalleryPhotoSvg,
+  UsersShieldSvg,
+  InboxMailSvg,
+  BuildingShieldSvg,
+} from "@/components/admin/admin-icons";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { AdminPageHeader } from "@/components/admin/page-header";
 import {
@@ -21,6 +21,7 @@ import {
   AdminEmptyState,
 } from "@/components/admin/feedback";
 import { adminLinks } from "@/components/admin/navigation";
+
 type Activity = {
   id: string;
   action: string;
@@ -28,6 +29,7 @@ type Activity = {
   resourceId: string | null;
   createdAt: string;
 };
+
 type Summary = {
   published: number;
   draft: number;
@@ -37,50 +39,67 @@ type Summary = {
   users: number;
   activity: Activity[];
 };
+
 const metrics = [
   {
     key: "published",
-    label: "Berita terbit",
-    icon: Newspaper,
+    label: "Berita Terbit",
+    subtitle: "Tayang di portal publik",
+    icon: NewsPaperSvg,
     href: "/admin/berita",
-    tone: "bg-emerald-50 text-emerald-600",
+    tone: "bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-md shadow-blue-600/25",
   },
   {
     key: "draft",
-    label: "Draft berita",
-    icon: FilePenLine,
+    label: "Draft Berita",
+    subtitle: "Menunggu penyuntingan",
+    icon: DocumentSealSvg,
     href: "/admin/berita",
-    tone: "bg-amber-50 text-amber-600",
+    tone: "bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-md shadow-sky-500/25",
   },
   {
     key: "announcements",
     label: "Pengumuman",
-    icon: Megaphone,
+    subtitle: "Siaran resmi warga",
+    icon: MegaphoneSvg,
     href: "/admin/konten#announcements",
-    tone: "bg-blue-50 text-blue-600",
+    tone: "bg-gradient-to-br from-indigo-500 to-blue-700 text-white shadow-md shadow-indigo-500/25",
   },
   {
     key: "events",
-    label: "Agenda kegiatan",
-    icon: CalendarDays,
+    label: "Agenda Kegiatan",
+    subtitle: "Jadwal acara kelurahan",
+    icon: CalendarEventSvg,
     href: "/admin/konten#events",
-    tone: "bg-violet-50 text-violet-600",
+    tone: "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25",
   },
   {
     key: "media",
-    label: "Media tersimpan",
-    icon: Images,
+    label: "Media Tersimpan",
+    subtitle: "Foto & dokumen publik",
+    icon: GalleryPhotoSvg,
     href: "/admin/berita",
-    tone: "bg-sky-50 text-sky-600",
+    tone: "bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-600/25",
   },
   {
     key: "users",
-    label: "Pengguna",
-    icon: Users,
+    label: "Total Pengguna",
+    subtitle: "Admin, Lurah & Warga",
+    icon: UsersShieldSvg,
     href: "/admin/pengguna",
-    tone: "bg-slate-100 text-slate-600",
+    tone: "bg-gradient-to-br from-slate-700 to-blue-900 text-white shadow-md shadow-blue-900/25",
   },
 ] as const;
+
+const shortcutDescriptions: Record<string, string> = {
+  "/admin/profil#pengaturan": "Identitas wilayah, kontak & banner utama",
+  "/admin/profil#halaman-profil": "Sejarah, visi-misi & struktur organisasi",
+  "/admin/pelayanan": "Standar alur & syarat layanan warga",
+  "/admin/konten#announcements": "Publikasi maklumat & info penting",
+  "/admin/konten#events": "Kalender jadwal kegiatan kelurahan",
+  "/admin/wilayah#statistics": "Data kependudukan & potensi wilayah",
+};
+
 function activityLabel(action: string) {
   const labels: Record<string, string> = {
     PUBLIC_REQUEST_RECEIVED: "Pesan masyarakat diterima",
@@ -110,6 +129,7 @@ function activityLabel(action: string) {
   };
   return labels[action] ?? action.toLowerCase().replaceAll("_", " ");
 }
+
 export default function Dashboard() {
   const auth = useAuth();
   const { request } = useAuthRuntime();
@@ -118,97 +138,134 @@ export default function Dashboard() {
     queryFn: () => request<Summary>("/admin/dashboard"),
   });
   const isAdmin = auth.user?.role === "ADMIN_KELURAHAN";
+
   return (
-    <main id="konten" className="admin-dashboard min-w-0">
+    <main id="konten" className="admin-dashboard min-w-0 space-y-6">
       <AdminPageHeader
-        title="Ringkasan kelurahan"
-        description="Selamat datang. Pantau konten dan kelola informasi untuk warga."
-        icon={LayoutDashboard}
+        title="Ringkasan Kelurahan"
+        description="Selamat datang di pusat kendali digital Kelurahan Watundehoa. Pantau metrik publikasi dan kelola layanan informasi warga."
+        icon={DashboardSvg}
       >
         {isAdmin && (
-          <Link
-            href="/admin/berita"
-            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-hover"
-          >
-            <Plus size={16} />
-            Kelola berita
+          <Link href="/admin/berita" className="glass-button-primary">
+            <Plus size={16} strokeWidth={2.4} />
+            <span>Tulis Berita Baru</span>
           </Link>
         )}
       </AdminPageHeader>
+
       {data.isPending && <AdminLoading />}
       {data.isError && (
         <AdminError error={data.error} onRetry={() => void data.refetch()} />
-      )}{" "}
+      )}
+
       {data.data && (
         <>
           <dl className="admin-metrics">
-            {metrics.map(({ key, label, icon: Icon, tone, href }) => (
-              <div key={key} className="admin-metric">
+            {metrics.map(({ key, label, subtitle, icon: Icon, tone, href }) => (
+              <div key={key} className="admin-metric group">
+                <div className="pointer-events-none absolute -right-6 -top-6 size-24 rounded-full bg-blue-500/10 blur-xl transition-transform group-hover:scale-125" />
                 <span className={`admin-metric-icon ${tone}`}>
-                  <Icon size={18} strokeWidth={1.7} />
+                  <Icon size={20} strokeWidth={2} />
                 </span>
                 <dt className="admin-metric-label">{label}</dt>
+                <p className="mt-0.5 text-[11px] font-medium text-slate-400">
+                  {subtitle}
+                </p>
                 <dd className="admin-metric-value">
                   {data.data[key].toLocaleString("id-ID")}
                 </dd>
                 {isAdmin && (
                   <Link href={href} className="admin-metric-link">
-                    Lihat detail
-                    <ArrowUpRight size={12} />
+                    <span>Kelola modul</span>
+                    <ArrowUpRight
+                      size={14}
+                      strokeWidth={2.2}
+                      className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
                   </Link>
                 )}
               </div>
             ))}
           </dl>
+
           <div
             className={`admin-dashboard-panels ${isAdmin ? "admin-dashboard-panels-pair" : ""}`}
           >
-            <section className="admin-activity-panel overflow-hidden rounded-2xl border border-slate-200 bg-white">
-              <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-5">
-                <Clock3 size={18} className="text-slate-500" />
-                <div>
-                  <h2 className="text-[15px] font-semibold text-slate-800">
-                    Aktivitas terbaru
-                  </h2>
-                  <p className="mt-1 text-[13px] text-slate-500">
-                    Pembaruan terakhir pada website kelurahan
-                  </p>
+            {/* Activity Timeline Glass Panel */}
+            <section className="glass-card overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between border-b border-blue-100/80 px-6 py-5 bg-gradient-to-r from-blue-50/50 to-transparent">
+                <div className="flex items-center gap-3.5">
+                  <div className="glass-icon-box size-10">
+                    <Clock3 size={19} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-extrabold text-slate-900">
+                      Riwayat Aktivitas Terbaru
+                    </h2>
+                    <p className="text-xs font-medium text-slate-500">
+                      Log pembaruan langsung pada portal kelurahan
+                    </p>
+                  </div>
                 </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200/80 bg-blue-50/80 px-3 py-1 text-[11px] font-bold text-blue-700">
+                  <span className="size-1.5 rounded-full bg-blue-600 animate-pulse" />
+                  Live Log
+                </span>
               </div>
+
               {!data.data.activity.length ? (
-                <div className="px-6">
+                <div className="p-6">
                   <AdminEmptyState
                     title="Belum ada aktivitas"
                     description="Riwayat pembaruan konten akan ditampilkan di sini."
                   />
                 </div>
               ) : (
-                <ul className="admin-activity-list divide-y divide-slate-100 px-6">
+                <ul className="admin-activity-list divide-y divide-blue-100/60 px-6">
                   {data.data.activity.map((item) => {
                     const isNews = item.action.startsWith("NEWS_");
                     const isMedia = item.action.startsWith("MEDIA_");
                     const isProfile = item.action.startsWith("PROFILE_");
                     const isRequest = item.action.startsWith("PUBLIC_REQUEST_");
-                    const dotColor = isNews
-                      ? "bg-blue-500"
+
+                    const Icon = isNews
+                      ? NewsPaperSvg
                       : isMedia
-                        ? "bg-sky-500"
+                        ? GalleryPhotoSvg
                         : isProfile
-                          ? "bg-purple-500"
+                          ? BuildingShieldSvg
                           : isRequest
-                            ? "bg-amber-500"
-                            : "bg-emerald-500";
+                            ? InboxMailSvg
+                            : DocumentSealSvg;
+
+                    const iconStyle = isNews
+                      ? "bg-blue-50 text-blue-600 border-blue-200/80"
+                      : isMedia
+                        ? "bg-sky-50 text-sky-600 border-sky-200/80"
+                        : isProfile
+                          ? "bg-indigo-50 text-indigo-600 border-indigo-200/80"
+                          : isRequest
+                            ? "bg-amber-50 text-amber-600 border-amber-200/80"
+                            : "bg-emerald-50 text-emerald-600 border-emerald-200/80";
 
                     return (
-                      <li key={item.id} className="flex items-start gap-3 py-4 hover:bg-slate-50/50 -mx-6 px-6 transition-colors">
-                        <span className={`mt-2 size-2 shrink-0 rounded-full ${dotColor}`} />
+                      <li
+                        key={item.id}
+                        className="flex items-center gap-3.5 py-3.5 hover:bg-blue-50/40 -mx-6 px-6 transition-colors"
+                      >
+                        <span
+                          className={`grid size-9 shrink-0 place-items-center rounded-xl border ${iconStyle} shadow-2xs`}
+                        >
+                          <Icon size={17} strokeWidth={2} />
+                        </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-800 break-words">
+                          <p className="text-xs sm:text-sm font-bold text-slate-800 truncate">
                             {activityLabel(item.action)}
                           </p>
                           <time
                             dateTime={item.createdAt}
-                            className="mt-1 block text-xs text-slate-400"
+                            className="mt-0.5 block text-[11px] font-medium text-slate-400"
                           >
                             {new Intl.DateTimeFormat("id-ID", {
                               dateStyle: "medium",
@@ -218,52 +275,90 @@ export default function Dashboard() {
                             WITA
                           </time>
                         </div>
+                        {item.resourceType && (
+                          <span className="hidden sm:inline-flex items-center rounded-lg bg-blue-50/80 border border-blue-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700">
+                            {item.resourceType}
+                          </span>
+                        )}
                       </li>
                     );
                   })}
                 </ul>
               )}
             </section>
+
+            {/* Quick Shortcuts Glass Panel */}
             {isAdmin && (
-              <section className="admin-shortcuts rounded-2xl border border-slate-200 bg-white p-6">
-                <h2 className="text-[15px] font-semibold text-slate-800">
-                  Mulai mengelola
-                </h2>
-                <p className="mt-1 text-[13px] text-slate-500">
-                  Akses cepat ke konten website
-                </p>
-                <div className="admin-shortcut-grid">
-                  {adminLinks
-                    .filter((item) =>
-                      [
-                        "/admin/profil#pengaturan",
-                        "/admin/profil#halaman-profil",
-                        "/admin/pelayanan",
-                        "/admin/konten#announcements",
-                        "/admin/konten#events",
-                        "/admin/wilayah#statistics",
-                      ].includes(item.href),
-                    )
-                    .map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="group flex items-center gap-3 rounded-lg border border-slate-100 px-4 py-3.5 transition hover:border-slate-300 hover:bg-slate-50"
-                      >
-                        <item.icon
-                          size={17}
-                          strokeWidth={1.5}
-                          className="text-slate-500"
-                        />
-                        <span className="flex-1 text-sm font-medium text-slate-700">
-                          {item.label}
-                        </span>
-                        <ArrowUpRight
-                          size={13}
-                          className="text-slate-300 group-hover:text-primary"
-                        />
-                      </Link>
-                    ))}
+              <section className="glass-card p-6 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3.5 border-b border-blue-100/80 pb-4">
+                    <div className="glass-icon-box size-10">
+                      <Sparkles size={19} strokeWidth={2} />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-extrabold text-slate-900">
+                        Pintasan Pengelolaan Cepat
+                      </h2>
+                      <p className="text-xs font-medium text-slate-500">
+                        Akses langsung ke modul utama portal kelurahan
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="admin-shortcut-grid">
+                    {adminLinks
+                      .filter((item) =>
+                        [
+                          "/admin/profil#pengaturan",
+                          "/admin/profil#halaman-profil",
+                          "/admin/pelayanan",
+                          "/admin/konten#announcements",
+                          "/admin/konten#events",
+                          "/admin/wilayah#statistics",
+                        ].includes(item.href),
+                      )
+                      .map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="group relative flex flex-col justify-between gap-3 rounded-2xl border border-blue-200/75 bg-white/80 p-4 shadow-2xs transition-all hover:-translate-y-0.5 hover:border-blue-400 hover:bg-white hover:shadow-md hover:shadow-blue-600/10"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/80 text-blue-700 border border-blue-200/80 transition-colors group-hover:from-blue-600 group-hover:to-blue-700 group-hover:text-white group-hover:border-blue-600">
+                              <item.icon size={20} strokeWidth={2} />
+                            </span>
+                            <ArrowUpRight
+                              size={16}
+                              strokeWidth={2.2}
+                              className="text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blue-600"
+                            />
+                          </div>
+                          <div>
+                            <span className="block text-sm font-extrabold text-slate-900 group-hover:text-blue-700 transition-colors">
+                              {item.label}
+                            </span>
+                            <span className="mt-0.5 block text-[11px] font-medium text-slate-500 line-clamp-1">
+                              {shortcutDescriptions[item.href] ??
+                                "Kelola modul website"}
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                  </div>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between rounded-2xl border border-blue-200/70 bg-gradient-to-r from-blue-50/90 to-sky-50/80 px-4 py-3 text-xs text-blue-900">
+                  <span className="font-semibold">
+                    Ingin melihat tampilan langsung untuk warga?
+                  </span>
+                  <Link
+                    href="/"
+                    target="_blank"
+                    className="inline-flex items-center gap-1 font-extrabold text-blue-700 hover:text-blue-900"
+                  >
+                    <span>Buka Website</span>
+                    <ArrowUpRight size={14} strokeWidth={2.2} />
+                  </Link>
                 </div>
               </section>
             )}

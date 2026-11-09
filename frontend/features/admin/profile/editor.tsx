@@ -306,20 +306,20 @@ export default function Editor({
           {!isEditingSettings ? (
             <div className="space-y-6">
               {/* Header Hero */}
-              <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-                <div className="absolute top-0 right-0 -mt-6 -mr-6 size-40 rounded-full bg-gradient-to-br from-blue-50/60 to-slate-100/50 blur-2xl pointer-events-none" />
+              <div className="glass-card relative overflow-hidden p-6 sm:p-8">
+                <div className="absolute top-0 right-0 -mt-8 -mr-8 size-48 rounded-full bg-gradient-to-br from-blue-400/20 to-indigo-400/15 blur-2xl pointer-events-none" />
 
                 <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-2 max-w-2xl">
                     <div className="flex items-center gap-2">
-                      <span className="rounded-md bg-slate-100 px-2.5 py-0.5 font-mono text-xs font-semibold text-slate-600">
+                      <span className="rounded-lg border border-blue-200/80 bg-blue-50/80 px-2.5 py-0.5 font-mono text-xs font-bold text-blue-700">
                         Identitas Resmi
                       </span>
                     </div>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                       {settings.name || "Kelurahan Watundehoa"}
                     </h2>
-                    <p className="text-sm leading-relaxed text-slate-500">
+                    <p className="text-sm leading-relaxed text-slate-600">
                       Konfigurasi identitas wilayah, nomor kontak darurat, jam kerja pelayanan, titik koordinat peta, dan tautan luar.
                     </p>
                   </div>
@@ -329,9 +329,9 @@ export default function Editor({
                       href="/kontak"
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50 transition-all"
+                      className="glass-button-secondary px-4 py-2.5 text-xs"
                     >
-                      <ExternalLink size={16} className="text-slate-400" />
+                      <ExternalLink size={16} className="text-blue-600" />
                       Buka Kontak Publik
                     </Link>
                     <button
@@ -339,9 +339,10 @@ export default function Editor({
                       onClick={() => setIsEditingSettings(true)}
                       title="Edit Pengaturan Website"
                       aria-label="Edit Pengaturan Website"
-                      className="inline-flex size-11 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all"
+                      className="glass-button-primary px-4 py-2.5 text-xs"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={16} />
+                      <span>Sunting Identitas</span>
                     </button>
                   </div>
                 </div>
@@ -350,26 +351,29 @@ export default function Editor({
               {/* Grid Cards Identitas & Kontak */}
               <div className="grid gap-6 md:grid-cols-2">
                 {/* Info Identitas Wilayah */}
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
-                  <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
-                    <div className="grid size-8 place-items-center rounded-lg bg-blue-50 text-blue-600">
-                      <Building2 size={18} />
+                <div className="glass-card p-6 space-y-4">
+                  <div className="flex items-center gap-3 border-b border-blue-100/70 pb-3.5">
+                    <div className="glass-icon-box size-10 rounded-xl">
+                      <Building2 size={20} strokeWidth={2} />
                     </div>
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800">
-                      Wilayah Pemerintahan
-                    </h3>
+                    <div>
+                      <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-900">
+                        Wilayah Pemerintahan
+                      </h3>
+                      <p className="text-[11px] text-slate-500">Nomenklatur resmi daerah</p>
+                    </div>
                   </div>
                   <dl className="grid grid-cols-3 gap-3 text-sm">
                     <dt className="text-slate-500">Kelurahan</dt>
-                    <dd className="col-span-2 font-semibold text-slate-900">
+                    <dd className="col-span-2 font-bold text-slate-900">
                       {settings.name || "-"}
                     </dd>
                     <dt className="text-slate-500">Kecamatan</dt>
-                    <dd className="col-span-2 font-medium text-slate-800">
+                    <dd className="col-span-2 font-semibold text-slate-800">
                       {settings.district || "-"}
                     </dd>
                     <dt className="text-slate-500">Kabupaten</dt>
-                    <dd className="col-span-2 font-medium text-slate-800">
+                    <dd className="col-span-2 font-semibold text-slate-800">
                       {settings.regency || "-"}
                     </dd>
                     <dt className="text-slate-500">Alamat Kantor</dt>
@@ -380,30 +384,33 @@ export default function Editor({
                 </div>
 
                 {/* Info Kontak & Operasional */}
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
-                  <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
-                    <div className="grid size-8 place-items-center rounded-lg bg-emerald-50 text-emerald-600">
-                      <Phone size={18} />
+                <div className="glass-card p-6 space-y-4">
+                  <div className="flex items-center gap-3 border-b border-blue-100/70 pb-3.5">
+                    <div className="glass-icon-box size-10 rounded-xl">
+                      <Phone size={20} strokeWidth={2} />
                     </div>
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800">
-                      Kontak & Lokasi Kantor
-                    </h3>
+                    <div>
+                      <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-900">
+                        Kontak & Lokasi Kantor
+                      </h3>
+                      <p className="text-[11px] text-slate-500">Saluran layanan masyarakat</p>
+                    </div>
                   </div>
                   <dl className="grid grid-cols-3 gap-3 text-sm">
                     <dt className="text-slate-500">Telepon / WA</dt>
-                    <dd className="col-span-2 font-semibold text-slate-900">
+                    <dd className="col-span-2 font-bold text-slate-900">
                       {settings.phone || "-"}
                     </dd>
                     <dt className="text-slate-500">Email Resmi</dt>
-                    <dd className="col-span-2 font-medium text-slate-800">
+                    <dd className="col-span-2 font-semibold text-slate-800">
                       {settings.email || "-"}
                     </dd>
                     <dt className="text-slate-500">Jam Layanan</dt>
-                    <dd className="col-span-2 font-medium text-slate-800">
+                    <dd className="col-span-2 font-semibold text-slate-800">
                       {settings.hours || "-"}
                     </dd>
                     <dt className="text-slate-500">Koordinat Peta</dt>
-                    <dd className="col-span-2 font-mono text-xs text-slate-600 bg-slate-50 px-2 py-1 rounded inline-block w-fit">
+                    <dd className="col-span-2 font-mono text-xs font-semibold text-blue-700 bg-blue-50/80 border border-blue-200/60 px-2.5 py-1 rounded-lg inline-block w-fit">
                       {settings.latitude && settings.longitude
                         ? `${settings.latitude}, ${settings.longitude}`
                         : "Belum disetel"}
@@ -414,15 +421,17 @@ export default function Editor({
 
               {/* Media Logo & Hero Preview */}
               <div className="grid gap-6 md:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-3">
-                  <div className="flex items-center gap-2 text-slate-700">
-                    <ImageIcon size={18} className="text-slate-400" />
-                    <h4 className="text-sm font-bold uppercase tracking-wider">
+                <div className="glass-card p-6 space-y-3">
+                  <div className="flex items-center gap-2.5 text-slate-800">
+                    <div className="glass-icon-box size-9 rounded-xl">
+                      <ImageIcon size={18} strokeWidth={2} />
+                    </div>
+                    <h4 className="text-sm font-extrabold uppercase tracking-wider">
                       Logo Kelurahan
                     </h4>
                   </div>
                   {settings.logoUrl ? (
-                    <div className="relative h-28 w-28 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden flex items-center justify-center p-2">
+                    <div className="relative h-28 w-28 rounded-2xl border border-blue-200/70 bg-white/80 overflow-hidden flex items-center justify-center p-2 shadow-xs">
                       <SkeletonImage
                         src={settings.logoUrl}
                         alt="Logo"
@@ -436,15 +445,17 @@ export default function Editor({
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-3">
-                  <div className="flex items-center gap-2 text-slate-700">
-                    <ImageIcon size={18} className="text-slate-400" />
-                    <h4 className="text-sm font-bold uppercase tracking-wider">
+                <div className="glass-card p-6 space-y-3">
+                  <div className="flex items-center gap-2.5 text-slate-800">
+                    <div className="glass-icon-box size-9 rounded-xl">
+                      <ImageIcon size={18} strokeWidth={2} />
+                    </div>
+                    <h4 className="text-sm font-extrabold uppercase tracking-wider">
                       Banner Beranda Utama
                     </h4>
                   </div>
                   {settings.heroUrl ? (
-                    <div className="relative h-28 w-full rounded-xl border border-slate-200 bg-slate-50 overflow-hidden">
+                    <div className="relative h-28 w-full rounded-2xl border border-blue-200/70 bg-white/80 overflow-hidden shadow-xs">
                       <SkeletonImage
                         src={settings.heroUrl}
                         alt="Hero Banner"
@@ -460,10 +471,12 @@ export default function Editor({
               </div>
 
               {/* Tautan Terkait */}
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-4">
-                <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
-                  <Globe size={18} className="text-slate-500" />
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800">
+              <div className="glass-card p-6 space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-blue-100/70 pb-3">
+                  <div className="glass-icon-box size-9 rounded-xl">
+                    <Globe size={18} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-900">
                     Tautan Eksternal & Jejaring ({settings.relatedLinks.length})
                   </h3>
                 </div>
@@ -472,12 +485,12 @@ export default function Editor({
                     {settings.relatedLinks.map((link, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between rounded-xl border border-slate-200/70 p-3 bg-slate-50/50"
+                        className="flex items-center justify-between rounded-xl border border-blue-200/60 p-3.5 bg-white/75 shadow-2xs"
                       >
-                        <span className="font-semibold text-slate-800 text-sm">
+                        <span className="font-bold text-slate-800 text-sm">
                           {link.label || "(Tanpa label)"}
                         </span>
-                        <span className="text-xs text-slate-400 font-mono truncate max-w-[200px]">
+                        <span className="text-xs text-blue-600 font-mono truncate max-w-[200px]">
                           {link.href}
                         </span>
                       </div>
@@ -492,23 +505,23 @@ export default function Editor({
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 shadow-xs">
+              <div className="glass-toolbar flex items-center justify-between p-4">
                 <button
                   type="button"
                   onClick={() => setIsEditingSettings(false)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
                 >
                   <ArrowLeft size={16} />
                   Kembali ke Ringkasan
                 </button>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                  <Sparkles size={13} className="text-amber-500" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-3 py-1 rounded-full">
+                  <Sparkles size={13} className="text-blue-600" />
                   Mode Pengeditan Pengaturan
                 </span>
               </div>
 
               <form
-                className="admin-settings-form space-y-6 rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs"
+                className="admin-settings-form glass-card space-y-6 p-6 sm:p-8"
                 onSubmit={(e) => {
                   e.preventDefault();
                   save.mutate(
@@ -521,10 +534,10 @@ export default function Editor({
                   );
                 }}
               >
-                <div className="border-b border-slate-100 pb-4">
+                <div className="border-b border-blue-100/70 pb-4">
                   <h2
                     id="pengaturan"
-                    className="text-xl font-bold text-slate-900"
+                    className="text-xl font-extrabold text-slate-900"
                   >
                     Form Pengaturan Website
                   </h2>
@@ -595,10 +608,10 @@ export default function Editor({
                   />
                 </div>
 
-                <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="space-y-4 pt-4 border-t border-blue-100/70">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800">
+                      <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-800">
                         Tautan Terkait Eksternal
                       </h3>
                       <p className="text-xs text-slate-500">Maksimal 10 tautan rujukan untuk publik.</p>
@@ -615,7 +628,7 @@ export default function Editor({
                           ],
                         })
                       }
-                      className="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 transition-colors"
+                      className="glass-button-secondary px-3.5 py-1.5 text-xs"
                     >
                       + Tambah Baris
                     </button>
@@ -624,7 +637,7 @@ export default function Editor({
                   {settings.relatedLinks.map((l, i) => (
                     <div
                       key={i}
-                      className="grid gap-3 sm:grid-cols-[1fr_2fr_auto] items-end rounded-xl border border-slate-200 p-4 bg-slate-50/50"
+                      className="grid gap-3 sm:grid-cols-[1fr_2fr_auto] items-end rounded-2xl border border-blue-200/70 p-4 bg-white/75"
                     >
                       <Field
                         label="Label Tautan"
@@ -660,7 +673,7 @@ export default function Editor({
                             ),
                           })
                         }
-                        className="rounded-xl border border-red-200 bg-white px-4 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 h-[42px] transition-colors"
+                        className="rounded-xl border border-red-200 bg-red-50/70 px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-100 h-[42px] transition-colors"
                       >
                         Hapus
                       </button>
@@ -668,9 +681,9 @@ export default function Editor({
                   ))}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100">
+                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-blue-100/70">
                   <button
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all disabled:opacity-50"
+                    className="glass-button-primary px-6 py-2.5 text-sm disabled:opacity-50"
                     disabled={save.isPending}
                   >
                     {save.isPending ? "Menyimpan…" : "Simpan Pengaturan"}
@@ -678,7 +691,7 @@ export default function Editor({
                   <button
                     type="button"
                     onClick={() => setIsEditingSettings(false)}
-                    className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                    className="glass-button-secondary px-5 py-2.5 text-sm"
                   >
                     Batal
                   </button>
@@ -694,13 +707,13 @@ export default function Editor({
         <>
           {editingProfileSlug === null ? (
             <div className="space-y-6">
-              <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+              <div className="glass-card relative overflow-hidden p-6 sm:p-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                       Halaman Profil Kelurahan
                     </h2>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-slate-600">
                       Kelola 5 naskah dan dokumen resmi kelurahan yang disajikan untuk masyarakat dan arsip publik.
                     </p>
                   </div>
@@ -708,9 +721,9 @@ export default function Editor({
                     href="/profil"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs hover:border-slate-300 hover:bg-slate-50 transition-all shrink-0"
+                    className="glass-button-secondary px-4 py-2.5 text-xs shrink-0"
                   >
-                    <ExternalLink size={16} className="text-slate-400" />
+                    <ExternalLink size={16} className="text-blue-600" />
                     Buka Profil Publik
                   </Link>
                 </div>
@@ -730,18 +743,18 @@ export default function Editor({
                   return (
                     <div
                       key={s}
-                      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs hover:border-slate-300 hover:shadow-sm transition-all"
+                      className="glass-list-card group relative flex flex-col justify-between p-6"
                     >
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <div className="grid size-10 place-items-center rounded-xl bg-slate-100 text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                            <Icon size={19} />
+                          <div className="glass-icon-box size-11 rounded-2xl">
+                            <Icon size={20} strokeWidth={2} />
                           </div>
                           {statusBadge(targetPage.status)}
                         </div>
 
                         <div>
-                          <h3 className="text-base font-bold text-slate-900">
+                          <h3 className="text-base font-extrabold text-slate-900 group-hover:text-blue-700 transition-colors">
                             {meta.name}
                           </h3>
                           <p className="text-xs text-slate-500 mt-1 line-clamp-2">
@@ -749,7 +762,7 @@ export default function Editor({
                           </p>
                         </div>
 
-                        <div className="rounded-xl bg-slate-50/70 p-3 border border-slate-100 text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                        <div className="rounded-xl bg-white/75 p-3.5 border border-blue-100/80 text-xs text-slate-600 line-clamp-3 leading-relaxed">
                           {targetPage.content
                             ? targetPage.content
                                 .replace(/<[^>]+>/g, " ")
@@ -759,12 +772,12 @@ export default function Editor({
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-100">
+                      <div className="flex items-center justify-between pt-4 mt-4 border-t border-blue-100/70">
                         <Link
                           href={`/profil#${s}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-xs font-medium text-slate-500 hover:text-slate-800 inline-flex items-center gap-1"
+                          className="text-xs font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
                         >
                           <ExternalLink size={12} /> Pratinjau
                         </Link>
@@ -777,9 +790,9 @@ export default function Editor({
                           }}
                           title={`Edit ${meta.name}`}
                           aria-label={`Edit ${meta.name}`}
-                          className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-all"
+                          className="inline-flex size-9 items-center justify-center rounded-xl border border-blue-200/80 bg-white/90 text-blue-600 shadow-2xs hover:bg-blue-50 hover:text-blue-800 transition-all"
                         >
-                          <Pencil size={14} />
+                          <Pencil size={15} />
                         </button>
                       </div>
                     </div>
@@ -789,23 +802,23 @@ export default function Editor({
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 shadow-xs">
+              <div className="glass-toolbar flex items-center justify-between p-4">
                 <button
                   type="button"
                   onClick={() => setEditingProfileSlug(null)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
                 >
                   <ArrowLeft size={16} />
                   Kembali ke Daftar Halaman
                 </button>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                  <Sparkles size={13} className="text-amber-500" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-3 py-1 rounded-full">
+                  <Sparkles size={13} className="text-blue-600" />
                   Mengedit: {pageMetadata[editingProfileSlug]?.name}
                 </span>
               </div>
 
               <form
-                className="space-y-6 rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs"
+                className="glass-card space-y-6 p-6 sm:p-8"
                 onSubmit={(e) => {
                   e.preventDefault();
                   const { title, content, status } = page;
@@ -822,8 +835,8 @@ export default function Editor({
                   );
                 }}
               >
-                <div className="border-b border-slate-100 pb-4">
-                  <h2 className="text-xl font-bold text-slate-900">
+                <div className="border-b border-blue-100/70 pb-4">
+                  <h2 className="text-xl font-extrabold text-slate-900">
                     Sunting Naskah {pageMetadata[editingProfileSlug]?.name}
                   </h2>
                 </div>
@@ -852,9 +865,9 @@ export default function Editor({
                   </div>
                 </div>
                 {status(page.status, (v) => setPage({ ...page, status: v }))}
-                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100">
+                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-blue-100/70">
                   <button
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all disabled:opacity-50"
+                    className="glass-button-primary px-6 py-2.5 text-sm disabled:opacity-50"
                     disabled={save.isPending}
                   >
                     {save.isPending ? "Menyimpan…" : "Simpan Halaman"}
@@ -862,17 +875,17 @@ export default function Editor({
                   <button
                     type="button"
                     onClick={() => setEditingProfileSlug(null)}
-                    className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                    className="glass-button-secondary px-5 py-2.5 text-sm"
                   >
                     Batal
                   </button>
                   <button
                     type="button"
                     onClick={() => setPreview(!preview)}
-                    className={`inline-flex min-h-11 items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all ml-auto ${
+                    className={`ml-auto px-4 py-2.5 text-xs ${
                       preview
-                        ? "border-slate-900 bg-slate-900 text-white shadow-xs"
-                        : "border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-50"
+                        ? "glass-button-primary"
+                        : "glass-button-secondary"
                     }`}
                   >
                     {preview ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -880,11 +893,11 @@ export default function Editor({
                   </button>
                 </div>
                 {preview && (
-                  <article className="break-words rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8 shadow-xs">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-2">
+                  <article className="glass-card break-words p-6 sm:p-8">
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-2">
                       Pratinjau Halaman — Status: {page.status}
                     </span>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    <h3 className="text-xl font-extrabold text-slate-900 mb-3">
                       {page.title}
                     </h3>
                     {page.content.includes("<") ? (
@@ -910,13 +923,13 @@ export default function Editor({
         <>
           {editingOfficialId === null ? (
             <div className="space-y-6">
-              <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+              <div className="glass-card relative overflow-hidden p-6 sm:p-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                    <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                       Aparatur & Struktur Organisasi
                     </h2>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-slate-600">
                       Kelola profil kepemimpinan lurah, sekretaris, kepala seksi, dan staf kelurahan ({data.officials.length} terdaftar).
                     </p>
                   </div>
@@ -926,7 +939,7 @@ export default function Editor({
                       setOfficial(blankOfficial());
                       setEditingOfficialId("new");
                     }}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all shrink-0"
+                    className="glass-button-primary px-5 py-2.5 text-xs shrink-0"
                   >
                     <Plus size={16} />
                     Tambah Aparatur Baru
@@ -935,126 +948,96 @@ export default function Editor({
               </div>
 
               {data.officials.length === 0 ? (
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-16 text-center text-slate-400">
-                  <Users size={40} className="mx-auto mb-3 opacity-30 text-slate-500" />
-                  <p className="text-base font-bold text-slate-800">Belum ada aparatur yang ditambahkan</p>
-                  <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                <div className="glass-card p-16 text-center text-slate-400">
+                  <Users size={40} className="mx-auto mb-3 opacity-40 text-blue-500" />
+                  <p className="text-base font-extrabold text-slate-800">Belum ada aparatur yang ditambahkan</p>
+                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
                     Data aparatur akan ditampilkan pada bagan organisasi dan laman profil publik kelurahan.
                   </p>
                 </div>
               ) : (
-                <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white shadow-xs">
-                  <table className="w-full text-left text-sm divide-y divide-slate-100">
-                    <thead className="bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                      <tr>
-                        <th className="px-6 py-4">Aparatur</th>
-                        <th className="px-6 py-4">Jabatan & Unit</th>
-                        <th className="px-6 py-4">Urutan</th>
-                        <th className="px-6 py-4">Status Aktif</th>
-                        <th className="px-6 py-4">Publikasi</th>
-                        <th className="px-6 py-4 text-right">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {data.officials
-                        .slice()
-                        .sort((a, b) => a.sortOrder - b.sortOrder)
-                        .map((o) => (
-                          <tr
-                            key={o.id}
-                            className="hover:bg-slate-50/70 transition-colors"
-                          >
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-3.5">
-                                <div className="relative size-11 rounded-full overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-2xs">
-                                  {o.photoUrl ? (
-                                    <SkeletonImage
-                                      src={o.photoUrl}
-                                      alt={o.name}
-                                      fill
-                                      unoptimized
-                                      className="object-cover"
-                                    />
-                                  ) : (
-                                    <div className="grid size-full place-items-center text-xs font-extrabold text-slate-400 bg-gradient-to-br from-slate-100 to-slate-200">
-                                      {o.name.slice(0, 2).toUpperCase()}
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  <span className="font-bold text-slate-900 block text-[15px]">
-                                    {o.name}
-                                  </span>
-                                  {o.termStart && (
-                                    <span className="text-xs text-slate-400">
-                                      Masa tugas: {o.termStart.slice(0, 10)}
-                                    </span>
-                                  )}
-                                </div>
+                <div className="grid gap-3.5 sm:grid-cols-2">
+                  {data.officials
+                    .slice()
+                    .sort((a, b) => a.sortOrder - b.sortOrder)
+                    .map((o) => (
+                      <div
+                        key={o.id}
+                        className="glass-list-card flex items-center justify-between p-4 sm:p-5 gap-4"
+                      >
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <div className="relative size-14 rounded-2xl overflow-hidden bg-blue-50 border border-blue-200/80 shrink-0 shadow-xs">
+                            {o.photoUrl ? (
+                              <SkeletonImage
+                                src={o.photoUrl}
+                                alt={o.name}
+                                fill
+                                unoptimized
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="grid size-full place-items-center text-sm font-black text-blue-700 bg-gradient-to-br from-blue-100 to-indigo-100">
+                                {o.name.slice(0, 2).toUpperCase()}
                               </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className="font-semibold text-slate-800 block">
-                                {o.position || "-"}
-                              </span>
-                              <span className="text-xs text-slate-500">
-                                {o.unit || "-"}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className="rounded-md bg-slate-100 px-2.5 py-1 font-mono text-xs font-semibold text-slate-600">
+                            )}
+                          </div>
+                          <div className="min-w-0 space-y-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="rounded-md bg-blue-50 border border-blue-200/80 px-2 py-0.5 font-mono text-[11px] font-bold text-blue-700">
                                 #{o.sortOrder}
                               </span>
-                            </td>
-                            <td className="px-6 py-4">
+                              <span className="font-extrabold text-slate-900 text-sm sm:text-base truncate">
+                                {o.name}
+                              </span>
+                            </div>
+                            <p className="text-xs font-bold text-blue-700 truncate">
+                              {o.position || "-"} · <span className="font-medium text-slate-500">{o.unit || "-"}</span>
+                            </p>
+                            <div className="flex items-center gap-2 flex-wrap pt-0.5">
                               {o.active ? (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                                   <span className="size-1.5 rounded-full bg-emerald-500" />
                                   Aktif
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
                                   Non-aktif
                                 </span>
                               )}
-                            </td>
-                            <td className="px-6 py-4">
                               {statusBadge(o.status)}
-                            </td>
-                            <td className="px-6 py-4 text-right">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setOfficial(o);
-                                  setEditingOfficialId(o.id);
-                                }}
-                                title={`Edit aparatur ${o.name}`}
-                                aria-label={`Edit aparatur ${o.name}`}
-                                className="inline-flex size-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-all"
-                              >
-                                <Pencil size={14} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setOfficial(o);
+                            setEditingOfficialId(o.id);
+                          }}
+                          title={`Edit aparatur ${o.name}`}
+                          aria-label={`Edit aparatur ${o.name}`}
+                          className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-blue-200/80 bg-white/90 text-blue-600 shadow-2xs hover:bg-blue-50 hover:text-blue-800 transition-all"
+                        >
+                          <Pencil size={15} />
+                        </button>
+                      </div>
+                    ))}
                 </div>
               )}
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-white p-4 shadow-xs">
+              <div className="glass-toolbar flex items-center justify-between p-4">
                 <button
                   type="button"
                   onClick={() => setEditingOfficialId(null)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition-colors"
                 >
                   <ArrowLeft size={16} />
                   Kembali ke Daftar Aparatur
                 </button>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                  <Sparkles size={13} className="text-amber-500" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-3 py-1 rounded-full">
+                  <Sparkles size={13} className="text-blue-600" />
                   {editingOfficialId === "new"
                     ? "Tambah Aparatur Baru"
                     : `Ubah: ${official.name}`}
@@ -1062,7 +1045,7 @@ export default function Editor({
               </div>
 
               <form
-                className="space-y-6 rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs"
+                className="glass-card space-y-6 p-6 sm:p-8"
                 onSubmit={(e) => {
                   e.preventDefault();
                   const {
@@ -1100,10 +1083,10 @@ export default function Editor({
                   );
                 }}
               >
-                <div className="border-b border-slate-100 pb-4">
+                <div className="border-b border-blue-100/70 pb-4">
                   <h2
                     id="aparatur"
-                    className="text-xl font-bold text-slate-900"
+                    className="text-xl font-extrabold text-slate-900"
                   >
                     {editingOfficialId === "new"
                       ? "Form Tambah Aparatur"
@@ -1167,13 +1150,13 @@ export default function Editor({
                 <label className="inline-flex items-center gap-2.5 cursor-pointer pt-2">
                   <input
                     type="checkbox"
-                    className="size-4 rounded text-slate-900 focus:ring-slate-900"
+                    className="size-4 rounded text-blue-600 focus:ring-blue-600"
                     checked={official.active}
                     onChange={(e) =>
                       setOfficial({ ...official, active: e.target.checked })
                     }
                   />
-                  <span className="text-sm font-semibold text-slate-800">
+                  <span className="text-sm font-bold text-slate-800">
                     Aparatur Masih Aktif Menjabat
                   </span>
                 </label>
@@ -1182,9 +1165,9 @@ export default function Editor({
                   setOfficial({ ...official, status: v }),
                 )}
 
-                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100">
+                <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-blue-100/70">
                   <button
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow transition-all disabled:opacity-50"
+                    className="glass-button-primary px-6 py-2.5 text-sm disabled:opacity-50"
                     disabled={save.isPending}
                   >
                     {save.isPending ? "Menyimpan…" : "Simpan Aparatur"}
@@ -1192,7 +1175,7 @@ export default function Editor({
                   <button
                     type="button"
                     onClick={() => setEditingOfficialId(null)}
-                    className="inline-flex min-h-11 items-center rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                    className="glass-button-secondary px-5 py-2.5 text-sm"
                   >
                     Batal
                   </button>

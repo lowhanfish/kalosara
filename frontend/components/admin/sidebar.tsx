@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { adminLinks } from "./navigation";
 import { AdminBrand } from "./brand";
+
 export function AdminSidebar({
   path,
   hash,
@@ -17,6 +18,7 @@ export function AdminSidebar({
   const active =
     adminLinks.find((item) => item.href === path + hash) ??
     adminLinks.find((item) => item.href.split("#")[0] === path);
+
   return (
     <div className="admin-sidebar flex h-full flex-col">
       <div className="admin-sidebar-brand">
@@ -48,16 +50,16 @@ export function AdminSidebar({
                 }}
                 className="admin-nav-link"
               >
-                <item.icon size={18} strokeWidth={1.6} aria-hidden="true" />
-                {item.label}
+                <item.icon size={20} strokeWidth={2} aria-hidden="true" />
+                <span className="truncate">{item.label}</span>
               </Link>
             </div>
           ))}
       </nav>
       <div className="admin-sidebar-footer">
         <Link href="/" className="admin-website-link">
-          Lihat website kelurahan
-          <ArrowUpRight size={16} aria-hidden="true" />
+          <span className="font-semibold">Lihat Portal Publik</span>
+          <ArrowUpRight size={16} strokeWidth={2.2} aria-hidden="true" />
         </Link>
       </div>
     </div>

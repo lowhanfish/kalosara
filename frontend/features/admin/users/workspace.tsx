@@ -36,6 +36,7 @@ import {
 import { AdminEmptyState, AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { AdminPagination } from "@/components/admin/pagination";
+import { UsersShieldSvg } from "@/components/admin/admin-icons";
 import { AdminAccess } from "@/features/cms/admin-access";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsError, cmsMutate, type List } from "@/features/cms/client";
@@ -606,19 +607,19 @@ function RegisterUserModal({ onClose }: { onClose: () => void }) {
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-blue-100/70">
             <button
               type="button"
               disabled={mutation.isPending}
               onClick={onClose}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="glass-button-secondary px-4 py-2.5 text-xs"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={mutation.isPending || !verified}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+              className="glass-button-primary px-5 py-2.5 text-xs disabled:opacity-50"
             >
               {mutation.isPending ? (
                 <>
@@ -899,19 +900,19 @@ function AccessFormModal({
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-blue-100/70">
             <button
               type="button"
               disabled={mutation.isPending}
               onClick={onClose}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="glass-button-secondary px-4 py-2.5 text-xs"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={mutation.isPending || !verified}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+              className="glass-button-primary px-5 py-2.5 text-xs disabled:opacity-50"
             >
               {mutation.isPending ? (
                 <>
@@ -963,9 +964,9 @@ function Management() {
   return (
     <div className="space-y-6">
       {/* Top Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+      <div className="glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">
+          <h2 className="text-xl font-extrabold text-slate-900">
             {tab === "users"
               ? "Manajemen Pengguna & Peran"
               : tab === "audit"
@@ -985,7 +986,7 @@ function Management() {
           <button
             type="button"
             onClick={() => setIsRegisterOpen(true)}
-            className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-slate-800 transition-all active:scale-95"
+            className="glass-button-primary px-4 py-2.5 text-xs"
           >
             <UserPlus size={15} />
             <span>+ Registrasi Pengguna / Admin</span>
@@ -993,16 +994,16 @@ function Management() {
 
           <Link
             href="/admin/verifikasi-kontak"
-            className="inline-flex items-center gap-2 rounded-2xl border border-slate-200/90 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+            className="glass-button-secondary px-3.5 py-2.5 text-xs"
           >
-            <UserCheck size={15} className="text-primary" />
+            <UserCheck size={15} className="text-blue-600" />
             <span>Verifikasi Kontak Warga</span>
           </Link>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-slate-200 gap-2 sm:gap-6">
+      <div className="cms-channel-tabs" role="tablist" aria-label="Menu pengguna dan audit">
         {(
           [
             ["users", "Daftar Pengguna", Users],
@@ -1014,6 +1015,7 @@ function Management() {
           return (
             <button
               key={key}
+              type="button"
               aria-pressed={isActive}
               onClick={() => {
                 setTab(key);
@@ -1022,11 +1024,7 @@ function Management() {
                 setRoleFilter("ALL");
                 setSelectedUser(null);
               }}
-              className={`pb-3 text-xs sm:text-sm font-bold transition-all border-b-2 flex items-center gap-2 ${
-                isActive
-                  ? "border-primary text-primary"
-                  : "border-transparent text-slate-500 hover:text-slate-900"
-              }`}
+              className="inline-flex items-center gap-2"
             >
               <Icon size={16} />
               <span>{label}</span>
@@ -1043,20 +1041,20 @@ function Management() {
               setRoleFilter("ALL");
               setPage(1);
             }}
-            className={`rounded-2xl border p-4.5 cursor-pointer transition-all ${
+            className={`glass-card p-5 cursor-pointer transition-all ${
               roleFilter === "ALL"
-                ? "border-slate-400 bg-white shadow-sm ring-1 ring-slate-400"
-                : "border-slate-200/80 bg-white/70 hover:bg-white shadow-2xs"
+                ? "ring-2 ring-blue-500 border-blue-400"
+                : "hover:border-blue-300"
             }`}
           >
             <div className="flex items-center justify-between text-slate-500 mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider">Total Akun</span>
-              <div className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700">
+              <div className="glass-icon-box size-9 rounded-xl">
                 <Users size={16} />
               </div>
             </div>
             <div className="text-2xl font-black text-slate-900">{counts.total}</div>
-            <p className="text-[11px] text-slate-400 mt-1">Semua pengguna terdaftar</p>
+            <p className="text-[11px] text-slate-500 mt-1">Semua pengguna terdaftar</p>
           </div>
 
           <div
@@ -1064,22 +1062,22 @@ function Management() {
               setRoleFilter("ADMIN_KELURAHAN");
               setPage(1);
             }}
-            className={`rounded-2xl border p-4.5 cursor-pointer transition-all ${
+            className={`glass-card p-5 cursor-pointer transition-all ${
               roleFilter === "ADMIN_KELURAHAN"
-                ? "border-indigo-400 bg-indigo-50/50 shadow-sm ring-1 ring-indigo-400"
-                : "border-slate-200/80 bg-white/70 hover:bg-white shadow-2xs"
+                ? "ring-2 ring-blue-600 border-blue-400"
+                : "hover:border-blue-300"
             }`}
           >
-            <div className="flex items-center justify-between text-indigo-600 mb-2">
+            <div className="flex items-center justify-between text-blue-600 mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Administrator
               </span>
-              <div className="grid h-8 w-8 place-items-center rounded-xl bg-indigo-50 text-indigo-600">
+              <div className="glass-icon-box size-9 rounded-xl">
                 <ShieldCheck size={16} />
               </div>
             </div>
             <div className="text-2xl font-black text-slate-900">{counts.admin}</div>
-            <p className="text-[11px] text-indigo-600 font-medium mt-1">Akses penuh sistem</p>
+            <p className="text-[11px] text-blue-600 font-semibold mt-1">Akses penuh sistem</p>
           </div>
 
           <div
@@ -1087,22 +1085,22 @@ function Management() {
               setRoleFilter("LURAH");
               setPage(1);
             }}
-            className={`rounded-2xl border p-4.5 cursor-pointer transition-all ${
+            className={`glass-card p-5 cursor-pointer transition-all ${
               roleFilter === "LURAH"
-                ? "border-purple-400 bg-purple-50/50 shadow-sm ring-1 ring-purple-400"
-                : "border-slate-200/80 bg-white/70 hover:bg-white shadow-2xs"
+                ? "ring-2 ring-indigo-500 border-indigo-400"
+                : "hover:border-blue-300"
             }`}
           >
-            <div className="flex items-center justify-between text-purple-600 mb-2">
+            <div className="flex items-center justify-between text-indigo-600 mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Lurah & Pimpinan
               </span>
-              <div className="grid h-8 w-8 place-items-center rounded-xl bg-purple-50 text-purple-600">
+              <div className="glass-icon-box size-9 rounded-xl">
                 <UserCheck size={16} />
               </div>
             </div>
             <div className="text-2xl font-black text-slate-900">{counts.lurah}</div>
-            <p className="text-[11px] text-purple-600 font-medium mt-1">Akses monitoring</p>
+            <p className="text-[11px] text-indigo-600 font-semibold mt-1">Akses monitoring</p>
           </div>
 
           <div
@@ -1110,22 +1108,22 @@ function Management() {
               setRoleFilter("MASYARAKAT");
               setPage(1);
             }}
-            className={`rounded-2xl border p-4.5 cursor-pointer transition-all ${
+            className={`glass-card p-5 cursor-pointer transition-all ${
               roleFilter === "MASYARAKAT"
-                ? "border-emerald-400 bg-emerald-50/50 shadow-sm ring-1 ring-emerald-400"
-                : "border-slate-200/80 bg-white/70 hover:bg-white shadow-2xs"
+                ? "ring-2 ring-emerald-500 border-emerald-400"
+                : "hover:border-blue-300"
             }`}
           >
             <div className="flex items-center justify-between text-emerald-600 mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Warga Terdaftar
               </span>
-              <div className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <div className="glass-icon-box size-9 rounded-xl">
                 <UserIcon size={16} />
               </div>
             </div>
             <div className="text-2xl font-black text-slate-900">{counts.masyarakat}</div>
-            <p className="text-[11px] text-emerald-600 font-medium mt-1">Layanan mandiri</p>
+            <p className="text-[11px] text-emerald-600 font-semibold mt-1">Layanan mandiri</p>
           </div>
         </div>
       )}
@@ -1133,41 +1131,41 @@ function Management() {
       {/* Quota Cards for Uploads Tab */}
       {tab === "uploads" && query.data?.quota && (
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs space-y-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="glass-card p-5 space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
               Total Berkas Tersimpan
             </span>
             <div className="text-2xl font-black text-slate-900">
               {(query.data.quota.physicalBytes / (1024 * 1024)).toFixed(1)}{" "}
               <span className="text-xs font-semibold text-slate-500">MB</span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-500">
               Ukuran fisik seluruh gambar dan dokumen di server kelurahan
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs space-y-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="glass-card p-5 space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
               Batas Ukuran Berkas
             </span>
             <div className="text-2xl font-black text-slate-900">
               {Math.round(query.data.quota.perFileBytes / (1024 * 1024))}{" "}
               <span className="text-xs font-semibold text-slate-500">MB / file</span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-500">
               Maksimum per berkas gambar JPG, PNG, WebP & PDF
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs space-y-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="glass-card p-5 space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
               Proses Simultan
             </span>
             <div className="text-2xl font-black text-slate-900">
               {query.data.quota.concurrentUploads}{" "}
               <span className="text-xs font-semibold text-slate-500">Proses</span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-500">
               Kapasitas unggahan bersamaan untuk stabilitas server
             </p>
           </div>
@@ -1176,11 +1174,13 @@ function Management() {
 
       {/* Role notice banner on Users Tab */}
       {tab === "users" && (
-        <div className="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4 text-xs text-indigo-900">
-          <ShieldCheck size={18} className="shrink-0 text-indigo-600 mt-0.5" />
+        <div className="glass-card flex items-start gap-3.5 p-4 text-xs text-blue-950 border-blue-200/80 bg-blue-50/70">
+          <div className="glass-icon-box size-9 rounded-xl shrink-0">
+            <ShieldCheck size={18} />
+          </div>
           <div className="space-y-0.5">
-            <span className="font-bold">Kewenangan Penuh Administrator Kelurahan:</span>
-            <p className="text-indigo-800/90 leading-relaxed">
+            <span className="font-extrabold text-blue-900">Kewenangan Penuh Administrator Kelurahan:</span>
+            <p className="text-blue-900/85 leading-relaxed">
               Sebagai Administrator Kelurahan, Anda memiliki akses penuh membuka dan mengelola seluruh fitur: berita, profil, kotak masuk, wilayah, kanal konten, dan pengguna. Anda dapat mendaftarkan akun pengelola baru melalui tombol <strong>+ Registrasi Pengguna / Admin</strong> atau mengubah peran akun melalui <strong>Kelola Akses & Peran</strong>.
             </p>
           </div>
@@ -1188,8 +1188,8 @@ function Management() {
       )}
 
       {/* Search and Filter Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2 flex-1 max-w-xl">
+      <div className="glass-toolbar flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
+        <div className="flex items-center gap-2.5 flex-1 max-w-xl">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -1244,9 +1244,9 @@ function Management() {
         <button
           type="button"
           onClick={() => void query.refetch()}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs self-start sm:self-auto"
+          className="glass-button-secondary px-3.5 py-2 text-xs self-start sm:self-auto"
         >
-          <RotateCw size={13} className={query.isFetching ? "animate-spin text-primary" : ""} />
+          <RotateCw size={13} className={query.isFetching ? "animate-spin text-blue-600" : ""} />
           <span>Segarkan Data</span>
         </button>
       </div>
@@ -1280,10 +1280,10 @@ function Management() {
               description="Tidak ada data yang cocok dengan kriteria pencarian Anda. Silakan coba kata kunci atau filter lain."
             />
           ) : (
-            <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs overflow-hidden">
+            <div className="space-y-3">
               {/* TAB 1: USERS LIST */}
               {tab === "users" && (
-                <div className="divide-y divide-slate-100">
+                <div className="space-y-3">
                   {query.data.items.map((item) => {
                     if (!isUser(item)) return null;
                     const roleInfo = formatRole(item.role);
@@ -1300,10 +1300,10 @@ function Management() {
                     return (
                       <div
                         key={item.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                        className="glass-list-card flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3"
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
-                          <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl font-bold text-sm text-white bg-gradient-to-br ${roleInfo.gradient} shadow-2xs`}>
+                          <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl font-black text-base text-white bg-gradient-to-br ${roleInfo.gradient} shadow-sm`}>
                             {initialLetter}
                           </div>
 
@@ -1311,21 +1311,21 @@ function Management() {
                             <div className="flex items-center gap-2 flex-wrap">
                               {item.profile?.displayName ? (
                                 <>
-                                  <span className="font-bold text-slate-900 text-sm truncate">
+                                  <span className="font-extrabold text-slate-900 text-sm sm:text-base truncate">
                                     {item.profile.displayName}
                                   </span>
-                                  <span className="text-xs text-slate-400 font-medium truncate">
+                                  <span className="text-xs text-slate-500 font-semibold truncate">
                                     ({item.email})
                                   </span>
                                 </>
                               ) : (
-                                <span className="font-bold text-slate-900 text-sm truncate">
+                                <span className="font-extrabold text-slate-900 text-sm sm:text-base truncate">
                                   {item.email}
                                 </span>
                               )}
 
                               {isSelf && (
-                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
                                   Akun Anda
                                 </span>
                               )}
@@ -1347,7 +1347,7 @@ function Management() {
                               </span>
 
                               {formattedDate && (
-                                <span className="text-[11px] text-slate-400">
+                                <span className="text-[11px] text-slate-500">
                                   Terdaftar: {formattedDate}
                                 </span>
                               )}
@@ -1357,16 +1357,16 @@ function Management() {
 
                         <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                           {isSelf ? (
-                            <span className="text-xs text-slate-400 font-medium px-3.5 py-2 bg-slate-50 rounded-xl border border-slate-100">
+                            <span className="text-xs text-blue-700 font-bold px-3.5 py-2 bg-blue-50/80 rounded-xl border border-blue-200/80">
                               Akun Sedang Digunakan
                             </span>
                           ) : (
                             <button
                               type="button"
                               onClick={() => setSelectedUser(item)}
-                              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                              className="glass-button-secondary px-3.5 py-2 text-xs"
                             >
-                              <KeyRound size={13} className="text-primary" />
+                              <KeyRound size={13} className="text-blue-600" />
                               <span>Kelola Akses & Peran</span>
                             </button>
                           )}
@@ -1379,7 +1379,7 @@ function Management() {
 
               {/* TAB 2: AUDIT LOGS */}
               {tab === "audit" && (
-                <div className="divide-y divide-slate-100">
+                <div className="space-y-3">
                   {query.data.items.map((item) => {
                     if (!isAudit(item)) return null;
                     const meta = humanAction(item.action);
@@ -1395,32 +1395,32 @@ function Management() {
                     return (
                       <div
                         key={item.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                        className="glass-list-card flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3"
                       >
                         <div className="flex items-start gap-3.5 min-w-0">
-                          <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl ${meta.tone}`}>
-                            <ActionIcon size={18} />
+                          <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${meta.tone}`}>
+                            <ActionIcon size={19} strokeWidth={2} />
                           </div>
 
                           <div className="min-w-0 space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-bold text-slate-900 text-sm">
+                              <span className="font-extrabold text-slate-900 text-sm">
                                 {meta.title}
                               </span>
                               {item.resourceType && (
-                                <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                                <span className="inline-flex items-center rounded-lg border border-blue-200/70 bg-blue-50/80 px-2 py-0.5 text-[10px] font-bold text-blue-700">
                                   {item.resourceType}
                                 </span>
                               )}
                             </div>
 
                             <p className="text-xs text-slate-500">
-                              {meta.desc} · Pelaku: <span className="font-semibold text-slate-700">{item.actorId ? "Administrator" : "Sistem"}</span>
+                              {meta.desc} · Pelaku: <span className="font-bold text-slate-700">{item.actorId ? "Administrator" : "Sistem"}</span>
                             </p>
                           </div>
                         </div>
 
-                        <div className="text-xs text-slate-400 font-medium self-end sm:self-auto shrink-0 flex items-center gap-2">
+                        <div className="text-xs text-slate-500 font-semibold self-end sm:self-auto shrink-0 flex items-center gap-2">
                           <time dateTime={item.createdAt}>{formattedDate}</time>
                         </div>
                       </div>
@@ -1431,7 +1431,7 @@ function Management() {
 
               {/* TAB 3: UPLOADS LIST */}
               {tab === "uploads" && (
-                <div className="divide-y divide-slate-100">
+                <div className="space-y-3">
                   {query.data.items.map((item) => {
                     if (!isUpload(item)) return null;
                     const isImage = /\.(jpe?g|png|webp|gif|svg)$/i.test(item.originalName);
@@ -1443,10 +1443,10 @@ function Management() {
                     return (
                       <div
                         key={item.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 hover:bg-slate-50/60 transition-colors"
+                        className="glass-list-card flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3"
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
-                          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 grid place-items-center">
+                          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-blue-200/70 bg-blue-50/70 grid place-items-center shadow-2xs">
                             {isImage ? (
                               <Image
                                 src={fileUrl}
@@ -1456,17 +1456,17 @@ function Management() {
                                 className="object-cover"
                               />
                             ) : (
-                              <FileText size={20} className="text-slate-400" />
+                              <FileText size={20} className="text-blue-600" />
                             )}
                           </div>
 
                           <div className="min-w-0 space-y-1">
-                            <p className="font-bold text-slate-900 text-sm truncate" title={item.originalName}>
+                            <p className="font-extrabold text-slate-900 text-sm truncate" title={item.originalName}>
                               {item.originalName}
                             </p>
 
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs font-semibold text-slate-500">
+                              <span className="text-xs font-bold text-slate-600">
                                 {sizeText}
                               </span>
                               <span>·</span>
@@ -1494,9 +1494,9 @@ function Management() {
                             href={fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                            className="glass-button-secondary px-3 py-1.5 text-xs"
                           >
-                            <ExternalLink size={13} />
+                            <ExternalLink size={13} className="text-blue-600" />
                             <span>Buka</span>
                           </a>
                         </div>
@@ -1527,7 +1527,7 @@ export default function UsersPage() {
       <AdminPageHeader
         title="Pengguna & Keamanan Sistem"
         description="Kelola akun pengguna, registrasi administrator kelurahan, pantau audit log aktivitas, dan kapasitas penyimpanan berkas."
-        icon={Users}
+        icon={UsersShieldSvg}
       />
       <AdminAccess>
         <Management />
