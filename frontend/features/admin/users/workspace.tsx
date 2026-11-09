@@ -24,6 +24,9 @@ import {
   AlertTriangle,
   User as UserIcon,
   FileCode2,
+  UserPlus,
+  Shield,
+  Plus,
 } from "lucide-react";
 import { AdminEmptyState, AdminLoading, AdminError } from "@/components/admin/feedback";
 import { AdminPageHeader } from "@/components/admin/page-header";
@@ -110,6 +113,42 @@ function humanAction(action: string): { title: string; desc: string; icon: typeo
       desc: "Sesi autentikasi ditutup",
       icon: Lock,
       tone: "text-slate-600 bg-slate-50",
+    },
+    USER_PROVISIONED_ADMIN_KELURAHAN: {
+      title: "Registrasi Administrator Baru",
+      desc: "Akun administrator baru berhasil dibuat dengan hak akses penuh",
+      icon: UserPlus,
+      tone: "text-indigo-600 bg-indigo-50",
+    },
+    USER_PROVISIONED_LURAH: {
+      title: "Registrasi Akun Lurah",
+      desc: "Akun kepemimpinan lurah berhasil dibuat",
+      icon: UserPlus,
+      tone: "text-purple-600 bg-purple-50",
+    },
+    USER_PROVISIONED_MASYARAKAT: {
+      title: "Registrasi Akun Pengguna",
+      desc: "Akun warga baru berhasil dibuat",
+      icon: UserPlus,
+      tone: "text-emerald-600 bg-emerald-50",
+    },
+    USER_SET_ROLE_ADMIN_KELURAHAN: {
+      title: "Perubahan Peran: Administrator",
+      desc: "Pengguna diberikan hak akses penuh administrator kelurahan",
+      icon: Shield,
+      tone: "text-indigo-600 bg-indigo-50",
+    },
+    USER_SET_ROLE_LURAH: {
+      title: "Perubahan Peran: Lurah",
+      desc: "Pengguna diberikan peran kepemimpinan lurah",
+      icon: Shield,
+      tone: "text-purple-600 bg-purple-50",
+    },
+    USER_SET_ROLE_MASYARAKAT: {
+      title: "Perubahan Peran: Warga",
+      desc: "Peran pengguna diubah menjadi warga terdaftar",
+      icon: Shield,
+      tone: "text-emerald-600 bg-emerald-50",
     },
     USER_SESSION_REVOKED: {
       title: "Pencabutan Sesi Akun",
@@ -231,6 +270,227 @@ function humanAction(action: string): { title: string; desc: string; icon: typeo
   };
 }
 
+function RegisterUserModal({ onClose }: { onClose: () => void }) {
+  const runtime = useAuthRuntime();
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [role, setRole] = useState("ADMIN_KELURAHAN");
+  const [password, setPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [verified, setVerified] = useState(false);
+
+  const mutation = useMutation({
+    mutationFn: async (body: {
+      email: string;
+      displayName?: string;
+      role: string;
+      password: string;
+      currentPassword: string;
+    }) => {
+      return await cmsMutate<{ item: User }>(
+        runtime.request,
+        "/admin/dashboard/users",
+        body,
+        "POST",
+      );
+    },
+    onSuccess: async () => {
+      await runtime.queryClient.invalidateQueries({ queryKey: ["user"] });
+      onClose();
+    },
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <UserPlus className="h-5 w-5 text-primary" />
+              <span>Registrasi Admin / Pengguna Baru</span>
+            </h2>
+            <p className="text-xs text-slate-500">
+              Tambahkan akun pengelola baru dan tentukan hak akses peran dalam sistem.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            mutation.mutate({
+              email: email.trim().toLowerCase(),
+              displayName: displayName.trim() || undefined,
+              role,
+              password,
+              currentPassword: adminPassword,
+            });
+          }}
+        >
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Alamat Email Akun
+            </label>
+            <input
+              className="cms-input"
+              type="email"
+              required
+              maxLength={254}
+              placeholder="contoh: staf.kelurahan@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Nama Lengkap / Jabatan (Opsional)
+            </label>
+            <input
+              className="cms-input"
+              type="text"
+              maxLength={120}
+              placeholder="misal: Amirullah, S.Sos (Kasi Pemerintahan)"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Peran Akun (Hak Akses)
+            </label>
+            <select
+              className="cms-input font-medium"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="ADMIN_KELURAHAN">
+                Administrator Kelurahan — Hak Akses Penuh ke Semua Menu & Pengaturan
+              </option>
+              <option value="LURAH">
+                Lurah — Akses Monitoring Eksekutif, Pelayanan & Publikasi
+              </option>
+              <option value="MASYARAKAT">
+                Warga Terdaftar — Akses Layanan & Aspirasi Mandiri
+              </option>
+            </select>
+            <p className="text-[11px] text-slate-500">
+              {role === "ADMIN_KELURAHAN" && (
+                <span className="text-indigo-600 font-semibold">
+                  Administrator dapat membuka dan mengelola seluruh menu: berita, profil, kotak masuk, wilayah, kanal konten, dan pengguna.
+                </span>
+              )}
+              {role === "LURAH" && (
+                <span className="text-purple-600 font-semibold">
+                  Lurah dapat meninjau dashboard statistik, pelayanan, dan monitoring publikasi kelurahan.
+                </span>
+              )}
+              {role === "MASYARAKAT" && (
+                <span className="text-slate-600">
+                  Warga terdaftar untuk mengajukan aspirasi dan layanan mandiri.
+                </span>
+              )}
+            </p>
+          </div>
+
+          <div className="space-y-1.5 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Kata Sandi Akun Baru
+            </label>
+            <input
+              className="cms-input bg-white"
+              type="password"
+              required
+              minLength={12}
+              maxLength={72}
+              placeholder="Minimal 12 karakter kombinasi kuat..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+            />
+            <p className="text-[11px] text-slate-400">
+              Harap berikan kata sandi ini langsung kepada pemilik akun secara aman.
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+              Kata Sandi Administrator Anda
+            </label>
+            <input
+              className="cms-input"
+              type="password"
+              required
+              maxLength={72}
+              placeholder="Masukkan kata sandi login admin Anda untuk konfirmasi..."
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+          </div>
+
+          <label className="flex items-start gap-2.5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 cursor-pointer">
+            <input
+              type="checkbox"
+              required
+              checked={verified}
+              onChange={(e) => setVerified(e.target.checked)}
+              className="mt-0.5 rounded border-slate-300 text-primary focus:ring-primary"
+            />
+            <span>
+              Saya mengonfirmasi pendaftaran akun dan pemberian peran ini secara resmi untuk staf kelurahan.
+            </span>
+          </label>
+
+          {mutation.isError && (
+            <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+              <AlertCircle size={15} className="shrink-0 text-red-600" />
+              <span>{cmsError(mutation.error)}</span>
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              disabled={mutation.isPending}
+              onClick={onClose}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending || !verified}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 disabled:opacity-50 transition-colors"
+            >
+              {mutation.isPending ? (
+                <>
+                  <RotateCw size={13} className="animate-spin" />
+                  <span>Mendaftarkan...</span>
+                </>
+              ) : (
+                <>
+                  <UserPlus size={14} />
+                  <span>Daftarkan Pengguna Baru</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function AccessFormModal({
   user,
   onClose,
@@ -240,6 +500,7 @@ function AccessFormModal({
 }) {
   const runtime = useAuthRuntime();
   const [action, setAction] = useState("REVOKE_SESSIONS");
+  const [selectedRole, setSelectedRole] = useState(user.role);
   const roleInfo = formatRole(user.role);
 
   const mutation = useMutation({
@@ -249,6 +510,7 @@ function AccessFormModal({
       currentPassword: string;
       expectedUpdatedAt: string;
       newPassword?: string;
+      role?: string;
     }) => {
       try {
         return await cmsMutate(
@@ -313,6 +575,7 @@ function AccessFormModal({
               ...(action === "RESET_PASSWORD"
                 ? { newPassword: String(f.get("newPassword")) }
                 : {}),
+              ...(action === "SET_ROLE" ? { role: selectedRole } : {}),
             };
             form.reset();
             mutation.mutate(body);
@@ -323,11 +586,12 @@ function AccessFormModal({
               Pilihan Tindakan Akses
             </label>
             <select
-              className="cms-input"
+              className="cms-input font-medium"
               value={action}
               onChange={(e) => setAction(e.target.value)}
             >
               <option value="REVOKE_SESSIONS">Cabut semua sesi aktif (Logout paksa)</option>
+              <option value="SET_ROLE">Ubah Peran Akun (Role: Admin / Lurah / Warga)</option>
               <option value={user.isActive ? "DEACTIVATE" : "ACTIVATE"}>
                 {user.isActive ? "Nonaktifkan akun pengguna" : "Aktifkan kembali akun"}
               </option>
@@ -337,6 +601,32 @@ function AccessFormModal({
               Setiap tindakan secara otomatis mencabut seluruh sesi login aktif pengguna tersebut.
             </p>
           </div>
+
+          {action === "SET_ROLE" && (
+            <div className="space-y-2 rounded-xl border border-indigo-200 bg-indigo-50/60 p-4">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
+                Pilih Peran Baru (Role)
+              </label>
+              <select
+                className="cms-input bg-white font-medium"
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+              >
+                <option value="ADMIN_KELURAHAN">
+                  Administrator Kelurahan — Hak Akses Penuh Semua Menu
+                </option>
+                <option value="LURAH">
+                  Lurah — Akses Monitoring Eksekutif & Pelayanan
+                </option>
+                <option value="MASYARAKAT">
+                  Warga Terdaftar — Akses Layanan Publik Mandiri
+                </option>
+              </select>
+              <p className="text-[11px] text-slate-600">
+                Administrator memiliki kewenangan tertinggi membuka dan mengelola seluruh modul CMS, profil kelurahan, kotak masuk, berita, dan pengguna.
+              </p>
+            </div>
+          )}
 
           {action === "RESET_PASSWORD" && (
             <div className="space-y-1.5 rounded-xl border border-amber-200 bg-amber-50/60 p-4">
@@ -428,6 +718,7 @@ function Management() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   const query = useQuery({
     queryKey: ["user", auth.user?.id, "management", tab, page, search],
@@ -459,13 +750,24 @@ function Management() {
           </p>
         </div>
 
-        <Link
-          href="/admin/verifikasi-kontak"
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors self-start sm:self-auto"
-        >
-          <UserCheck size={14} className="text-primary" />
-          <span>Verifikasi Perubahan Kontak Warga</span>
-        </Link>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setIsRegisterOpen(true)}
+            className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
+          >
+            <UserPlus size={14} />
+            <span>Registrasi Admin / Pengguna</span>
+          </button>
+
+          <Link
+            href="/admin/verifikasi-kontak"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
+          >
+            <UserCheck size={14} className="text-primary" />
+            <span>Verifikasi Kontak Warga</span>
+          </Link>
+        </div>
       </div>
 
       {/* Navigation Tabs */}
@@ -547,10 +849,10 @@ function Management() {
 
       {/* Notice info on Users Tab */}
       {tab === "users" && (
-        <div className="flex items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 text-xs text-blue-800">
-          <ShieldCheck size={18} className="shrink-0 text-blue-600" />
+        <div className="flex items-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4 text-xs text-indigo-900">
+          <ShieldCheck size={18} className="shrink-0 text-indigo-600" />
           <span>
-            Demi keamanan sistem, penambahan atau perubahan hak akses administrator dilakukan melalui verifikasi pengelola kelurahan. Akun aktif Anda sendiri dilindungi dan tidak dapat dinonaktifkan oleh sesi Anda sendiri.
+            Administrator memiliki kewenangan penuh membuka dan mengelola seluruh fitur di dalam website kelurahan. Anda dapat mendaftarkan akun administrator/lurah baru atau menyesuaikan peran pengguna yang ada melalui tombol <strong>Kelola Akses</strong>.
           </span>
         </div>
       )}
@@ -586,6 +888,11 @@ function Management() {
           <span>Segarkan Data</span>
         </button>
       </div>
+
+      {/* Register User Modal */}
+      {isRegisterOpen && (
+        <RegisterUserModal onClose={() => setIsRegisterOpen(false)} />
+      )}
 
       {/* Access Form Modal */}
       {selectedUser && (
@@ -679,7 +986,7 @@ function Management() {
                               className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 transition-colors"
                             >
                               <KeyRound size={13} className="text-primary" />
-                              <span>Kelola Akses</span>
+                              <span>Kelola Akses & Peran</span>
                             </button>
                           )}
                         </div>
@@ -837,7 +1144,7 @@ export default function UsersPage() {
     <main className="min-w-0 space-y-6">
       <AdminPageHeader
         title="Pengguna & Keamanan Sistem"
-        description="Kelola akun pengguna, pantau riwayat log aktivitas, dan pantau pemakaian penyimpanan berkas."
+        description="Kelola hak akses administrator, registrasi pengelola baru, pantau riwayat log aktivitas, dan pantau pemakaian berkas."
         icon={Users}
       />
       <AdminAccess>

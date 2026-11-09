@@ -94,6 +94,38 @@ describe('Prompt 11 direct dashboard API security', () => {
     expect(await prisma.auditLog.count({ where: { resourceId: target.id, action: 'USER_SET_ROLE_LURAH' } })).toBe(1);
     await admin.post(accessPath()).set(headers).send(body).expect(409);
   });
+  it('provisions new administrator/staff accounts with role assignment and audit log', async () => {
+    const newEmail = `provisioned-${randomUUID()}@example.invalid`;
+    const newSecret = randomUUID() + '-Secret123!';
+    const r = await admin.post('/api/v1/admin/dashboard/users').set(headers).send({
+      email: newEmail,
+      password: newSecret,
+      role: 'ADMIN_KELURAHAN',
+      currentPassword: password,
+      displayName: 'Admin Baru',
+    }).expect(201);
+    expect(r.body.data.item.email).toBe(newEmail);
+    expect(r.body.data.item.role).toBe('ADMIN_KELURAHAN');
+    ids.push(r.body.data.item.id);
+
+    await admin.post('/api/v1/admin/dashboard/users').set(headers).send({
+      email: newEmail,
+      password: newSecret,
+      role: 'ADMIN_KELURAHAN',
+      currentPassword: password,
+    }).expect(409);
+
+    await admin.post('/api/v1/admin/dashboard/users').set(headers).send({
+      email: `another-${randomUUID()}@example.invalid`,
+      password: newSecret,
+      role: 'ADMIN_KELURAHAN',
+      currentPassword: 'wrong-password',
+    }).expect(403);
+
+    const newAgent = request.agent(server);
+    await login(newAgent, newEmail, newSecret);
+    await newAgent.get('/api/v1/admin/dashboard').expect(200);
+  });
   it('paginates audits and upload inventory while preserving private ownership', async () => {
     const media = await prisma.mediaAsset.create({ data: { id: randomUUID(), storageKey: `${randomUUID()}.pdf`, originalName: 'PRIVATE_DO_NOT_LEAK.pdf', mimeType: 'application/pdf', size: 50, visibility: 'PRIVATE', ownerId: ids[1], alt: '', caption: '' } });
     const r = await admin.get('/api/v1/admin/dashboard/uploads').expect(200);

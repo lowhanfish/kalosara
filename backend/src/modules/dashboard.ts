@@ -9,7 +9,7 @@ import { env } from '../config/env.js';
 import { authenticate, requireMutation } from './auth/routes.js';
 import { assertRole, loadActivePrincipal, requireRoles, AccessError } from './auth/authorization.js';
 import { verifyPassword, hashPassword } from './auth/password.js';
-import { passwordSchema } from './auth/validation.js';
+import { emailSchema, passwordSchema } from './auth/validation.js';
 import { idSchema, pagination } from './cms/common.js';
 
 const router = Router();
@@ -33,6 +33,53 @@ router.get('/users', async (req, res) => {
   const [items, total] = await prisma.$transaction([prisma.user.findMany({ where, select: userSelect, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (page - 1) * limit, take: limit }), prisma.user.count({ where })]);
   res.json({ success: true, data: { items, total, page, limit }, requestId: req.id });
 });
+const createUserSchema = z.object({
+  email: emailSchema,
+  password: passwordSchema,
+  role: z.enum(['MASYARAKAT', 'LURAH', 'ADMIN_KELURAHAN']).default('ADMIN_KELURAHAN'),
+  displayName: z.string().trim().min(1).max(120).optional(),
+  currentPassword: z.string().min(1).max(72),
+}).strict();
+
+router.post('/users', requireMutation, rateLimit({ windowMs: 15 * 60_000, limit: 20, standardHeaders: 'draft-8', legacyHeaders: false, handler: (req, res) => { res.status(429).json({ success: false, error: { code: 'RATE_LIMITED', message: 'Terlalu banyak percobaan pembuatan akun' }, requestId: req.id }); } }), async (req, res) => {
+  const input = createUserSchema.parse(req.body);
+  const actorId = req.auth!.userId;
+  const actor = await prisma.user.findUniqueOrThrow({ where: { id: actorId } });
+  if (!await verifyPassword(input.currentPassword, actor.passwordHash)) {
+    throw new AccessError(403, 'REAUTH_REQUIRED', 'Kata sandi admin tidak sesuai');
+  }
+
+  const existing = await prisma.user.findUnique({ where: { email: input.email } });
+  if (existing) {
+    throw new AccessError(409, 'EMAIL_EXISTS', 'Alamat email sudah terdaftar dalam sistem');
+  }
+
+  const passwordHash = await hashPassword(input.password);
+  const user = await prisma.$transaction(async tx => {
+    const created = await tx.user.create({
+      data: {
+        email: input.email,
+        passwordHash,
+        role: input.role,
+        isActive: true,
+        profile: input.displayName ? { create: { displayName: input.displayName } } : undefined,
+      },
+      select: userSelect,
+    });
+    await tx.auditLog.create({
+      data: {
+        actorId,
+        action: `USER_PROVISIONED_${input.role}`,
+        resourceType: 'User',
+        resourceId: created.id,
+      },
+    });
+    return created;
+  });
+
+  res.status(201).json({ success: true, data: { item: user }, requestId: req.id });
+});
+
 const accessSchema = z.object({
   action: z.enum(['ACTIVATE', 'DEACTIVATE', 'REVOKE_SESSIONS', 'RESET_PASSWORD', 'SET_ROLE']),
   currentPassword: z.string().min(1).max(72), expectedUpdatedAt: z.iso.datetime(),
