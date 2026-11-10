@@ -211,18 +211,21 @@ export function FormAccessUserModal({
             </div>
           )}
 
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-              Kata Sandi Akun Anda (Konfirmasi) <span className="text-red-500">*</span>
+          <div className="space-y-1.5 rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
+            <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
+              Kata Sandi Akun Login Anda Saat Ini <span className="text-red-500">*</span>
             </label>
-            <div className="relative">
+            <p className="text-[11px] text-amber-800 leading-tight">
+              Sebagai otorisasi perubahan hak akses akun, masukkan kata sandi akun login Anda yang sedang aktif saat ini.
+            </p>
+            <div className="relative pt-1">
               <input
-                className="cms-input pr-10 w-full"
+                className="cms-input bg-white pr-10 w-full"
                 type={showAdminPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
                 maxLength={72}
-                placeholder="Masukkan kata sandi login akun Anda untuk konfirmasi..."
+                placeholder="Masukkan kata sandi login akun Anda saat ini..."
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
               />

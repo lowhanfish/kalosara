@@ -43,13 +43,35 @@ export function cmsError(error: unknown) {
     TIMEOUT: "Server belum merespons. Silakan coba lagi.",
     ORIGIN_FORBIDDEN:
       "Alamat website belum sesuai konfigurasi server. Hubungi pengelola.",
+    REAUTH_REQUIRED:
+      "Kata sandi konfirmasi akun Anda tidak sesuai. Masukkan kata sandi akun login Anda yang sedang aktif saat ini.",
+    EMAIL_EXISTS:
+      "Alamat email sudah terdaftar dalam sistem. Gunakan email lain.",
+    CSRF_INVALID:
+      "Sesi keamanan kedaluwarsa. Muat ulang halaman lalu coba lagi.",
+    FORBIDDEN:
+      "Anda tidak memiliki hak akses untuk melakukan tindakan ini.",
+    NOT_FOUND:
+      "Data atau berkas yang diminta tidak ditemukan.",
   };
-  return (
-    messages[error.code] ??
-    (error.status >= 500
-      ? "Terjadi gangguan pada server. Silakan coba lagi nanti."
-      : "Permintaan belum berhasil. Periksa isian atau muat ulang halaman.")
-  );
+
+  if (messages[error.code]) {
+    return messages[error.code];
+  }
+
+  if (
+    error.message &&
+    error.status < 500 &&
+    error.message !== "Permintaan gagal" &&
+    error.message !== "Resource not found" &&
+    error.message !== "Invalid request"
+  ) {
+    return error.message;
+  }
+
+  return error.status >= 500
+    ? "Terjadi gangguan pada server. Silakan coba lagi nanti."
+    : "Permintaan belum berhasil. Periksa isian atau muat ulang halaman.";
 }
 export type MediaAsset = {
   id: string;
