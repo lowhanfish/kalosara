@@ -86,7 +86,7 @@ function formatRole(role: string) {
   switch (role) {
     case "ADMIN_KELURAHAN":
       return {
-        label: "Administrator",
+        label: "Admin Kelurahan",
         variant: "sky" as const,
         gradient: "from-sky-400 to-blue-600",
       };
@@ -98,7 +98,7 @@ function formatRole(role: string) {
       };
     case "MASYARAKAT":
       return {
-        label: "Warga Terdaftar",
+        label: "Warga",
         variant: "success" as const,
         gradient: "from-teal-400 to-emerald-600",
       };
@@ -479,7 +479,7 @@ function Management() {
                 }}
               >
                 <option value="ALL">Semua Peran</option>
-                <option value="ADMIN_KELURAHAN">Administrator</option>
+                <option value="ADMIN_KELURAHAN">Admin Kelurahan</option>
                 <option value="LURAH">Lurah</option>
                 <option value="MASYARAKAT">Warga</option>
               </select>

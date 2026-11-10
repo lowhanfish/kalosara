@@ -127,13 +127,13 @@ export function FormAccessUserModal({
                 {[
                   {
                     id: "ADMIN_KELURAHAN",
-                    title: "Administrator Kelurahan",
-                    desc: "Wewenang penuh membuka dan mengelola seluruh fitur.",
+                    title: "Admin Kelurahan",
+                    desc: "Akses penuh kelola seluruh konten & verifikasi surat (tanpa TTE).",
                   },
                   {
                     id: "LURAH",
                     title: "Lurah (Pimpinan)",
-                    desc: "Akses monitoring eksekutif terhadap data pelayanan & statistik.",
+                    desc: "Akses penuh kelola seluruh sistem & tanda tangan elektronik (TTE).",
                   },
                   {
                     id: "MASYARAKAT",
@@ -211,7 +211,7 @@ export function FormAccessUserModal({
 
           <div className="space-y-1.5">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-              Kata Sandi Administrator Anda <span className="text-red-500">*</span>
+              Kata Sandi Akun Anda (Konfirmasi) <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <input
@@ -220,7 +220,7 @@ export function FormAccessUserModal({
                 autoComplete="current-password"
                 required
                 maxLength={72}
-                placeholder="Masukkan kata sandi login admin Anda untuk konfirmasi..."
+                placeholder="Masukkan kata sandi login akun Anda untuk konfirmasi..."
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
               />

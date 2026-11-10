@@ -24,7 +24,7 @@ export function DetailUserModal({
 
   const roleLabel =
     user.role === "ADMIN_KELURAHAN"
-      ? "Administrator Kelurahan"
+      ? "Admin Kelurahan"
       : user.role === "LURAH"
         ? "Lurah"
         : "Warga Terdaftar";

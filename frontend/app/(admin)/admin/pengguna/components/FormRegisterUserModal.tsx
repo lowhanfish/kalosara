@@ -125,8 +125,8 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
               {[
                 {
                   id: "ADMIN_KELURAHAN",
-                  title: "Administrator",
-                  desc: "Akses Penuh Semua Modul & Kelola Akun",
+                  title: "Admin Kelurahan",
+                  desc: "Akses Penuh Semua Modul & Verifikasi Surat (Tanpa TTE)",
                   color:
                     "border-sky-300 bg-sky-50/80 text-sky-900 ring-2 ring-sky-500",
                   idle: "border-slate-200 hover:border-sky-200 bg-white/80",
@@ -134,15 +134,15 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
                 {
                   id: "LURAH",
                   title: "Lurah",
-                  desc: "Akses Monitoring Eksekutif & Pelayanan",
+                  desc: "Akses Penuh Seluruh Sistem & Tanda Tangan Elektronik (TTE)",
                   color:
                     "border-indigo-300 bg-indigo-50/80 text-indigo-900 ring-2 ring-indigo-500",
                   idle: "border-slate-200 hover:border-sky-200 bg-white/80",
                 },
                 {
                   id: "MASYARAKAT",
-                  title: "Warga",
-                  desc: "Aspirasi & Layanan Publik Mandiri",
+                  title: "Warga / Masyarakat",
+                  desc: "Layanan Persuratan & Permohonan Publik Mandiri",
                   color:
                     "border-emerald-300 bg-emerald-50/80 text-emerald-900 ring-2 ring-emerald-500",
                   idle: "border-slate-200 hover:border-sky-200 bg-white/80",
@@ -203,7 +203,7 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
 
           <div className="space-y-1.5">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-              Kata Sandi Administrator Anda <span className="text-red-500">*</span>
+              Kata Sandi Akun Anda (Konfirmasi) <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <input
@@ -211,7 +211,7 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
                 type={showAdminPassword ? "text" : "password"}
                 required
                 maxLength={72}
-                placeholder="Masukkan kata sandi login admin Anda untuk konfirmasi..."
+                placeholder="Masukkan kata sandi akun login Anda untuk konfirmasi..."
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
                 autoComplete="current-password"
