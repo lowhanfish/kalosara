@@ -109,7 +109,8 @@ export default function BukuTamuAdminPage() {
   const items = data?.items ?? [];
   const pagination = data?.pagination;
 
-  const canEdit = auth.user?.role === "ADMIN_KELURAHAN";
+  const canEdit =
+    auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH";
 
   return (
     <div className="space-y-6">

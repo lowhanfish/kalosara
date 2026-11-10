@@ -30,7 +30,10 @@ export function AdminSidebar({
       >
         {adminLinks
           .filter(
-            (item) => role === "ADMIN_KELURAHAN" || item.href === "/admin",
+            (item) =>
+              role === "ADMIN_KELURAHAN" ||
+              role === "LURAH" ||
+              item.href === "/admin",
           )
           .map((item) => (
             <div key={item.href}>

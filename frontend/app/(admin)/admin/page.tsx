@@ -122,7 +122,8 @@ function activityLabel(action: string) {
 export default function AdminDashboardPage() {
   const auth = useAuth();
   const data = useResponseDashboard();
-  const isAdmin = auth.user?.role === "ADMIN_KELURAHAN";
+  const isAdmin =
+    auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH";
 
   return (
     <main id="konten" className="admin-dashboard min-w-0 space-y-6">
