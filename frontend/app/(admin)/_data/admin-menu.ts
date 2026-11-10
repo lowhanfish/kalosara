@@ -16,7 +16,17 @@ export function filterAdminMenuByRole(
   role?: string,
 ): AdminMenuNode[] {
   return nodes
-    .filter((node) => !node.role || node.role === role)
+    .filter((node) => {
+      if (!node.role) return true;
+      if (node.role === role) return true;
+      if (
+        (role === "ADMIN_KELURAHAN" || role === "LURAH") &&
+        (node.role === "ADMIN_KELURAHAN" || node.role === "LURAH")
+      ) {
+        return true;
+      }
+      return false;
+    })
     .map((node) => ({
       ...node,
       children: filterAdminMenuByRole(node.children ?? [], role),

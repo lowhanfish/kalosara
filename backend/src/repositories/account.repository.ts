@@ -234,7 +234,7 @@ export async function reviewContactChangeInTx(params: {
         await acquireAdminAdvisoryLock(tx);
         await lockAccount(tx, params.targetUserId);
         const currentActor = await tx.user.findUnique({ where: { id: params.actorId } });
-        assertRole(currentActor, ['ADMIN_KELURAHAN']);
+        assertRole(currentActor, ['ADMIN_KELURAHAN', 'LURAH']);
         await assertActiveTransactionSession(tx, params.actorId, params.sessionId);
         if (currentActor!.passwordHash !== params.expectedActorPasswordHash) {
           throw new AccessError(409, 'CONFLICT', 'Akun admin berubah');

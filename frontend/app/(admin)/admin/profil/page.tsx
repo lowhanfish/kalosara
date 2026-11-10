@@ -19,7 +19,7 @@ export default function ProfilPage() {
         icon={BuildingShieldSvg}
         badge={{ text: "Identitas & Organisasi", variant: "sky" }}
       />
-      {auth.user?.role !== "ADMIN_KELURAHAN" && (
+      {auth.user?.role !== "ADMIN_KELURAHAN" && auth.user?.role !== "LURAH" && (
         <div
           role="alert"
           className="glass-card p-6 text-sm font-semibold text-amber-800 border-amber-200/80 bg-amber-50/75"
@@ -27,7 +27,7 @@ export default function ProfilPage() {
           Akun Anda tidak memiliki izin untuk mengelola profil.
         </div>
       )}
-      {auth.user?.role === "ADMIN_KELURAHAN" && query.isPending && (
+      {(auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH") && query.isPending && (
         <AdminLoading
           variant="cards"
           label="Memuat pengaturan profil kelurahan…"
@@ -36,7 +36,7 @@ export default function ProfilPage() {
       {query.isError && (
         <AdminError error={query.error} onRetry={() => void query.refetch()} />
       )}
-      {query.data && auth.user?.role === "ADMIN_KELURAHAN" && (
+      {query.data && (auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH") && (
         <FormProfilWorkspace
           key={auth.user.id}
           data={query.data}

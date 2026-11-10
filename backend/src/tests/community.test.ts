@@ -58,21 +58,23 @@ describe('community HTTP boundaries with isolated fake storage', () => {
     }
     await request(app).get('/api/v1/public/community/requests').expect(404);
   });
-  it('denies citizen, lurah and inactive principals while allowing admin inbox without leaking bodies in listings', async () => {
+  it('denies citizen and inactive principals while allowing admin & lurah inbox without leaking bodies in listings', async () => {
     const userId = 'b6bd6fc0-50dd-4b06-80b8-b74eb855997e';
     const expiresAt = new Date(Date.now() + 600000);
     db.refreshSession.findUnique.mockResolvedValue({ userId, expiresAt, revokedAt: null });
     const token = await signAccessToken(userId, 'f6bd6fc0-50dd-4b06-80b8-b74eb855997e', expiresAt);
     const cookie = `kalosara_access=${token}`;
-    for (const role of ['MASYARAKAT', 'LURAH']) {
+    for (const role of ['MASYARAKAT']) {
       db.user.findUnique.mockResolvedValue({ id: userId, role, isActive: true });
       await request(app).get('/api/v1/admin/community/requests').set('Cookie', cookie).expect(403);
     }
     db.user.findUnique.mockResolvedValue({ id: userId, role: 'ADMIN_KELURAHAN', isActive: false });
     await request(app).get('/api/v1/admin/community/requests').set('Cookie', cookie).expect(403);
-    db.user.findUnique.mockResolvedValue({ id: userId, role: 'ADMIN_KELURAHAN', isActive: true });
-    db.publicRequest.findMany.mockResolvedValue([]); db.publicRequest.count.mockResolvedValue(0);
-    await request(app).get('/api/v1/admin/community/requests').set('Cookie', cookie).expect(200);
+    for (const role of ['ADMIN_KELURAHAN', 'LURAH']) {
+      db.user.findUnique.mockResolvedValue({ id: userId, role, isActive: true });
+      db.publicRequest.findMany.mockResolvedValue([]); db.publicRequest.count.mockResolvedValue(0);
+      await request(app).get('/api/v1/admin/community/requests').set('Cookie', cookie).expect(200);
+    }
     const projection = db.publicRequest.findMany.mock.calls[0][0].select;
     expect(projection.name).toBeUndefined(); expect(projection.email).toBeUndefined(); expect(projection.message).toBeUndefined();
   });

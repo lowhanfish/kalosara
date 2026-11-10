@@ -40,7 +40,7 @@ export const adminCommunityRouter = Router();
 adminCommunityRouter.use(
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   privateNoStore,
 );
 adminCommunityRouter.get('/sections/:slug', getAdminCommunitySectionController);

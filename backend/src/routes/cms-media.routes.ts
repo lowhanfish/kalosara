@@ -26,7 +26,7 @@ export const mediaAdminRouter = Router();
 mediaAdminRouter.use(
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   noStore,
 );
 mediaAdminRouter.get('/', listAdminMediaController);

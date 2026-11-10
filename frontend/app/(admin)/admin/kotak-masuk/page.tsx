@@ -65,7 +65,7 @@ export default function KotakMasukPage() {
         badge={{ text: "Pengaduan & PPID", variant: "sky" }}
       />
 
-      {auth.user?.role !== "ADMIN_KELURAHAN" ? (
+      {auth.user?.role !== "ADMIN_KELURAHAN" && auth.user?.role !== "LURAH" ? (
         <div className="glass-card flex items-center gap-2 p-5 text-xs font-semibold text-amber-800 border-amber-200/80 bg-amber-50/75">
           <AlertCircle size={16} className="text-amber-600" />
           <span>Halaman ini khusus untuk administrator kelurahan.</span>

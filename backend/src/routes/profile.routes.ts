@@ -21,7 +21,7 @@ export const profileAdminRouter = Router();
 profileAdminRouter.use(
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   noStore,
 );
 profileAdminRouter.get('/', getAdminProfileController);

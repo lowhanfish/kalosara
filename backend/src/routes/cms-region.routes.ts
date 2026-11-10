@@ -20,7 +20,7 @@ export const regionAdminRouter = Router();
 regionAdminRouter.use(
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   noStore,
 );
 regionAdminRouter.get('/statistics', listAdminRegionStatisticsController);

@@ -15,7 +15,8 @@ export const useResponseMaster = (slug: SectionSlug) => {
 
   return useQuery({
     queryKey: ["user", auth.user?.id, "community-section", slug],
-    enabled: auth.user?.role === "ADMIN_KELURAHAN",
+    enabled:
+      auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH",
     queryFn: () =>
       runtime.request<ResponseInterface>(
         `/admin/community/sections/${slug}`,

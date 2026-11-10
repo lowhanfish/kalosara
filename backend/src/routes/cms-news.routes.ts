@@ -28,7 +28,7 @@ export const newsAdminRouter = Router();
 newsAdminRouter.use(
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   noStore,
 );
 

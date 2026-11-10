@@ -16,7 +16,7 @@ export const contentAdminRouter = Router();
 contentAdminRouter.use(
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   noStore,
 );
 contentAdminRouter.get('/:kind', listAdminContentController);

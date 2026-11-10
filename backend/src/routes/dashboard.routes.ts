@@ -38,7 +38,7 @@ router.use(
 
 router.get('/', getDashboardSummaryController);
 
-router.use(requireRoles('ADMIN_KELURAHAN'));
+router.use(requireRoles('ADMIN_KELURAHAN', 'LURAH'));
 router.get('/users', listDashboardUsersController);
 router.post(
   '/users',

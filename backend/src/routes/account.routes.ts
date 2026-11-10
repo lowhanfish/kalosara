@@ -59,7 +59,7 @@ admin.use(
   privateNoStore,
   authenticate,
   loadActivePrincipal,
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
 );
 
 admin.get('/', listAdminContactChangesController);

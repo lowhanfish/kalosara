@@ -20,7 +20,8 @@ export const useResponseListMaster = (params: {
 
   return useQuery({
     queryKey: ["user", auth.user?.id, "community-inbox", page, kind, status],
-    enabled: auth.user?.role === "ADMIN_KELURAHAN",
+    enabled:
+      auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH",
     queryFn: () =>
       runtime.request<ResponseListInterface>(
         `/admin/community/requests?${new URLSearchParams({
@@ -38,7 +39,9 @@ export const useResponseDetailMaster = (selectedId: string) => {
 
   return useQuery({
     queryKey: ["user", auth.user?.id, "community-request", selectedId],
-    enabled: !!selectedId && auth.user?.role === "ADMIN_KELURAHAN",
+    enabled:
+      !!selectedId &&
+      (auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH"),
     queryFn: () =>
       runtime.request<{ item: ResponseInterface }>(
         `/admin/community/requests/${selectedId}`,

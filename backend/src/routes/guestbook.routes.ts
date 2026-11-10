@@ -48,7 +48,7 @@ adminGuestbookRouter.get('/stats', getAdminGuestbookStatsController);
 adminGuestbookRouter.get('/:id', getAdminGuestbookDetailController);
 adminGuestbookRouter.patch(
   '/:id/status',
-  requireRoles('ADMIN_KELURAHAN'),
+  requireRoles('ADMIN_KELURAHAN', 'LURAH'),
   requireMutation,
   patchAdminGuestbookStatusController,
 );

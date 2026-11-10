@@ -104,7 +104,7 @@ export async function updateUserAccessInTx(params: {
       await acquireAdminAdvisoryLock(tx);
       await lockAccount(tx, params.id);
       const currentActor = await tx.user.findUnique({ where: { id: params.actorId } });
-      assertRole(currentActor, ['ADMIN_KELURAHAN']);
+      assertRole(currentActor, ['ADMIN_KELURAHAN', 'LURAH']);
       if (currentActor!.passwordHash !== params.expectedActorPasswordHash) {
         throw new AccessError(409, 'CONFLICT', 'Sesi berubah; masuk kembali');
       }

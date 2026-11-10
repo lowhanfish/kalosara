@@ -33,7 +33,7 @@ export default function InfografisPage() {
         icon={InfographicPieSvg}
         badge={{ text: "Transparansi Publik", variant: "sky" }}
       />
-      {auth.user?.role !== "ADMIN_KELURAHAN" ? (
+      {auth.user?.role !== "ADMIN_KELURAHAN" && auth.user?.role !== "LURAH" ? (
         <div
           role="alert"
           className="glass-card p-6 text-sm font-semibold text-amber-800 border-amber-200/80 bg-amber-50/75"
