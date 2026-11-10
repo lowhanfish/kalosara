@@ -52,11 +52,22 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _nex
     });
     return;
   }
-  // Prisma and parser error messages can contain query arguments or submitted data.
-  logger.error({ event: 'unhandled_request_error', requestId: req.id }, 'Unhandled request error');
+  logger.error(
+    {
+      event: 'unhandled_request_error',
+      requestId: req.id,
+      errName: error instanceof Error ? error.name : typeof error,
+      errMsg: error instanceof Error ? error.message : String(error),
+      errStack: error instanceof Error ? error.stack : undefined,
+    },
+    'Unhandled request error',
+  );
   res.status(500).json({
     success: false,
-    error: { code: 'INTERNAL_ERROR', message: 'Internal server error' },
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: error instanceof Error ? error.message : 'Internal server error',
+    },
     requestId: req.id,
   });
 };

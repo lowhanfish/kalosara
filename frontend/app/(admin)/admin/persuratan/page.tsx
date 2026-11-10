@@ -355,18 +355,35 @@ export default function AdminPersuratanPage() {
                       </TableCell>
 
                       <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedLetter(item);
-                            setShowRejectForm(false);
-                            setRejectionReason("");
-                          }}
-                        >
-                          <Eye size={14} />
-                          <span>Periksa</span>
-                        </Button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          {auth.user?.role === "LURAH" && (item.status === "VERIFIED" || item.status === "SUBMITTED") && (
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                              onClick={() => {
+                                setSelectedLetter(item);
+                                setShowRejectForm(false);
+                                setRejectionReason("");
+                              }}
+                            >
+                              <ShieldCheck size={14} />
+                              <span>TTE</span>
+                            </Button>
+                          )}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedLetter(item);
+                              setShowRejectForm(false);
+                              setRejectionReason("");
+                            }}
+                          >
+                            <Eye size={14} />
+                            <span>Periksa</span>
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -593,6 +610,13 @@ export default function AdminPersuratanPage() {
                   </div>
                 </div>
               )}
+              {/* Error feedback if action failed */}
+              {actionMutation.isError && (
+                <div className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-xs font-semibold text-rose-800 flex items-center gap-2">
+                  <AlertCircle size={16} className="shrink-0 text-rose-600" />
+                  <span>{actionMutation.error?.message || "Gagal memproses permohonan"}</span>
+                </div>
+              )}
             </div>
 
             {/* Modal Actions Footer */}
@@ -625,7 +649,7 @@ export default function AdminPersuratanPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
-                {/* When SUBMITTED: Admin can verify or reject */}
+                {/* When SUBMITTED: Admin can verify or reject. Lurah can directly sign (TTE). */}
                 {selectedLetter.status === "SUBMITTED" && !showRejectForm && (
                   <>
                     <Button
@@ -636,6 +660,18 @@ export default function AdminPersuratanPage() {
                       <X size={14} />
                       <span>Tolak / Minta Perbaikan</span>
                     </Button>
+                    {auth.user?.role === "LURAH" && (
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        disabled={actionMutation.isPending}
+                        onClick={() => handleAction("SIGN")}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                      >
+                        <ShieldCheck size={16} />
+                        <span>Tandatangani Langsung (TTE)</span>
+                      </Button>
+                    )}
                     <Button
                       variant="primary"
                       size="sm"

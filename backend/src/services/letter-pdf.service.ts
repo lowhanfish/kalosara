@@ -208,7 +208,7 @@ export class LetterPdfService {
     for (const [label, val] of dataRows) {
       page.drawText(label, { x: detailsLeft, y: cursorY, size: 9, font: fontRegular });
       page.drawText(":", { x: colonX, y: cursorY, size: 9, font: fontRegular });
-      page.drawText(val, {
+      page.drawText(String(val || "-"), {
         x: valueX,
         y: cursorY,
         size: 9,

@@ -167,7 +167,7 @@ export class LetterService {
   ) {
     const existing = await this.letterRepo.findById(id);
     if (!existing) {
-      throw new Error("Permohonan surat tidak ditemukan");
+      throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
     }
 
     if (action === "VERIFY") {
@@ -182,7 +182,7 @@ export class LetterService {
 
     if (action === "REJECT") {
       if (!reason?.trim()) {
-        throw new Error("Alasan penolakan / catatan perbaikan wajib diisi");
+        throw new ApiError(400, "BAD_REQUEST", "Alasan penolakan / catatan perbaikan wajib diisi");
       }
       const updated = await this.letterRepo.updateStatus(id, {
         status: "REJECTED",
@@ -248,7 +248,7 @@ export class LetterService {
       return this.getRequestDetail(updated.id);
     }
 
-    throw new Error("Aksi tidak valid");
+    throw new ApiError(400, "BAD_REQUEST", "Aksi tidak valid");
   }
 
   async verifyPublicLetter(token: string) {
