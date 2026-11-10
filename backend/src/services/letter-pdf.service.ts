@@ -3,7 +3,15 @@ import QRCode from "qrcode";
 import fs from "fs/promises";
 import fsSync from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import type { LetterRequest } from "@prisma/client";
+
+let currentDir = "";
+try {
+  currentDir = path.dirname(fileURLToPath(import.meta.url));
+} catch {
+  currentDir = process.cwd();
+}
 
 export class LetterPdfService {
   getUploadDir(): string {
@@ -19,14 +27,14 @@ export class LetterPdfService {
 
   private getLogoBuffer(): Buffer | null {
     const candidatePaths = [
-      path.resolve(__dirname, "../../assets/konawe.png"),
-      path.resolve(__dirname, "../assets/konawe.png"),
+      path.resolve(currentDir, "../../assets/konawe.png"),
+      path.resolve(currentDir, "../assets/konawe.png"),
       path.resolve(process.cwd(), "assets/konawe.png"),
       path.resolve(process.cwd(), "backend/assets/konawe.png"),
       path.resolve(process.cwd(), "public/images/watundehoa/konawe.png"),
       path.resolve(process.cwd(), "backend/public/images/watundehoa/konawe.png"),
       path.resolve(process.cwd(), "../frontend/public/images/watundehoa/konawe.png"),
-      path.resolve(__dirname, "../../../frontend/public/images/watundehoa/konawe.png"),
+      path.resolve(currentDir, "../../../frontend/public/images/watundehoa/konawe.png"),
       "/srv/kalosara/current/frontend/public/images/watundehoa/konawe.png",
       "/srv/kalosara/current/backend/assets/konawe.png",
       "/srv/kalosara/current/backend/public/images/watundehoa/konawe.png",
