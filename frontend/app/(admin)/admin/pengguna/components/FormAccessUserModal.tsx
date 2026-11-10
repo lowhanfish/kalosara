@@ -36,11 +36,13 @@ function generateSecurePassword(length = 16): string {
 export function FormAccessUserModal({
   user,
   onClose,
+  initialAction = "SET_ROLE",
 }: {
   user: UserItem;
   onClose: () => void;
+  initialAction?: string;
 }) {
-  const [action, setAction] = useState("REVOKE_SESSIONS");
+  const [action, setAction] = useState(initialAction);
   const [selectedRole, setSelectedRole] = useState(user.role);
   const [newPassword, setNewPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);

@@ -58,7 +58,7 @@ const copy = (source, dest) =>
 mkdirSync(output, { recursive: true, mode: 0o700 });
 const backend = join(output, "backend");
 mkdirSync(backend);
-for (const name of ["package.json", "package-lock.json", "dist"])
+for (const name of ["package.json", "package-lock.json", "dist", "assets"])
   copy(join(root, "backend", name), join(backend, name));
 // Ignore lifecycle scripts and optional peer toolchains; Sharp's platform packages remain.
 execFileSync(

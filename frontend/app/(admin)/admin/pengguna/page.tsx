@@ -180,6 +180,7 @@ function Management() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
+  const [initialAccessAction, setInitialAccessAction] = useState<string>("SET_ROLE");
   const [detailUser, setDetailUser] = useState<UserItem | null>(null);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
@@ -510,6 +511,7 @@ function Management() {
         <FormAccessUserModal
           key={selectedUser.id}
           user={selectedUser}
+          initialAction={initialAccessAction}
           onClose={() => setSelectedUser(null)}
         />
       )}
@@ -625,14 +627,30 @@ function Management() {
                                 Detail
                               </Button>
                               {!isSelf && (
-                                <Button
-                                  variant="secondary"
-                                  size="sm"
-                                  onClick={() => setSelectedUser(item)}
-                                  leftIcon={<KeyRound size={13} />}
-                                >
-                                  Kelola Akses
-                                </Button>
+                                <>
+                                  <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={() => {
+                                      setInitialAccessAction("SET_ROLE");
+                                      setSelectedUser(item);
+                                    }}
+                                    leftIcon={<ShieldCheck size={13} />}
+                                  >
+                                    Ubah Peran
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setInitialAccessAction("REVOKE_SESSIONS");
+                                      setSelectedUser(item);
+                                    }}
+                                    leftIcon={<KeyRound size={13} />}
+                                  >
+                                    Akses
+                                  </Button>
+                                </>
                               )}
                             </div>
                           </TableCell>
