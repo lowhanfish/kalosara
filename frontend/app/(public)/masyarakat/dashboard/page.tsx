@@ -18,7 +18,11 @@ import { KalosaraBanner } from "@/features/persuratan/kalosara-banner";
 import { LetterCatalog } from "@/features/persuratan/letter-catalog";
 import { LetterHistoryList } from "@/features/persuratan/letter-history-list";
 import { LetterRequestModal } from "@/features/persuratan/letter-request-modal";
-import { getCitizenLetters, submitLetterRequest } from "@/features/persuratan/client";
+import {
+  getCitizenLetters,
+  submitLetterRequest,
+  deleteLetterRequest,
+} from "@/features/persuratan/client";
 import type { LetterType } from "@/features/persuratan/types";
 
 export default function CitizenDashboard() {
@@ -68,6 +72,19 @@ export default function CitizenDashboard() {
       setSuccessTicket(newLetter.ticketNumber);
       setActiveTab("HISTORY");
       setSelectedType(null);
+    },
+  });
+
+  // Delete / Cancel Mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (letterId: string) => {
+      const csrfRes = await fetch("/api/v1/auth/csrf");
+      const csrfJson = await csrfRes.json();
+      const csrfToken = csrfJson.data?.csrfToken;
+      return deleteLetterRequest(letterId, csrfToken);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["citizen", auth.user?.id, "letters"] });
     },
   });
 
@@ -256,6 +273,9 @@ export default function CitizenDashboard() {
           isLoading={lettersQuery.isLoading}
           onOpenReapply={(letter) => {
             setSelectedType(letter.type);
+          }}
+          onDeleteLetter={async (letterId) => {
+            await deleteMutation.mutateAsync(letterId);
           }}
         />
       )}

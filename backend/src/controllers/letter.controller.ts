@@ -92,6 +92,32 @@ export class LetterController {
     return sendSuccess(res, req, updated);
   };
 
+  deleteCitizenLetter = async (req: Request, res: Response) => {
+    const rawId = req.params.id;
+    const id = Array.isArray(rawId) ? rawId[0] : rawId;
+    if (!id) {
+      throw new ApiError(400, "BAD_REQUEST", "ID permohonan diperlukan");
+    }
+    const userId = req.auth?.userId || res.locals.principal?.id;
+    if (!userId) {
+      throw new ApiError(401, "UNAUTHENTICATED", "Autentikasi diperlukan");
+    }
+
+    const result = await this.letterService.deleteCitizenLetter(id, userId);
+    return sendSuccess(res, req, result);
+  };
+
+  deleteAdminLetter = async (req: Request, res: Response) => {
+    const rawId = req.params.id;
+    const id = Array.isArray(rawId) ? rawId[0] : rawId;
+    if (!id) {
+      throw new ApiError(400, "BAD_REQUEST", "ID permohonan diperlukan");
+    }
+
+    const result = await this.letterService.deleteAdminLetter(id);
+    return sendSuccess(res, req, result);
+  };
+
   downloadLetterPdf = async (req: Request, res: Response) => {
     const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     if (!id) {
@@ -114,6 +140,41 @@ export class LetterController {
 
     const safeFilename = `${letter.ticketNumber}.pdf`;
     res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `inline; filename="${safeFilename}"`);
+    const stream = fs.createReadStream(fullPath);
+    return stream.pipe(res);
+  };
+
+  downloadAttachment = async (req: Request, res: Response) => {
+    const rawFilename = req.params.filename;
+    const filename = Array.isArray(rawFilename) ? rawFilename[0] : rawFilename;
+    if (!filename) {
+      throw new ApiError(400, "BAD_REQUEST", "Nama berkas lampiran diperlukan");
+    }
+
+    const safeFilename = path.basename(filename);
+    const uploadRoot =
+      process.env.UPLOAD_ROOT ||
+      path.resolve(process.cwd(), "../shared/uploads");
+    const fullPath = path.join(uploadRoot, "attachments", safeFilename);
+
+    if (!fs.existsSync(fullPath)) {
+      throw new ApiError(404, "NOT_FOUND", "File fisik lampiran tidak ditemukan di server");
+    }
+
+    const ext = path.extname(safeFilename).toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      ".pdf": "application/pdf",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".webp": "image/webp",
+    };
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox");
+    res.setHeader("Content-Type", contentType);
     res.setHeader("Content-Disposition", `inline; filename="${safeFilename}"`);
     const stream = fs.createReadStream(fullPath);
     return stream.pipe(res);

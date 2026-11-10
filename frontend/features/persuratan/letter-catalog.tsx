@@ -8,8 +8,26 @@ interface LetterCatalogProps {
   onSelectLetter: (type: LetterType) => void;
 }
 
+const FEATURED_LETTER_ORDER: LetterType[] = [
+  "SKTM",
+  "BELUM_MENIKAH",
+  "DOMISILI",
+  "SKU",
+  "BELUM_MEMILIKI_RUMAH",
+  "BELUM_BEKERJA",
+  "AHLI_WARIS",
+  "LAINNYA",
+  "PENGANTAR_SKCK",
+  "PENGHASILAN",
+  "PENGANTAR_NIKAH",
+];
+
 export function LetterCatalog({ onSelectLetter }: LetterCatalogProps) {
-  const letters = Object.values(LETTER_DEFINITIONS);
+  const letters = Object.values(LETTER_DEFINITIONS).sort((a, b) => {
+    const idxA = FEATURED_LETTER_ORDER.indexOf(a.code);
+    const idxB = FEATURED_LETTER_ORDER.indexOf(b.code);
+    return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
+  });
 
   return (
     <div className="space-y-6">

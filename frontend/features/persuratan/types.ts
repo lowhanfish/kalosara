@@ -5,6 +5,7 @@ export type LetterType =
   | "PENGANTAR_SKCK"
   | "BELUM_MENIKAH"
   | "BELUM_BEKERJA"
+  | "BELUM_MEMILIKI_RUMAH"
   | "PENGHASILAN"
   | "PENGANTAR_NIKAH"
   | "AHLI_WARIS"

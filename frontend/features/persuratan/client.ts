@@ -48,3 +48,29 @@ export async function submitLetterRequest(
   }
   return json.data;
 }
+
+/**
+ * Delete / cancel a submitted or rejected letter request
+ */
+export async function deleteLetterRequest(
+  id: string,
+  csrfToken?: string,
+): Promise<{ success: boolean; message: string }> {
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
+  if (csrfToken) {
+    headers["x-csrf-token"] = csrfToken;
+  }
+
+  const res = await fetch(`/api/v1/citizen/letters/${id}`, {
+    method: "DELETE",
+    headers,
+  });
+
+  const json = await res.json();
+  if (!res.ok || !json.success) {
+    throw new Error(json.error?.message || "Gagal menghapus permohonan surat");
+  }
+  return json.data;
+}

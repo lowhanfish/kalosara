@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { LetterRepository } from "../repositories/letter.repository.js";
 import { LetterPdfService } from "./letter-pdf.service.js";
 import { EmailService } from "./email.service.js";
+import { ApiError } from "../lib/errors.js";
 import type { LetterRequest, LetterStatus, LetterType } from "@prisma/client";
 
 export class LetterService {
@@ -96,7 +97,7 @@ export class LetterService {
       attachments: item.attachments.map((att) => ({
         id: att.id,
         name: att.originalName,
-        url: att.storagePath,
+        url: `/api/v1/public/letters/attachments/${path.basename(att.storagePath)}`,
         size: att.fileSize,
         type: att.mimeType,
       })),
@@ -120,7 +121,7 @@ export class LetterService {
       attachments: item.attachments.map((att) => ({
         id: att.id,
         name: att.originalName,
-        url: att.storagePath,
+        url: `/api/v1/public/letters/attachments/${path.basename(att.storagePath)}`,
         size: att.fileSize,
         type: att.mimeType,
       })),
@@ -144,7 +145,7 @@ export class LetterService {
       attachments: item.attachments.map((att) => ({
         id: att.id,
         name: att.originalName,
-        url: att.storagePath,
+        url: `/api/v1/public/letters/attachments/${path.basename(att.storagePath)}`,
         size: att.fileSize,
         type: att.mimeType,
       })),
@@ -261,5 +262,81 @@ export class LetterService {
       downloadUrl: `/api/v1/public/letters/download/${letter.id}`,
       pdfUrl: `/api/v1/public/letters/download/${letter.id}`,
     };
+  }
+
+  async deleteCitizenLetter(id: string, userId: string) {
+    const letter = await this.letterRepo.findById(id);
+    if (!letter) {
+      throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
+    }
+
+    if (letter.userId !== userId) {
+      throw new ApiError(403, "FORBIDDEN", "Anda tidak memiliki wewenang untuk menghapus permohonan ini");
+    }
+
+    if (letter.status === "SIGNED") {
+      throw new ApiError(
+        400,
+        "BAD_REQUEST",
+        "Surat yang telah selesai ditandatangani Lurah berstatus arsip resmi dan tidak dapat dihapus.",
+      );
+    }
+
+    // Clean up physical attachments on disk
+    if (letter.attachments && letter.attachments.length > 0) {
+      for (const att of letter.attachments) {
+        try {
+          const safeName = path.basename(att.storagePath);
+          const fullPath = path.join(this.uploadDir, "attachments", safeName);
+          await fs.unlink(fullPath).catch(() => {});
+        } catch {
+          // ignore error if file missing
+        }
+      }
+    }
+
+    // Clean up pdf if exists
+    if (letter.pdfPath) {
+      try {
+        const safePdf = path.basename(letter.pdfPath);
+        const fullPdfPath = path.join(this.uploadDir, "letters", safePdf);
+        await fs.unlink(fullPdfPath).catch(() => {});
+      } catch {
+        // ignore error
+      }
+    }
+
+    await this.letterRepo.delete(id);
+    return { success: true, message: "Permohonan surat berhasil dihapus" };
+  }
+
+  async deleteAdminLetter(id: string) {
+    const letter = await this.letterRepo.findById(id);
+    if (!letter) {
+      throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
+    }
+
+    // Clean up physical attachments on disk
+    if (letter.attachments && letter.attachments.length > 0) {
+      for (const att of letter.attachments) {
+        try {
+          const safeName = path.basename(att.storagePath);
+          const fullPath = path.join(this.uploadDir, "attachments", safeName);
+          await fs.unlink(fullPath).catch(() => {});
+        } catch {}
+      }
+    }
+
+    // Clean up pdf if exists
+    if (letter.pdfPath) {
+      try {
+        const safePdf = path.basename(letter.pdfPath);
+        const fullPdfPath = path.join(this.uploadDir, "letters", safePdf);
+        await fs.unlink(fullPdfPath).catch(() => {});
+      } catch {}
+    }
+
+    await this.letterRepo.delete(id);
+    return { success: true, message: "Permohonan surat berhasil dihapus oleh admin" };
   }
 }

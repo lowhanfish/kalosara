@@ -26,10 +26,10 @@ export class LetterPdfService {
     const fontOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
 
     const marginX = 54;
-    let cursorY = height - 50;
+    let cursorY = height - 36; // Margin atas proporsional dan rapi
 
     // 1. KOP SURAT
-    const drawCenteredText = (text: string, font: PDFFont, size: number) => {
+    const drawCenteredText = (text: string, font: PDFFont, size: number, gap: number = 3) => {
       const textWidth = font.widthOfTextAtSize(text, size);
       page.drawText(text, {
         x: (width - textWidth) / 2,
@@ -38,19 +38,19 @@ export class LetterPdfService {
         font,
         color: rgb(0, 0, 0),
       });
-      cursorY -= size + 4;
+      cursorY -= size + gap;
     };
 
-    drawCenteredText("PEMERINTAH KABUPATEN KOLAKA UTARA", fontBold, 12);
-    drawCenteredText("KECAMATAN WATUNOHU", fontBold, 12);
-    drawCenteredText("KELURAHAN WATUNDEHOA", fontBold, 14);
+    drawCenteredText("PEMERINTAH KABUPATEN KOLAKA UTARA", fontBold, 11, 2);
+    drawCenteredText("KECAMATAN WATUNOHU", fontBold, 11, 2);
+    drawCenteredText("KELURAHAN WATUNDEHOA", fontBold, 13, 3);
     drawCenteredText(
       "Alamat: Jl. Poros Watunohu - Kolaka Utara, Kode Pos 93554",
       fontRegular,
-      9,
+      8.5,
+      5,
     );
 
-    cursorY -= 4;
     // Garis Kop Surat Ganda
     page.drawLine({
       start: { x: marginX, y: cursorY },
@@ -58,7 +58,7 @@ export class LetterPdfService {
       thickness: 2,
       color: rgb(0, 0, 0),
     });
-    cursorY -= 3;
+    cursorY -= 2.5;
     page.drawLine({
       start: { x: marginX, y: cursorY },
       end: { x: width - marginX, y: cursorY },
@@ -66,7 +66,7 @@ export class LetterPdfService {
       color: rgb(0, 0, 0),
     });
 
-    cursorY -= 20;
+    cursorY -= 14;
 
     // 2. JUDUL SURAT & NOMOR
     const titleMap: Record<string, string> = {
@@ -76,6 +76,7 @@ export class LetterPdfService {
       PENGANTAR_SKCK: "SURAT PENGANTAR SKCK",
       BELUM_MENIKAH: "SURAT KETERANGAN BELUM MENIKAH",
       BELUM_BEKERJA: "SURAT KETERANGAN BELUM / TIDAK BEKERJA",
+      BELUM_MEMILIKI_RUMAH: "SURAT KETERANGAN BELUM MEMILIKI RUMAH",
       PENGHASILAN: "SURAT KETERANGAN PENGHASILAN",
       PENGANTAR_NIKAH: "SURAT PENGANTAR NIKAH",
       AHLI_WARIS: "SURAT KETERANGAN AHLI WARIS / PENGUASAAN TANAH",
@@ -83,9 +84,9 @@ export class LetterPdfService {
     };
 
     const docTitle = titleMap[letter.type] || "SURAT KETERANGAN";
-    drawCenteredText(docTitle, fontBold, 12);
+    drawCenteredText(docTitle, fontBold, 11, 2);
 
-    const titleWidth = fontBold.widthOfTextAtSize(docTitle, 12);
+    const titleWidth = fontBold.widthOfTextAtSize(docTitle, 11);
     page.drawLine({
       start: { x: (width - titleWidth) / 2, y: cursorY + 2 },
       end: { x: (width + titleWidth) / 2, y: cursorY + 2 },
@@ -94,9 +95,9 @@ export class LetterPdfService {
     });
 
     cursorY -= 2;
-    drawCenteredText(`Nomor: ${letter.letterNumber || "470 / ... / WTDH / ... / 2026"}`, fontRegular, 10);
+    drawCenteredText(`Nomor: ${letter.letterNumber || "470 / ... / WTDH / ... / 2026"}`, fontRegular, 9.5, 6);
 
-    cursorY -= 15;
+    cursorY -= 10;
 
     // 3. PARAGRAF PEMBUKA
     const introText =
@@ -104,19 +105,19 @@ export class LetterPdfService {
     page.drawText(introText, {
       x: marginX,
       y: cursorY,
-      size: 10,
+      size: 9.5,
       font: fontRegular,
       maxWidth: width - marginX * 2,
       lineHeight: 14,
     });
 
-    cursorY -= 26;
+    cursorY -= 34;
 
     // 4. DATA PEMOHON TABULAR
     const detailsLeft = marginX + 20;
     const colonX = marginX + 170;
     const valueX = colonX + 10;
-    const rowHeight = 16;
+    const rowHeight = 15;
 
     const dataRows = [
       ["Nama Lengkap", letter.applicantName],
@@ -130,12 +131,12 @@ export class LetterPdfService {
     ];
 
     for (const [label, val] of dataRows) {
-      page.drawText(label, { x: detailsLeft, y: cursorY, size: 9.5, font: fontRegular });
-      page.drawText(":", { x: colonX, y: cursorY, size: 9.5, font: fontRegular });
+      page.drawText(label, { x: detailsLeft, y: cursorY, size: 9, font: fontRegular });
+      page.drawText(":", { x: colonX, y: cursorY, size: 9, font: fontRegular });
       page.drawText(val, {
         x: valueX,
         y: cursorY,
-        size: 9.5,
+        size: 9,
         font: fontBold,
         maxWidth: width - valueX - marginX,
       });
@@ -168,6 +169,9 @@ export class LetterPdfService {
       case "BELUM_BEKERJA":
         contentParagraph = `Adalah benar bahwa yang bersangkutan dengan riwayat pendidikan terakhir ${details.lastEducation || "-"}, sampai saat surat keterangan ini dikeluarkan benar-benar BELUM / TIDAK MEMILIKI PEKERJAAN TETAP dan berstatus sebagai pencari kerja.\n\nSurat keterangan ini dibuat untuk keperluan: ${details.purpose || "Kelengkapan berkas administrasi"}.`;
         break;
+      case "BELUM_MEMILIKI_RUMAH":
+        contentParagraph = `Adalah benar bahwa yang bersangkutan sampai saat ini belum memiliki rumah tinggal sendiri / hak milik pribadi dan saat ini berstatus ${details.housingStatus || "belum memiliki tempat tinggal tetap"}.\n\nSurat keterangan ini diberikan kepada yang bersangkutan untuk keperluan: ${details.purpose || "Persyaratan pengajuan perumahan / KPR Bersubsidi"}.`;
+        break;
       case "PENGHASILAN":
         contentParagraph = `Adalah benar yang bersangkutan berprofesi di sektor informal sebagai ${details.sourceOfIncome || letter.occupation} dengan taksiran penghasilan rata-rata sebesar ${details.monthlyIncome || "-"} per bulan dan menanggung beban ${details.familyDependents || "-"} orang anggota keluarga.\n\nSurat keterangan ini dibuat untuk keperluan: ${details.purpose || "Persyaratan administrasi"}.`;
         break;
@@ -183,6 +187,14 @@ export class LetterPdfService {
         break;
     }
 
+    const contentLines = contentParagraph.split("\n").reduce((acc, paragraph) => {
+      if (!paragraph.trim()) return acc + 1;
+      const chars = paragraph.length;
+      const wrapped = Math.max(1, Math.ceil(chars / 95));
+      return acc + wrapped;
+    }, 0);
+    const contentBlockHeight = contentLines * 14;
+
     page.drawText(contentParagraph, {
       x: marginX,
       y: cursorY,
@@ -192,7 +204,7 @@ export class LetterPdfService {
       lineHeight: 14,
     });
 
-    cursorY -= 90;
+    cursorY -= contentBlockHeight + 14;
 
     // 6. PARAGRAF PENUTUP
     const closingText =
@@ -206,7 +218,7 @@ export class LetterPdfService {
       lineHeight: 14,
     });
 
-    cursorY -= 30;
+    cursorY -= 20;
 
     // 7. AREA TANDA TANGAN ELEKTRONIK (TTE) DENGAN QR CODE RESMI
     const signDate = letter.signedAt ? new Date(letter.signedAt) : new Date();

@@ -45,6 +45,7 @@ export class LetterRepository {
       PENGANTAR_SKCK: "331",
       BELUM_MENIKAH: "474",
       BELUM_BEKERJA: "560",
+      BELUM_MEMILIKI_RUMAH: "640",
       PENGHASILAN: "581",
       PENGANTAR_NIKAH: "474.2",
       AHLI_WARIS: "590",
@@ -246,6 +247,13 @@ export class LetterRepository {
           },
         },
       },
+    });
+  }
+
+  async delete(id: string) {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.letterAttachment.deleteMany({ where: { letterId: id } });
+      return tx.letterRequest.delete({ where: { id } });
     });
   }
 }

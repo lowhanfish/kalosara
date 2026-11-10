@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "LetterType" ADD VALUE 'BELUM_MEMILIKI_RUMAH';

@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Check,
   X,
+  Trash2,
 } from "lucide-react";
 import { useAuth } from "@/features/auth/auth-provider";
 import {
@@ -107,6 +108,30 @@ export default function AdminPersuratanPage() {
       setSelectedLetter(updated);
       setShowRejectForm(false);
       setRejectionReason("");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const csrfRes = await fetch("/api/v1/auth/csrf");
+      const csrfJson = await csrfRes.json();
+      const csrfToken = csrfJson.data?.csrfToken;
+
+      const res = await fetch(`/api/v1/admin/letters/${id}`, {
+        method: "DELETE",
+        headers: {
+          "x-csrf-token": csrfToken ?? "",
+        },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error?.message || "Gagal menghapus permohonan");
+      }
+      return json.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "letters"] });
+      setSelectedLetter(null);
     },
   });
 
@@ -572,13 +597,32 @@ export default function AdminPersuratanPage() {
 
             {/* Modal Actions Footer */}
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 shrink-0">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedLetter(null)}
-              >
-                Tutup
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedLetter(null)}
+                >
+                  Tutup
+                </Button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (
+                      confirm(
+                        `Apakah Anda yakin ingin menghapus permohonan surat ${selectedLetter.ticketNumber}? Data dan lampiran akan dihapus permanen.`,
+                      )
+                    ) {
+                      await deleteMutation.mutateAsync(selectedLetter.id);
+                    }
+                  }}
+                  disabled={deleteMutation.isPending}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition"
+                >
+                  <Trash2 size={13} />
+                  <span>Hapus Permohonan</span>
+                </button>
+              </div>
 
               <div className="flex flex-wrap items-center gap-2">
                 {/* When SUBMITTED: Admin can verify or reject */}

@@ -18,6 +18,7 @@ const mockLetterRepo = {
   generateTicketNumber: vi.fn(),
   generateLetterNumber: vi.fn(),
   findByQrToken: vi.fn(),
+  delete: vi.fn(),
 };
 
 describe("Letter Workflow & Persuratan KALOSARA", () => {
@@ -304,7 +305,20 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
     });
   });
 
-  describe("Step 6: Public QR Code Verification", () => {
+  describe("Step 6: Public QR Code Verification & Attachment Download", () => {
+    it("throws 404 when attachment file is not found on disk", async () => {
+      const controller = new LetterController(letterService);
+      const req = {
+        params: { filename: "non-existent-attachment.pdf" },
+      } as unknown as Request;
+      const res = {} as unknown as Response;
+
+      await expect(controller.downloadAttachment(req, res)).rejects.toMatchObject({
+        status: 404,
+        code: "NOT_FOUND",
+      });
+    });
+
     it("returns verified document details for valid QR token", async () => {
       mockLetterRepo.findByQrToken.mockResolvedValue({
         id: "letter-123",
@@ -377,6 +391,53 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
       // Valid PDF files start with %PDF
       const header = result.pdfBuffer.subarray(0, 5).toString("utf-8");
       expect(header).toBe("%PDF-");
+    });
+  });
+
+  describe("Step 7: Letter Cancellation & Deletion", () => {
+    it("allows citizen to delete their SUBMITTED letter", async () => {
+      mockLetterRepo.findById.mockResolvedValue({
+        id: "letter-del-1",
+        userId: "user-1",
+        status: "SUBMITTED",
+        attachments: [],
+        pdfPath: null,
+      });
+      mockLetterRepo.delete.mockResolvedValue({ id: "letter-del-1" });
+
+      const result = await letterService.deleteCitizenLetter("letter-del-1", "user-1");
+      expect(result.success).toBe(true);
+      expect(mockLetterRepo.delete).toHaveBeenCalledWith("letter-del-1");
+    });
+
+    it("rejects deletion if citizen does not own the letter", async () => {
+      mockLetterRepo.findById.mockResolvedValue({
+        id: "letter-del-2",
+        userId: "other-user",
+        status: "SUBMITTED",
+      });
+
+      await expect(
+        letterService.deleteCitizenLetter("letter-del-2", "user-1"),
+      ).rejects.toMatchObject({
+        status: 403,
+        code: "FORBIDDEN",
+      });
+    });
+
+    it("prevents deletion of SIGNED official letters", async () => {
+      mockLetterRepo.findById.mockResolvedValue({
+        id: "letter-del-3",
+        userId: "user-1",
+        status: "SIGNED",
+      });
+
+      await expect(
+        letterService.deleteCitizenLetter("letter-del-3", "user-1"),
+      ).rejects.toMatchObject({
+        status: 400,
+        code: "BAD_REQUEST",
+      });
     });
   });
 });

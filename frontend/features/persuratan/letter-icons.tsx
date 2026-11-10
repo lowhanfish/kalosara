@@ -115,48 +115,105 @@ export function LetterIllustratedIcon({
       );
 
     case "BELUM_MENIKAH":
-      // Cute golden rings with single heart & dove
+      // Yellow baby chick with whole brown egg - matching reference image
       return (
         <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-          <ellipse cx="80" cy="138" rx="46" ry="10" fill="#0f172a" fillOpacity="0.1" />
-          {/* Golden Ring */}
-          <ellipse cx="80" cy="88" rx="36" ry="36" stroke="url(#goldGrad)" strokeWidth="14" fill="none" />
-          {/* Diamond Top */}
-          <path d="M80 36L92 50L80 62L68 50L80 36Z" fill="#38bdf8" stroke="#0284c7" strokeWidth="2" />
-          <path d="M74 46L80 38L86 46M80 38V60" stroke="#bae6fd" strokeWidth="1.5" />
-          {/* Single Heart Badge */}
-          <circle cx="114" cy="54" r="16" fill="#f43f5e" />
-          <path d="M114 62C114 62 106 56 106 50C106 46 109 44 112 44C113.5 44 114 46 114 46C114 46 114.5 44 116 44C119 44 122 46 122 50C122 56 114 62 114 62Z" fill="#ffffff" />
-          <defs>
-            <linearGradient id="goldGrad" x1="44" y1="52" x2="116" y2="124" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#fef08a" />
-              <stop offset="0.5" stopColor="#f59e0b" />
-              <stop offset="1" stopColor="#b45309" />
-            </linearGradient>
-          </defs>
+          <ellipse cx="80" cy="140" rx="52" ry="10" fill="#0f172a" fillOpacity="0.1" />
+          {/* Egg on the left */}
+          <g transform="translate(32, 70)">
+            <ellipse cx="28" cy="40" rx="26" ry="32" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" transform="rotate(-15 28 40)" />
+            <path d="M16 28C14 36 18 52 28 58" stroke="#fdba74" strokeWidth="3" strokeLinecap="round" />
+          </g>
+          {/* Baby Chick on the right */}
+          <g transform="translate(68, 42)">
+            {/* Chick Body */}
+            <circle cx="40" cy="62" r="28" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
+            {/* Chick Head */}
+            <circle cx="34" cy="30" r="20" fill="#fde047" stroke="#ca8a04" strokeWidth="2" />
+            {/* Chick Eye */}
+            <circle cx="28" cy="26" r="3.5" fill="#1e293b" />
+            <circle cx="29" cy="25" r="1.2" fill="#ffffff" />
+            {/* Orange Beak */}
+            <polygon points="14,30 22,26 22,34" fill="#f97316" stroke="#c2410c" strokeWidth="1" />
+            {/* Little Wing */}
+            <path d="M42 56C48 58 58 66 54 74C46 76 38 72 40 64" fill="#eab308" stroke="#ca8a04" strokeWidth="1.5" />
+            {/* Chick Feet */}
+            <path d="M30 88V96M26 96H34" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M46 88V96M42 96H50" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" />
+          </g>
+          {/* Paper airplane floating badge */}
+          <g transform="translate(112, 74)">
+            <path d="M0 16L18 0L9 20L6 14L0 16Z" fill="#0284c7" />
+            <path d="M6 14L18 0L9 20L6 14Z" fill="#38bdf8" />
+          </g>
+        </svg>
+      );
+
+    case "BELUM_MEMILIKI_RUMAH":
+      // Two figures warming near a barrel fire - matching reference image
+      return (
+        <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+          <ellipse cx="80" cy="142" rx="54" ry="10" fill="#0f172a" fillOpacity="0.12" />
+          {/* Central Burning Barrel */}
+          <rect x="66" y="94" width="28" height="38" rx="3" fill="#64748b" stroke="#334155" strokeWidth="2" />
+          <line x1="66" y1="104" x2="94" y2="104" stroke="#475569" strokeWidth="2" />
+          <line x1="66" y1="116" x2="94" y2="116" stroke="#475569" strokeWidth="2" />
+          <ellipse cx="80" cy="94" rx="14" ry="4" fill="#475569" stroke="#334155" strokeWidth="1.5" />
+          {/* Fire flames from barrel */}
+          <path d="M72 92C72 82 76 74 80 70C82 76 86 78 88 92Z" fill="#f97316" />
+          <path d="M75 92C75 85 78 78 80 76C82 80 84 83 85 92Z" fill="#fde047" />
+          {/* Left Figure */}
+          <g transform="translate(34, 76)">
+            {/* Head with beanie */}
+            <circle cx="16" cy="14" r="8" fill="#fed7aa" />
+            <path d="M8 12C8 6 12 2 16 2C20 2 24 6 24 12Z" fill="#ef4444" />
+            {/* Body */}
+            <path d="M6 24C6 20 10 18 16 18C22 18 26 20 26 24L28 48H4L6 24Z" fill="#3b82f6" />
+            {/* Hands warming toward fire */}
+            <path d="M22 28L34 32" stroke="#fed7aa" strokeWidth="3" strokeLinecap="round" />
+            {/* Legs */}
+            <path d="M10 48V62M22 48V62" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+          </g>
+          {/* Right Figure */}
+          <g transform="translate(90, 76)">
+            {/* Head with hood */}
+            <circle cx="16" cy="14" r="8" fill="#fed7aa" />
+            <path d="M8 12C8 6 12 2 16 2C20 2 24 6 24 12Z" fill="#10b981" />
+            {/* Body */}
+            <path d="M6 24C6 20 10 18 16 18C22 18 26 20 26 24L28 48H4L6 24Z" fill="#64748b" />
+            {/* Hands warming toward fire */}
+            <path d="M10 28L-2 32" stroke="#fed7aa" strokeWidth="3" strokeLinecap="round" />
+            {/* Legs */}
+            <path d="M10 48V62M22 48V62" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" />
+          </g>
+          {/* Paper airplane floating badge */}
+          <g transform="translate(118, 92)">
+            <path d="M0 16L18 0L9 20L6 14L0 16Z" fill="#0284c7" />
+            <path d="M6 14L18 0L9 20L6 14Z" fill="#38bdf8" />
+          </g>
         </svg>
       );
 
     case "BELUM_BEKERJA":
-      // Job application briefcase & magnifying glass
+      // Person avatar holding "NEED A JOB!" sign - matching reference image
       return (
         <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-          <ellipse cx="80" cy="138" rx="54" ry="10" fill="#0f172a" fillOpacity="0.1" />
-          {/* Briefcase */}
-          <rect x="36" y="66" width="88" height="58" rx="8" fill="#475569" stroke="#1e293b" strokeWidth="2.5" />
-          <rect x="36" y="66" width="88" height="24" rx="4" fill="#334155" />
-          {/* Handle */}
-          <path d="M62 66V50C62 46 66 42 70 42H90C94 42 98 46 98 50V66" stroke="#1e293b" strokeWidth="6" strokeLinecap="round" fill="none" />
-          {/* Golden Locks */}
-          <rect x="52" y="84" width="8" height="12" rx="2" fill="#fbbf24" />
-          <rect x="100" y="84" width="8" height="12" rx="2" fill="#fbbf24" />
-          {/* "Need Work" badge */}
-          <rect x="58" y="100" width="44" height="14" rx="4" fill="#ef4444" />
-          <text x="80" y="110" textAnchor="middle" fill="#ffffff" fontSize="8" fontWeight="bold" fontFamily="sans-serif">SEEKING</text>
-          {/* Magnifying Glass */}
-          <g transform="translate(86, 26)">
-            <circle cx="24" cy="24" r="16" fill="#e0f2fe" stroke="#0284c7" strokeWidth="4" />
-            <path d="M36 36L48 48" stroke="#0369a1" strokeWidth="6" strokeLinecap="round" />
+          <ellipse cx="80" cy="142" rx="54" ry="10" fill="#0f172a" fillOpacity="0.1" />
+          {/* Blue Circular Backdrop */}
+          <circle cx="80" cy="80" r="44" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="2" />
+          {/* Person Head & Hair */}
+          <circle cx="80" cy="62" r="16" fill="#fed7aa" />
+          <path d="M66 58C66 46 72 42 80 42C88 42 94 46 94 58C90 54 84 52 80 52C76 52 70 54 66 58Z" fill="#3b82f6" />
+          {/* Person Shoulders */}
+          <path d="M56 100C56 86 66 80 80 80C94 80 104 86 104 100V108H56V100Z" fill="#2563eb" />
+          {/* "NEED A JOB!" Red Placard */}
+          <rect x="58" y="96" width="44" height="20" rx="3" fill="#ef4444" stroke="#b91c1c" strokeWidth="1.5" />
+          <text x="80" y="106" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="900" fontFamily="sans-serif">NEED A</text>
+          <text x="80" y="113" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="900" fontFamily="sans-serif">JOB!</text>
+          {/* Paper airplane floating badge */}
+          <g transform="translate(112, 102)">
+            <path d="M0 16L18 0L9 20L6 14L0 16Z" fill="#0284c7" />
+            <path d="M6 14L18 0L9 20L6 14Z" fill="#38bdf8" />
           </g>
         </svg>
       );

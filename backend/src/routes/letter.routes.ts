@@ -65,6 +65,11 @@ citizenLetterRouter.post(
   upload.array("attachments", 10),
   letterController.submitCitizenLetter,
 );
+citizenLetterRouter.delete(
+  "/:id",
+  requireMutation,
+  letterController.deleteCitizenLetter,
+);
 
 // Admin / Lurah routes
 export const adminLetterRouter = Router();
@@ -81,9 +86,15 @@ adminLetterRouter.post(
   requireMutation,
   letterController.processAdminLetterAction,
 );
+adminLetterRouter.delete(
+  "/:id",
+  requireMutation,
+  letterController.deleteAdminLetter,
+);
 
-// Public routes (PDF download & QR verification)
+// Public routes (PDF download, attachments & QR verification)
 export const publicLetterRouter = Router();
 publicLetterRouter.use(noStore);
 publicLetterRouter.get("/download/:id", letterController.downloadLetterPdf);
+publicLetterRouter.get("/attachments/:filename", letterController.downloadAttachment);
 publicLetterRouter.get("/verify/:token", letterController.verifyPublicLetter);

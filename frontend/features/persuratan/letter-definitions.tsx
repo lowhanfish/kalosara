@@ -106,6 +106,30 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
       { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Pendaftaran Pelatihan Kerja BLK / Pembuatan Kartu Kuning (AK-1)", required: true },
     ],
   },
+  BELUM_MEMILIKI_RUMAH: {
+    code: "BELUM_MEMILIKI_RUMAH",
+    title: "Surat Keterangan Belum Memiliki Rumah",
+    shortTitle: "Belum Memiliki Rumah",
+    badge: "Perumahan",
+    description: "Menerangkan bahwa pemohon sampai saat ini belum memiliki rumah tinggal sendiri / hak milik pribadi.",
+    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Surat Pengantar RT"],
+    fields: [
+      {
+        name: "housingStatus",
+        label: "Status Tempat Tinggal Saat Ini",
+        type: "select",
+        options: [
+          "Menyewa / Kontrak",
+          "Tinggal Bersama Orang Tua",
+          "Menumpang di Rumah Kerabat",
+          "Mess / Asrama Sementara",
+        ],
+        required: true,
+      },
+      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Syarat KPR BTN Bersubsidi / Bantuan Rumah", required: true },
+      { name: "notes", label: "Keterangan Tambahan", type: "textarea", placeholder: "Tuliskan keterangan pendukung jika ada" },
+    ],
+  },
   PENGHASILAN: {
     code: "PENGHASILAN",
     title: "Surat Keterangan Penghasilan",

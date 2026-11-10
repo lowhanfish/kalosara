@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FileText,
   Clock,
@@ -10,6 +10,8 @@ import {
   FileCheck,
   Paperclip,
   ExternalLink,
+  Trash2,
+  X,
 } from "lucide-react";
 import type { LetterRequest } from "./types";
 import { LETTER_DEFINITIONS } from "./letter-definitions";
@@ -18,13 +20,32 @@ interface LetterHistoryListProps {
   letters: LetterRequest[];
   isLoading: boolean;
   onOpenReapply?: (letter: LetterRequest) => void;
+  onDeleteLetter?: (letterId: string) => Promise<void>;
 }
 
 export function LetterHistoryList({
   letters,
   isLoading,
   onOpenReapply,
+  onDeleteLetter,
 }: LetterHistoryListProps) {
+  const [letterToDelete, setLetterToDelete] = useState<LetterRequest | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const handleConfirmDelete = async () => {
+    if (!letterToDelete || !onDeleteLetter) return;
+    try {
+      setIsDeleting(true);
+      setDeleteError(null);
+      await onDeleteLetter(letterToDelete.id);
+      setLetterToDelete(null);
+    } catch (err: unknown) {
+      setDeleteError(err instanceof Error ? err.message : "Gagal menghapus permohonan surat");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   if (isLoading) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-xs">
@@ -148,6 +169,24 @@ export function LetterHistoryList({
                       <span>Cek QR TTE</span>
                     </a>
                   )}
+                </div>
+              )}
+
+              {/* Action Button for Non-Signed (Can be cancelled & deleted) */}
+              {letter.status !== "SIGNED" && onDeleteLetter && (
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeleteError(null);
+                      setLetterToDelete(letter);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50/70 px-3 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-100 active:scale-95"
+                    title="Batalkan & Hapus Permohonan"
+                  >
+                    <Trash2 size={13} className="text-rose-600" />
+                    <span>{letter.status === "SUBMITTED" ? "Batalkan & Hapus" : "Hapus Riwayat"}</span>
+                  </button>
                 </div>
               )}
             </div>
@@ -303,6 +342,79 @@ export function LetterHistoryList({
           </div>
         );
       })}
+
+      {/* Delete Confirmation Modal */}
+      {letterToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl border border-slate-200 p-6 space-y-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <span className="grid size-10 place-items-center rounded-xl bg-rose-100 text-rose-600">
+                  <Trash2 size={20} />
+                </span>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    {letterToDelete.status === "SUBMITTED"
+                      ? "Batalkan & Hapus Permohonan?"
+                      : "Hapus Riwayat Permohonan?"}
+                  </h3>
+                  <span className="font-mono text-xs text-slate-500">
+                    {letterToDelete.ticketNumber}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLetterToDelete(null)}
+                className="grid size-7 place-items-center rounded-lg text-slate-400 hover:bg-slate-100"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Apakah Anda yakin ingin membatalkan dan menghapus permohonan{" "}
+              <strong>{LETTER_DEFINITIONS[letterToDelete.type]?.title ?? letterToDelete.title}</strong>?
+              Data isian serta semua berkas lampiran yang telah diunggah akan dihapus secara permanen dari server.
+            </p>
+
+            {deleteError && (
+              <div className="flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800">
+                <AlertCircle size={14} className="shrink-0 text-rose-600" />
+                <span>{deleteError}</span>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setLetterToDelete(null)}
+                className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+              >
+                Kembali
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleConfirmDelete}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-rose-700 active:scale-95 disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <div className="size-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <span>Menghapus...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={13} />
+                    <span>Ya, Hapus Permohonan</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
