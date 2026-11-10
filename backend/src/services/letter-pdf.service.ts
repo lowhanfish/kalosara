@@ -17,6 +17,33 @@ export class LetterPdfService {
     return path.resolve(process.cwd(), "../shared/uploads");
   }
 
+  private getLogoBuffer(): Buffer | null {
+    const candidatePaths = [
+      path.resolve(__dirname, "../../assets/konawe.png"),
+      path.resolve(__dirname, "../assets/konawe.png"),
+      path.resolve(process.cwd(), "assets/konawe.png"),
+      path.resolve(process.cwd(), "backend/assets/konawe.png"),
+      path.resolve(process.cwd(), "public/images/watundehoa/konawe.png"),
+      path.resolve(process.cwd(), "backend/public/images/watundehoa/konawe.png"),
+      path.resolve(process.cwd(), "../frontend/public/images/watundehoa/konawe.png"),
+      path.resolve(__dirname, "../../../frontend/public/images/watundehoa/konawe.png"),
+      "/srv/kalosara/current/frontend/public/images/watundehoa/konawe.png",
+      "/srv/kalosara/current/backend/assets/konawe.png",
+      "/srv/kalosara/current/backend/public/images/watundehoa/konawe.png",
+    ];
+
+    for (const p of candidatePaths) {
+      if (fsSync.existsSync(p)) {
+        try {
+          return fsSync.readFileSync(p);
+        } catch {
+          // continue
+        }
+      }
+    }
+    return null;
+  }
+
   async generatePdf(letter: LetterRequest): Promise<{
     storagePath: string;
     pdfBuffer: Buffer;
@@ -33,6 +60,17 @@ export class LetterPdfService {
     let cursorY = height - 36; // Margin atas proporsional dan rapi
 
     // 1. KOP SURAT
+    // Embed Lambang Daerah (Konawe / Pemda) jika tersedia
+    const logoBuffer = this.getLogoBuffer();
+    let logoImage = null;
+    if (logoBuffer) {
+      try {
+        logoImage = await pdfDoc.embedPng(logoBuffer);
+      } catch {
+        logoImage = null;
+      }
+    }
+
     const drawCenteredText = (text: string, font: PDFFont, size: number, gap: number = 3) => {
       const textWidth = font.widthOfTextAtSize(text, size);
       page.drawText(text, {
@@ -54,6 +92,16 @@ export class LetterPdfService {
       8.5,
       5,
     );
+
+    if (logoImage) {
+      const logoSize = 56;
+      page.drawImage(logoImage, {
+        x: marginX + 4,
+        y: cursorY + 4,
+        width: logoSize,
+        height: logoSize,
+      });
+    }
 
     // Garis Kop Surat Ganda
     page.drawLine({
