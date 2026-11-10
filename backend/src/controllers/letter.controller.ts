@@ -123,24 +123,11 @@ export class LetterController {
     if (!id) {
       throw new ApiError(400, "BAD_REQUEST", "ID permohonan diperlukan");
     }
-    const letter = await this.letterService.getRequestDetail(id);
-    if (!letter || !letter.pdfPath) {
-      throw new ApiError(404, "NOT_FOUND", "Dokumen PDF belum tersedia atau belum ditandatangani");
-    }
 
-    const uploadRoot =
-      process.env.UPLOAD_ROOT ||
-      path.resolve(process.cwd(), "../shared/uploads");
-    const relativePath = letter.pdfPath.replace(/^\/uploads\//, "");
-    const fullPath = path.join(uploadRoot, relativePath);
+    const { fullPath, filename } = await this.letterService.getOrGeneratePdfFile(id);
 
-    if (!fs.existsSync(fullPath)) {
-      throw new ApiError(404, "NOT_FOUND", "File fisik PDF tidak ditemukan di server");
-    }
-
-    const safeFilename = `${letter.ticketNumber}.pdf`;
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `inline; filename="${safeFilename}"`);
+    res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
     const stream = fs.createReadStream(fullPath);
     return stream.pipe(res);
   };
@@ -155,11 +142,18 @@ export class LetterController {
     const safeFilename = path.basename(filename);
     const uploadRoot =
       process.env.UPLOAD_ROOT ||
-      path.resolve(process.cwd(), "../shared/uploads");
-    const fullPath = path.join(uploadRoot, "attachments", safeFilename);
+      (fs.existsSync("/srv/kalosara/shared/uploads")
+        ? "/srv/kalosara/shared/uploads"
+        : path.resolve(process.cwd(), "../shared/uploads"));
+    let fullPath = path.join(uploadRoot, "attachments", safeFilename);
 
     if (!fs.existsSync(fullPath)) {
-      throw new ApiError(404, "NOT_FOUND", "File fisik lampiran tidak ditemukan di server");
+      const fallbackPath = path.resolve(process.cwd(), "../shared/uploads/attachments", safeFilename);
+      if (fs.existsSync(fallbackPath)) {
+        fullPath = fallbackPath;
+      } else {
+        throw new ApiError(404, "NOT_FOUND", "File fisik lampiran tidak ditemukan di server");
+      }
     }
 
     const ext = path.extname(safeFilename).toLowerCase();

@@ -1,16 +1,20 @@
 import { PDFDocument, rgb, StandardFonts, type PDFFont } from "pdf-lib";
 import QRCode from "qrcode";
 import fs from "fs/promises";
+import fsSync from "fs";
 import path from "path";
 import type { LetterRequest } from "@prisma/client";
 
 export class LetterPdfService {
-  private uploadDir: string;
-
-  constructor() {
-    this.uploadDir =
-      process.env.UPLOAD_ROOT ||
-      path.resolve(process.cwd(), "../shared/uploads");
+  getUploadDir(): string {
+    if (process.env.UPLOAD_ROOT) {
+      return process.env.UPLOAD_ROOT;
+    }
+    const vpsShared = "/srv/kalosara/shared/uploads";
+    if (fsSync.existsSync(vpsShared)) {
+      return vpsShared;
+    }
+    return path.resolve(process.cwd(), "../shared/uploads");
   }
 
   async generatePdf(letter: LetterRequest): Promise<{
@@ -309,7 +313,8 @@ export class LetterPdfService {
     const pdfBuffer = Buffer.from(pdfBytes);
 
     // Save to shared uploads
-    const lettersDir = path.join(this.uploadDir, "letters");
+    const uploadDir = this.getUploadDir();
+    const lettersDir = path.join(uploadDir, "letters");
     await fs.mkdir(lettersDir, { recursive: true });
 
     const safeTicket = letter.ticketNumber.replace(/[^a-zA-Z0-9_-]/g, "_");

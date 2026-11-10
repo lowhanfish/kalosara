@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import fsSync from "fs";
 import path from "path";
 import crypto from "crypto";
 import { LetterRepository } from "../repositories/letter.repository.js";
@@ -8,17 +9,22 @@ import { ApiError } from "../lib/errors.js";
 import type { LetterRequest, LetterStatus, LetterType } from "@prisma/client";
 
 export class LetterService {
-  private uploadDir: string;
+  getUploadDir(): string {
+    if (process.env.UPLOAD_ROOT) {
+      return process.env.UPLOAD_ROOT;
+    }
+    const vpsShared = "/srv/kalosara/shared/uploads";
+    if (fsSync.existsSync(vpsShared)) {
+      return vpsShared;
+    }
+    return path.resolve(process.cwd(), "../shared/uploads");
+  }
 
   constructor(
     private letterRepo: LetterRepository,
     private pdfService: LetterPdfService,
     private emailService: EmailService,
-  ) {
-    this.uploadDir =
-      process.env.UPLOAD_ROOT ||
-      path.resolve(process.cwd(), "../shared/uploads");
-  }
+  ) {}
 
   async createRequest(
     userId: string,
@@ -40,7 +46,8 @@ export class LetterService {
     const ticketNumber = await this.letterRepo.generateTicketNumber();
 
     // Process file attachments
-    const attachmentsDir = path.join(this.uploadDir, "attachments");
+    const uploadDir = this.getUploadDir();
+    const attachmentsDir = path.join(uploadDir, "attachments");
     await fs.mkdir(attachmentsDir, { recursive: true });
 
     const attachmentsData: Array<{
@@ -283,11 +290,12 @@ export class LetterService {
     }
 
     // Clean up physical attachments on disk
+    const uploadDir = this.getUploadDir();
     if (letter.attachments && letter.attachments.length > 0) {
       for (const att of letter.attachments) {
         try {
           const safeName = path.basename(att.storagePath);
-          const fullPath = path.join(this.uploadDir, "attachments", safeName);
+          const fullPath = path.join(uploadDir, "attachments", safeName);
           await fs.unlink(fullPath).catch(() => {});
         } catch {
           // ignore error if file missing
@@ -299,7 +307,7 @@ export class LetterService {
     if (letter.pdfPath) {
       try {
         const safePdf = path.basename(letter.pdfPath);
-        const fullPdfPath = path.join(this.uploadDir, "letters", safePdf);
+        const fullPdfPath = path.join(uploadDir, "letters", safePdf);
         await fs.unlink(fullPdfPath).catch(() => {});
       } catch {
         // ignore error
@@ -316,12 +324,14 @@ export class LetterService {
       throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
     }
 
+    const uploadDir = this.getUploadDir();
+
     // Clean up physical attachments on disk
     if (letter.attachments && letter.attachments.length > 0) {
       for (const att of letter.attachments) {
         try {
           const safeName = path.basename(att.storagePath);
-          const fullPath = path.join(this.uploadDir, "attachments", safeName);
+          const fullPath = path.join(uploadDir, "attachments", safeName);
           await fs.unlink(fullPath).catch(() => {});
         } catch {}
       }
@@ -331,12 +341,42 @@ export class LetterService {
     if (letter.pdfPath) {
       try {
         const safePdf = path.basename(letter.pdfPath);
-        const fullPdfPath = path.join(this.uploadDir, "letters", safePdf);
+        const fullPdfPath = path.join(uploadDir, "letters", safePdf);
         await fs.unlink(fullPdfPath).catch(() => {});
       } catch {}
     }
 
     await this.letterRepo.delete(id);
     return { success: true, message: "Permohonan surat berhasil dihapus oleh admin" };
+  }
+
+  async getOrGeneratePdfFile(id: string): Promise<{ fullPath: string; filename: string }> {
+    const letter = await this.letterRepo.findById(id);
+    if (!letter || letter.status !== "SIGNED") {
+      throw new ApiError(404, "NOT_FOUND", "Dokumen PDF belum tersedia atau belum ditandatangani");
+    }
+
+    const safeTicket = letter.ticketNumber.replace(/[^a-zA-Z0-9_-]/g, "_");
+    const filename = `${safeTicket}.pdf`;
+    const uploadRoot = this.getUploadDir();
+    const relativePath = (letter.pdfPath || `/uploads/letters/${filename}`).replace(/^\/uploads\//, "");
+    let fullPath = path.join(uploadRoot, relativePath);
+
+    if (!fsSync.existsSync(fullPath)) {
+      const fallbackPath = path.resolve(process.cwd(), "../shared/uploads", relativePath);
+      if (fsSync.existsSync(fallbackPath)) {
+        return { fullPath: fallbackPath, filename };
+      }
+      // Re-generate authentic signed PDF on the fly
+      await this.pdfService.generatePdf(letter);
+      if (fsSync.existsSync(fullPath)) {
+        return { fullPath, filename };
+      }
+      if (fsSync.existsSync(fallbackPath)) {
+        return { fullPath: fallbackPath, filename };
+      }
+    }
+
+    return { fullPath, filename };
   }
 }
