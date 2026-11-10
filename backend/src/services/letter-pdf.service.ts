@@ -88,20 +88,43 @@ export class LetterPdfService {
     };
 
     const docTitle = titleMap[letter.type] || "SURAT KETERANGAN";
-    drawCenteredText(docTitle, fontBold, 11, 2);
+    const titleSize = 12;
+    const titleWidth = fontBold.widthOfTextAtSize(docTitle, titleSize);
 
-    const titleWidth = fontBold.widthOfTextAtSize(docTitle, 11);
+    // Judul Surat
+    page.drawText(docTitle, {
+      x: (width - titleWidth) / 2,
+      y: cursorY,
+      size: titleSize,
+      font: fontBold,
+      color: rgb(0, 0, 0),
+    });
+
+    // Garis Bawah Judul Surat (Underline tepat di bawah judul)
     page.drawLine({
-      start: { x: (width - titleWidth) / 2, y: cursorY + 2 },
-      end: { x: (width + titleWidth) / 2, y: cursorY + 2 },
+      start: { x: (width - titleWidth) / 2, y: cursorY - 2.5 },
+      end: { x: (width + titleWidth) / 2, y: cursorY - 2.5 },
       thickness: 1,
       color: rgb(0, 0, 0),
     });
 
-    cursorY -= 2;
-    drawCenteredText(`Nomor: ${letter.letterNumber || "470 / ... / WTDH / ... / 2026"}`, fontRegular, 9.5, 6);
+    // Jarak ke Nomor Surat
+    cursorY -= 15;
 
-    cursorY -= 10;
+    // Nomor Surat
+    const nomorText = `Nomor: ${letter.letterNumber || "470 / ... / WTDH / ... / 2026"}`;
+    const nomorSize = 9.5;
+    const nomorWidth = fontRegular.widthOfTextAtSize(nomorText, nomorSize);
+    page.drawText(nomorText, {
+      x: (width - nomorWidth) / 2,
+      y: cursorY,
+      size: nomorSize,
+      font: fontRegular,
+      color: rgb(0, 0, 0),
+    });
+
+    // Jarak ke Paragraf Pembuka
+    cursorY -= 20;
 
     // 3. PARAGRAF PEMBUKA
     const introText =
