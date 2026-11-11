@@ -32,7 +32,9 @@ export function AdminPageHeader({
           <p className="admin-page-description">{description}</p>
         </div>
       </div>
-      {children && <div className="admin-page-actions shrink-0">{children}</div>}
+      {children && (
+        <div className="admin-page-actions shrink-0">{children}</div>
+      )}
     </header>
   );
 }

@@ -15,7 +15,11 @@ export default async function BukuTamuPage() {
   const locationName = settings.address ?? siteIdentity.location;
 
   return (
-    <main id="konten" tabIndex={-1} className="min-h-screen bg-slate-50/50 pb-16">
+    <main
+      id="konten"
+      tabIndex={-1}
+      className="min-h-screen bg-slate-50/50 pb-16"
+    >
       <GuestbookForm siteName={siteName} locationName={locationName} />
     </main>
   );

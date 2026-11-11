@@ -80,7 +80,15 @@ function Icon3dAnggaran(props: SVGProps<SVGSVGElement>) {
           fill="url(#g-ang-coin1)"
         />
         <ellipse cx="28" cy="17" rx="15" ry="6.2" fill="url(#g-ang-top1)" />
-        <ellipse cx="28" cy="17" rx="11" ry="4.5" fill="#fef08a" stroke="#d97706" strokeWidth="1" />
+        <ellipse
+          cx="28"
+          cy="17"
+          rx="11"
+          ry="4.5"
+          fill="#fef08a"
+          stroke="#d97706"
+          strokeWidth="1"
+        />
         {/* Rp / currency symbol embossing */}
         <text
           x="28"
@@ -95,7 +103,11 @@ function Icon3dAnggaran(props: SVGProps<SVGSVGElement>) {
         </text>
       </g>
       {/* 3D Specular Sparkle */}
-      <path d="M42 11l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z" fill="#fef08a" opacity="0.9" />
+      <path
+        d="M42 11l1.5 3 3 1.5-3 1.5-1.5 3-1.5-3-3-1.5 3-1.5z"
+        fill="#fef08a"
+        opacity="0.9"
+      />
     </svg>
   );
 }
@@ -129,10 +141,42 @@ function Icon3dPPID(props: SVGProps<SVGSVGElement>) {
         fill="url(#g-ppid-back)"
       />
       {/* White Document Emerging */}
-      <rect x="17" y="11" width="22" height="26" rx="2" fill="url(#g-ppid-paper)" filter="drop-shadow(0 2px 4px #0002)" />
-      <line x1="21" y1="17" x2="33" y2="17" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
-      <line x1="21" y1="22" x2="35" y2="22" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="21" y1="26" x2="31" y2="26" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
+      <rect
+        x="17"
+        y="11"
+        width="22"
+        height="26"
+        rx="2"
+        fill="url(#g-ppid-paper)"
+        filter="drop-shadow(0 2px 4px #0002)"
+      />
+      <line
+        x1="21"
+        y1="17"
+        x2="33"
+        y2="17"
+        stroke="#38bdf8"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="21"
+        y1="22"
+        x2="35"
+        y2="22"
+        stroke="#94a3b8"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <line
+        x1="21"
+        y1="26"
+        x2="31"
+        y2="26"
+        stroke="#94a3b8"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
       {/* Front Folder Angled */}
       <path
         d="M9 25a3 3 0 0 1 3-2.5h32a3 3 0 0 1 3 2.5l-2.5 17a3 3 0 0 1-3 2.5H14.5a3 3 0 0 1-3-2.5L9 25z"
@@ -140,7 +184,14 @@ function Icon3dPPID(props: SVGProps<SVGSVGElement>) {
         opacity="0.95"
       />
       {/* Floating Magnifier / Shield Eye */}
-      <circle cx="28" cy="33" r="6" fill="#ffffff33" stroke="#ffffff" strokeWidth="1.5" />
+      <circle
+        cx="28"
+        cy="33"
+        r="6"
+        fill="#ffffff33"
+        stroke="#ffffff"
+        strokeWidth="1.5"
+      />
       <circle cx="28" cy="33" r="2.5" fill="#fef08a" />
     </svg>
   );
@@ -171,7 +222,15 @@ function Icon3dWisata(props: SVGProps<SVGSVGElement>) {
       <ellipse cx="28" cy="46" rx="20" ry="6" fill="url(#g-wis-shadow)" />
       {/* 3D Sun Disc Rising */}
       <circle cx="37" cy="17" r="8" fill="url(#g-wis-sun)" />
-      <circle cx="37" cy="17" r="10" stroke="#fde047" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+      <circle
+        cx="37"
+        cy="17"
+        r="10"
+        stroke="#fde047"
+        strokeWidth="1"
+        strokeDasharray="3 3"
+        opacity="0.6"
+      />
       {/* Small Peak in background */}
       <polygon points="12,42 22,23 32,42" fill="#047857" opacity="0.8" />
       <polygon points="22,23 32,42 27,42" fill="#065f46" opacity="0.9" />
@@ -182,7 +241,14 @@ function Icon3dWisata(props: SVGProps<SVGSVGElement>) {
       <polygon points="26,14 22,22 26,24 29,21" fill="#ecfdf5" />
       <polygon points="26,14 29,21 33,23 26,24" fill="#a7f3d0" />
       {/* Winding Trail */}
-      <path d="M26 24q-2 8 2 11t-1 8" stroke="#fde047" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
+      <path
+        d="M26 24q-2 8 2 11t-1 8"
+        stroke="#fde047"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.9"
+      />
     </svg>
   );
 }
@@ -224,9 +290,34 @@ function Icon3dUMKM(props: SVGProps<SVGSVGElement>) {
       <polygon points="20,19 24,21 24,27 20,25" fill="#fef08a" />
       <polygon points="32,21 36,19 36,25 32,27" fill="#fef08a" />
       {/* 3D Ribbon Bow knot on top */}
-      <ellipse cx="24" cy="13" rx="4" ry="2.5" transform="rotate(-25 24 13)" fill="#fde047" stroke="#ca8a04" strokeWidth="1" />
-      <ellipse cx="32" cy="13" rx="4" ry="2.5" transform="rotate(25 32 13)" fill="#fde047" stroke="#ca8a04" strokeWidth="1" />
-      <circle cx="28" cy="14" r="2.5" fill="#fef9c3" stroke="#ca8a04" strokeWidth="1" />
+      <ellipse
+        cx="24"
+        cy="13"
+        rx="4"
+        ry="2.5"
+        transform="rotate(-25 24 13)"
+        fill="#fde047"
+        stroke="#ca8a04"
+        strokeWidth="1"
+      />
+      <ellipse
+        cx="32"
+        cy="13"
+        rx="4"
+        ry="2.5"
+        transform="rotate(25 32 13)"
+        fill="#fde047"
+        stroke="#ca8a04"
+        strokeWidth="1"
+      />
+      <circle
+        cx="28"
+        cy="14"
+        r="2.5"
+        fill="#fef9c3"
+        stroke="#ca8a04"
+        strokeWidth="1"
+      />
     </svg>
   );
 }
@@ -247,13 +338,28 @@ function Icon3dFasilitas(props: SVGProps<SVGSVGElement>) {
       </defs>
       <ellipse cx="28" cy="46" rx="19" ry="5.5" fill="url(#g-fas-shadow)" />
       {/* 3D Map Slab Isometric Top */}
-      <polygon points="28,21 45,29 28,38 11,29" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="1" />
+      <polygon
+        points="28,21 45,29 28,38 11,29"
+        fill="#e2e8f0"
+        stroke="#cbd5e1"
+        strokeWidth="1"
+      />
       {/* Slab Thickness / Depth */}
       <polygon points="11,29 28,38 28,42 11,33" fill="#64748b" />
       <polygon points="28,38 45,29 45,33 28,42" fill="#475569" />
       {/* Map Roads on Slab */}
-      <path d="M19 25l13 8m-4-10l-6 10" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M25 24l8 6" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M19 25l13 8m-4-10l-6 10"
+        stroke="#10b981"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M25 24l8 6"
+        stroke="#f59e0b"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
       {/* Pin Contact Shadow */}
       <ellipse cx="28" cy="33" rx="4.5" ry="2" fill="#0f172a" opacity="0.4" />
       {/* 3D Floating Location Pin */}
@@ -286,17 +392,44 @@ function Icon3dPengaduan(props: SVGProps<SVGSVGElement>) {
       </defs>
       <ellipse cx="28" cy="46" rx="19" ry="5.5" fill="url(#g-peng-shadow)" />
       {/* Handle */}
-      <path d="M22 30l-3 9a2 2 0 0 0 2 2.5l2 .5a2 2 0 0 0 2-1.5l2.5-9" fill="#0f172a" />
+      <path
+        d="M22 30l-3 9a2 2 0 0 0 2 2.5l2 .5a2 2 0 0 0 2-1.5l2.5-9"
+        fill="#0f172a"
+      />
       {/* Megaphone Cone Body */}
-      <path d="M16 23l16-9v20l-16-5a2 2 0 0 1-1.5-2v-2a2 2 0 0 1 1.5-2z" fill="url(#g-peng-body)" />
+      <path
+        d="M16 23l16-9v20l-16-5a2 2 0 0 1-1.5-2v-2a2 2 0 0 1 1.5-2z"
+        fill="url(#g-peng-body)"
+      />
       {/* Rear Cap */}
       <ellipse cx="16" cy="24" rx="2" ry="4" fill="#f43f5e" />
       {/* Front Bell Rim Ellipse */}
-      <ellipse cx="32" cy="24" rx="3.5" ry="10" fill="#fde047" stroke="#b45309" strokeWidth="1" />
+      <ellipse
+        cx="32"
+        cy="24"
+        rx="3.5"
+        ry="10"
+        fill="#fde047"
+        stroke="#b45309"
+        strokeWidth="1"
+      />
       <ellipse cx="32" cy="24" rx="2" ry="7" fill="#78350f" />
       {/* 3D Soundwaves / Audio Arcs */}
-      <path d="M38 18a8 8 0 0 1 0 12" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-      <path d="M43 14a14 14 0 0 1 0 20" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.8" />
+      <path
+        d="M38 18a8 8 0 0 1 0 12"
+        stroke="#f59e0b"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M43 14a14 14 0 0 1 0 20"
+        stroke="#fbbf24"
+        strokeWidth="2"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.8"
+      />
     </svg>
   );
 }
@@ -375,7 +508,14 @@ function Icon3dDokumen(props: SVGProps<SVGSVGElement>) {
       <polygon points="12,21 28,27 28,24 12,18" fill="#0f766e" />
       <polygon points="28,27 44,21 44,18 28,24" fill="#115e59" />
       {/* Golden Seal Medallion */}
-      <circle cx="28" cy="20" r="5" fill="#fbbf24" stroke="#d97706" strokeWidth="1" />
+      <circle
+        cx="28"
+        cy="20"
+        r="5"
+        fill="#fbbf24"
+        stroke="#d97706"
+        strokeWidth="1"
+      />
       <circle cx="28" cy="20" r="2.5" fill="#fef08a" />
       {/* Floating Ribbon Bookmark */}
       <path d="M35 18v14l3-2.5 3 2.5V18" fill="#f43f5e" />
@@ -407,17 +547,51 @@ function Icon3dAgenda(props: SVGProps<SVGSVGElement>) {
       {/* Isometric Calendar Cube - Right */}
       <polygon points="28,32 43,24 43,36 28,44" fill="#6b21a8" />
       {/* Top Face */}
-      <polygon points="28,16 43,24 28,32 13,24" fill="url(#g-agd-top)" stroke="#e9d5ff" strokeWidth="1" />
+      <polygon
+        points="28,16 43,24 28,32 13,24"
+        fill="url(#g-agd-top)"
+        stroke="#e9d5ff"
+        strokeWidth="1"
+      />
       {/* Red Calendar Header Bar */}
       <polygon points="13,24 28,32 28,29 13,21" fill="#ec4899" />
       <polygon points="28,32 43,24 43,21 28,29" fill="#db2777" />
       {/* Binder Metal Rings */}
-      <circle cx="21" cy="19" r="1.5" fill="#475569" stroke="#94a3b8" strokeWidth="1" />
-      <circle cx="28" cy="22.5" r="1.5" fill="#475569" stroke="#94a3b8" strokeWidth="1" />
-      <circle cx="35" cy="19" r="1.5" fill="#475569" stroke="#94a3b8" strokeWidth="1" />
+      <circle
+        cx="21"
+        cy="19"
+        r="1.5"
+        fill="#475569"
+        stroke="#94a3b8"
+        strokeWidth="1"
+      />
+      <circle
+        cx="28"
+        cy="22.5"
+        r="1.5"
+        fill="#475569"
+        stroke="#94a3b8"
+        strokeWidth="1"
+      />
+      <circle
+        cx="35"
+        cy="19"
+        r="1.5"
+        fill="#475569"
+        stroke="#94a3b8"
+        strokeWidth="1"
+      />
       {/* Floating Day Number Badge */}
       <g transform="translate(0, -3)">
-        <circle cx="36" cy="14" r="5" fill="#fbbf24" stroke="#ffffff" strokeWidth="1.5" filter="drop-shadow(0 2px 4px #0003)" />
+        <circle
+          cx="36"
+          cy="14"
+          r="5"
+          fill="#fbbf24"
+          stroke="#ffffff"
+          strokeWidth="1.5"
+          filter="drop-shadow(0 2px 4px #0003)"
+        />
         <text
           x="36"
           y="16.5"
@@ -451,7 +625,14 @@ function Icon3dPengumuman(props: SVGProps<SVGSVGElement>) {
       </defs>
       <ellipse cx="28" cy="46" rx="19" ry="5.5" fill="url(#g-bell-shadow)" />
       {/* Top Bell Loop */}
-      <circle cx="28" cy="14" r="4" fill="none" stroke="#d97706" strokeWidth="2" />
+      <circle
+        cx="28"
+        cy="14"
+        r="4"
+        fill="none"
+        stroke="#d97706"
+        strokeWidth="2"
+      />
       {/* Bell Body */}
       <path
         d="M28 15c-6.5 0-11 5-11 15 0 3-1.5 5-3 6.5h28c-1.5-1.5-3-3.5-3-6.5 0-10-4.5-15-11-15z"
@@ -459,7 +640,15 @@ function Icon3dPengumuman(props: SVGProps<SVGSVGElement>) {
         filter="drop-shadow(0 4px 6px #0003)"
       />
       {/* Bottom Rim Lip */}
-      <ellipse cx="28" cy="37" rx="14" ry="3.5" fill="#fde047" stroke="#b45309" strokeWidth="1" />
+      <ellipse
+        cx="28"
+        cy="37"
+        rx="14"
+        ry="3.5"
+        fill="#fde047"
+        stroke="#b45309"
+        strokeWidth="1"
+      />
       {/* Clapper Ball */}
       <circle cx="28" cy="41" r="3" fill="#78350f" />
       {/* Sparkles */}
@@ -490,17 +679,40 @@ function Icon3dGaleri(props: SVGProps<SVGSVGElement>) {
       </defs>
       <ellipse cx="28" cy="46" rx="19" ry="5.5" fill="url(#g-cam-shadow)" />
       {/* 3D Camera Body */}
-      <rect x="11" y="21" width="34" height="22" rx="5" fill="url(#g-cam-body)" filter="drop-shadow(0 4px 8px #0004)" />
+      <rect
+        x="11"
+        y="21"
+        width="34"
+        height="22"
+        rx="5"
+        fill="url(#g-cam-body)"
+        filter="drop-shadow(0 4px 8px #0004)"
+      />
       {/* Top Viewfinder Bump */}
       <path d="M22 21l2-4h8l2 4" fill="#1e293b" />
       {/* Flash Gem */}
       <circle cx="39" cy="26" r="2" fill="#fde047" />
       {/* 3D Big Lens Outer Ring */}
-      <circle cx="28" cy="32" r="9" fill="#1e293b" stroke="#cbd5e1" strokeWidth="1.5" />
+      <circle
+        cx="28"
+        cy="32"
+        r="9"
+        fill="#1e293b"
+        stroke="#cbd5e1"
+        strokeWidth="1.5"
+      />
       {/* Lens Glass with Prismatic Glow */}
       <circle cx="28" cy="32" r="6.5" fill="url(#g-cam-lens)" />
       {/* Lens Specular Reflection */}
-      <ellipse cx="26" cy="30" rx="2.5" ry="1.5" fill="#ffffff" opacity="0.7" transform="rotate(-30 26 30)" />
+      <ellipse
+        cx="26"
+        cy="30"
+        rx="2.5"
+        ry="1.5"
+        fill="#ffffff"
+        opacity="0.7"
+        transform="rotate(-30 26 30)"
+      />
     </svg>
   );
 }
@@ -529,13 +741,22 @@ function Icon3dStatistik(props: SVGProps<SVGSVGElement>) {
       </defs>
       <ellipse cx="28" cy="46" rx="19" ry="5.5" fill="url(#g-stat-shadow)" />
       {/* Bar 1 (Low) */}
-      <path d="M12 33v9c0 2 3.6 3.5 8 3.5s8-1.5 8-3.5v-9z" fill="url(#g-stat-bar1)" />
+      <path
+        d="M12 33v9c0 2 3.6 3.5 8 3.5s8-1.5 8-3.5v-9z"
+        fill="url(#g-stat-bar1)"
+      />
       <ellipse cx="20" cy="33" rx="8" ry="3" fill="#bae6fd" />
       {/* Bar 2 (Medium) */}
-      <path d="M22 25v17c0 2 3.6 3.5 8 3.5s8-1.5 8-3.5v-17z" fill="url(#g-stat-bar2)" />
+      <path
+        d="M22 25v17c0 2 3.6 3.5 8 3.5s8-1.5 8-3.5v-17z"
+        fill="url(#g-stat-bar2)"
+      />
       <ellipse cx="30" cy="25" rx="8" ry="3" fill="#bfdbfe" />
       {/* Bar 3 (High) */}
-      <path d="M32 17v25c0 2 3.6 3.5 8 3.5s8-1.5 8-3.5v-25z" fill="url(#g-stat-bar3)" />
+      <path
+        d="M32 17v25c0 2 3.6 3.5 8 3.5s8-1.5 8-3.5v-25z"
+        fill="url(#g-stat-bar3)"
+      />
       <ellipse cx="40" cy="17" rx="8" ry="3" fill="#c7d2fe" />
       {/* 3D Floating Trend Arrow */}
       <path
@@ -552,7 +773,10 @@ function Icon3dStatistik(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-const iconMap: Record<Icon3dKey, (props: SVGProps<SVGSVGElement>) => React.JSX.Element> = {
+const iconMap: Record<
+  Icon3dKey,
+  (props: SVGProps<SVGSVGElement>) => React.JSX.Element
+> = {
   anggaran: Icon3dAnggaran,
   ppid: Icon3dPPID,
   wisata: Icon3dWisata,

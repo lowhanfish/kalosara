@@ -29,7 +29,9 @@ export function LetterHistoryList({
   onOpenReapply,
   onDeleteLetter,
 }: LetterHistoryListProps) {
-  const [letterToDelete, setLetterToDelete] = useState<LetterRequest | null>(null);
+  const [letterToDelete, setLetterToDelete] = useState<LetterRequest | null>(
+    null,
+  );
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -41,7 +43,9 @@ export function LetterHistoryList({
       await onDeleteLetter(letterToDelete.id);
       setLetterToDelete(null);
     } catch (err: unknown) {
-      setDeleteError(err instanceof Error ? err.message : "Gagal menghapus permohonan surat");
+      setDeleteError(
+        err instanceof Error ? err.message : "Gagal menghapus permohonan surat",
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -50,7 +54,9 @@ export function LetterHistoryList({
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-xs">
         <div className="mx-auto size-8 animate-spin rounded-full border-2 border-sky-600 border-t-transparent" />
-        <p className="mt-3 text-xs font-semibold animate-pulse">Memuat riwayat permohonan surat...</p>
+        <p className="mt-3 text-xs font-semibold animate-pulse">
+          Memuat riwayat permohonan surat...
+        </p>
       </div>
     );
   }
@@ -65,7 +71,8 @@ export function LetterHistoryList({
           Belum Ada Riwayat Permohonan
         </h3>
         <p className="mt-1 max-w-sm mx-auto text-xs text-slate-500">
-          Anda belum pernah mengajukan surat digital. Silakan pilih jenis surat pada tab &ldquo;Ajukan Surat Baru&rdquo; di atas.
+          Anda belum pernah mengajukan surat digital. Silakan pilih jenis surat
+          pada tab &ldquo;Ajukan Surat Baru&rdquo; di atas.
         </p>
       </div>
     );
@@ -185,7 +192,11 @@ export function LetterHistoryList({
                     title="Batalkan & Hapus Permohonan"
                   >
                     <Trash2 size={13} className="text-rose-600" />
-                    <span>{letter.status === "SUBMITTED" ? "Batalkan & Hapus" : "Hapus Riwayat"}</span>
+                    <span>
+                      {letter.status === "SUBMITTED"
+                        ? "Batalkan & Hapus"
+                        : "Hapus Riwayat"}
+                    </span>
                   </button>
                 </div>
               )}
@@ -202,8 +213,8 @@ export function LetterHistoryList({
                       letter.status === "SIGNED"
                         ? "100%"
                         : letter.status === "VERIFIED"
-                        ? "66%"
-                        : "33%",
+                          ? "66%"
+                          : "33%",
                   }}
                 />
 
@@ -224,11 +235,15 @@ export function LetterHistoryList({
                       letter.status === "REJECTED"
                         ? "bg-rose-600 text-white"
                         : statusConfig.stepIndex >= 2
-                        ? "bg-sky-600 text-white"
-                        : "bg-slate-200 text-slate-600"
+                          ? "bg-sky-600 text-white"
+                          : "bg-slate-200 text-slate-600"
                     }`}
                   >
-                    {letter.status === "REJECTED" ? "✕" : statusConfig.stepIndex >= 2 ? "✓" : "2"}
+                    {letter.status === "REJECTED"
+                      ? "✕"
+                      : statusConfig.stepIndex >= 2
+                        ? "✓"
+                        : "2"}
                   </div>
                   <span className="mt-1.5 text-[11px] font-bold text-slate-700 text-center">
                     Verifikasi Admin
@@ -242,8 +257,8 @@ export function LetterHistoryList({
                       letter.status === "SIGNED"
                         ? "bg-sky-600 text-white"
                         : statusConfig.stepIndex === 2
-                        ? "bg-sky-100 text-sky-700 border-2 border-sky-600"
-                        : "bg-slate-200 text-slate-600"
+                          ? "bg-sky-100 text-sky-700 border-2 border-sky-600"
+                          : "bg-slate-200 text-slate-600"
                     }`}
                   >
                     {letter.status === "SIGNED" ? "✓" : "3"}
@@ -275,13 +290,17 @@ export function LetterHistoryList({
             {letter.status === "REJECTED" && (
               <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50/70 p-4">
                 <div className="flex items-start gap-3">
-                  <AlertCircle size={18} className="text-rose-600 shrink-0 mt-0.5" />
+                  <AlertCircle
+                    size={18}
+                    className="text-rose-600 shrink-0 mt-0.5"
+                  />
                   <div className="flex-1">
                     <p className="text-xs font-bold uppercase tracking-wider text-rose-800">
                       Alasan Penolakan / Catatan Perbaikan:
                     </p>
                     <p className="mt-1 text-sm text-rose-900 leading-relaxed">
-                      {letter.rejectionReason || "Berkas lampiran belum lengkap atau tidak terbaca."}
+                      {letter.rejectionReason ||
+                        "Berkas lampiran belum lengkap atau tidak terbaca."}
                     </p>
                     {onOpenReapply && (
                       <button
@@ -300,22 +319,30 @@ export function LetterHistoryList({
             {/* Details preview */}
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-xl">
               <div>
-                <span className="font-semibold text-slate-500">Nama Pemohon:</span>{" "}
-                <span className="font-bold text-slate-800">{letter.applicantName}</span> (NIK: {letter.applicantNik})
+                <span className="font-semibold text-slate-500">
+                  Nama Pemohon:
+                </span>{" "}
+                <span className="font-bold text-slate-800">
+                  {letter.applicantName}
+                </span>{" "}
+                (NIK: {letter.applicantNik})
               </div>
               <div>
                 <span className="font-semibold text-slate-500">Alamat:</span>{" "}
                 <span className="text-slate-800">{letter.address}</span>
               </div>
-              {letter.details && Object.entries(letter.details).map(([k, v]) => {
-                if (typeof v === "object" || !v) return null;
-                return (
-                  <div key={k} className="truncate">
-                    <span className="font-semibold text-slate-500 capitalize">{k}:</span>{" "}
-                    <span className="text-slate-800">{String(v)}</span>
-                  </div>
-                );
-              })}
+              {letter.details &&
+                Object.entries(letter.details).map(([k, v]) => {
+                  if (typeof v === "object" || !v) return null;
+                  return (
+                    <div key={k} className="truncate">
+                      <span className="font-semibold text-slate-500 capitalize">
+                        {k}:
+                      </span>{" "}
+                      <span className="text-slate-800">{String(v)}</span>
+                    </div>
+                  );
+                })}
             </div>
 
             {/* Attachments List */}
@@ -374,8 +401,12 @@ export function LetterHistoryList({
 
             <p className="text-xs text-slate-600 leading-relaxed">
               Apakah Anda yakin ingin membatalkan dan menghapus permohonan{" "}
-              <strong>{LETTER_DEFINITIONS[letterToDelete.type]?.title ?? letterToDelete.title}</strong>?
-              Data isian serta semua berkas lampiran yang telah diunggah akan dihapus secara permanen dari server.
+              <strong>
+                {LETTER_DEFINITIONS[letterToDelete.type]?.title ??
+                  letterToDelete.title}
+              </strong>
+              ? Data isian serta semua berkas lampiran yang telah diunggah akan
+              dihapus secara permanen dari server.
             </p>
 
             {deleteError && (

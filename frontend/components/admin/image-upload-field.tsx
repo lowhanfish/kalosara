@@ -110,7 +110,9 @@ export function ImageUploadField({
 
       const asset = response.asset;
       const returnedValue =
-        valueType === "id" ? asset.id : asset.url ?? `/api/v1/public/media/${asset.id}`;
+        valueType === "id"
+          ? asset.id
+          : (asset.url ?? `/api/v1/public/media/${asset.id}`);
 
       onChange(returnedValue, asset);
       setJustUploaded(true);
@@ -287,7 +289,8 @@ export function ImageUploadField({
           </p>
 
           <p className="mt-1 text-xs text-slate-400">
-            JPG, PNG, atau WebP · Disimpan otomatis di direktori backend (Maks 20 MB)
+            JPG, PNG, atau WebP · Disimpan otomatis di direktori backend (Maks
+            20 MB)
           </p>
         </div>
       )}

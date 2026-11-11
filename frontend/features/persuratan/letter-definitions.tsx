@@ -6,14 +6,49 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Usaha (SKU)",
     shortTitle: "Keterangan Usaha",
     badge: "UMKM & KUR",
-    description: "Menerangkan keberadaan fisik dan keaktifan usaha mikro/kecil warga di wilayah Watundehoa.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Foto Tempat/Aktivitas Usaha"],
+    description:
+      "Menerangkan keberadaan fisik dan keaktifan usaha mikro/kecil warga di wilayah Watundehoa.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Foto Tempat/Aktivitas Usaha",
+    ],
     fields: [
-      { name: "businessName", label: "Nama Usaha / Toko", type: "text", placeholder: "Contoh: Kios Berkah Tani", required: true },
-      { name: "businessType", label: "Jenis / Bidang Usaha", type: "text", placeholder: "Contoh: Perdagangan Sembako / Bengkel Motor", required: true },
-      { name: "businessAddress", label: "Alamat Lokasi Usaha", type: "textarea", placeholder: "Contoh: Jl. Poros Watunohu RT 02 Dusun I", required: true },
-      { name: "startedYear", label: "Tahun Mulai Beroperasi", type: "number", placeholder: "Contoh: 2021", required: true },
-      { name: "purpose", label: "Keperluan Pengajuan", type: "text", placeholder: "Contoh: Persyaratan Pengajuan KUR Bank / Legalitas Usaha", required: true },
+      {
+        name: "businessName",
+        label: "Nama Usaha / Toko",
+        type: "text",
+        placeholder: "Contoh: Kios Berkah Tani",
+        required: true,
+      },
+      {
+        name: "businessType",
+        label: "Jenis / Bidang Usaha",
+        type: "text",
+        placeholder: "Contoh: Perdagangan Sembako / Bengkel Motor",
+        required: true,
+      },
+      {
+        name: "businessAddress",
+        label: "Alamat Lokasi Usaha",
+        type: "textarea",
+        placeholder: "Contoh: Jl. Poros Watunohu RT 02 Dusun I",
+        required: true,
+      },
+      {
+        name: "startedYear",
+        label: "Tahun Mulai Beroperasi",
+        type: "number",
+        placeholder: "Contoh: 2021",
+        required: true,
+      },
+      {
+        name: "purpose",
+        label: "Keperluan Pengajuan",
+        type: "text",
+        placeholder: "Contoh: Persyaratan Pengajuan KUR Bank / Legalitas Usaha",
+        required: true,
+      },
     ],
   },
   SKTM: {
@@ -21,8 +56,13 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Tidak Mampu (SKTM)",
     shortTitle: "Tidak Mampu",
     badge: "Sosial & Bantuan",
-    description: "Menerangkan keadaan ekonomi riil keluarga untuk keperluan keringanan biaya pendidikan atau pengobatan.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Surat Pengantar RT / Keterangan Saksi"],
+    description:
+      "Menerangkan keadaan ekonomi riil keluarga untuk keperluan keringanan biaya pendidikan atau pengobatan.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Surat Pengantar RT / Keterangan Saksi",
+    ],
     fields: [
       {
         name: "purpose",
@@ -37,9 +77,25 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
         ],
         required: true,
       },
-      { name: "familyMemberName", label: "Nama Siswa / Anggota Keluarga Terkait", type: "text", placeholder: "Contoh: Ahmad Fauzan (kosongkan jika untuk pemohon sendiri)" },
-      { name: "schoolOrHospital", label: "Nama Instansi / Sekolah / Rumah Sakit Tujuan", type: "text", placeholder: "Contoh: Universitas Halu Oleo / RSUD Kolaka Utara" },
-      { name: "notes", label: "Keterangan Tambahan", type: "textarea", placeholder: "Uraikan kondisi singkat jika ada" },
+      {
+        name: "familyMemberName",
+        label: "Nama Siswa / Anggota Keluarga Terkait",
+        type: "text",
+        placeholder:
+          "Contoh: Ahmad Fauzan (kosongkan jika untuk pemohon sendiri)",
+      },
+      {
+        name: "schoolOrHospital",
+        label: "Nama Instansi / Sekolah / Rumah Sakit Tujuan",
+        type: "text",
+        placeholder: "Contoh: Universitas Halu Oleo / RSUD Kolaka Utara",
+      },
+      {
+        name: "notes",
+        label: "Keterangan Tambahan",
+        type: "textarea",
+        placeholder: "Uraikan kondisi singkat jika ada",
+      },
     ],
   },
   DOMISILI: {
@@ -47,13 +103,47 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Domisili",
     shortTitle: "Domisili Tempat Tinggal",
     badge: "Kependudukan",
-    description: "Menerangkan bahwa pemohon secara faktual bertempat tinggal atau berdomisili di Kelurahan Watundehoa.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Surat Pengantar RT"],
+    description:
+      "Menerangkan bahwa pemohon secara faktual bertempat tinggal atau berdomisili di Kelurahan Watundehoa.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Surat Pengantar RT",
+    ],
     fields: [
-      { name: "currentAddress", label: "Alamat Domisili Sekarang", type: "textarea", placeholder: "Alamat lengkap tempat tinggal saat ini di Watundehoa", required: true },
-      { name: "residentSince", label: "Tinggal Sejak (Bulan / Tahun)", type: "text", placeholder: "Contoh: Januari 2023", required: true },
-      { name: "residenceStatus", label: "Status Tempat Tinggal", type: "select", options: ["Rumah Milik Sendiri", "Menyewa / Kontrak", "Tinggal Bersama Orang Tua / Keluarga", "Asrama / Mess"], required: true },
-      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Melamar Pekerjaan / Persyaratan Perbankan", required: true },
+      {
+        name: "currentAddress",
+        label: "Alamat Domisili Sekarang",
+        type: "textarea",
+        placeholder: "Alamat lengkap tempat tinggal saat ini di Watundehoa",
+        required: true,
+      },
+      {
+        name: "residentSince",
+        label: "Tinggal Sejak (Bulan / Tahun)",
+        type: "text",
+        placeholder: "Contoh: Januari 2023",
+        required: true,
+      },
+      {
+        name: "residenceStatus",
+        label: "Status Tempat Tinggal",
+        type: "select",
+        options: [
+          "Rumah Milik Sendiri",
+          "Menyewa / Kontrak",
+          "Tinggal Bersama Orang Tua / Keluarga",
+          "Asrama / Mess",
+        ],
+        required: true,
+      },
+      {
+        name: "purpose",
+        label: "Keperluan Permohonan",
+        type: "text",
+        placeholder: "Contoh: Melamar Pekerjaan / Persyaratan Perbankan",
+        required: true,
+      },
     ],
   },
   PENGANTAR_SKCK: {
@@ -61,8 +151,13 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Pengantar SKCK",
     shortTitle: "Pengantar SKCK",
     badge: "Kepolisian & Kerja",
-    description: "Pengantar dari kelurahan yang menerangkan kelakuan baik untuk pengurusan SKCK resmi di Polsek.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Pas Foto 4x6 Berwarna"],
+    description:
+      "Pengantar dari kelurahan yang menerangkan kelakuan baik untuk pengurusan SKCK resmi di Polsek.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Pas Foto 4x6 Berwarna",
+    ],
     fields: [
       {
         name: "purpose",
@@ -78,8 +173,20 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
         ],
         required: true,
       },
-      { name: "targetOffice", label: "Polsek / Polres Tujuan", type: "text", placeholder: "Contoh: Polsek Watunohu / Polres Kolaka Utara", required: true },
-      { name: "notes", label: "Keterangan Tambahan", type: "textarea", placeholder: "Tuliskan jika ada spesifikasi khusus dari instansi peminta" },
+      {
+        name: "targetOffice",
+        label: "Polsek / Polres Tujuan",
+        type: "text",
+        placeholder: "Contoh: Polsek Watunohu / Polres Kolaka Utara",
+        required: true,
+      },
+      {
+        name: "notes",
+        label: "Keterangan Tambahan",
+        type: "textarea",
+        placeholder:
+          "Tuliskan jika ada spesifikasi khusus dari instansi peminta",
+      },
     ],
   },
   BELUM_MENIKAH: {
@@ -87,11 +194,28 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Belum Menikah",
     shortTitle: "Belum Menikah",
     badge: "Status Pribadi",
-    description: "Menerangkan bahwa pemohon belum pernah melangsungkan perkawinan dan berstatus lajang/jejaka/perawan.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Surat Pernyataan / Pengantar RT"],
+    description:
+      "Menerangkan bahwa pemohon belum pernah melangsungkan perkawinan dan berstatus lajang/jejaka/perawan.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Surat Pernyataan / Pengantar RT",
+    ],
     fields: [
-      { name: "purpose", label: "Keperluan Surat", type: "text", placeholder: "Contoh: Melamar Pekerjaan / Syarat Beasiswa / Ikatan Dinas", required: true },
-      { name: "notes", label: "Catatan Tambahan", type: "textarea", placeholder: "Tuliskan keterangan pendukung jika diperlukan" },
+      {
+        name: "purpose",
+        label: "Keperluan Surat",
+        type: "text",
+        placeholder:
+          "Contoh: Melamar Pekerjaan / Syarat Beasiswa / Ikatan Dinas",
+        required: true,
+      },
+      {
+        name: "notes",
+        label: "Catatan Tambahan",
+        type: "textarea",
+        placeholder: "Tuliskan keterangan pendukung jika diperlukan",
+      },
     ],
   },
   BELUM_BEKERJA: {
@@ -99,11 +223,29 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Belum / Tidak Bekerja",
     shortTitle: "Belum Bekerja",
     badge: "Ketenagakerjaan",
-    description: "Menerangkan bahwa pemohon saat ini belum memiliki pekerjaan tetap atau berstatus pencari kerja.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Ijazah Terakhir"],
+    description:
+      "Menerangkan bahwa pemohon saat ini belum memiliki pekerjaan tetap atau berstatus pencari kerja.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Ijazah Terakhir",
+    ],
     fields: [
-      { name: "lastEducation", label: "Pendidikan Terakhir", type: "text", placeholder: "Contoh: S1 Teknik Informatika / SMA IPA", required: true },
-      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Pendaftaran Pelatihan Kerja BLK / Pembuatan Kartu Kuning (AK-1)", required: true },
+      {
+        name: "lastEducation",
+        label: "Pendidikan Terakhir",
+        type: "text",
+        placeholder: "Contoh: S1 Teknik Informatika / SMA IPA",
+        required: true,
+      },
+      {
+        name: "purpose",
+        label: "Keperluan Permohonan",
+        type: "text",
+        placeholder:
+          "Contoh: Pendaftaran Pelatihan Kerja BLK / Pembuatan Kartu Kuning (AK-1)",
+        required: true,
+      },
     ],
   },
   BELUM_MEMILIKI_RUMAH: {
@@ -111,8 +253,13 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Belum Memiliki Rumah",
     shortTitle: "Belum Memiliki Rumah",
     badge: "Perumahan",
-    description: "Menerangkan bahwa pemohon sampai saat ini belum memiliki rumah tinggal sendiri / hak milik pribadi.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Surat Pengantar RT"],
+    description:
+      "Menerangkan bahwa pemohon sampai saat ini belum memiliki rumah tinggal sendiri / hak milik pribadi.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Surat Pengantar RT",
+    ],
     fields: [
       {
         name: "housingStatus",
@@ -126,8 +273,19 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
         ],
         required: true,
       },
-      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Syarat KPR BTN Bersubsidi / Bantuan Rumah", required: true },
-      { name: "notes", label: "Keterangan Tambahan", type: "textarea", placeholder: "Tuliskan keterangan pendukung jika ada" },
+      {
+        name: "purpose",
+        label: "Keperluan Permohonan",
+        type: "text",
+        placeholder: "Contoh: Syarat KPR BTN Bersubsidi / Bantuan Rumah",
+        required: true,
+      },
+      {
+        name: "notes",
+        label: "Keterangan Tambahan",
+        type: "textarea",
+        placeholder: "Tuliskan keterangan pendukung jika ada",
+      },
     ],
   },
   PENGHASILAN: {
@@ -135,13 +293,39 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Penghasilan",
     shortTitle: "Penghasilan Informal",
     badge: "Keuangan & KUR",
-    description: "Menerangkan taksiran penghasilan rata-rata per bulan bagi warga yang bekerja di sektor informal/petani.",
+    description:
+      "Menerangkan taksiran penghasilan rata-rata per bulan bagi warga yang bekerja di sektor informal/petani.",
     requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)"],
     fields: [
-      { name: "monthlyIncome", label: "Penghasilan Rata-rata per Bulan (Rp)", type: "text", placeholder: "Contoh: Rp 1.500.000,-", required: true },
-      { name: "sourceOfIncome", label: "Sumber Penghasilan / Pekerjaan Utama", type: "text", placeholder: "Contoh: Petani Cengkeh / Nelayan Tangkap / Pedagang Sayur", required: true },
-      { name: "familyDependents", label: "Jumlah Tanggungan Keluarga", type: "number", placeholder: "Contoh: 3 orang", required: true },
-      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Syarat KPR Bersubsidi / Beasiswa Anak", required: true },
+      {
+        name: "monthlyIncome",
+        label: "Penghasilan Rata-rata per Bulan (Rp)",
+        type: "text",
+        placeholder: "Contoh: Rp 1.500.000,-",
+        required: true,
+      },
+      {
+        name: "sourceOfIncome",
+        label: "Sumber Penghasilan / Pekerjaan Utama",
+        type: "text",
+        placeholder:
+          "Contoh: Petani Cengkeh / Nelayan Tangkap / Pedagang Sayur",
+        required: true,
+      },
+      {
+        name: "familyDependents",
+        label: "Jumlah Tanggungan Keluarga",
+        type: "number",
+        placeholder: "Contoh: 3 orang",
+        required: true,
+      },
+      {
+        name: "purpose",
+        label: "Keperluan Permohonan",
+        type: "text",
+        placeholder: "Contoh: Syarat KPR Bersubsidi / Beasiswa Anak",
+        required: true,
+      },
     ],
   },
   PENGANTAR_NIKAH: {
@@ -149,14 +333,50 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Pengantar Nikah (Model N1)",
     shortTitle: "Pengantar Nikah (N1)",
     badge: "Keluarga & KUA",
-    description: "Pengantar resmi kelurahan ke Kantor Urusan Agama (KUA) atau Pencatatan Sipil.",
-    requirements: ["Foto KTP & KK Pemohon", "Foto KTP Kedua Orang Tua", "Foto KTP Calon Pasangan", "Surat Pengantar RT"],
+    description:
+      "Pengantar resmi kelurahan ke Kantor Urusan Agama (KUA) atau Pencatatan Sipil.",
+    requirements: [
+      "Foto KTP & KK Pemohon",
+      "Foto KTP Kedua Orang Tua",
+      "Foto KTP Calon Pasangan",
+      "Surat Pengantar RT",
+    ],
     fields: [
-      { name: "spouseName", label: "Nama Lengkap Calon Pasangan", type: "text", placeholder: "Nama lengkap calon suami / istri", required: true },
-      { name: "spouseFatherName", label: "Nama Ayah Calon Pasangan (Bin / Binti)", type: "text", placeholder: "Nama ayah kandung calon pasangan", required: true },
-      { name: "spouseAddress", label: "Alamat Asal Calon Pasangan", type: "textarea", placeholder: "Desa/Kelurahan, Kecamatan, Kabupaten/Kota asal", required: true },
-      { name: "plannedDate", label: "Rencana Tanggal Akad / Pemberkatan", type: "text", placeholder: "Contoh: 25 Desember 2026", required: true },
-      { name: "kuaTarget", label: "KUA / Kantor Pencatatan Tujuan", type: "text", placeholder: "Contoh: KUA Watunohu", required: true },
+      {
+        name: "spouseName",
+        label: "Nama Lengkap Calon Pasangan",
+        type: "text",
+        placeholder: "Nama lengkap calon suami / istri",
+        required: true,
+      },
+      {
+        name: "spouseFatherName",
+        label: "Nama Ayah Calon Pasangan (Bin / Binti)",
+        type: "text",
+        placeholder: "Nama ayah kandung calon pasangan",
+        required: true,
+      },
+      {
+        name: "spouseAddress",
+        label: "Alamat Asal Calon Pasangan",
+        type: "textarea",
+        placeholder: "Desa/Kelurahan, Kecamatan, Kabupaten/Kota asal",
+        required: true,
+      },
+      {
+        name: "plannedDate",
+        label: "Rencana Tanggal Akad / Pemberkatan",
+        type: "text",
+        placeholder: "Contoh: 25 Desember 2026",
+        required: true,
+      },
+      {
+        name: "kuaTarget",
+        label: "KUA / Kantor Pencatatan Tujuan",
+        type: "text",
+        placeholder: "Contoh: KUA Watunohu",
+        required: true,
+      },
     ],
   },
   AHLI_WARIS: {
@@ -164,13 +384,45 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Ahli Waris / Sporadik",
     shortTitle: "Waris & Tanah",
     badge: "Pertanahan & Waris",
-    description: "Keterangan penguasaan fisik tanah sporadik atau silsilah ahli waris almarhum warga.",
-    requirements: ["Foto KTP Seluruh Ahli Waris", "Foto KK Almarhum / Pemohon", "Surat Kematian Almarhum", "Bukti Riwayat Penguasaan / PBB"],
+    description:
+      "Keterangan penguasaan fisik tanah sporadik atau silsilah ahli waris almarhum warga.",
+    requirements: [
+      "Foto KTP Seluruh Ahli Waris",
+      "Foto KK Almarhum / Pemohon",
+      "Surat Kematian Almarhum",
+      "Bukti Riwayat Penguasaan / PBB",
+    ],
     fields: [
-      { name: "deceasedName", label: "Nama Almarhum / Pemilik Awal", type: "text", placeholder: "Nama lengkap yang telah meninggal dunia", required: true },
-      { name: "deceasedDate", label: "Tanggal Meninggal Dunia", type: "text", placeholder: "Contoh: 14 Agustus 2024", required: true },
-      { name: "objectDescription", label: "Objek Waris / Lokasi Tanah", type: "textarea", placeholder: "Contoh: Sebidang tanah kebun seluas 5.000 m² di Dusun II Watundehoa", required: true },
-      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Pengurusan Rekening Bank Almarhum / Pengajuan Sertifikat PTSL BPN", required: true },
+      {
+        name: "deceasedName",
+        label: "Nama Almarhum / Pemilik Awal",
+        type: "text",
+        placeholder: "Nama lengkap yang telah meninggal dunia",
+        required: true,
+      },
+      {
+        name: "deceasedDate",
+        label: "Tanggal Meninggal Dunia",
+        type: "text",
+        placeholder: "Contoh: 14 Agustus 2024",
+        required: true,
+      },
+      {
+        name: "objectDescription",
+        label: "Objek Waris / Lokasi Tanah",
+        type: "textarea",
+        placeholder:
+          "Contoh: Sebidang tanah kebun seluas 5.000 m² di Dusun II Watundehoa",
+        required: true,
+      },
+      {
+        name: "purpose",
+        label: "Keperluan Permohonan",
+        type: "text",
+        placeholder:
+          "Contoh: Pengurusan Rekening Bank Almarhum / Pengajuan Sertifikat PTSL BPN",
+        required: true,
+      },
     ],
   },
   LAINNYA: {
@@ -178,12 +430,36 @@ export const LETTER_DEFINITIONS: Record<LetterType, LetterMeta> = {
     title: "Surat Keterangan Lainnya",
     shortTitle: "Keterangan Umum",
     badge: "Pelayanan Terbuka",
-    description: "Untuk keperluan administrasi spesifik lainnya yang tidak tercakup dalam daftar di atas.",
-    requirements: ["Foto KTP Pemohon", "Foto Kartu Keluarga (KK)", "Dokumen Pendukung Terkait"],
+    description:
+      "Untuk keperluan administrasi spesifik lainnya yang tidak tercakup dalam daftar di atas.",
+    requirements: [
+      "Foto KTP Pemohon",
+      "Foto Kartu Keluarga (KK)",
+      "Dokumen Pendukung Terkait",
+    ],
     fields: [
-      { name: "letterSubject", label: "Perihal / Pokok Keterangan", type: "text", placeholder: "Contoh: Surat Keterangan Beda Nama Ijazah dan KTP", required: true },
-      { name: "explanation", label: "Uraian Fakta / Penjelasan Singkat", type: "textarea", placeholder: "Tuliskan keterangan detail yang ingin diterangkan oleh pihak kelurahan", required: true },
-      { name: "purpose", label: "Keperluan Permohonan", type: "text", placeholder: "Contoh: Pengurusan Pembaharuan Data BPJS Ketenagakerjaan", required: true },
+      {
+        name: "letterSubject",
+        label: "Perihal / Pokok Keterangan",
+        type: "text",
+        placeholder: "Contoh: Surat Keterangan Beda Nama Ijazah dan KTP",
+        required: true,
+      },
+      {
+        name: "explanation",
+        label: "Uraian Fakta / Penjelasan Singkat",
+        type: "textarea",
+        placeholder:
+          "Tuliskan keterangan detail yang ingin diterangkan oleh pihak kelurahan",
+        required: true,
+      },
+      {
+        name: "purpose",
+        label: "Keperluan Permohonan",
+        type: "text",
+        placeholder: "Contoh: Pengurusan Pembaharuan Data BPJS Ketenagakerjaan",
+        required: true,
+      },
     ],
   },
 };

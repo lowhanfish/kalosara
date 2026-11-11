@@ -105,7 +105,9 @@ export function TableEmpty({
           <div className="glass-icon-box size-12 rounded-2xl text-sky-600">
             {icon ?? <Inbox size={22} />}
           </div>
-          <p className="text-sm font-extrabold text-slate-800 mt-1">{message}</p>
+          <p className="text-sm font-extrabold text-slate-800 mt-1">
+            {message}
+          </p>
           {description && (
             <p className="text-xs text-slate-500">{description}</p>
           )}

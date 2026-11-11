@@ -53,27 +53,27 @@ Build Turbopack pada volume macOS ini membutuhkan cache generated bersih (`.next
 
 Tidak ada migration, env, rahasia, atau dependency baru. Endpoint memakai DATABASE_URL dan API_INTERNAL_URL yang sudah ada. AppSetting tetap skema lama; hanya key berikut yang dapat dibaca publik:
 
-| Key | Bentuk nilai JSON |
-| --- | --- |
-| `site.name` | string nama kelurahan |
-| `site.address` | string alamat resmi |
-| `site.phone` | string telepon dengan digit, spasi, +, tanda kurung atau minus |
-| `site.email` | string alamat email valid |
-| `site.hours` | string jam pelayanan |
-| `site.logoUrl` | path internal `/...` atau URL HTTPS |
-| `site.relatedLinks` | array maksimal 10 objek `{label, href}`; href internal atau HTTPS |
-| `site.isExample` | boolean; default true, false hanya untuk identitas resmi terverifikasi |
+| Key                 | Bentuk nilai JSON                                                      |
+| ------------------- | ---------------------------------------------------------------------- |
+| `site.name`         | string nama kelurahan                                                  |
+| `site.address`      | string alamat resmi                                                    |
+| `site.phone`        | string telepon dengan digit, spasi, +, tanda kurung atau minus         |
+| `site.email`        | string alamat email valid                                              |
+| `site.hours`        | string jam pelayanan                                                   |
+| `site.logoUrl`      | path internal `/...` atau URL HTTPS                                    |
+| `site.relatedLinks` | array maksimal 10 objek `{label, href}`; href internal atau HTTPS      |
+| `site.isExample`    | boolean; default true, false hanya untuk identitas resmi terverifikasi |
 
 Envelope: `{success:true,data:{settings:{name,address,phone,email,hours,logoUrl,relatedLinks,isExample}},requestId}`. Nilai invalid diabaikan; field belum diisi menjadi null (atau [] untuk tautan). Jangan memasukkan rahasia ke key publik. Endpoint ini tidak menulis pengaturan; manajemen identitas menunggu Prompt 06.
 
 ## 5. Hasil lint/typecheck/test/build
 
-| Pemeriksaan | Frontend | Backend |
-| --- | --- | --- |
-| Lint | Lulus | Lulus |
-| Typecheck | Lulus | Lulus |
-| Test | 19/19 lulus | 8/8 lulus |
-| Build | Lulus; 10 rute utama + pencarian dan state sistem | Lulus |
+| Pemeriksaan | Frontend                                          | Backend   |
+| ----------- | ------------------------------------------------- | --------- |
+| Lint        | Lulus                                             | Lulus     |
+| Typecheck   | Lulus                                             | Lulus     |
+| Test        | 19/19 lulus                                       | 8/8 lulus |
+| Build       | Lulus; 10 rute utama + pencarian dan state sistem | Lulus     |
 
 Tes baru memeriksa URL script/protocol-relative, field privat tidak ikut keluar, envelope requestId, pencarian kosong/case/teks berbahaya, serta pembedaan guest awal dan invalidasi identitas lama. Endpoint backend dites dengan Prisma spy tanpa mengubah database. Regresi auth termasuk single-flight, gangguan jaringan dan isolasi A/B tetap lulus.
 

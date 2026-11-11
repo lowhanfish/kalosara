@@ -80,25 +80,60 @@ export function KalosaraEmblemSvg({
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="kalosara-bg" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-bg"
+          x1="0"
+          y1="0"
+          x2="44"
+          y2="44"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#60bcfb" />
           <stop offset="50%" stopColor="#2d92e6" />
           <stop offset="100%" stopColor="#1879d1" />
         </linearGradient>
-        <linearGradient id="kalosara-gloss" x1="22" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-gloss"
+          x1="22"
+          y1="2"
+          x2="22"
+          y2="22"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
           <stop offset="100%" stopColor="#ffffff" stopOpacity="0.05" />
         </linearGradient>
-        <linearGradient id="kalosara-shield" x1="10" y1="8" x2="34" y2="36" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-shield"
+          x1="10"
+          y1="8"
+          x2="34"
+          y2="36"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
           <stop offset="100%" stopColor="#e0f2fe" stopOpacity="0.92" />
         </linearGradient>
-        <linearGradient id="kalosara-gold" x1="16" y1="12" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-gold"
+          x1="16"
+          y1="12"
+          x2="28"
+          y2="28"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#fcd34d" />
           <stop offset="100%" stopColor="#f59e0b" />
         </linearGradient>
       </defs>
-      <rect x="2" y="2" width="40" height="40" rx="12" fill="url(#kalosara-bg)" />
+      <rect
+        x="2"
+        y="2"
+        width="40"
+        height="40"
+        rx="12"
+        fill="url(#kalosara-bg)"
+      />
       <path
         d="M14 3H30C36.075 3 41 7.925 41 14V18C35 20.5 28.5 21.5 22 21.5C15.5 21.5 9 20.5 3 18V14C3 7.925 7.925 3 14 3Z"
         fill="url(#kalosara-gloss)"
@@ -121,7 +156,13 @@ export function KalosaraEmblemSvg({
         d="M22 11.5L29.8 14.7V21C29.8 26.2 26.4 30.4 22 32.3C17.6 30.4 14.2 26.2 14.2 21V14.7L22 11.5Z"
         fill="#0284c7"
       />
-      <circle cx="22" cy="21" r="5.2" stroke="url(#kalosara-gold)" strokeWidth="1.8" />
+      <circle
+        cx="22"
+        cy="21"
+        r="5.2"
+        stroke="url(#kalosara-gold)"
+        strokeWidth="1.8"
+      />
       <path
         d="M22 17.2L23.15 19.65L25.8 20L23.85 21.85L24.35 24.5L22 23.2L19.65 24.5L20.15 21.85L18.2 20L20.85 19.65L22 17.2Z"
         fill="url(#kalosara-gold)"
@@ -130,7 +171,10 @@ export function KalosaraEmblemSvg({
   );
 }
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number | string; className?: string }>> = {
+const ICON_MAP: Record<
+  string,
+  React.ComponentType<{ size?: number | string; className?: string }>
+> = {
   dashboard: LayoutDashboard,
   home: Home,
   profil: Building2,
@@ -236,6 +280,7 @@ export function Icon({
   className?: string;
 }) {
   const mappedKey = EMOJI_ICON[name] ?? name;
-  const Comp = ICON_MAP[mappedKey] ?? ICON_MAP[mappedKey.toLowerCase()] ?? Layers;
+  const Comp =
+    ICON_MAP[mappedKey] ?? ICON_MAP[mappedKey.toLowerCase()] ?? Layers;
   return <Comp size={size} className={`shrink-0 ${className}`} />;
 }

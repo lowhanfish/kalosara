@@ -155,7 +155,11 @@ export function QuickLinks() {
               >
                 <div className="flex items-start justify-between">
                   <div className="relative -ml-1 -mt-1 transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-110">
-                    <Icon3D name={item.icon3d} size={48} className="drop-shadow-xs" />
+                    <Icon3D
+                      name={item.icon3d}
+                      size={48}
+                      className="drop-shadow-xs"
+                    />
                   </div>
                   <span className="grid size-7 place-items-center rounded-full border border-slate-100 bg-slate-50 text-slate-400 transition-all duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-amber-300">
                     <ArrowUpRight

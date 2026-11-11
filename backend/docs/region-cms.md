@@ -29,14 +29,14 @@ Tidak membuat formulir pengiriman pesan/ContactMessage. Pemilih topik ContactGui
 
 Frontend manual `pnpm dev --port 3001`, backend Node 22.12+ `npm run dev` pada 4000. Buka `/admin/wilayah` dengan admin terprovisi. Pilih Statistik agregat, isi periode/sumber/tanggal dan angka yang diketahui, simpan draft, periksa lalu terbitkan. Data tidak diketahui dibiarkan kosong. Jangan memasukkan data pribadi dalam metadata bebas. Pilih Fasilitas/Potensi untuk lokasi dan foto; gunakan pustaka media (PRIVATE default) dan pilih PUBLIC hanya untuk materi disetujui. Pilihan foto dicari server-side, maksimum 50 hasil per pencarian; unggah satu file/request. Kontak/koordinat kantor tetap di `/admin/profil`.
 
-| Endpoint | Perilaku |
-| --- | --- |
-| `GET /api/v1/admin/region/statistics` | ADMIN aktif; page/limit/status/period/search sumber |
-| `PUT /api/v1/admin/region/statistics/:id` | ADMIN+Origin/CSRF; create expectedVersion 0/update versi terkini |
-| `GET /api/v1/public/region/statistics` | PUBLISHED saja; page/limit/period/search sumber, urut periode desc |
-| `GET /api/v1/admin/region/:kind` | kind facilities/potentials; page/limit/status/category/search nama |
-| `PUT /api/v1/admin/region/:kind/:id` | create/edit/publish/archive, validasi koordinat/foto/versi |
-| `GET /api/v1/public/region/:kind` | PUBLISHED saja, foto PUBLIC aktif atau tanpa foto; filter/cari/pagination |
+| Endpoint                                  | Perilaku                                                                  |
+| ----------------------------------------- | ------------------------------------------------------------------------- |
+| `GET /api/v1/admin/region/statistics`     | ADMIN aktif; page/limit/status/period/search sumber                       |
+| `PUT /api/v1/admin/region/statistics/:id` | ADMIN+Origin/CSRF; create expectedVersion 0/update versi terkini          |
+| `GET /api/v1/public/region/statistics`    | PUBLISHED saja; page/limit/period/search sumber, urut periode desc        |
+| `GET /api/v1/admin/region/:kind`          | kind facilities/potentials; page/limit/status/category/search nama        |
+| `PUT /api/v1/admin/region/:kind/:id`      | create/edit/publish/archive, validasi koordinat/foto/versi                |
+| `GET /api/v1/public/region/:kind`         | PUBLISHED saja, foto PUBLIC aktif atau tanpa foto; filter/cari/pagination |
 
 Semua respons memakai envelope/requestId. Limit default10/maksimum 50; halaman publik statistik 5 snapshot dan potensi 9 item. Unknown fields ditolak. Periode YYYY atau YYYY-MM; tanggal data ISO-date; sumber 1–300 karakter. Lokasi 1–300, nama 1–160, kategori 1–100, deskripsi maksimal 10.000; teks dirender sebagai teks biasa. Koordinat latitude ±90/longitude ±180 harus berpasangan. Foto optional uuid dan alt wajib jika dipilih. Guest 401, role/inactive/CSRF 403, input 400, konflik versi/periode 409. Delete melalui ARCHIVED dengan konfirmasi.
 
@@ -44,7 +44,7 @@ Semua respons memakai envelope/requestId. Limit default10/maksimum 50; halaman p
 
 Migration baru hanya menambah tiga tabel, relasi foto dan indeks. Tidak mengubah data lama. Tidak ada env/dependency aplikasi baru. Source upload baru facilities/potentials tersimpan fisik di backend/public/uploads/<asal>/images atau documents sesuai jenis; UI foto hanya memilih gambarPUBLIC. Database tetap hanya metadata/path/relasi, batas 20 MiB/signature/optimasi/legacy/proteksiPRIVATE tidak berubah. Tidak menyalakan PostgreSQL Docker.
 
-Seluruh tujuh migration berhasil diuji dari database kosong pada PostgreSQL native 18.4 disposable port 55439. Database regresi dan browser dipisahkan. TEST_DATABASE_URL runner wajib local kalosara_*_test; guard Neon/non-test tetap berlaku. Upload/akun/fixture QA diisolasi.
+Seluruh tujuh migration berhasil diuji dari database kosong pada PostgreSQL native 18.4 disposable port 55439. Database regresi dan browser dipisahkan. TEST*DATABASE_URL runner wajib local kalosara*\*\_test; guard Neon/non-test tetap berlaku. Upload/akun/fixture QA diisolasi.
 
 Status aktivasi Neon: **berhasil pada 17 Oktober 2026 setelah pengguna memberikan persetujuan eksplisit untuk Prompt 10**. `prisma migrate deploy` menerapkan `20261017000000_region_information`; `prisma migrate status` melaporkan skema mutakhir. DATABASE_URL yang ada dipakai tanpa ditimpa/ditampilkan. Tidak ada reset, seed, akun/konten QA atau tes destruktif di Neon. Izin migrasi tidak mencakup memulai prompt berikutnya.
 
@@ -52,15 +52,15 @@ APP_ORIGIN/SITE_ORIGIN/FRONTEND_INTERNAL_URL tetap localhost 3001, API 4000; sec
 
 ## 5. Hasil lint/typecheck/test/build
 
-| Pemeriksaan | Hasil |
-| --- | --- |
-| Backend lint/typecheck/build Node 22.12 | Lulus |
-| Backend unit/HTTP | 30/30 lulus |
-| Backend integration PostgreSQL | 32/32, 7 suite lulus |
-| Tujuh migration dari DB kosong | Lulus |
-| Frontend lint/typecheck/build Next 16.4 | Lulus |
-| Frontend tes | 34/34 lulus |
-| Diff whitespace | Lulus |
+| Pemeriksaan                             | Hasil                |
+| --------------------------------------- | -------------------- |
+| Backend lint/typecheck/build Node 22.12 | Lulus                |
+| Backend unit/HTTP                       | 30/30 lulus          |
+| Backend integration PostgreSQL          | 32/32, 7 suite lulus |
+| Tujuh migration dari DB kosong          | Lulus                |
+| Frontend lint/typecheck/build Next 16.4 | Lulus                |
+| Frontend tes                            | 34/34 lulus          |
+| Diff whitespace                         | Lulus                |
 
 Perintah: backend `npm run lint && npm run typecheck && npm test && npm run build`; `TEST_DATABASE_URL=postgresql://test:test@127.0.0.1:55439/kalosara_prompt10_test npm run test:db`. Frontend `pnpm lint && pnpm typecheck && pnpm test && pnpm build`. Contoh password hanya milik database disposable lokal, bukan Neon. Build QA memakai env proses API 4002/SITE 3002 sementara; file env tidak diubah. Build akhir dikembalikan ke konfigurasi utama 4000/3001 sebelum cleanup.
 

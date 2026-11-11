@@ -74,7 +74,10 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
   const logout = useMutation({ mutationFn: () => runtime.logout() });
   if (auth.status === "INITIALIZING")
     return (
-      <div className="flex min-h-[300px] items-center justify-center p-8 text-center text-slate-500" role="status">
+      <div
+        className="flex min-h-[300px] items-center justify-center p-8 text-center text-slate-500"
+        role="status"
+      >
         <p className="animate-pulse">Memeriksa sesi akun…</p>
       </div>
     );
@@ -129,7 +132,10 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
             className="mb-5 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
             role="status"
           >
-            <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-600" />
+            <CheckCircle2
+              size={18}
+              className="mt-0.5 shrink-0 text-emerald-600"
+            />
             <p>{notice}</p>
           </div>
         )}
@@ -197,7 +203,9 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
             <input
               name="password"
               type="password"
-              placeholder={register ? "Minimal 12 karakter" : "Masukkan kata sandi"}
+              placeholder={
+                register ? "Minimal 12 karakter" : "Masukkan kata sandi"
+              }
               className="cms-input mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               autoComplete={register ? "new-password" : "current-password"}
               required
@@ -215,7 +223,11 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
             className="yellow-button flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-white transition hover:bg-primary-hover disabled:opacity-50"
             disabled={login.isPending}
           >
-            {login.isPending ? "Memproses…" : register ? "Daftar Akun" : "Masuk ke Akun"}
+            {login.isPending
+              ? "Memproses…"
+              : register
+                ? "Daftar Akun"
+                : "Masuk ke Akun"}
             <ArrowRight size={16} />
           </button>
         </form>
@@ -223,7 +235,10 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
     );
   if (auth.user?.role !== "MASYARAKAT")
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-900" role="alert">
+      <div
+        className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-900"
+        role="alert"
+      >
         <p className="font-semibold">Area ini khusus untuk akun masyarakat.</p>
         <p className="mt-2 text-sm">
           Anda saat ini masuk sebagai staf/pengelola. Silakan{" "}
@@ -276,7 +291,10 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
         </button>
       </div>
       {logout.isError && (
-        <div className="mb-5 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800" role="alert">
+        <div
+          className="mb-5 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
+          role="alert"
+        >
           {cmsError(logout.error)}
         </div>
       )}
@@ -284,4 +302,3 @@ export function CitizenAccess({ children }: { children: React.ReactNode }) {
     </>
   );
 }
-

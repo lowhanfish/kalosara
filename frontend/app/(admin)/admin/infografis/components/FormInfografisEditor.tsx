@@ -216,7 +216,8 @@ export function FormInfografisEditor({
             </p>
           ) : (
             <p className="text-sm text-slate-400 italic py-4">
-              Belum ada penjelasan deskriptif yang ditambahkan. Klik &ldquo;Sunting Data&rdquo; untuk melengkapi keterangan.
+              Belum ada penjelasan deskriptif yang ditambahkan. Klik
+              &ldquo;Sunting Data&rdquo; untuk melengkapi keterangan.
             </p>
           )}
         </Card>
@@ -267,7 +268,8 @@ export function FormInfografisEditor({
             {config.title}
           </h2>
           <p className="mt-1 text-xs text-slate-500">
-            Gunakan data agregat yang sudah diperiksa. Jangan masukkan identitas penerima bansos, anak, atau pasien.
+            Gunakan data agregat yang sudah diperiksa. Jangan masukkan identitas
+            penerima bansos, anak, atau pasien.
           </p>
         </div>
 
@@ -459,7 +461,8 @@ export function FormInfografisEditor({
           </Button>
           {save.isError && (
             <p role="alert" className="text-xs text-red-600 font-medium">
-              {cmsError(save.error)} Muat ulang halaman jika versi data telah berubah.
+              {cmsError(save.error)} Muat ulang halaman jika versi data telah
+              berubah.
             </p>
           )}
         </div>

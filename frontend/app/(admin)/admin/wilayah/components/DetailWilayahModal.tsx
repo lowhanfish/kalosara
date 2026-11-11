@@ -116,7 +116,9 @@ export function DetailWilayahModal({
             <MapPin size={15} className="text-sky-600 shrink-0" />
             <div>
               <span className="text-slate-400 block">Lokasi / Alamat</span>
-              <strong className="text-slate-800">{String(item.location)}</strong>
+              <strong className="text-slate-800">
+                {String(item.location)}
+              </strong>
             </div>
           </div>
         )}

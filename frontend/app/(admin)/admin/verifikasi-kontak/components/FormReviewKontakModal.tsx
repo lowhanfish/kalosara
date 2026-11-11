@@ -106,7 +106,8 @@ export function FormReviewKontakModal({
             </select>
             {isExpired && (
               <p className="text-[11px] text-amber-600 font-medium">
-                Permintaan ini telah melampaui batas waktu verifikasi dan hanya dapat ditolak.
+                Permintaan ini telah melampaui batas waktu verifikasi dan hanya
+                dapat ditolak.
               </p>
             )}
           </div>
@@ -135,7 +136,8 @@ export function FormReviewKontakModal({
                 className="mt-0.5 rounded border-slate-300 text-sky-600 focus:ring-sky-600"
               />
               <span>
-                Saya telah memverifikasi identitas pemilik akun secara sah melalui prosedur pelayanan kantor.
+                Saya telah memverifikasi identitas pemilik akun secara sah
+                melalui prosedur pelayanan kantor.
               </span>
             </label>
 
@@ -148,7 +150,8 @@ export function FormReviewKontakModal({
                 className="mt-0.5 rounded border-slate-300 text-sky-600 focus:ring-sky-600"
               />
               <span>
-                Kepemilikan kontak email/nomor telepon baru telah dipastikan benar milik pemohon.
+                Kepemilikan kontak email/nomor telepon baru telah dipastikan
+                benar milik pemohon.
               </span>
             </label>
           </div>

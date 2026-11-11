@@ -106,7 +106,8 @@ export default function Editor({
           <div className="grid gap-4 sm:grid-cols-3 rounded-2xl border border-blue-200/75 bg-blue-50/40 p-5">
             <label className="block space-y-1.5">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                Periode (YYYY atau YYYY-MM) <span className="text-red-500">*</span>
+                Periode (YYYY atau YYYY-MM){" "}
+                <span className="text-red-500">*</span>
               </span>
               <input
                 className="cms-input font-mono"
@@ -182,7 +183,10 @@ export default function Editor({
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block space-y-1.5">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                Nama {kind === "facilities" ? "Fasilitas Publik" : "Potensi Kelurahan"}{" "}
+                Nama{" "}
+                {kind === "facilities"
+                  ? "Fasilitas Publik"
+                  : "Potensi Kelurahan"}{" "}
                 <span className="text-red-500">*</span>
               </span>
               <input
@@ -377,10 +381,7 @@ export default function Editor({
           </select>
         </label>
 
-        <button
-          className="glass-button-primary h-10"
-          disabled={save.isPending}
-        >
+        <button className="glass-button-primary h-10" disabled={save.isPending}>
           <Save size={15} strokeWidth={2.2} />
           <span>{save.isPending ? "Menyimpan…" : "Simpan Data Wilayah"}</span>
         </button>

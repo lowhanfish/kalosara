@@ -34,10 +34,7 @@ export function SkeletonText({
 
 export function SkeletonCard({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`glass-card p-5 space-y-3 ${className}`}
-      aria-hidden="true"
-    >
+    <div className={`glass-card p-5 space-y-3 ${className}`} aria-hidden="true">
       <div className="flex items-center justify-between">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="size-10 rounded-xl" />

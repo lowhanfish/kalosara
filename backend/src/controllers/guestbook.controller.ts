@@ -27,7 +27,9 @@ export const getPublicTicketStatusController: RequestHandler = async (
   req,
   res,
 ) => {
-  const data = await getPublicTicketStatusService(String(req.params.ticketNumber));
+  const data = await getPublicTicketStatusService(
+    String(req.params.ticketNumber),
+  );
   sendSuccess(res, req, data);
 };
 

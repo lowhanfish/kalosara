@@ -29,8 +29,9 @@ export function MediaLibrary() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [previewModalAsset, setPreviewModalAsset] =
-    useState<MediaAsset | null>(null);
+  const [previewModalAsset, setPreviewModalAsset] = useState<MediaAsset | null>(
+    null,
+  );
 
   const query = useQuery({
     queryKey: ["user", auth.user?.id, "cms-media", page, search, visibility],
@@ -116,11 +117,15 @@ export function MediaLibrary() {
             <UploadCloud size={20} strokeWidth={2} />
           </div>
           <div>
-            <h2 id="media-title" className="text-lg font-extrabold text-slate-900">
+            <h2
+              id="media-title"
+              className="text-lg font-extrabold text-slate-900"
+            >
               Unggah Media & Berkas Baru
             </h2>
             <p className="text-xs font-medium text-slate-500">
-              Unggah foto dokumentasi kegiatan, dokumen PDF publik, dan lampiran resmi kelurahan.
+              Unggah foto dokumentasi kegiatan, dokumen PDF publik, dan lampiran
+              resmi kelurahan.
             </p>
           </div>
         </div>

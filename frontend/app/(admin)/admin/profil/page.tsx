@@ -27,22 +27,25 @@ export default function ProfilPage() {
           Akun Anda tidak memiliki izin untuk mengelola profil.
         </div>
       )}
-      {(auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH") && query.isPending && (
-        <AdminLoading
-          variant="cards"
-          label="Memuat pengaturan profil kelurahan…"
-        />
-      )}
+      {(auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH") &&
+        query.isPending && (
+          <AdminLoading
+            variant="cards"
+            label="Memuat pengaturan profil kelurahan…"
+          />
+        )}
       {query.isError && (
         <AdminError error={query.error} onRetry={() => void query.refetch()} />
       )}
-      {query.data && (auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH") && (
-        <FormProfilWorkspace
-          key={auth.user.id}
-          data={query.data}
-          reload={() => void query.refetch()}
-        />
-      )}
+      {query.data &&
+        (auth.user?.role === "ADMIN_KELURAHAN" ||
+          auth.user?.role === "LURAH") && (
+          <FormProfilWorkspace
+            key={auth.user.id}
+            data={query.data}
+            reload={() => void query.refetch()}
+          />
+        )}
     </main>
   );
 }

@@ -11,7 +11,12 @@ export const notFound: RequestHandler = (req, res) => {
   });
 };
 
-export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = (
+  error: unknown,
+  req,
+  res,
+  _next,
+) => {
   if (
     error instanceof AccessError ||
     error instanceof CmsError ||
@@ -44,7 +49,11 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, req, res, _nex
     });
     return;
   }
-  if (error instanceof Error && 'type' in error && error.type === 'entity.too.large') {
+  if (
+    error instanceof Error &&
+    'type' in error &&
+    error.type === 'entity.too.large'
+  ) {
     res.status(413).json({
       success: false,
       error: { code: 'BODY_TOO_LARGE', message: 'Request body too large' },

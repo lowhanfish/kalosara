@@ -1,13 +1,7 @@
 import React from "react";
 
 export type BadgeVariant =
-  | "success"
-  | "warning"
-  | "danger"
-  | "info"
-  | "sky"
-  | "gold"
-  | "neutral";
+  "success" | "warning" | "danger" | "info" | "sky" | "gold" | "neutral";
 
 export type BadgeSize = "sm" | "md";
 

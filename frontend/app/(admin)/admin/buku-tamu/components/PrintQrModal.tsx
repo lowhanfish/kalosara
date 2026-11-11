@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { QrCode, Printer, X, ShieldCheck, Smartphone, Loader2 } from "lucide-react";
+import {
+  QrCode,
+  Printer,
+  X,
+  ShieldCheck,
+  Smartphone,
+  Loader2,
+} from "lucide-react";
 import QRCode from "qrcode";
 import { siteIdentity } from "@/lib/site-identity";
 

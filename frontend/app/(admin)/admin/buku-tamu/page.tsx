@@ -84,9 +84,7 @@ export default function BukuTamuAdminPage() {
 
   // Computed Date parameters
   const dateParam =
-    periodFilter === "TODAY"
-      ? now.toISOString().slice(0, 10)
-      : undefined;
+    periodFilter === "TODAY" ? now.toISOString().slice(0, 10) : undefined;
   const monthParam =
     periodFilter === "MONTH" ? `${filterYear}-${filterMonth}` : undefined;
   const yearParam = periodFilter === "YEAR" ? filterYear : undefined;
@@ -149,7 +147,9 @@ export default function BukuTamuAdminPage() {
               <Users className="size-5" />
             </div>
             <div>
-              <p className="text-xs font-medium text-slate-500">Tamu Hari Ini</p>
+              <p className="text-xs font-medium text-slate-500">
+                Tamu Hari Ini
+              </p>
               <p className="text-2xl font-black text-slate-900">
                 {stats?.todayTotal ?? 0}
               </p>
@@ -322,7 +322,9 @@ export default function BukuTamuAdminPage() {
               onClick={() => refetch()}
               className="ml-auto inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
             >
-              <RotateCw className={`size-3 ${isFetching ? "animate-spin" : ""}`} />
+              <RotateCw
+                className={`size-3 ${isFetching ? "animate-spin" : ""}`}
+              />
               Segarkan Data
             </button>
           </div>

@@ -40,7 +40,11 @@ import {
   AdminEmptyState,
 } from "@/components/admin/feedback";
 import { LETTER_DEFINITIONS } from "@/features/persuratan/letter-definitions";
-import type { LetterRequest, LetterStatus, LetterType } from "@/features/persuratan/types";
+import type {
+  LetterRequest,
+  LetterStatus,
+  LetterType,
+} from "@/features/persuratan/types";
 
 export default function AdminPersuratanPage() {
   const auth = useAuth();
@@ -52,7 +56,9 @@ export default function AdminPersuratanPage() {
   const [typeFilter, setTypeFilter] = useState<LetterType | "">("");
 
   // Modal Detail State
-  const [selectedLetter, setSelectedLetter] = useState<LetterRequest | null>(null);
+  const [selectedLetter, setSelectedLetter] = useState<LetterRequest | null>(
+    null,
+  );
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
 
@@ -70,7 +76,11 @@ export default function AdminPersuratanPage() {
       const res = await fetch(`/api/v1/admin/letters?${params.toString()}`);
       if (!res.ok) throw new Error("Gagal mengambil data permohonan surat");
       const json = await res.json();
-      return json.data as { items: LetterRequest[]; total: number; totalPages: number };
+      return json.data as {
+        items: LetterRequest[];
+        total: number;
+        totalPages: number;
+      };
     },
   });
 
@@ -317,17 +327,23 @@ export default function AdminPersuratanPage() {
 
                       <TableCell>
                         <div className="text-xs text-slate-600">
-                          {new Date(item.createdAt).toLocaleDateString("id-ID", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
+                          {new Date(item.createdAt).toLocaleDateString(
+                            "id-ID",
+                            {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            },
+                          )}
                         </div>
                         <div className="text-[10px] text-slate-400">
-                          {new Date(item.createdAt).toLocaleTimeString("id-ID", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}{" "}
+                          {new Date(item.createdAt).toLocaleTimeString(
+                            "id-ID",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            },
+                          )}{" "}
                           WITA
                         </div>
                       </TableCell>
@@ -356,21 +372,23 @@ export default function AdminPersuratanPage() {
 
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1.5">
-                          {auth.user?.role === "LURAH" && (item.status === "VERIFIED" || item.status === "SUBMITTED") && (
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                              onClick={() => {
-                                setSelectedLetter(item);
-                                setShowRejectForm(false);
-                                setRejectionReason("");
-                              }}
-                            >
-                              <ShieldCheck size={14} />
-                              <span>TTE</span>
-                            </Button>
-                          )}
+                          {auth.user?.role === "LURAH" &&
+                            (item.status === "VERIFIED" ||
+                              item.status === "SUBMITTED") && (
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                onClick={() => {
+                                  setSelectedLetter(item);
+                                  setShowRejectForm(false);
+                                  setRejectionReason("");
+                                }}
+                              >
+                                <ShieldCheck size={14} />
+                                <span>TTE</span>
+                              </Button>
+                            )}
                           <Button
                             variant="outline"
                             size="sm"
@@ -393,7 +411,8 @@ export default function AdminPersuratanPage() {
 
             <div className="p-4 border-t border-slate-100 flex items-center justify-between">
               <p className="text-xs text-slate-500">
-                Total <strong>{lettersQuery.data?.total ?? 0}</strong> permohonan surat
+                Total <strong>{lettersQuery.data?.total ?? 0}</strong>{" "}
+                permohonan surat
               </p>
               <Pagination
                 currentPage={page}
@@ -419,7 +438,8 @@ export default function AdminPersuratanPage() {
                   {selectedLetter.ticketNumber}
                 </span>
                 <h3 className="text-base font-extrabold uppercase tracking-wide">
-                  {LETTER_DEFINITIONS[selectedLetter.type]?.title ?? selectedLetter.title}
+                  {LETTER_DEFINITIONS[selectedLetter.type]?.title ??
+                    selectedLetter.title}
                 </h3>
               </div>
               <button
@@ -447,12 +467,14 @@ export default function AdminPersuratanPage() {
                     )}
                     {selectedLetter.status === "VERIFIED" && (
                       <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-700 bg-sky-100 px-2.5 py-1 rounded-full">
-                        <FileCheck size={12} /> Terverifikasi, Menunggu TTE Lurah
+                        <FileCheck size={12} /> Terverifikasi, Menunggu TTE
+                        Lurah
                       </span>
                     )}
                     {selectedLetter.status === "SIGNED" && (
                       <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full">
-                        <CheckCircle2 size={12} /> Selesai & Ditandatangani Elektronik
+                        <CheckCircle2 size={12} /> Selesai & Ditandatangani
+                        Elektronik
                       </span>
                     )}
                     {selectedLetter.status === "REJECTED" && (
@@ -463,28 +485,34 @@ export default function AdminPersuratanPage() {
                   </div>
                 </div>
 
-                {selectedLetter.status === "SIGNED" && selectedLetter.pdfUrl && (
-                  <div className="flex items-center gap-2">
-                    <a
-                      href={selectedLetter.pdfUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 transition"
-                    >
-                      <Download size={14} />
-                      <span>Unduh PDF Resmi</span>
-                    </a>
-                  </div>
-                )}
+                {selectedLetter.status === "SIGNED" &&
+                  selectedLetter.pdfUrl && (
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={selectedLetter.pdfUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 transition"
+                      >
+                        <Download size={14} />
+                        <span>Unduh PDF Resmi</span>
+                      </a>
+                    </div>
+                  )}
               </div>
 
               {/* Rejection Note if Rejected */}
-              {selectedLetter.status === "REJECTED" && selectedLetter.rejectionReason && (
-                <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs">
-                  <p className="font-bold uppercase tracking-wider">Alasan Penolakan:</p>
-                  <p className="mt-1 leading-relaxed text-rose-900">{selectedLetter.rejectionReason}</p>
-                </div>
-              )}
+              {selectedLetter.status === "REJECTED" &&
+                selectedLetter.rejectionReason && (
+                  <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs">
+                    <p className="font-bold uppercase tracking-wider">
+                      Alasan Penolakan:
+                    </p>
+                    <p className="mt-1 leading-relaxed text-rose-900">
+                      {selectedLetter.rejectionReason}
+                    </p>
+                  </div>
+                )}
 
               {/* Data Pemohon */}
               <div className="space-y-3">
@@ -494,11 +522,15 @@ export default function AdminPersuratanPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div>
                     <span className="text-slate-400">Nama Lengkap:</span>
-                    <p className="font-bold text-slate-800">{selectedLetter.applicantName}</p>
+                    <p className="font-bold text-slate-800">
+                      {selectedLetter.applicantName}
+                    </p>
                   </div>
                   <div>
                     <span className="text-slate-400">NIK:</span>
-                    <p className="font-mono font-bold text-slate-800">{selectedLetter.applicantNik}</p>
+                    <p className="font-mono font-bold text-slate-800">
+                      {selectedLetter.applicantNik}
+                    </p>
                   </div>
                   <div>
                     <span className="text-slate-400">Tempat, Tgl Lahir:</span>
@@ -514,11 +546,15 @@ export default function AdminPersuratanPage() {
                   </div>
                   <div>
                     <span className="text-slate-400">Status Perkawinan:</span>
-                    <p className="text-slate-800">{selectedLetter.maritalStatus}</p>
+                    <p className="text-slate-800">
+                      {selectedLetter.maritalStatus}
+                    </p>
                   </div>
                   <div>
                     <span className="text-slate-400">Pekerjaan:</span>
-                    <p className="text-slate-800">{selectedLetter.occupation}</p>
+                    <p className="text-slate-800">
+                      {selectedLetter.occupation}
+                    </p>
                   </div>
                   <div className="sm:col-span-2">
                     <span className="text-slate-400">Alamat Lengkap:</span>
@@ -528,28 +564,36 @@ export default function AdminPersuratanPage() {
               </div>
 
               {/* Isian Spesifik Surat */}
-              {selectedLetter.details && Object.keys(selectedLetter.details).length > 0 && (
-                <div className="space-y-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 border-b pb-1">
-                    Detail Khusus Surat
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-xl">
-                    {Object.entries(selectedLetter.details).map(([key, val]) => (
-                      <div key={key}>
-                        <span className="text-slate-400 capitalize">{key}:</span>
-                        <p className="font-semibold text-slate-800">{String(val)}</p>
-                      </div>
-                    ))}
+              {selectedLetter.details &&
+                Object.keys(selectedLetter.details).length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 border-b pb-1">
+                      Detail Khusus Surat
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-xl">
+                      {Object.entries(selectedLetter.details).map(
+                        ([key, val]) => (
+                          <div key={key}>
+                            <span className="text-slate-400 capitalize">
+                              {key}:
+                            </span>
+                            <p className="font-semibold text-slate-800">
+                              {String(val)}
+                            </p>
+                          </div>
+                        ),
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Berkas Lampiran */}
               <div className="space-y-3">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 border-b pb-1">
                   Berkas Lampiran ({selectedLetter.attachments?.length ?? 0})
                 </h4>
-                {selectedLetter.attachments && selectedLetter.attachments.length > 0 ? (
+                {selectedLetter.attachments &&
+                selectedLetter.attachments.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {selectedLetter.attachments.map((file, idx) => (
                       <a
@@ -567,12 +611,17 @@ export default function AdminPersuratanPage() {
                             {file.name}
                           </span>
                         </div>
-                        <ExternalLink size={14} className="text-slate-400 group-hover:text-sky-600 shrink-0" />
+                        <ExternalLink
+                          size={14}
+                          className="text-slate-400 group-hover:text-sky-600 shrink-0"
+                        />
                       </a>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-400 italic">Tidak ada berkas lampiran yang diunggah.</p>
+                  <p className="text-xs text-slate-400 italic">
+                    Tidak ada berkas lampiran yang diunggah.
+                  </p>
                 )}
               </div>
 
@@ -614,7 +663,10 @@ export default function AdminPersuratanPage() {
               {actionMutation.isError && (
                 <div className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-xs font-semibold text-rose-800 flex items-center gap-2">
                   <AlertCircle size={16} className="shrink-0 text-rose-600" />
-                  <span>{actionMutation.error?.message || "Gagal memproses permohonan"}</span>
+                  <span>
+                    {actionMutation.error?.message ||
+                      "Gagal memproses permohonan"}
+                  </span>
                 </div>
               )}
             </div>
@@ -685,8 +737,8 @@ export default function AdminPersuratanPage() {
                 )}
 
                 {/* When VERIFIED: Only Lurah can sign (TTE). Admin Kelurahan cannot sign. */}
-                {selectedLetter.status === "VERIFIED" && (
-                  auth.user?.role === "LURAH" ? (
+                {selectedLetter.status === "VERIFIED" &&
+                  (auth.user?.role === "LURAH" ? (
                     <Button
                       variant="primary"
                       size="sm"
@@ -701,11 +753,11 @@ export default function AdminPersuratanPage() {
                     <div className="flex items-center gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2 text-xs font-medium text-amber-900">
                       <Clock size={15} className="text-amber-600 shrink-0" />
                       <span>
-                        Berkas telah diverifikasi. Menunggu penandatanganan elektronik (TTE) oleh <strong>Bapak/Ibu Lurah</strong>.
+                        Berkas telah diverifikasi. Menunggu penandatanganan
+                        elektronik (TTE) oleh <strong>Bapak/Ibu Lurah</strong>.
                       </span>
                     </div>
-                  )
-                )}
+                  ))}
               </div>
             </div>
           </div>

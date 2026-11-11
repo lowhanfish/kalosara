@@ -8,8 +8,15 @@ import {
   type Principal,
 } from '../lib/authorization.js';
 import { AccessError } from '../lib/errors.js';
-import { findPrincipalById, findRefreshSessionById } from '../repositories/auth.repository.js';
-import { ACCESS_COOKIE, validateMutation, verifyAccessToken } from '../services/auth.service.js';
+import {
+  findPrincipalById,
+  findRefreshSessionById,
+} from '../repositories/auth.repository.js';
+import {
+  ACCESS_COOKIE,
+  validateMutation,
+  verifyAccessToken,
+} from '../services/auth.service.js';
 
 export { AccessError, assertActive, assertOwner, assertRole, type Principal };
 
@@ -49,7 +56,9 @@ export const authenticate: RequestHandler = async (req, _res, next) => {
 export const loadActivePrincipal: RequestHandler = async (req, res, next) => {
   const userId = req.auth?.userId;
   if (!userId || !z.uuid().safeParse(userId).success) {
-    return next(new AccessError(401, 'UNAUTHENTICATED', 'Authentication required'));
+    return next(
+      new AccessError(401, 'UNAUTHENTICATED', 'Authentication required'),
+    );
   }
   try {
     const principal = await findPrincipalById(userId);
@@ -72,7 +81,9 @@ export function requireRoles(...roles: Role[]): RequestHandler {
 }
 
 export function requireOwnership(
-  ownerIdOf: (req: Request) => string | null | undefined | Promise<string | null | undefined>,
+  ownerIdOf: (
+    req: Request,
+  ) => string | null | undefined | Promise<string | null | undefined>,
 ): RequestHandler {
   return async (req, res, next) => {
     try {

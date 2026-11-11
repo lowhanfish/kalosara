@@ -195,7 +195,8 @@ export default function Editor({
         <div className="grid gap-5 sm:grid-cols-[2fr_1fr]">
           <label className="block space-y-1.5">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Judul {channels[kind].title} <span className="text-red-500">*</span>
+              Judul {channels[kind].title}{" "}
+              <span className="text-red-500">*</span>
             </span>
             <input
               className="cms-input"
@@ -229,8 +230,9 @@ export default function Editor({
             Isi Konten & Penjelasan
           </span>
           <p className="text-xs text-slate-500">
-            Gunakan editor WYSIWYG untuk menyusun format teks (Heading Bab H2/H3,
-            Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip Gambar).
+            Gunakan editor WYSIWYG untuk menyusun format teks (Heading Bab
+            H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring, dan Sisip
+            Gambar).
           </p>
           <RichEditor
             key={item?.id ?? kind}
@@ -412,7 +414,8 @@ export default function Editor({
                   Foto Album Galeri ({photos.length} / 12 Foto)
                 </span>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Unggah file foto langsung dari perangkat Anda ke server kelurahan.
+                  Unggah file foto langsung dari perangkat Anda ke server
+                  kelurahan.
                 </p>
               </div>
 

@@ -40,16 +40,14 @@ describe('public site identity', () => {
     const settingSpy = vi
       .spyOn(prisma.siteSetting, 'findUnique')
       .mockResolvedValue(null);
-    const spy = vi
-      .spyOn(prisma.appSetting, 'findMany')
-      .mockResolvedValue([
-        {
-          key: 'site.name',
-          value: 'Kelurahan Uji',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ]);
+    const spy = vi.spyOn(prisma.appSetting, 'findMany').mockResolvedValue([
+      {
+        key: 'site.name',
+        value: 'Kelurahan Uji',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
     try {
       const response = await request(createApp())
         .get('/api/v1/public/settings')

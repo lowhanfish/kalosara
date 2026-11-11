@@ -90,9 +90,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               >
                 Jelajahi <ChevronDown size={13} />
               </button>
-              <div className="portal-dropdown">
-                {moreNavigation.map(link)}
-              </div>
+              <div className="portal-dropdown">{moreNavigation.map(link)}</div>
             </div>
             {link(guestbookNav)}
           </nav>

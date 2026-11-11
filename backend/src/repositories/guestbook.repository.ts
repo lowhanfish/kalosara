@@ -178,26 +178,35 @@ export async function updateGuestBookStatusInTx(params: {
 export async function getGuestBookStats() {
   const now = new Date();
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+  const endOfDay = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59,
+    59,
+    999,
+  );
 
-  const [todayTotal, todayWaiting, todayServed, totalAllTime] = await Promise.all([
-    prisma.guestBookEntry.count({
-      where: { createdAt: { gte: startOfDay, lte: endOfDay } },
-    }),
-    prisma.guestBookEntry.count({
-      where: {
-        createdAt: { gte: startOfDay, lte: endOfDay },
-        status: 'WAITING',
-      },
-    }),
-    prisma.guestBookEntry.count({
-      where: {
-        createdAt: { gte: startOfDay, lte: endOfDay },
-        status: 'SERVED',
-      },
-    }),
-    prisma.guestBookEntry.count(),
-  ]);
+  const [todayTotal, todayWaiting, todayServed, totalAllTime] =
+    await Promise.all([
+      prisma.guestBookEntry.count({
+        where: { createdAt: { gte: startOfDay, lte: endOfDay } },
+      }),
+      prisma.guestBookEntry.count({
+        where: {
+          createdAt: { gte: startOfDay, lte: endOfDay },
+          status: 'WAITING',
+        },
+      }),
+      prisma.guestBookEntry.count({
+        where: {
+          createdAt: { gte: startOfDay, lte: endOfDay },
+          status: 'SERVED',
+        },
+      }),
+      prisma.guestBookEntry.count(),
+    ]);
 
   return {
     todayTotal,

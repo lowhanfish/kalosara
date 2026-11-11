@@ -36,14 +36,8 @@ export function KalosaraBanner() {
                 fill="#0369a1"
               />
               {/* Quill / Letter Icon */}
-              <path
-                d="M36 64L42 46L62 34L66 38L54 58L36 64Z"
-                fill="#ffffff"
-              />
-              <path
-                d="M36 64L40 56L44 60L36 64Z"
-                fill="#fde047"
-              />
+              <path d="M36 64L42 46L62 34L66 38L54 58L36 64Z" fill="#ffffff" />
+              <path d="M36 64L40 56L44 60L36 64Z" fill="#fde047" />
               <circle cx="50" cy="50" r="4" fill="#ffffff" />
             </svg>
           </div>
@@ -71,8 +65,9 @@ export function KalosaraBanner() {
             </p>
 
             <p className="mt-1 max-w-2xl text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Pelayanan permohonan persuratan mandiri Kelurahan Watundehoa secara digital,
-              terintegrasi verifikasi administrasi dan Tanda Tangan Elektronik (TTE) Lurah.
+              Pelayanan permohonan persuratan mandiri Kelurahan Watundehoa
+              secara digital, terintegrasi verifikasi administrasi dan Tanda
+              Tangan Elektronik (TTE) Lurah.
             </p>
           </div>
         </div>
@@ -84,14 +79,18 @@ export function KalosaraBanner() {
               <ShieldCheck size={14} className="text-sky-600" />
               TTE & QR Code
             </p>
-            <p className="text-[11px] text-slate-500 mt-0.5">Surat anti-pemalsuan</p>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Surat anti-pemalsuan
+            </p>
           </div>
           <div className="rounded-xl border border-sky-100 bg-white/80 p-3 shadow-xs">
             <p className="font-bold text-slate-800 flex items-center gap-1">
               <Clock size={14} className="text-sky-600" />
               Tracking Berkas
             </p>
-            <p className="text-[11px] text-slate-500 mt-0.5">Pantau status real-time</p>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Pantau status real-time
+            </p>
           </div>
         </div>
       </div>

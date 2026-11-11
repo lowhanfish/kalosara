@@ -1,23 +1,23 @@
-import fs from "fs/promises";
-import fsSync from "fs";
-import path from "path";
-import crypto from "crypto";
-import { LetterRepository } from "../repositories/letter.repository.js";
-import { LetterPdfService } from "./letter-pdf.service.js";
-import { EmailService } from "./email.service.js";
-import { ApiError } from "../lib/errors.js";
-import type { LetterRequest, LetterStatus, LetterType } from "@prisma/client";
+import fs from 'fs/promises';
+import fsSync from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import { LetterRepository } from '../repositories/letter.repository.js';
+import { LetterPdfService } from './letter-pdf.service.js';
+import { EmailService } from './email.service.js';
+import { ApiError } from '../lib/errors.js';
+import type { LetterRequest, LetterStatus, LetterType } from '@prisma/client';
 
 export class LetterService {
   getUploadDir(): string {
     if (process.env.UPLOAD_ROOT) {
       return process.env.UPLOAD_ROOT;
     }
-    const vpsShared = "/srv/kalosara/shared/uploads";
+    const vpsShared = '/srv/kalosara/shared/uploads';
     if (fsSync.existsSync(vpsShared)) {
       return vpsShared;
     }
-    return path.resolve(process.cwd(), "../shared/uploads");
+    return path.resolve(process.cwd(), '../shared/uploads');
   }
 
   constructor(
@@ -47,7 +47,7 @@ export class LetterService {
 
     // Process file attachments
     const uploadDir = this.getUploadDir();
-    const attachmentsDir = path.join(uploadDir, "attachments");
+    const attachmentsDir = path.join(uploadDir, 'attachments');
     await fs.mkdir(attachmentsDir, { recursive: true });
 
     const attachmentsData: Array<{
@@ -58,7 +58,7 @@ export class LetterService {
     }> = [];
 
     for (const file of files) {
-      const ext = path.extname(file.originalname) || ".pdf";
+      const ext = path.extname(file.originalname) || '.pdf';
       const randomName = `${crypto.randomUUID()}${ext}`;
       const destPath = path.join(attachmentsDir, randomName);
       if (file.buffer) {
@@ -97,7 +97,9 @@ export class LetterService {
     const items = await this.letterRepo.listByUserId(userId);
     return items.map((item) => ({
       ...item,
-      pdfUrl: item.pdfPath ? `/api/v1/public/letters/download/${item.id}` : null,
+      pdfUrl: item.pdfPath
+        ? `/api/v1/public/letters/download/${item.id}`
+        : null,
       qrCodeUrl: item.qrToken
         ? `https://watundehoa.digital/verifikasi-surat/${item.qrToken}`
         : null,
@@ -121,7 +123,9 @@ export class LetterService {
     const result = await this.letterRepo.listAdmin(params);
     const mappedItems = result.items.map((item) => ({
       ...item,
-      pdfUrl: item.pdfPath ? `/api/v1/public/letters/download/${item.id}` : null,
+      pdfUrl: item.pdfPath
+        ? `/api/v1/public/letters/download/${item.id}`
+        : null,
       qrCodeUrl: item.qrToken
         ? `https://watundehoa.digital/verifikasi-surat/${item.qrToken}`
         : null,
@@ -145,7 +149,9 @@ export class LetterService {
     if (!item) return null;
     return {
       ...item,
-      pdfUrl: item.pdfPath ? `/api/v1/public/letters/download/${item.id}` : null,
+      pdfUrl: item.pdfPath
+        ? `/api/v1/public/letters/download/${item.id}`
+        : null,
       qrCodeUrl: item.qrToken
         ? `https://watundehoa.digital/verifikasi-surat/${item.qrToken}`
         : null,
@@ -162,17 +168,17 @@ export class LetterService {
   async processAction(
     id: string,
     actorName: string,
-    action: "VERIFY" | "REJECT" | "SIGN",
+    action: 'VERIFY' | 'REJECT' | 'SIGN',
     reason?: string,
   ) {
     const existing = await this.letterRepo.findById(id);
     if (!existing) {
-      throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
+      throw new ApiError(404, 'NOT_FOUND', 'Permohonan surat tidak ditemukan');
     }
 
-    if (action === "VERIFY") {
+    if (action === 'VERIFY') {
       const updated = await this.letterRepo.updateStatus(id, {
-        status: "VERIFIED",
+        status: 'VERIFIED',
         verifiedAt: new Date(),
         verifiedBy: actorName,
         rejectionReason: null,
@@ -180,12 +186,16 @@ export class LetterService {
       return this.getRequestDetail(updated.id);
     }
 
-    if (action === "REJECT") {
+    if (action === 'REJECT') {
       if (!reason?.trim()) {
-        throw new ApiError(400, "BAD_REQUEST", "Alasan penolakan / catatan perbaikan wajib diisi");
+        throw new ApiError(
+          400,
+          'BAD_REQUEST',
+          'Alasan penolakan / catatan perbaikan wajib diisi',
+        );
       }
       const updated = await this.letterRepo.updateStatus(id, {
-        status: "REJECTED",
+        status: 'REJECTED',
         rejectionReason: reason.trim(),
       });
 
@@ -203,8 +213,10 @@ export class LetterService {
       return this.getRequestDetail(updated.id);
     }
 
-    if (action === "SIGN") {
-      const letterNumber = await this.letterRepo.generateLetterNumber(existing.type);
+    if (action === 'SIGN') {
+      const letterNumber = await this.letterRepo.generateLetterNumber(
+        existing.type,
+      );
       const qrToken = crypto.randomUUID();
 
       // Temporarily assign letterNumber and qrToken for PDF generation
@@ -213,7 +225,7 @@ export class LetterService {
         letterNumber,
         qrToken,
         signedAt: new Date(),
-        signedBy: actorName || "Lurah Watundehoa",
+        signedBy: actorName || 'Lurah Watundehoa',
       };
 
       // Generate PDF
@@ -222,11 +234,11 @@ export class LetterService {
       );
 
       const updated = await this.letterRepo.updateStatus(id, {
-        status: "SIGNED",
+        status: 'SIGNED',
         letterNumber,
         qrToken,
         signedAt: new Date(),
-        signedBy: actorName || "Lurah Watundehoa",
+        signedBy: actorName || 'Lurah Watundehoa',
         pdfPath: storagePath,
       });
 
@@ -248,12 +260,12 @@ export class LetterService {
       return this.getRequestDetail(updated.id);
     }
 
-    throw new ApiError(400, "BAD_REQUEST", "Aksi tidak valid");
+    throw new ApiError(400, 'BAD_REQUEST', 'Aksi tidak valid');
   }
 
   async verifyPublicLetter(token: string) {
     const letter = await this.letterRepo.findByQrToken(token);
-    if (!letter || letter.status !== "SIGNED") {
+    if (!letter || letter.status !== 'SIGNED') {
       return null;
     }
     return {
@@ -274,18 +286,22 @@ export class LetterService {
   async deleteCitizenLetter(id: string, userId: string) {
     const letter = await this.letterRepo.findById(id);
     if (!letter) {
-      throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
+      throw new ApiError(404, 'NOT_FOUND', 'Permohonan surat tidak ditemukan');
     }
 
     if (letter.userId !== userId) {
-      throw new ApiError(403, "FORBIDDEN", "Anda tidak memiliki wewenang untuk menghapus permohonan ini");
+      throw new ApiError(
+        403,
+        'FORBIDDEN',
+        'Anda tidak memiliki wewenang untuk menghapus permohonan ini',
+      );
     }
 
-    if (letter.status === "SIGNED") {
+    if (letter.status === 'SIGNED') {
       throw new ApiError(
         400,
-        "BAD_REQUEST",
-        "Surat yang telah selesai ditandatangani Lurah berstatus arsip resmi dan tidak dapat dihapus.",
+        'BAD_REQUEST',
+        'Surat yang telah selesai ditandatangani Lurah berstatus arsip resmi dan tidak dapat dihapus.',
       );
     }
 
@@ -295,7 +311,7 @@ export class LetterService {
       for (const att of letter.attachments) {
         try {
           const safeName = path.basename(att.storagePath);
-          const fullPath = path.join(uploadDir, "attachments", safeName);
+          const fullPath = path.join(uploadDir, 'attachments', safeName);
           await fs.unlink(fullPath).catch(() => {});
         } catch {
           // ignore error if file missing
@@ -307,7 +323,7 @@ export class LetterService {
     if (letter.pdfPath) {
       try {
         const safePdf = path.basename(letter.pdfPath);
-        const fullPdfPath = path.join(uploadDir, "letters", safePdf);
+        const fullPdfPath = path.join(uploadDir, 'letters', safePdf);
         await fs.unlink(fullPdfPath).catch(() => {});
       } catch {
         // ignore error
@@ -315,13 +331,13 @@ export class LetterService {
     }
 
     await this.letterRepo.delete(id);
-    return { success: true, message: "Permohonan surat berhasil dihapus" };
+    return { success: true, message: 'Permohonan surat berhasil dihapus' };
   }
 
   async deleteAdminLetter(id: string) {
     const letter = await this.letterRepo.findById(id);
     if (!letter) {
-      throw new ApiError(404, "NOT_FOUND", "Permohonan surat tidak ditemukan");
+      throw new ApiError(404, 'NOT_FOUND', 'Permohonan surat tidak ditemukan');
     }
 
     const uploadDir = this.getUploadDir();
@@ -331,9 +347,11 @@ export class LetterService {
       for (const att of letter.attachments) {
         try {
           const safeName = path.basename(att.storagePath);
-          const fullPath = path.join(uploadDir, "attachments", safeName);
+          const fullPath = path.join(uploadDir, 'attachments', safeName);
           await fs.unlink(fullPath).catch(() => {});
-        } catch {}
+        } catch {
+          // ignore cleanup error
+        }
       }
     }
 
@@ -341,29 +359,46 @@ export class LetterService {
     if (letter.pdfPath) {
       try {
         const safePdf = path.basename(letter.pdfPath);
-        const fullPdfPath = path.join(uploadDir, "letters", safePdf);
+        const fullPdfPath = path.join(uploadDir, 'letters', safePdf);
         await fs.unlink(fullPdfPath).catch(() => {});
-      } catch {}
+      } catch {
+        // ignore cleanup error
+      }
     }
 
     await this.letterRepo.delete(id);
-    return { success: true, message: "Permohonan surat berhasil dihapus oleh admin" };
+    return {
+      success: true,
+      message: 'Permohonan surat berhasil dihapus oleh admin',
+    };
   }
 
-  async getOrGeneratePdfFile(id: string): Promise<{ fullPath: string; filename: string }> {
+  async getOrGeneratePdfFile(
+    id: string,
+  ): Promise<{ fullPath: string; filename: string }> {
     const letter = await this.letterRepo.findById(id);
-    if (!letter || letter.status !== "SIGNED") {
-      throw new ApiError(404, "NOT_FOUND", "Dokumen PDF belum tersedia atau belum ditandatangani");
+    if (!letter || letter.status !== 'SIGNED') {
+      throw new ApiError(
+        404,
+        'NOT_FOUND',
+        'Dokumen PDF belum tersedia atau belum ditandatangani',
+      );
     }
 
-    const safeTicket = letter.ticketNumber.replace(/[^a-zA-Z0-9_-]/g, "_");
+    const safeTicket = letter.ticketNumber.replace(/[^a-zA-Z0-9_-]/g, '_');
     const filename = `${safeTicket}.pdf`;
     const uploadRoot = this.getUploadDir();
-    const relativePath = (letter.pdfPath || `/uploads/letters/${filename}`).replace(/^\/uploads\//, "");
-    let fullPath = path.join(uploadRoot, relativePath);
+    const relativePath = (
+      letter.pdfPath || `/uploads/letters/${filename}`
+    ).replace(/^\/uploads\//, '');
+    const fullPath = path.join(uploadRoot, relativePath);
 
     if (!fsSync.existsSync(fullPath)) {
-      const fallbackPath = path.resolve(process.cwd(), "../shared/uploads", relativePath);
+      const fallbackPath = path.resolve(
+        process.cwd(),
+        '../shared/uploads',
+        relativePath,
+      );
       if (fsSync.existsSync(fallbackPath)) {
         return { fullPath: fallbackPath, filename };
       }

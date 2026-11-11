@@ -47,22 +47,22 @@ Backend memerlukan Node >=22.12; jalankan `npm ci`, `npm run db:generate`, `npm 
 
 Prefix seluruh endpoint berikut `/api/v1`:
 
-| Endpoint | Kontrak |
-| --- | --- |
-| GET `/admin/news` | Admin; page/limit/search/status/categoryId/sort=newest,oldest,title |
-| GET `/admin/news/categories` | Admin; page/limit/search |
-| PUT `/admin/news/categories/:uuid` | Admin+CSRF; name/slug/archived, slug stabil |
-| GET `/admin/news/:uuid` | Admin; objek editor, termasuk version |
-| PUT `/admin/news/:uuid` | Admin+CSRF; slug/title/excerpt/bodyHtml/categoryId/coverId/status/expectedVersion; baru expectedVersion=0 |
-| GET `/admin/news/:uuid/revisions` | Admin; page/limit, daftar metadata revisi |
-| POST `/admin/news/:uuid/rollback` | Admin+CSRF; revisionId/expectedVersion; selalu menghasilkan draft versi baru |
-| GET `/admin/news/:uuid/preview` | Admin; preview tersimpan yang disanitasi, no-store |
-| GET `/public/news/:slug` | Publik; hanya PUBLISHED, selain itu 404; belum dihubungkan ke frontend publik |
-| GET `/admin/media` | Admin; page/limit/search/visibility, public bersama + private milik sendiri |
-| POST `/admin/media` | Admin+CSRF; multipart file/visibility/alt/caption, maksimum satu file 20 MiB |
-| PATCH `/admin/media/:uuid` | Admin+CSRF; alt/caption/archived; private harus pemilik |
-| GET `/admin/media/:uuid/file` | Admin; private harus pemilik, archived 404 |
-| GET `/public/media/:uuid` | Tanpa login; PUBLIC aktif saja, lainnya 404 |
+| Endpoint                           | Kontrak                                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| GET `/admin/news`                  | Admin; page/limit/search/status/categoryId/sort=newest,oldest,title                                       |
+| GET `/admin/news/categories`       | Admin; page/limit/search                                                                                  |
+| PUT `/admin/news/categories/:uuid` | Admin+CSRF; name/slug/archived, slug stabil                                                               |
+| GET `/admin/news/:uuid`            | Admin; objek editor, termasuk version                                                                     |
+| PUT `/admin/news/:uuid`            | Admin+CSRF; slug/title/excerpt/bodyHtml/categoryId/coverId/status/expectedVersion; baru expectedVersion=0 |
+| GET `/admin/news/:uuid/revisions`  | Admin; page/limit, daftar metadata revisi                                                                 |
+| POST `/admin/news/:uuid/rollback`  | Admin+CSRF; revisionId/expectedVersion; selalu menghasilkan draft versi baru                              |
+| GET `/admin/news/:uuid/preview`    | Admin; preview tersimpan yang disanitasi, no-store                                                        |
+| GET `/public/news/:slug`           | Publik; hanya PUBLISHED, selain itu 404; belum dihubungkan ke frontend publik                             |
+| GET `/admin/media`                 | Admin; page/limit/search/visibility, public bersama + private milik sendiri                               |
+| POST `/admin/media`                | Admin+CSRF; multipart file/visibility/alt/caption, maksimum satu file 20 MiB                              |
+| PATCH `/admin/media/:uuid`         | Admin+CSRF; alt/caption/archived; private harus pemilik                                                   |
+| GET `/admin/media/:uuid/file`      | Admin; private harus pemilik, archived 404                                                                |
+| GET `/public/media/:uuid`          | Tanpa login; PUBLIC aktif saja, lainnya 404                                                               |
 
 Pagination default 10, maksimum 50; urutan memakai tie-breaker ID/versi agar halaman stabil. Semua JSON memakai envelope success/data atau error serta requestId. 400 invalid input/file, 401 sesi tidak valid, 403 role/owner/Origin/CSRF, 404 resource tak tersedia, 409 konflik/referensi, 413 file oversize, 429 rate limit, 503 dua upload sedang sibuk. URL fisik dan storageKey tidak dikirim dalam API daftar media. Upload berhasil 201. Endpoint file memakai no-store, nama download UUID dan nosniff.
 

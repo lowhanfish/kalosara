@@ -6,16 +6,16 @@ Hanya Prompt 11 Tahap 01. Audit awal: HEAD `d2a0546`, main bersih/sinkron origin
 
 Dashboard `/admin` membaca hitungan riil berita terbit/draft, pengumuman/agenda semua status, seluruh media termasuk arsip dan pengguna terdaftar. Ringkasan sepuluh aktivitas CMS tidak menampilkan identitas akun, IP, isi file atau aktivitas pengelolaan akun. Tidak ada metrik pelayanan surat. API autentikasi memakai cookie HttpOnly yang sudah ada; seluruh data dashboard private/no-store dan query frontend dipisahkan berdasarkan user ID.
 
-| Kemampuan | ADMIN_KELURAHAN | LURAH | MASYARAKAT/anonim |
-| --- | --- | --- | --- |
-| Ringkasan `/admin`, hitungan dan aktivitas CMS terbatas | Ya | Monitoring | Ditolak; anonim mendapat form login |
-| CMS profil/settings, berita, kanal informasi, wilayah | Kelola sesuai validasi modul | Ditolak | Ditolak |
-| Daftar pengguna, audit rinci, inventory upload | Ya | Ditolak | Ditolak |
-| Aktif/nonaktif, cabut sesi, reset password akun lain | Verifikasi ulang password + identitas + CSRF | Ditolak | Ditolak |
-| Perubahan role akun lain | Operasi backend SET_ROLE; izin/verifikasi/transaksi/audit sama | Ditolak | Ditolak |
-| File PRIVATE | Hanya milik sendiri, termasuk antar-admin | Tidak memperoleh akses admin media | Tidak memperoleh akses admin media |
-| Profil akun sendiri `/auth/me` | Baca sendiri | Baca sendiri | Masyarakat baca sendiri; anonim ditolak |
-| Approval konten | Belum diaktifkan | Belum diaktifkan | Tidak ada |
+| Kemampuan                                               | ADMIN_KELURAHAN                                                | LURAH                              | MASYARAKAT/anonim                       |
+| ------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------------- | --------------------------------------- |
+| Ringkasan `/admin`, hitungan dan aktivitas CMS terbatas | Ya                                                             | Monitoring                         | Ditolak; anonim mendapat form login     |
+| CMS profil/settings, berita, kanal informasi, wilayah   | Kelola sesuai validasi modul                                   | Ditolak                            | Ditolak                                 |
+| Daftar pengguna, audit rinci, inventory upload          | Ya                                                             | Ditolak                            | Ditolak                                 |
+| Aktif/nonaktif, cabut sesi, reset password akun lain    | Verifikasi ulang password + identitas + CSRF                   | Ditolak                            | Ditolak                                 |
+| Perubahan role akun lain                                | Operasi backend SET_ROLE; izin/verifikasi/transaksi/audit sama | Ditolak                            | Ditolak                                 |
+| File PRIVATE                                            | Hanya milik sendiri, termasuk antar-admin                      | Tidak memperoleh akses admin media | Tidak memperoleh akses admin media      |
+| Profil akun sendiri `/auth/me`                          | Baca sendiri                                                   | Baca sendiri                       | Masyarakat baca sendiri; anonim ditolak |
+| Approval konten                                         | Belum diaktifkan                                               | Belum diaktifkan                   | Tidak ada                               |
 
 Tidak ada dropdown role dalam UI. Registrasi publik tetap tidak dapat memilih role. Operasi backend menerima hanya tiga role yang sah. Self access change ditolak: minta admin lain; pemeriksaan admin aktif terakhir dan serialisasi perubahan hak akses mencegah kehilangan seluruh admin. Dashboard masyarakat/edit profil adalah Prompt 12 dan belum dikerjakan.
 
@@ -37,13 +37,13 @@ Pilih akun tujuan, verifikasi identitas/permintaannya melalui prosedur kantor, p
 
 Kontrak API (semua awalan `/api/v1/admin/dashboard`):
 
-| Metode/path | Hasil |
-| --- | --- |
-| GET `/` | Hitungan dan aktivitas terbatas; admin/lurah |
-| GET `/users?page=1&limit=10&search=...` | DTO akun minimal, search email, tanpa hash/telepon/sesi |
-| GET `/audit?page=1&limit=10&search=USER_` | Siapa/kapan/action/entity ID/requestId/IP pseudonim; search action |
-| GET `/uploads?page=1&limit=10&search=...` | Media PUBLIC atau PRIVATE milik admin sendiri, termasuk arsip; search nama file |
-| POST `/users/:id/access` | Aktif/nonaktif/reset/cabut sesi/role; admin saja, CSRF+Origin, rate limit 10/15 menit/IP |
+| Metode/path                               | Hasil                                                                                    |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| GET `/`                                   | Hitungan dan aktivitas terbatas; admin/lurah                                             |
+| GET `/users?page=1&limit=10&search=...`   | DTO akun minimal, search email, tanpa hash/telepon/sesi                                  |
+| GET `/audit?page=1&limit=10&search=USER_` | Siapa/kapan/action/entity ID/requestId/IP pseudonim; search action                       |
+| GET `/uploads?page=1&limit=10&search=...` | Media PUBLIC atau PRIVATE milik admin sendiri, termasuk arsip; search nama file          |
+| POST `/users/:id/access`                  | Aktif/nonaktif/reset/cabut sesi/role; admin saja, CSRF+Origin, rate limit 10/15 menit/IP |
 
 Body akses strict: `action` salah satu ACTIVATE/DEACTIVATE/REVOKE_SESSIONS/RESET_PASSWORD/SET_ROLE, `currentPassword`, `identityVerified: true`, `expectedUpdatedAt` dari DTO terakhir. Hanya RESET_PASSWORD menerima/wajib `newPassword`; hanya SET_ROLE menerima/wajib `role` salah satu ADMIN_KELURAHAN/LURAH/MASYARAKAT. Field lain ditolak. Untuk perubahan role, operator pengembang menggunakan klien API internal yang sudah login admin dengan CSRF dari `/auth/csrf`, setelah verifikasi identitas dan kewenangan. Jangan menaruh password/cookie dalam argumen CLI, URL, log, Git, tiket atau screenshot. Tidak ada endpoint role generik tanpa izin. Provisioning staf baru tetap melalui prosedur CLI terpisah yang sudah tersedia.
 
@@ -65,19 +65,19 @@ Audit runtime awal: hanya port3000 proyek lain aktif; frontend3001/backend4000/R
 
 Hasil akhir 18 Oktober 2026:
 
-| Pemeriksaan | Hasil |
-| --- | --- |
-| Backend lint/typecheck/build | Lulus |
-| Backend unit/HTTP | 30/30, 8 suite |
-| Backend database terisolasi | 41/41, 8 suite; termasuk 9 tes dashboard/akses |
-| Frontend lint/typecheck/build | Lulus; build QA dan konfigurasi utama |
-| Frontend test | 34/34 |
-| Browser QA | 13 pemeriksaan lulus: peran, konfirmasi batal/terima, audit, quota, error/retry, mobile |
-| Diff whitespace | Lulus |
+| Pemeriksaan                   | Hasil                                                                                   |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| Backend lint/typecheck/build  | Lulus                                                                                   |
+| Backend unit/HTTP             | 30/30, 8 suite                                                                          |
+| Backend database terisolasi   | 41/41, 8 suite; termasuk 9 tes dashboard/akses                                          |
+| Frontend lint/typecheck/build | Lulus; build QA dan konfigurasi utama                                                   |
+| Frontend test                 | 34/34                                                                                   |
+| Browser QA                    | 13 pemeriksaan lulus: peran, konfirmasi batal/terima, audit, quota, error/retry, mobile |
+| Diff whitespace               | Lulus                                                                                   |
 
 Perintah: `npm run lint && npm run typecheck && npm test && npm run build` dari backend; `TEST_DATABASE_URL=postgresql://test:test@127.0.0.1:55439/kalosara_prompt11_test npm run test:db`; frontend `pnpm lint && pnpm typecheck && pnpm test && pnpm build`. Kredensial contoh hanya untuk DB disposable lokal. Tidak ada akun/konten QA pada Neon.
 
-Selama implementasi, query advisory lock awal mengembalikan tipe void yang tidak didukung Prisma; hasil query diganti menjadi integer. Tes socket ephemeral sempat terputus; suite baru menggunakan server persisten sepanjang suite. Keduanya diperbaiki dan seluruh rangkaian final lulus, termasuk barrier refresh/reset. Seluruh tes DB hanya melalui TEST_DATABASE_URL localhost/kalosara_*_test dengan upload sementara; runner menolak Neon/non-test. Kegagalan socket EPERM sandbox pada unit test diselesaikan dengan menjalankan ulang izin socket lokal. Tidak dianggap lulus sebelum pengulangan berhasil.
+Selama implementasi, query advisory lock awal mengembalikan tipe void yang tidak didukung Prisma; hasil query diganti menjadi integer. Tes socket ephemeral sempat terputus; suite baru menggunakan server persisten sepanjang suite. Keduanya diperbaiki dan seluruh rangkaian final lulus, termasuk barrier refresh/reset. Seluruh tes DB hanya melalui TEST*DATABASE_URL localhost/kalosara*\*\_test dengan upload sementara; runner menolak Neon/non-test. Kegagalan socket EPERM sandbox pada unit test diselesaikan dengan menjalankan ulang izin socket lokal. Tidak dianggap lulus sebelum pengulangan berhasil.
 
 ## 6. Daftar manual testing/review
 

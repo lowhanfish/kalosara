@@ -2,11 +2,7 @@ import { AlertCircle, FolderOpen } from "lucide-react";
 import { cmsError } from "@/features/cms/client";
 
 export type AdminLoadingVariant =
-  | "list"
-  | "dashboard"
-  | "cards"
-  | "detail"
-  | "shell";
+  "list" | "dashboard" | "cards" | "detail" | "shell";
 
 export function AdminEmptyState({
   title,

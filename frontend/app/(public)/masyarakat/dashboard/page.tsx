@@ -68,7 +68,9 @@ export default function CitizenDashboard() {
       return submitLetterRequest(data, attachments, csrfToken);
     },
     onSuccess: (newLetter) => {
-      queryClient.invalidateQueries({ queryKey: ["citizen", auth.user?.id, "letters"] });
+      queryClient.invalidateQueries({
+        queryKey: ["citizen", auth.user?.id, "letters"],
+      });
       setSuccessTicket(newLetter.ticketNumber);
       setActiveTab("HISTORY");
       setSelectedType(null);
@@ -84,7 +86,9 @@ export default function CitizenDashboard() {
       return deleteLetterRequest(letterId, csrfToken);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["citizen", auth.user?.id, "letters"] });
+      queryClient.invalidateQueries({
+        queryKey: ["citizen", auth.user?.id, "letters"],
+      });
     },
   });
 
@@ -151,7 +155,8 @@ export default function CitizenDashboard() {
                   )}
                 </div>
                 <p className="mt-1 text-sm text-slate-500">
-                  {profileQuery.data.user.email} • {profileQuery.data.user.phone ?? "No. HP belum terdaftar"}
+                  {profileQuery.data.user.email} •{" "}
+                  {profileQuery.data.user.phone ?? "No. HP belum terdaftar"}
                 </p>
               </div>
             </div>
@@ -188,7 +193,8 @@ export default function CitizenDashboard() {
               </p>
               <p className="text-xs text-emerald-700">
                 Nomor Tiket Anda:{" "}
-                <strong className="font-mono">{successTicket}</strong>. Permohonan telah masuk ke antrean verifikasi Admin Kelurahan.
+                <strong className="font-mono">{successTicket}</strong>.
+                Permohonan telah masuk ke antrean verifikasi Admin Kelurahan.
               </p>
             </div>
           </div>

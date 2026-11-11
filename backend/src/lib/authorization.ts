@@ -3,9 +3,13 @@ import { AccessError } from './errors.js';
 
 export type Principal = { id: string; role: Role; isActive: boolean };
 
-export function assertActive(principal: Principal | null | undefined): Principal {
-  if (!principal) throw new AccessError(401, 'UNAUTHENTICATED', 'Authentication required');
-  if (!principal.isActive) throw new AccessError(403, 'ACCOUNT_INACTIVE', 'Account is inactive');
+export function assertActive(
+  principal: Principal | null | undefined,
+): Principal {
+  if (!principal)
+    throw new AccessError(401, 'UNAUTHENTICATED', 'Authentication required');
+  if (!principal.isActive)
+    throw new AccessError(403, 'ACCOUNT_INACTIVE', 'Account is inactive');
   return principal;
 }
 

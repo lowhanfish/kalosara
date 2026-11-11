@@ -8,14 +8,14 @@ Tiga halaman `/masyarakat/dashboard`, `/masyarakat/profil`, `/masyarakat/keamana
 
 Profil hanya nama, alamat opsional dan kontak akun; tanpa NIK/KK/KTP/foto identitas/upload. Kontak penting tidak ditimpa langsung. Karena pengiriman email/SMS belum tersedia, masyarakat mengajukan perubahan lalu petugas memverifikasi identitas **dan kepemilikan kontak baru secara nyata melalui prosedur kantor**. Admin mengonfirmasi dengan password/CSRF sebelum menerapkan. Ini bukan pengiriman kode/email palsu: UI menunjukkan pending, kontak lama tetap berlaku, masa berlaku7hari, dan setelah disetujui semua sesi dicabut. Permintaan dapat diganti/dibatalkan pemilik. Admin bisa menolak tanpa menyatakan kepemilikan kontak telah terverifikasi.
 
-| Kemampuan | MASYARAKAT | ADMIN_KELURAHAN | LURAH/anonim |
-| --- | --- | --- | --- |
-| GET/PATCH profil masyarakat | Akun sendiri dari sesi | Ditolak | Ditolak |
-| Ajukan/batalkan kontak | Akun sendiri, reauth saat mengajukan | Ditolak | Ditolak |
-| Ganti password sendiri | Password lama + pilihan cabut sesi lain | Ditolak pada API masyarakat | Ditolak |
-| Daftar/review permintaan kontak | Ditolak | Izin admin + reauth + verifikasi nyata | Ditolak |
-| Website publik | Terbuka | Terbuka | Terbuka |
-| Katalog/status pengajuan | Penanda belum aktif | Tidak ada endpoint pelayanan baru | Tidak ada endpoint pelayanan baru |
+| Kemampuan                       | MASYARAKAT                              | ADMIN_KELURAHAN                        | LURAH/anonim                      |
+| ------------------------------- | --------------------------------------- | -------------------------------------- | --------------------------------- |
+| GET/PATCH profil masyarakat     | Akun sendiri dari sesi                  | Ditolak                                | Ditolak                           |
+| Ajukan/batalkan kontak          | Akun sendiri, reauth saat mengajukan    | Ditolak                                | Ditolak                           |
+| Ganti password sendiri          | Password lama + pilihan cabut sesi lain | Ditolak pada API masyarakat            | Ditolak                           |
+| Daftar/review permintaan kontak | Ditolak                                 | Izin admin + reauth + verifikasi nyata | Ditolak                           |
+| Website publik                  | Terbuka                                 | Terbuka                                | Terbuka                           |
+| Katalog/status pengajuan        | Penanda belum aktif                     | Tidak ada endpoint pelayanan baru      | Tidak ada endpoint pelayanan baru |
 
 Ganti password mempertahankan sesi saat ini; default UI mencabut sesi lain, pengguna dapat memilih mempertahankannya. Semua token reset lama dan permintaan kontak yang belum diverifikasi dibatalkan. Reset admin/nonaktif/perubahan role Prompt11 juga membatalkan pending kontak. Lock akun yang sama dengan login/refresh/reset mencegah perubahan keamanan saling mendahului tanpa pemeriksaan ulang. Audit tidak berisi alamat/kontak/password/token.
 
@@ -48,14 +48,14 @@ Migration menambah `UserProfile.address VARCHAR(500)` nullable dan tabel `Contac
 
 **Migrasi Prompt12 telah diterapkan ke Neon pada18 Oktober2026 setelah persetujuan khusus pengguna, tanpa reset/seed.** Preflight memastikan hanya migrasi yang diizinkan tertunda; deploy berhasil dan status Prisma mutakhir. Metadata baca-saja memastikan alamat nullable dan seluruh kolom ContactChange tersedia. Seluruh tes mutasi hanya pada PostgreSQL native sementara lokal; tidak ada akun/data QA atau tes destruktif pada Neon. Runtime utama sempat dihentikan agar operasi versi baru tidak memakai skema lama, lalu dijalankan kembali manual3001/4000 setelah migrasi. Origin/CSRF/invalidation dan secret cocok; env/URL tidak ditimpa atau ditampilkan, Redis6380/Docker tidak dioperasikan.
 
-| API | Kontrak |
-| --- | --- |
-| GET `/api/v1/account/profile` | DTO akun sendiri + nama/alamat/pending; query userId ditolak |
-| PATCH `/api/v1/account/profile` | Strict displayName, address nullable, expectedUpdatedAt; bukan email/role/userId |
-| POST `/api/v1/account/contact-change` | currentPassword + newEmail/newPhone;202 menandakan pending, bukan kontak berubah; MANUAL_OFFICE |
-| DELETE `/api/v1/account/contact-change/:id` | Hanya pending milik session user;404 jika milik orang lain |
-| POST `/api/v1/account/password` | currentPassword, newPassword, revokeOtherSessions boolean; sesi ini tetap |
-| GET `/api/v1/admin/contact-changes` | Admin saja, pagination/search email, DTO tanpa baseline hash |
+| API                                             | Kontrak                                                                                                                  |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| GET `/api/v1/account/profile`                   | DTO akun sendiri + nama/alamat/pending; query userId ditolak                                                             |
+| PATCH `/api/v1/account/profile`                 | Strict displayName, address nullable, expectedUpdatedAt; bukan email/role/userId                                         |
+| POST `/api/v1/account/contact-change`           | currentPassword + newEmail/newPhone;202 menandakan pending, bukan kontak berubah; MANUAL_OFFICE                          |
+| DELETE `/api/v1/account/contact-change/:id`     | Hanya pending milik session user;404 jika milik orang lain                                                               |
+| POST `/api/v1/account/password`                 | currentPassword, newPassword, revokeOtherSessions boolean; sesi ini tetap                                                |
+| GET `/api/v1/admin/contact-changes`             | Admin saja, pagination/search email, DTO tanpa baseline hash                                                             |
 | POST `/api/v1/admin/contact-changes/:id/review` | Strict decision APPROVE/REJECT, currentPassword, identityVerified:true, contactOwnershipVerified wajibtrue untuk approve |
 
 Semua mutasi memeriksa Origin+CSRF, sesi aktif/role DB, body strict dan transaksi. Kontak/password/review maksimal10 percobaan per15menit/IP. Semua API account/review private,no-store termasuk penolakan autentikasi. Log/audit menggunakan konteks requestId/IP pseudonim harian dari Prompt11; tidak mencatat body kontak/password/alamat. LURAH tidak mendapatkan akses review atau data akun warga lewat dashboard CMS.
@@ -66,20 +66,20 @@ Kontrak extension Tahap02: `ServiceCatalogPlaceholder` dan `SubmissionStatusPlac
 
 Hasil akhir18 Oktober2026:
 
-| Pemeriksaan | Hasil |
-| --- | --- |
-| Backend lint/typecheck/build | Lulus |
-| Backend unit/HTTP |31/31,8suite |
-| Backend database terisolasi |50/50,9suite, termasuk9 tes akun |
-| Frontend lint/typecheck/build | Lulus, build QA dan konfigurasi utama |
-| Frontend tes |36/36, termasuk logout clear-cache dan gagal logout |
-| Browser Chrome QA |18 pemeriksaan lulus |
-| Smoke utama setelah migrasi |9 endpoint/halaman sesuai ekspektasi |
-| git diff --check | Lulus |
+| Pemeriksaan                   | Hasil                                               |
+| ----------------------------- | --------------------------------------------------- |
+| Backend lint/typecheck/build  | Lulus                                               |
+| Backend unit/HTTP             | 31/31,8suite                                        |
+| Backend database terisolasi   | 50/50,9suite, termasuk9 tes akun                    |
+| Frontend lint/typecheck/build | Lulus, build QA dan konfigurasi utama               |
+| Frontend tes                  | 36/36, termasuk logout clear-cache dan gagal logout |
+| Browser Chrome QA             | 18 pemeriksaan lulus                                |
+| Smoke utama setelah migrasi   | 9 endpoint/halaman sesuai ekspektasi                |
+| git diff --check              | Lulus                                               |
 
 Perintah backend: `npm run lint && npm run typecheck && npm test && npm run build`, serta `TEST_DATABASE_URL=postgresql://test:test@127.0.0.1:55439/kalosara_prompt12_test npm run test:db`. Frontend: `pnpm lint && pnpm typecheck && pnpm test && pnpm build`. Kredensial contoh hanya untuk DB lokal disposable.
 
-Browser awal menemukan label textarea ikut memuat nilai alamat setelah reload; diperbaiki dengan label aksesibilitas eksplisit, lalu alur lengkap diulang lulus. Cookie dicabut pada pengunjung baru kini tetap memungkinkan login; identitas aktif yang kehilangan sesi tetap menghapus cache/redirect. Cache Turbopack dev di volume ini sempat rusak (`invalid digit found in string`); hanya `.next/dev/cache/turbopack` dibersihkan dan startup/smoke diulang lulus. Tidak ada kegagalan pemeriksaan akhir. Database test runner mewajibkan TEST_DATABASE_URL lokal kalosara_*_test, tidak mengambil Neon dari.env, upload sementara dibersihkan. Dua DB native18.4 port55439 memisahkan regresi dan browser; frontend QA3002/backend4002 memakai origin dan secret uji yang terpisah, tanpa mengubah env utama.
+Browser awal menemukan label textarea ikut memuat nilai alamat setelah reload; diperbaiki dengan label aksesibilitas eksplisit, lalu alur lengkap diulang lulus. Cookie dicabut pada pengunjung baru kini tetap memungkinkan login; identitas aktif yang kehilangan sesi tetap menghapus cache/redirect. Cache Turbopack dev di volume ini sempat rusak (`invalid digit found in string`); hanya `.next/dev/cache/turbopack` dibersihkan dan startup/smoke diulang lulus. Tidak ada kegagalan pemeriksaan akhir. Database test runner mewajibkan TEST*DATABASE_URL lokal kalosara*\*\_test, tidak mengambil Neon dari.env, upload sementara dibersihkan. Dua DB native18.4 port55439 memisahkan regresi dan browser; frontend QA3002/backend4002 memakai origin dan secret uji yang terpisah, tanpa mengubah env utama.
 
 ## 6. Daftar manual testing
 

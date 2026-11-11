@@ -178,15 +178,22 @@ export function NewsEditor({
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-blue-100/80 pb-4">
         <div>
-          <h2 id="editor-title" className="text-xl font-extrabold text-slate-900">
-            {draft.version ? "Sunting Artikel Berita" : "Tulis Artikel Berita Baru"}
+          <h2
+            id="editor-title"
+            className="text-xl font-extrabold text-slate-900"
+          >
+            {draft.version
+              ? "Sunting Artikel Berita"
+              : "Tulis Artikel Berita Baru"}
           </h2>
           <p className="mt-1 text-xs font-medium text-slate-500">
             {draft.version
               ? `Revisi Versi ${draft.version} · Status Saat Ini: ${initial.status}`
               : "Artikel Baru"}{" "}
             ·{" "}
-            <span className={dirty ? "font-bold text-amber-600" : "text-slate-500"}>
+            <span
+              className={dirty ? "font-bold text-amber-600" : "text-slate-500"}
+            >
               {dirty ? "Ada perubahan belum disimpan" : "Tersinkronisasi"}
             </span>
           </p>
@@ -300,7 +307,9 @@ export function NewsEditor({
               className="cms-input font-semibold"
               aria-label="Status berita"
               value={draft.status}
-              onChange={(e) => change("status", e.target.value as News["status"])}
+              onChange={(e) =>
+                change("status", e.target.value as News["status"])
+              }
             >
               <option value="DRAFT">Draft (Belum Tayang)</option>
               <option value="PUBLISHED">Terbit (Tayang Publik)</option>
@@ -317,7 +326,8 @@ export function NewsEditor({
               Gambar Sampul (Cover Berita)
             </span>
             <p className="text-xs text-slate-500 mt-0.5">
-              Unggah file gambar sampul (JPG, PNG, WebP) langsung ke server kelurahan.
+              Unggah file gambar sampul (JPG, PNG, WebP) langsung ke server
+              kelurahan.
             </p>
           </div>
 
@@ -331,7 +341,8 @@ export function NewsEditor({
 
           <details className="text-xs text-slate-500 pt-1">
             <summary className="cursor-pointer font-bold text-blue-700 hover:text-blue-900 transition-colors">
-              Atau pilih gambar yang sudah ada di pustaka media ({imageOptions.length} gambar)
+              Atau pilih gambar yang sudah ada di pustaka media (
+              {imageOptions.length} gambar)
             </summary>
             <div className="mt-3 grid gap-3 sm:grid-cols-2 border-t border-blue-100/80 pt-3">
               <input
@@ -427,7 +438,8 @@ export function NewsEditor({
         <article className="glass-card p-6 sm:p-8 space-y-5 border-blue-300/80">
           <div className="flex items-center justify-between border-b border-blue-100 pb-4">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-              <Eye size={13} /> Pratinjau Langsung &mdash; Status: {draft.status}
+              <Eye size={13} /> Pratinjau Langsung &mdash; Status:{" "}
+              {draft.status}
             </span>
             <button
               type="button"

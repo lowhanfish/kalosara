@@ -3,11 +3,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsMutate } from "@/features/cms/client";
-import type {
-  SectionSlug,
-  CreateInterface,
-  ResponseInterface,
-} from "../types";
+import type { SectionSlug, CreateInterface, ResponseInterface } from "../types";
 
 export const useResponseMaster = (slug: SectionSlug) => {
   const auth = useAuth();
@@ -18,9 +14,7 @@ export const useResponseMaster = (slug: SectionSlug) => {
     enabled:
       auth.user?.role === "ADMIN_KELURAHAN" || auth.user?.role === "LURAH",
     queryFn: () =>
-      runtime.request<ResponseInterface>(
-        `/admin/community/sections/${slug}`,
-      ),
+      runtime.request<ResponseInterface>(`/admin/community/sections/${slug}`),
   });
 };
 

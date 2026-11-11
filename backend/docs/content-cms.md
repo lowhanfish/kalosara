@@ -29,13 +29,13 @@ Runtime utama yang terverifikasi: frontend manual localhost:3001, backend manual
 
 Setelah migration diizinkan/diterapkan, buka `/admin/konten`, login admin terprovisi, pilih kanal, buat draft, pilih media yang sesuai, simpan, buka ulang untuk edit/publish/arsip. Search media mencari nama file server-side; hasil pemilih dibatasi 50 file per pencarian. Upload satu file per request, pilih asal dan akses eksplisit; default PRIVATE. Pilihan tanggal editor mengikuti waktu lokal perangkat, disimpan ISO UTC; tampilan publik eksplisit WITA. PDF resmi dapat dikategorikan Standar pelayanan, Maklumat, Kontak atau kategori lain dari admin. Halaman informasi publik juga menautkan kontak kelurahan.
 
-| Endpoint | Akses / perilaku |
-| --- | --- |
-| `GET /api/v1/admin/content/:kind` | Admin; search, status, page, limit; semua lifecycle |
+| Endpoint                              | Akses / perilaku                                                        |
+| ------------------------------------- | ----------------------------------------------------------------------- |
+| `GET /api/v1/admin/content/:kind`     | Admin; search, status, page, limit; semua lifecycle                     |
 | `PUT /api/v1/admin/content/:kind/:id` | Admin + Origin/CSRF; create expectedVersion=0 atau update versi terkini |
-| `GET /api/v1/public/content/:kind` | Anonim; hanya PUBLISHED yang memenuhi jadwal/media |
-| `GET /api/v1/public/media/:id` | Hanya PUBLIC aktif; PDF attachment, nosniff, sandbox/no-store |
-| `GET /api/v1/admin/media/:id/file` | Admin; PRIVATE hanya pengunggah |
+| `GET /api/v1/public/content/:kind`    | Anonim; hanya PUBLISHED yang memenuhi jadwal/media                      |
+| `GET /api/v1/public/media/:id`        | Hanya PUBLIC aktif; PDF attachment, nosniff, sandbox/no-store           |
+| `GET /api/v1/admin/media/:id/file`    | Admin; PRIVATE hanya pengunggah                                         |
 
 `kind`: announcements, events, galleries, documents. Payload dasar: kind, title (1–200), content (maksimal 30.000), status, expectedVersion. Pengumuman: pinned, startsAt/expiredAt nullable. Agenda: start/end ISO ber-offset dan location (1–300), end >= start. Galeri: photos 1–12 entri unik `{mediaId,alt}` (alt 1–300). Dokumen: category (1–120), fileId PDF. Field asing ditolak. Query event period upcoming/past; dokumen category exact-match. Respons envelope/requestId tetap berlaku. Konflik 409 meminta muat ulang; input/media salah 400, guest 401, role/CSRF/inactive 403.
 
@@ -51,18 +51,18 @@ Upload baru memakai allowlist asal announcements/events/galleries/documents sela
 
 ## 5. Hasil lint/typecheck/test/build
 
-| Pemeriksaan akhir | Hasil |
-| --- | --- |
-| Backend lint / typecheck / build, Node 22.12 | Lulus |
-| Backend unit/HTTP `npm test` | 28/28 lulus |
-| Backend `TEST_DATABASE_URL=... npm run test:db` | 25/25 lulus, 6 suite |
-| Seluruh enam migration pada database kosong native | Lulus |
-| Frontend lint / typecheck / build Next 16.4.0 | Lulus |
-| Frontend `pnpm test` | 31/31 lulus |
-| `git diff --check` | Lulus |
-| CSS/aset desain | Tidak diubah |
+| Pemeriksaan akhir                                  | Hasil                |
+| -------------------------------------------------- | -------------------- |
+| Backend lint / typecheck / build, Node 22.12       | Lulus                |
+| Backend unit/HTTP `npm test`                       | 28/28 lulus          |
+| Backend `TEST_DATABASE_URL=... npm run test:db`    | 25/25 lulus, 6 suite |
+| Seluruh enam migration pada database kosong native | Lulus                |
+| Frontend lint / typecheck / build Next 16.4.0      | Lulus                |
+| Frontend `pnpm test`                               | 31/31 lulus          |
+| `git diff --check`                                 | Lulus                |
+| CSS/aset desain                                    | Tidak diubah         |
 
-Runner tes DB wajib TEST_DATABASE_URL eksplisit, host localhost/127.0.0.1, nama `kalosara_*_test`, tanpa query. Tidak mengambil URL Neon dari .env. Pengaman setiap suite juga menolak invokasi Vitest langsung terhadap database lain. Tanpa URL, runner terverifikasi berhenti sebelum menjalankan migration/tes. Gunakan database **kosong disposable khusus tiap run** karena assertion publik mengasumsikan tidak ada fixture proses QA lain.
+Runner tes DB wajib TEST*DATABASE_URL eksplisit, host localhost/127.0.0.1, nama `kalosara*\*\_test`, tanpa query. Tidak mengambil URL Neon dari .env. Pengaman setiap suite juga menolak invokasi Vitest langsung terhadap database lain. Tanpa URL, runner terverifikasi berhenti sebelum menjalankan migration/tes. Gunakan database **kosong disposable khusus tiap run** karena assertion publik mengasumsikan tidak ada fixture proses QA lain.
 
 Kegagalan awal yang telah diselesaikan: sandbox menolak socket/shared-memory sehingga tes dijalankan dengan izin lokal; cache build Turbopack macOS rusak dibersihkan; percobaan build saat server QA masih menggunakan artefak menimbulkan konflik cache, diselesaikan dengan menghentikan hanya server QA lalu rebuild. Suite regresi sempat tercampur fixture browser; dijalankan ulang di database disposable kedua dan seluruhnya lulus. Tidak ada kegagalan pemeriksaan kode tersisa.
 

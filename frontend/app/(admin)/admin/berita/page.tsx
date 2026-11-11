@@ -12,10 +12,7 @@ import {
   Layers,
   Eye,
 } from "lucide-react";
-import {
-  NewsPaperSvg,
-  GalleryPhotoSvg,
-} from "@/components/admin/admin-icons";
+import { NewsPaperSvg, GalleryPhotoSvg } from "@/components/admin/admin-icons";
 import {
   AdminEmptyState,
   AdminLoading,
@@ -130,7 +127,10 @@ function Workspace() {
             <div className="space-y-5">
               {/* 4 Stat Cards (EduSetara Pattern) */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-                <Card padding="sm" className="flex items-center justify-between">
+                <Card
+                  padding="sm"
+                  className="flex items-center justify-between"
+                >
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
                       Total Berita
@@ -144,7 +144,10 @@ function Workspace() {
                   </div>
                 </Card>
 
-                <Card padding="sm" className="flex items-center justify-between">
+                <Card
+                  padding="sm"
+                  className="flex items-center justify-between"
+                >
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 block">
                       Terbit Halaman Ini
@@ -158,7 +161,10 @@ function Workspace() {
                   </Badge>
                 </Card>
 
-                <Card padding="sm" className="flex items-center justify-between">
+                <Card
+                  padding="sm"
+                  className="flex items-center justify-between"
+                >
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 block">
                       Draft Halaman Ini
@@ -172,7 +178,10 @@ function Workspace() {
                   </Badge>
                 </Card>
 
-                <Card padding="sm" className="flex items-center justify-between">
+                <Card
+                  padding="sm"
+                  className="flex items-center justify-between"
+                >
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-sky-600 block">
                       Kategori Aktif
@@ -195,7 +204,8 @@ function Workspace() {
                       Arsip & Publikasi Berita Kelurahan
                     </h2>
                     <p className="text-xs font-medium text-slate-500 mt-0.5">
-                      Kelola kabar kegiatan, pengumuman pers, dan artikel liputan warga Kelurahan Watundehoa.
+                      Kelola kabar kegiatan, pengumuman pers, dan artikel
+                      liputan warga Kelurahan Watundehoa.
                     </p>
                   </div>
                   <Button
@@ -300,7 +310,9 @@ function Workspace() {
                       <RotateCw
                         size={14}
                         strokeWidth={2.2}
-                        className={query.isFetching ? "animate-spin text-sky-600" : ""}
+                        className={
+                          query.isFetching ? "animate-spin text-sky-600" : ""
+                        }
                       />
                     }
                   >
@@ -352,11 +364,14 @@ function Workspace() {
                               ? "Draft"
                               : "Arsip";
                         const formattedDate = row.updatedAt
-                          ? new Date(row.updatedAt).toLocaleDateString("id-ID", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })
+                          ? new Date(row.updatedAt).toLocaleDateString(
+                              "id-ID",
+                              {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              },
+                            )
                           : "-";
 
                         return (

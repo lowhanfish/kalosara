@@ -23,40 +23,146 @@ describe('profile CMS PostgreSQL', () => {
     let csrf = '';
     for (const role of ['MASYARAKAT', 'LURAH', 'ADMIN_KELURAHAN'] as const) {
       const email = `profile-${randomUUID()}@example.invalid`;
-      const user = await prisma.user.create({ data: { email, passwordHash: await hash('Test-only-password-123', 12), role } }); ids.push(user.id);
+      const user = await prisma.user.create({
+        data: {
+          email,
+          passwordHash: await hash('Test-only-password-123', 12),
+          role,
+        },
+      });
+      ids.push(user.id);
       const agent = role === 'ADMIN_KELURAHAN' ? admin : request.agent(app);
       const response = await agent.get('/api/v1/auth/csrf').expect(200);
       const token = response.body.data.csrfToken;
       expect(response.headers['set-cookie'][0]).toContain('Path=/api/v1');
-      await agent.post('/api/v1/auth/login').set({ Origin: 'http://localhost:3000', 'X-CSRF-Token': token }).send({ email, password: 'Test-only-password-123' }).expect(200);
-      await agent.get('/api/v1/admin/profile').expect(role === 'ADMIN_KELURAHAN' ? 200 : 403);
-      if (role !== 'ADMIN_KELURAHAN') await agent.put('/api/v1/admin/profile/pages/sejarah').set({ Origin: 'http://localhost:3000', 'X-CSRF-Token': token }).send({ title: 'Denied', content: '', status: 'PUBLISHED' }).expect(403);
+      await agent
+        .post('/api/v1/auth/login')
+        .set({ Origin: 'http://localhost:3000', 'X-CSRF-Token': token })
+        .send({ email, password: 'Test-only-password-123' })
+        .expect(200);
+      await agent
+        .get('/api/v1/admin/profile')
+        .expect(role === 'ADMIN_KELURAHAN' ? 200 : 403);
+      if (role !== 'ADMIN_KELURAHAN')
+        await agent
+          .put('/api/v1/admin/profile/pages/sejarah')
+          .set({ Origin: 'http://localhost:3000', 'X-CSRF-Token': token })
+          .send({ title: 'Denied', content: '', status: 'PUBLISHED' })
+          .expect(403);
       else csrf = token;
     }
     const headers = { Origin: 'http://localhost:3000', 'X-CSRF-Token': csrf };
-    const page = { title: 'Sejarah uji', content: '<script>window.xss=1</script>', status: 'DRAFT' };
-    await admin.put('/api/v1/admin/profile/pages/sejarah').send(page).expect(403);
-    await admin.put('/api/v1/admin/profile/pages/sejarah').set({ ...headers, Origin: 'https://evil.invalid' }).send(page).expect(403);
-    await admin.put('/api/v1/admin/profile/pages/sejarah').set(headers).send(page).expect(200);
-    await request(app).get('/api/v1/public/profile').expect(200).then(r => expect(r.body.data.pages).toEqual([]));
+    const page = {
+      title: 'Sejarah uji',
+      content: '<script>window.xss=1</script>',
+      status: 'DRAFT',
+    };
+    await admin
+      .put('/api/v1/admin/profile/pages/sejarah')
+      .send(page)
+      .expect(403);
+    await admin
+      .put('/api/v1/admin/profile/pages/sejarah')
+      .set({ ...headers, Origin: 'https://evil.invalid' })
+      .send(page)
+      .expect(403);
+    await admin
+      .put('/api/v1/admin/profile/pages/sejarah')
+      .set(headers)
+      .send(page)
+      .expect(200);
+    await request(app)
+      .get('/api/v1/public/profile')
+      .expect(200)
+      .then((r) => expect(r.body.data.pages).toEqual([]));
     await request(app).get('/api/v1/public/profile/sejarah').expect(404);
-    await admin.get('/api/v1/admin/profile').expect(200).then(r => expect(r.body.data.pages[0].content).toBe(page.content));
-    await admin.put('/api/v1/admin/profile/pages/sejarah').set(headers).send({ ...page, status: 'PUBLISHED' }).expect(200);
-    await admin.put('/api/v1/admin/profile/pages/sejarah').set(headers).send({ ...page, status: 'ARCHIVED' }).expect(200);
-    await request(app).get('/api/v1/public/profile').then(r => expect(r.body.data.pages).toEqual([]));
-    await admin.put('/api/v1/admin/profile/pages/sejarah').set(headers).send({ ...page, status: 'PUBLISHED' }).expect(200);
-    const official = { name: 'Pejabat Uji', position: 'Lurah', unit: 'Kelurahan', sortOrder: 1, photoUrl: null, active: true, termStart: null, termEnd: null, status: 'DRAFT' };
-    await admin.put(`/api/v1/admin/profile/officials/${officialId}`).set(headers).send(official).expect(200);
-    await request(app).get('/api/v1/public/profile').then(r => expect(r.body.data.officials).toEqual([]));
-    await admin.put(`/api/v1/admin/profile/officials/${officialId}`).set(headers).send({ ...official, status: 'PUBLISHED' }).expect(200);
-    await request(app).get('/api/v1/public/profile').then(r => { expect(r.body.data.pages[0].slug).toBe('sejarah'); expect(r.body.data.officials[0].name).toBe(official.name); });
-    await admin.put(`/api/v1/admin/profile/officials/${officialId}`).set(headers).send({ ...official, status: 'PUBLISHED', active: false }).expect(200);
-    await request(app).get('/api/v1/public/profile').then(r => expect(r.body.data.officials).toEqual([]));
-    await admin.put('/api/v1/admin/profile/settings').set(headers).send({ ...defaultSettings, hours: 'Jam uji' }).expect(200);
-    await request(app).get('/api/v1/public/settings').expect(200).then(r => expect(r.body.data.settings.hours).toBe('Jam uji'));
-    await admin.put('/api/v1/admin/profile/settings').set(headers).send({ ...defaultSettings, logoUrl: 'javascript:alert(1)' }).expect(400);
-    expect(await prisma.auditLog.count({ where: { actorId: ids.at(-1), action: 'PROFILE_SETTINGS_UPDATED' } })).toBe(1);
-    await prisma.user.update({ where: { id: ids.at(-1)! }, data: { isActive: false } });
-    await admin.put('/api/v1/admin/profile/settings').set(headers).send(defaultSettings).expect(403);
+    await admin
+      .get('/api/v1/admin/profile')
+      .expect(200)
+      .then((r) => expect(r.body.data.pages[0].content).toBe(page.content));
+    await admin
+      .put('/api/v1/admin/profile/pages/sejarah')
+      .set(headers)
+      .send({ ...page, status: 'PUBLISHED' })
+      .expect(200);
+    await admin
+      .put('/api/v1/admin/profile/pages/sejarah')
+      .set(headers)
+      .send({ ...page, status: 'ARCHIVED' })
+      .expect(200);
+    await request(app)
+      .get('/api/v1/public/profile')
+      .then((r) => expect(r.body.data.pages).toEqual([]));
+    await admin
+      .put('/api/v1/admin/profile/pages/sejarah')
+      .set(headers)
+      .send({ ...page, status: 'PUBLISHED' })
+      .expect(200);
+    const official = {
+      name: 'Pejabat Uji',
+      position: 'Lurah',
+      unit: 'Kelurahan',
+      sortOrder: 1,
+      photoUrl: null,
+      active: true,
+      termStart: null,
+      termEnd: null,
+      status: 'DRAFT',
+    };
+    await admin
+      .put(`/api/v1/admin/profile/officials/${officialId}`)
+      .set(headers)
+      .send(official)
+      .expect(200);
+    await request(app)
+      .get('/api/v1/public/profile')
+      .then((r) => expect(r.body.data.officials).toEqual([]));
+    await admin
+      .put(`/api/v1/admin/profile/officials/${officialId}`)
+      .set(headers)
+      .send({ ...official, status: 'PUBLISHED' })
+      .expect(200);
+    await request(app)
+      .get('/api/v1/public/profile')
+      .then((r) => {
+        expect(r.body.data.pages[0].slug).toBe('sejarah');
+        expect(r.body.data.officials[0].name).toBe(official.name);
+      });
+    await admin
+      .put(`/api/v1/admin/profile/officials/${officialId}`)
+      .set(headers)
+      .send({ ...official, status: 'PUBLISHED', active: false })
+      .expect(200);
+    await request(app)
+      .get('/api/v1/public/profile')
+      .then((r) => expect(r.body.data.officials).toEqual([]));
+    await admin
+      .put('/api/v1/admin/profile/settings')
+      .set(headers)
+      .send({ ...defaultSettings, hours: 'Jam uji' })
+      .expect(200);
+    await request(app)
+      .get('/api/v1/public/settings')
+      .expect(200)
+      .then((r) => expect(r.body.data.settings.hours).toBe('Jam uji'));
+    await admin
+      .put('/api/v1/admin/profile/settings')
+      .set(headers)
+      .send({ ...defaultSettings, logoUrl: 'javascript:alert(1)' })
+      .expect(400);
+    expect(
+      await prisma.auditLog.count({
+        where: { actorId: ids.at(-1), action: 'PROFILE_SETTINGS_UPDATED' },
+      }),
+    ).toBe(1);
+    await prisma.user.update({
+      where: { id: ids.at(-1)! },
+      data: { isActive: false },
+    });
+    await admin
+      .put('/api/v1/admin/profile/settings')
+      .set(headers)
+      .send(defaultSettings)
+      .expect(403);
   });
 });

@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Paperclip, FileText, CheckCircle2, AlertCircle, Trash2 } from "lucide-react";
+import {
+  X,
+  Paperclip,
+  FileText,
+  CheckCircle2,
+  AlertCircle,
+  Trash2,
+} from "lucide-react";
 import { LETTER_DEFINITIONS } from "./letter-definitions";
 import type { LetterType } from "./types";
 
 interface LetterRequestModalProps {
   type: LetterType | null;
   onClose: () => void;
-  onSubmit: (formData: Record<string, unknown>, attachments: File[]) => Promise<void>;
+  onSubmit: (
+    formData: Record<string, unknown>,
+    attachments: File[],
+  ) => Promise<void>;
   initialUserData?: {
     displayName?: string | null;
     phone?: string | null;
@@ -22,7 +32,9 @@ export function LetterRequestModal({
   initialUserData,
 }: LetterRequestModalProps) {
   // Base profile fields
-  const [applicantName, setApplicantName] = useState(initialUserData?.displayName ?? "");
+  const [applicantName, setApplicantName] = useState(
+    initialUserData?.displayName ?? "",
+  );
   const [applicantNik, setApplicantNik] = useState("");
   const [birthPlace, setBirthPlace] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -125,7 +137,10 @@ export function LetterRequestModal({
       await onSubmit(payload, selectedFiles);
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Terjadi kesalahan saat mengirim permohonan surat.";
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Terjadi kesalahan saat mengirim permohonan surat.";
       setErrorMessage(msg);
     } finally {
       setIsSubmitting(false);
@@ -153,10 +168,16 @@ export function LetterRequestModal({
         </div>
 
         {/* Scrollable Form Body */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-6 space-y-6"
+        >
           {errorMessage && (
             <div className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-sm">
-              <AlertCircle size={18} className="shrink-0 mt-0.5 text-rose-600" />
+              <AlertCircle
+                size={18}
+                className="shrink-0 mt-0.5 text-rose-600"
+              />
               <div>
                 <p className="font-semibold">Mohon periksa isian Anda:</p>
                 <p className="mt-0.5 text-xs text-rose-700">{errorMessage}</p>
@@ -171,7 +192,8 @@ export function LetterRequestModal({
                 1. Data Identitas Pemohon
               </h3>
               <p className="text-xs text-slate-500">
-                Data otomatis terisi dari akun warga Anda. Silakan sesuaikan jika diperlukan.
+                Data otomatis terisi dari akun warga Anda. Silakan sesuaikan
+                jika diperlukan.
               </p>
             </div>
 
@@ -193,13 +215,16 @@ export function LetterRequestModal({
             {/* NIK */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                NIK (Nomor Induk Kependudukan) <span className="text-rose-500">*</span>
+                NIK (Nomor Induk Kependudukan){" "}
+                <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
                 maxLength={16}
                 value={applicantNik}
-                onChange={(e) => setApplicantNik(e.target.value.replace(/\D/g, ""))}
+                onChange={(e) =>
+                  setApplicantNik(e.target.value.replace(/\D/g, ""))
+                }
                 placeholder="16 Digit NIK KTP"
                 required
                 className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 transition focus:border-sky-500 focus:bg-white focus:outline-none"
@@ -299,13 +324,25 @@ export function LetterRequestModal({
                   className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 transition focus:border-sky-500 focus:bg-white focus:outline-none"
                 >
                   <option value="Petani / Pekebun">Petani / Pekebun</option>
-                  <option value="Nelayan / Perikanan">Nelayan / Perikanan</option>
-                  <option value="Wiraswasta / Pedagang">Wiraswasta / Pedagang</option>
+                  <option value="Nelayan / Perikanan">
+                    Nelayan / Perikanan
+                  </option>
+                  <option value="Wiraswasta / Pedagang">
+                    Wiraswasta / Pedagang
+                  </option>
                   <option value="Karyawan Swasta">Karyawan Swasta</option>
-                  <option value="PNS / PPPK / TNI / Polri">PNS / PPPK / TNI / Polri</option>
-                  <option value="Pelajar / Mahasiswa">Pelajar / Mahasiswa</option>
-                  <option value="Mengurus Rumah Tangga">Mengurus Rumah Tangga</option>
-                  <option value="Belum / Tidak Bekerja">Belum / Tidak Bekerja</option>
+                  <option value="PNS / PPPK / TNI / Polri">
+                    PNS / PPPK / TNI / Polri
+                  </option>
+                  <option value="Pelajar / Mahasiswa">
+                    Pelajar / Mahasiswa
+                  </option>
+                  <option value="Mengurus Rumah Tangga">
+                    Mengurus Rumah Tangga
+                  </option>
+                  <option value="Belum / Tidak Bekerja">
+                    Belum / Tidak Bekerja
+                  </option>
                   <option value="Lainnya">Lainnya</option>
                 </select>
               </div>
@@ -314,7 +351,8 @@ export function LetterRequestModal({
             {/* Alamat Lengkap */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Alamat Sesuai KTP / Domisili <span className="text-rose-500">*</span>
+                Alamat Sesuai KTP / Domisili{" "}
+                <span className="text-rose-500">*</span>
               </label>
               <textarea
                 rows={2}
@@ -343,11 +381,16 @@ export function LetterRequestModal({
                 return (
                   <div key={field.name}>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      {field.label} {field.required && <span className="text-rose-500">*</span>}
+                      {field.label}{" "}
+                      {field.required && (
+                        <span className="text-rose-500">*</span>
+                      )}
                     </label>
                     <select
                       value={details[field.name] ?? field.options?.[0] ?? ""}
-                      onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                      onChange={(e) =>
+                        handleFieldChange(field.name, e.target.value)
+                      }
                       required={field.required}
                       className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 transition focus:border-sky-500 focus:bg-white focus:outline-none"
                     >
@@ -365,12 +408,17 @@ export function LetterRequestModal({
                 return (
                   <div key={field.name}>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      {field.label} {field.required && <span className="text-rose-500">*</span>}
+                      {field.label}{" "}
+                      {field.required && (
+                        <span className="text-rose-500">*</span>
+                      )}
                     </label>
                     <textarea
                       rows={2}
                       value={details[field.name] ?? ""}
-                      onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                      onChange={(e) =>
+                        handleFieldChange(field.name, e.target.value)
+                      }
                       placeholder={field.placeholder}
                       required={field.required}
                       className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 transition focus:border-sky-500 focus:bg-white focus:outline-none"
@@ -382,12 +430,15 @@ export function LetterRequestModal({
               return (
                 <div key={field.name}>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    {field.label} {field.required && <span className="text-rose-500">*</span>}
+                    {field.label}{" "}
+                    {field.required && <span className="text-rose-500">*</span>}
                   </label>
                   <input
                     type={field.type}
                     value={details[field.name] ?? ""}
-                    onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                    onChange={(e) =>
+                      handleFieldChange(field.name, e.target.value)
+                    }
                     placeholder={field.placeholder}
                     required={field.required}
                     className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 transition focus:border-sky-500 focus:bg-white focus:outline-none"
@@ -404,7 +455,8 @@ export function LetterRequestModal({
                 3. Unggah Berkas Lampiran
               </h3>
               <p className="text-xs text-slate-500">
-                Dipersyaratkan: {letterMeta.requirements.join(", ")}. Bisa berupa file PDF atau Foto Kamera HP (JPG/PNG).
+                Dipersyaratkan: {letterMeta.requirements.join(", ")}. Bisa
+                berupa file PDF atau Foto Kamera HP (JPG/PNG).
               </p>
             </div>
 
@@ -420,7 +472,8 @@ export function LetterRequestModal({
                 Klik untuk memilih file lampiran
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                Pilih satu atau beberapa file (PDF, JPG, PNG, WEBP, maks 10MB per file)
+                Pilih satu atau beberapa file (PDF, JPG, PNG, WEBP, maks 10MB
+                per file)
               </p>
               <input
                 ref={fileInputRef}
@@ -453,7 +506,8 @@ export function LetterRequestModal({
                             {file.name}
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            {(file.size / 1024).toFixed(0)} KB • {file.type || "Dokumen"}
+                            {(file.size / 1024).toFixed(0)} KB •{" "}
+                            {file.type || "Dokumen"}
                           </p>
                         </div>
                       </div>

@@ -193,7 +193,8 @@ function Workspace() {
                   Daftar {modules[kind]}
                 </h2>
                 <p className="text-xs font-medium text-slate-500 mt-0.5">
-                  Kelola data {modules[kind].toLowerCase()} untuk ditampilkan pada profil dan peta publik kelurahan.
+                  Kelola data {modules[kind].toLowerCase()} untuk ditampilkan
+                  pada profil dan peta publik kelurahan.
                 </p>
               </div>
               <Button
@@ -279,7 +280,9 @@ function Workspace() {
                   <RotateCw
                     size={14}
                     strokeWidth={2.2}
-                    className={query.isFetching ? "animate-spin text-sky-600" : ""}
+                    className={
+                      query.isFetching ? "animate-spin text-sky-600" : ""
+                    }
                   />
                 }
               >
@@ -290,7 +293,10 @@ function Workspace() {
 
           {query.isPending && <AdminLoading />}
           {query.isError && (
-            <AdminError error={query.error} onRetry={() => void query.refetch()} />
+            <AdminError
+              error={query.error}
+              onRetry={() => void query.refetch()}
+            />
           )}
 
           {query.data?.items.length === 0 && (

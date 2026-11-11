@@ -57,7 +57,9 @@ export function DetailKontakModal({
         <div className="rounded-2xl border border-sky-100 bg-sky-50/50 p-4 space-y-3 text-xs">
           <div>
             <span className="text-slate-400 block">Akun Pemohon</span>
-            <strong className="text-slate-900 text-sm">{item.user.email}</strong>
+            <strong className="text-slate-900 text-sm">
+              {item.user.email}
+            </strong>
           </div>
           <div className="flex items-center gap-2">
             <Mail size={14} className="text-sky-600" />

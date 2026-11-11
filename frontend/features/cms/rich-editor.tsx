@@ -137,7 +137,9 @@ export function RichEditor({
       return;
     }
     if (!/^(https?:\/\/|mailto:|tel:)/i.test(linkUrl)) {
-      setWarning("URL harus diawali dengan http://, https://, mailto:, atau tel:");
+      setWarning(
+        "URL harus diawali dengan http://, https://, mailto:, atau tel:",
+      );
       return;
     }
     editor.chain().focus().setLink({ href: linkUrl }).run();
@@ -205,7 +207,9 @@ export function RichEditor({
   };
 
   const filteredImages = images.filter((img) =>
-    (img.alt || img.originalName || "").toLowerCase().includes(imageSearch.toLowerCase()),
+    (img.alt || img.originalName || "")
+      .toLowerCase()
+      .includes(imageSearch.toLowerCase()),
   );
 
   return (
@@ -247,7 +251,9 @@ export function RichEditor({
             title="Judul Bab (H2)"
             aria-label="Judul Bab (H2)"
             aria-pressed={state?.h2}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
             className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors font-bold ${
               state?.h2
                 ? "bg-primary text-white shadow-xs"
@@ -261,7 +267,9 @@ export function RichEditor({
             title="Subjudul (H3)"
             aria-label="Subjudul (H3)"
             aria-pressed={state?.h3}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 3 }).run()
+            }
             className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors font-bold ${
               state?.h3
                 ? "bg-primary text-white shadow-xs"
@@ -410,7 +418,9 @@ export function RichEditor({
             type="button"
             title="Hapus format (Clear formatting)"
             aria-label="Hapus format"
-            onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
+            onClick={() =>
+              editor.chain().focus().unsetAllMarks().clearNodes().run()
+            }
             className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-slate-200/80 text-slate-500 hover:text-slate-900 transition-colors"
           >
             <RemoveFormatting className="h-4 w-4" />
@@ -481,9 +491,12 @@ export function RichEditor({
           <div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
               <div>
-                <h3 className="font-bold text-slate-900 text-lg">Sisipkan Gambar ke Artikel</h3>
+                <h3 className="font-bold text-slate-900 text-lg">
+                  Sisipkan Gambar ke Artikel
+                </h3>
                 <p className="text-xs text-slate-500">
-                  Unggah file gambar baru dari komputer atau pilih dari pustaka media kelurahan.
+                  Unggah file gambar baru dari komputer atau pilih dari pustaka
+                  media kelurahan.
                 </p>
               </div>
               <button
@@ -528,7 +541,10 @@ export function RichEditor({
             </div>
 
             {modalTab === "upload" ? (
-              <form onSubmit={handleUploadAndInsert} className="flex-1 overflow-y-auto p-6 space-y-4">
+              <form
+                onSubmit={handleUploadAndInsert}
+                className="flex-1 overflow-y-auto p-6 space-y-4"
+              >
                 <div className="space-y-1.5">
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700">
                     File Gambar (JPG, PNG, WebP · Maks 20 MB)
@@ -554,7 +570,8 @@ export function RichEditor({
                     className="cms-input"
                   />
                   <p className="text-[11px] text-slate-400">
-                    File akan diunggah via multipart multer dan disimpan ke folder upload backend.
+                    File akan diunggah via multipart multer dan disimpan ke
+                    folder upload backend.
                   </p>
                 </div>
 
@@ -639,7 +656,8 @@ export function RichEditor({
                   ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {filteredImages.map((img) => {
-                        const imgSrc = img.url ?? `/api/v1/public/media/${img.id}`;
+                        const imgSrc =
+                          img.url ?? `/api/v1/public/media/${img.id}`;
                         return (
                           <button
                             key={img.id}

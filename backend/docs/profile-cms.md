@@ -31,14 +31,14 @@ Editor/preview memakai teks biasa yang di-escape React, tanpa HTML mentah atau e
 
 Ikuti setup README. Backend: `npm ci`, `npm run db:generate`, `npm run db:deploy`, `npm run dev`. Frontend: `pnpm install --frozen-lockfile`, `pnpm dev`. Pastikan APP_ORIGIN sama dengan origin frontend. Provision akun admin menggunakan CLI yang telah ada, tanpa seed akun staf. Buka `/admin/profil`, login, pilih bagian, simpan draft, preview, lalu ubah status PUBLISHED dan simpan. Gunakan ARCHIVED untuk menarik konten; Official juga harus aktif agar tampil publik. Muat ulang halaman publik sesudah penyimpanan.
 
-| Metode/path (prefix `/api/v1`) | Akses | Hasil |
-| --- | --- | --- |
-| GET `/public/settings` | Publik | Identitas tervalidasi, whitelist saja |
-| GET `/public/profile` | Publik | Page PUBLISHED; Official PUBLISHED dan aktif, berurutan |
-| GET `/admin/profile` | Admin aktif | Settings dan seluruh status profil/aparatur; no-store |
-| PUT `/admin/profile/settings` | Admin + Origin/CSRF | Ganti singleton settings dan audit |
-| PUT `/admin/profile/pages/:slug` | Admin + Origin/CSRF | Simpan salah satu lima slug profil dan audit |
-| PUT `/admin/profile/officials/:uuid` | Admin + Origin/CSRF | Buat/perbarui aparatur dan audit |
+| Metode/path (prefix `/api/v1`)       | Akses               | Hasil                                                   |
+| ------------------------------------ | ------------------- | ------------------------------------------------------- |
+| GET `/public/settings`               | Publik              | Identitas tervalidasi, whitelist saja                   |
+| GET `/public/profile`                | Publik              | Page PUBLISHED; Official PUBLISHED dan aktif, berurutan |
+| GET `/admin/profile`                 | Admin aktif         | Settings dan seluruh status profil/aparatur; no-store   |
+| PUT `/admin/profile/settings`        | Admin + Origin/CSRF | Ganti singleton settings dan audit                      |
+| PUT `/admin/profile/pages/:slug`     | Admin + Origin/CSRF | Simpan salah satu lima slug profil dan audit            |
+| PUT `/admin/profile/officials/:uuid` | Admin + Origin/CSRF | Buat/perbarui aparatur dan audit                        |
 
 Semua respons memakai envelope dan requestId yang telah ada. Invalid input 400; tamu/sesi invalid 401; role/Origin/CSRF ditolak 403. Tidak ada endpoint preview publik. Preview privat dibentuk dari state form; draft tersimpan hanya dapat dimuat lewat endpoint admin.
 

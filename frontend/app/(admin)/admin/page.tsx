@@ -20,13 +20,7 @@ import {
   AdminEmptyState,
 } from "@/components/admin/feedback";
 import { adminLinks } from "@/components/admin/navigation";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  Badge,
-  Button,
-} from "../_components/ui";
+import { Card, CardHeader, CardTitle, Badge, Button } from "../_components/ui";
 import { useResponseDashboard } from "./hooks/crud";
 
 const metrics = [
@@ -140,7 +134,9 @@ export default function AdminDashboardPage() {
             Selamat datang di Pusat Kendali Digital Kelurahan!
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Pantau metrik publikasi berita, pengumuman warga, layanan administrasi, data kependudukan, dan kotak masuk masyarakat secara terpadu.
+            Pantau metrik publikasi berita, pengumuman warga, layanan
+            administrasi, data kependudukan, dan kotak masuk masyarakat secara
+            terpadu.
           </p>
         </div>
 
@@ -180,31 +176,33 @@ export default function AdminDashboardPage() {
         <>
           {/* ── Summary Metrics Grid ── */}
           <dl className="admin-metrics">
-            {metrics.map(({ key, label, subtitle, icon: IconComp, tone, href }) => (
-              <div key={key} className="admin-metric group">
-                <div className="pointer-events-none absolute -right-6 -top-6 size-24 rounded-full bg-sky-500/10 blur-xl transition-transform group-hover:scale-125" />
-                <span className={`admin-metric-icon ${tone}`}>
-                  <IconComp size={20} strokeWidth={2} />
-                </span>
-                <dt className="admin-metric-label">{label}</dt>
-                <p className="mt-0.5 text-[11px] font-medium text-slate-400">
-                  {subtitle}
-                </p>
-                <dd className="admin-metric-value">
-                  {data.data[key].toLocaleString("id-ID")}
-                </dd>
-                {isAdmin && (
-                  <Link href={href} className="admin-metric-link">
-                    <span>Kelola modul</span>
-                    <ArrowUpRight
-                      size={14}
-                      strokeWidth={2.2}
-                      className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    />
-                  </Link>
-                )}
-              </div>
-            ))}
+            {metrics.map(
+              ({ key, label, subtitle, icon: IconComp, tone, href }) => (
+                <div key={key} className="admin-metric group">
+                  <div className="pointer-events-none absolute -right-6 -top-6 size-24 rounded-full bg-sky-500/10 blur-xl transition-transform group-hover:scale-125" />
+                  <span className={`admin-metric-icon ${tone}`}>
+                    <IconComp size={20} strokeWidth={2} />
+                  </span>
+                  <dt className="admin-metric-label">{label}</dt>
+                  <p className="mt-0.5 text-[11px] font-medium text-slate-400">
+                    {subtitle}
+                  </p>
+                  <dd className="admin-metric-value">
+                    {data.data[key].toLocaleString("id-ID")}
+                  </dd>
+                  {isAdmin && (
+                    <Link href={href} className="admin-metric-link">
+                      <span>Kelola modul</span>
+                      <ArrowUpRight
+                        size={14}
+                        strokeWidth={2.2}
+                        className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </Link>
+                  )}
+                </div>
+              ),
+            )}
           </dl>
 
           {/* ── 2-Column Activity & Quick Shortcuts ── */}

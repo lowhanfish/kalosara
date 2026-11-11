@@ -3,8 +3,10 @@
 import React from "react";
 import { Calendar } from "lucide-react";
 
-export interface DateInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+export interface DateInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "type"
+> {
   label?: string;
   error?: string;
   helperText?: string;

@@ -49,10 +49,8 @@ export function cmsError(error: unknown) {
       "Alamat email sudah terdaftar dalam sistem. Gunakan email lain.",
     CSRF_INVALID:
       "Sesi keamanan kedaluwarsa. Muat ulang halaman lalu coba lagi.",
-    FORBIDDEN:
-      "Anda tidak memiliki hak akses untuk melakukan tindakan ini.",
-    NOT_FOUND:
-      "Data atau berkas yang diminta tidak ditemukan.",
+    FORBIDDEN: "Anda tidak memiliki hak akses untuk melakukan tindakan ini.",
+    NOT_FOUND: "Data atau berkas yang diminta tidak ditemukan.",
   };
 
   if (messages[error.code]) {

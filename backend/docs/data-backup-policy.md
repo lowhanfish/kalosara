@@ -12,15 +12,15 @@ Usulan operasional untuk persetujuan kelurahan, belum menjalankan penghapusan/ba
 
 ## Usulan retensi (belum otomatis/purge)
 
-| Kelas | Usulan dan prasyarat |
-| --- | --- |
-| HTTP/operational logs | 7hari,10MiB per arsip, akses operator; rotasi dulu, tanpa data pribadi masukan. |
-| Audit akses/perubahan | 180hari untuk investigasi, tinjau kewajiban arsip/insiden/legal hold; tanpa kontak/alamat/token. Jangan purge sebelum kebijakan disahkan. |
-| Sesi revoked/expired dan reset token expired | Evaluasi purge setelah30hari; token tidak berlaku tetap ditolak sekarang. |
-| Pending contact changes | Berlaku7hari; setelah expiry tidak dapat disetujui. Evaluasi purge setelah30hari. Belum job purge otomatis. |
-| Akun/profil | Selama tujuan layanan/akun masih berlaku; review tahunan akun tidak aktif. Permintaan penghapusan diverifikasi dan dicek dependensi/arsip/legal hold, bukan SQL delete sembarang. |
-| CMS/revisi/media | Sesuai jadwal arsip instansi; media direferensikan tidak boleh dihapus. Arsip CMS tidak mengubah akses file PUBLIC. Belum garbage collection. |
-| Backup | 7harian,4mingguan,3bulanan terenkripsi; salinan offsite dan uji kunci. Terapkan expiry terkontrol; penghapusan data ikut hilang saat backup kedaluwarsa, jangan mengubah backup immutable secara parsial. |
+| Kelas                                        | Usulan dan prasyarat                                                                                                                                                                                      |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HTTP/operational logs                        | 7hari,10MiB per arsip, akses operator; rotasi dulu, tanpa data pribadi masukan.                                                                                                                           |
+| Audit akses/perubahan                        | 180hari untuk investigasi, tinjau kewajiban arsip/insiden/legal hold; tanpa kontak/alamat/token. Jangan purge sebelum kebijakan disahkan.                                                                 |
+| Sesi revoked/expired dan reset token expired | Evaluasi purge setelah30hari; token tidak berlaku tetap ditolak sekarang.                                                                                                                                 |
+| Pending contact changes                      | Berlaku7hari; setelah expiry tidak dapat disetujui. Evaluasi purge setelah30hari. Belum job purge otomatis.                                                                                               |
+| Akun/profil                                  | Selama tujuan layanan/akun masih berlaku; review tahunan akun tidak aktif. Permintaan penghapusan diverifikasi dan dicek dependensi/arsip/legal hold, bukan SQL delete sembarang.                         |
+| CMS/revisi/media                             | Sesuai jadwal arsip instansi; media direferensikan tidak boleh dihapus. Arsip CMS tidak mengubah akses file PUBLIC. Belum garbage collection.                                                             |
+| Backup                                       | 7harian,4mingguan,3bulanan terenkripsi; salinan offsite dan uji kunci. Terapkan expiry terkontrol; penghapusan data ikut hilang saat backup kedaluwarsa, jangan mengubah backup immutable secara parsial. |
 
 ## Rencana backup konsisten
 

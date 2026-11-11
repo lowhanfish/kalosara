@@ -1,23 +1,23 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const letterTypeEnum = z.enum([
-  "SKU",
-  "SKTM",
-  "DOMISILI",
-  "PENGANTAR_SKCK",
-  "BELUM_MENIKAH",
-  "BELUM_BEKERJA",
-  "PENGHASILAN",
-  "PENGANTAR_NIKAH",
-  "AHLI_WARIS",
-  "LAINNYA",
+  'SKU',
+  'SKTM',
+  'DOMISILI',
+  'PENGANTAR_SKCK',
+  'BELUM_MENIKAH',
+  'BELUM_BEKERJA',
+  'PENGHASILAN',
+  'PENGANTAR_NIKAH',
+  'AHLI_WARIS',
+  'LAINNYA',
 ]);
 
 export const letterStatusEnum = z.enum([
-  "SUBMITTED",
-  "REJECTED",
-  "VERIFIED",
-  "SIGNED",
+  'SUBMITTED',
+  'REJECTED',
+  'VERIFIED',
+  'SIGNED',
 ]);
 
 export const citizenCreateLetterSchema = z.object({
@@ -35,7 +35,7 @@ export const citizenCreateLetterSchema = z.object({
 });
 
 export const adminLetterActionSchema = z.object({
-  action: z.enum(["VERIFY", "REJECT", "SIGN"]),
+  action: z.enum(['VERIFY', 'REJECT', 'SIGN']),
   reason: z.string().max(1000).optional(),
 });
 

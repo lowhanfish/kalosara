@@ -55,20 +55,48 @@ export function KalosaraEmblemSvg({
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="kalosara-bg" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-bg"
+          x1="0"
+          y1="0"
+          x2="44"
+          y2="44"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#60bcfb" />
           <stop offset="50%" stopColor="#2d92e6" />
           <stop offset="100%" stopColor="#1879d1" />
         </linearGradient>
-        <linearGradient id="kalosara-gloss" x1="22" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-gloss"
+          x1="22"
+          y1="2"
+          x2="22"
+          y2="22"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
           <stop offset="100%" stopColor="#ffffff" stopOpacity="0.05" />
         </linearGradient>
-        <linearGradient id="kalosara-shield" x1="10" y1="8" x2="34" y2="36" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-shield"
+          x1="10"
+          y1="8"
+          x2="34"
+          y2="36"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
           <stop offset="100%" stopColor="#e0f2fe" stopOpacity="0.92" />
         </linearGradient>
-        <linearGradient id="kalosara-gold" x1="16" y1="12" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="kalosara-gold"
+          x1="16"
+          y1="12"
+          x2="28"
+          y2="28"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#fcd34d" />
           <stop offset="100%" stopColor="#f59e0b" />
         </linearGradient>
@@ -126,9 +154,25 @@ export function KalosaraEmblemSvg({
 export function DashboardSvg(props: AdminIconProps) {
   return (
     <BaseSvg {...props}>
-      <rect x="3" y="3" width="7.5" height="9" rx="2" fill="currentColor" fillOpacity="0.16" />
+      <rect
+        x="3"
+        y="3"
+        width="7.5"
+        height="9"
+        rx="2"
+        fill="currentColor"
+        fillOpacity="0.16"
+      />
       <rect x="13.5" y="3" width="7.5" height="5.5" rx="2" />
-      <rect x="13.5" y="12" width="7.5" height="9" rx="2" fill="currentColor" fillOpacity="0.16" />
+      <rect
+        x="13.5"
+        y="12"
+        width="7.5"
+        height="9"
+        rx="2"
+        fill="currentColor"
+        fillOpacity="0.16"
+      />
       <rect x="3" y="15.5" width="7.5" height="5.5" rx="2" />
     </BaseSvg>
   );
@@ -138,7 +182,11 @@ export function HomeSettingsSvg(props: AdminIconProps) {
   return (
     <BaseSvg {...props}>
       <path d="M3 10.5L12 3l9 7.5" />
-      <path d="M5 9.2V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9.2" fill="currentColor" fillOpacity="0.12" />
+      <path
+        d="M5 9.2V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9.2"
+        fill="currentColor"
+        fillOpacity="0.12"
+      />
       <circle cx="12" cy="14" r="2.5" />
     </BaseSvg>
   );
@@ -251,9 +299,33 @@ export function ChartBarSvg(props: AdminIconProps) {
   return (
     <BaseSvg {...props}>
       <path d="M3 20.5h18" />
-      <rect x="5" y="11" width="3.5" height="9.5" rx="1" fill="currentColor" fillOpacity="0.2" />
-      <rect x="10.25" y="6" width="3.5" height="14.5" rx="1" fill="currentColor" fillOpacity="0.2" />
-      <rect x="15.5" y="3.5" width="3.5" height="17" rx="1" fill="currentColor" fillOpacity="0.2" />
+      <rect
+        x="5"
+        y="11"
+        width="3.5"
+        height="9.5"
+        rx="1"
+        fill="currentColor"
+        fillOpacity="0.2"
+      />
+      <rect
+        x="10.25"
+        y="6"
+        width="3.5"
+        height="14.5"
+        rx="1"
+        fill="currentColor"
+        fillOpacity="0.2"
+      />
+      <rect
+        x="15.5"
+        y="3.5"
+        width="3.5"
+        height="17"
+        rx="1"
+        fill="currentColor"
+        fillOpacity="0.2"
+      />
     </BaseSvg>
   );
 }

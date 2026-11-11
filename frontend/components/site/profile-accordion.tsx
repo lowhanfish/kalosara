@@ -282,7 +282,9 @@ export function ProfileAccordion({ profile, settings }: ProfileAccordionProps) {
                 <div className="flex items-center gap-2 shrink-0">
                   <span
                     className={`hidden text-xs font-medium sm:inline-block transition-colors ${
-                      isOpen ? "text-primary" : "text-slate-400 group-hover:text-slate-600"
+                      isOpen
+                        ? "text-primary"
+                        : "text-slate-400 group-hover:text-slate-600"
                     }`}
                   >
                     {isOpen ? "Tutup" : "Lihat rincian"}

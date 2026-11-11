@@ -221,7 +221,9 @@ export function DetailModal({
               className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 active:scale-95 disabled:opacity-50"
             >
               <CheckCircle2 className="size-4" />
-              <span>{isUpdating ? "Memproses..." : "Tandai Selesai Dilayani"}</span>
+              <span>
+                {isUpdating ? "Memproses..." : "Tandai Selesai Dilayani"}
+              </span>
             </button>
           )}
         </div>

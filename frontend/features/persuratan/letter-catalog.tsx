@@ -37,7 +37,8 @@ export function LetterCatalog({ onSelectLetter }: LetterCatalogProps) {
             Pilih Jenis Surat yang Dibutuhkan
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Pilih layanan surat di bawah ini. Formulir akan terisi otomatis dengan data akun Anda.
+            Pilih layanan surat di bawah ini. Formulir akan terisi otomatis
+            dengan data akun Anda.
           </p>
         </div>
       </div>
@@ -51,13 +52,19 @@ export function LetterCatalog({ onSelectLetter }: LetterCatalogProps) {
             >
               {/* Paper airplane accent floating at top right */}
               <div className="absolute right-4 top-4 flex size-8 items-center justify-center rounded-full bg-sky-50 text-sky-600 transition-transform duration-300 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white">
-                <Send size={14} className="-rotate-12 translate-x-px -translate-y-px" />
+                <Send
+                  size={14}
+                  className="-rotate-12 translate-x-px -translate-y-px"
+                />
               </div>
 
               {/* Icon / Illustration Center */}
               <div className="flex flex-col items-center pt-2 text-center">
                 <div className="transition-transform duration-300 group-hover:scale-105">
-                  <LetterIllustratedIcon type={letter.code} className="h-32 w-32 drop-shadow-md" />
+                  <LetterIllustratedIcon
+                    type={letter.code}
+                    className="h-32 w-32 drop-shadow-md"
+                  />
                 </div>
 
                 {/* Badge Category */}

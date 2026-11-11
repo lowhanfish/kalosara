@@ -324,12 +324,12 @@ export function PrintReportModal({
             {/* Ringkasan Jumlah Tamu */}
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
               <p>
-                Total Rekapitulasi: <strong>{items.length} Tamu Terdaftar</strong>
+                Total Rekapitulasi:{" "}
+                <strong>{items.length} Tamu Terdaftar</strong>
               </p>
               <p className="text-[11px] text-slate-400">
-                Selesai:{" "}
-                {items.filter((i) => i.status === "SERVED").length} | Menunggu:{" "}
-                {items.filter((i) => i.status === "WAITING").length}
+                Selesai: {items.filter((i) => i.status === "SERVED").length} |
+                Menunggu: {items.filter((i) => i.status === "WAITING").length}
               </p>
             </div>
 

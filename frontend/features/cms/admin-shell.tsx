@@ -30,7 +30,11 @@ function isNodeActive(
   const fullTarget = hash ? `${pathname}${hash}` : pathname;
   if (item.path) {
     if (item.path === fullTarget || item.path === pathname) return true;
-    if (item.path.includes("#") && item.path.split("#")[0] === pathname && !hash) {
+    if (
+      item.path.includes("#") &&
+      item.path.split("#")[0] === pathname &&
+      !hash
+    ) {
       return false;
     }
   }

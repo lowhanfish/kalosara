@@ -38,7 +38,9 @@ interface VerificationData {
   verifiedAt: string;
 }
 
-async function fetchVerification(token: string): Promise<VerificationData | null> {
+async function fetchVerification(
+  token: string,
+): Promise<VerificationData | null> {
   const apiUrl =
     process.env.INTERNAL_API_URL ||
     process.env.NEXT_PUBLIC_API_URL ||
@@ -99,7 +101,8 @@ export default async function VerifikasiSuratPage({ params }: VerifyPageProps) {
                   Dokumen Asli &amp; Terdaftar
                 </h2>
                 <p className="text-xs sm:text-sm text-emerald-100 mt-0.5">
-                  Dokumen ini telah ditandatangani secara elektronik (TTE) dan terdaftar resmi di pangkalan data Kelurahan Watundehoa.
+                  Dokumen ini telah ditandatangani secara elektronik (TTE) dan
+                  terdaftar resmi di pangkalan data Kelurahan Watundehoa.
                 </p>
               </div>
             </div>
@@ -211,13 +214,22 @@ export default async function VerifikasiSuratPage({ params }: VerifyPageProps) {
               Dokumen Tidak Ditemukan atau Belum Sah
             </h2>
             <p className="text-sm text-slate-600 max-w-md mx-auto mb-6">
-              Kode QR atau token verifikasi ini tidak terdaftar di sistem KALOSARA Kelurahan Watundehoa, atau dokumen permohonan belum selesai ditandatangani oleh Lurah.
+              Kode QR atau token verifikasi ini tidak terdaftar di sistem
+              KALOSARA Kelurahan Watundehoa, atau dokumen permohonan belum
+              selesai ditandatangani oleh Lurah.
             </p>
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 text-left mb-6">
               <p className="font-semibold mb-1">Catatan Keamanan:</p>
               <ul className="list-disc pl-4 space-y-1">
-                <li>Pastikan Anda memindai kode QR langsung dari dokumen resmi bertandatangan digital.</li>
-                <li>Jika Anda merasa ini adalah kekeliruan, silakan hubungi Kantor Kelurahan Watundehoa atau ajukan ulang melalui portal KALOSARA.</li>
+                <li>
+                  Pastikan Anda memindai kode QR langsung dari dokumen resmi
+                  bertandatangan digital.
+                </li>
+                <li>
+                  Jika Anda merasa ini adalah kekeliruan, silakan hubungi Kantor
+                  Kelurahan Watundehoa atau ajukan ulang melalui portal
+                  KALOSARA.
+                </li>
               </ul>
             </div>
             <Link
@@ -231,8 +243,14 @@ export default async function VerifikasiSuratPage({ params }: VerifyPageProps) {
 
         {/* Security watermark footer */}
         <div className="text-center mt-8 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} Kelurahan Watundehoa. Sistem Persuratan Digital KALOSARA.</p>
-          <p className="mt-1">Keaslian dokumen ini dilindungi oleh undang-undang ITE Republik Indonesia.</p>
+          <p>
+            © {new Date().getFullYear()} Kelurahan Watundehoa. Sistem Persuratan
+            Digital KALOSARA.
+          </p>
+          <p className="mt-1">
+            Keaslian dokumen ini dilindungi oleh undang-undang ITE Republik
+            Indonesia.
+          </p>
         </div>
       </div>
     </div>

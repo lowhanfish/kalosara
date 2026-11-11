@@ -6,18 +6,18 @@ Tanggal 18 Oktober 2026, Asia/Makassar. Baseline `e3aff03` di main, working tree
 
 Aset: akun/profil minimum warga, password hash, cookie/sesi, kontak pending, media PRIVATE, konten resmi, audit dan backup. Pelaku: anonim, akun warga, petugas dengan izin terbatas, pemilik konten berbahaya, penyerang yang memalsukan header/query/file. Batas kepercayaan: browser → proxy lokal → API → Prisma/Neon dan storage disk. Server/operator yang sepenuhnya diretas berada di luar jaminan kontrol aplikasi.
 
-| Ancaman | Mitigasi dan bukti |
-| --- | --- |
-| Auth bypass/broken access control | Cookie bertanda tangan + sesi DB/akun aktif/role terkini; tampered token, guest401, warga/lurah403, self/last-admin guards dan pencabutan sesi diuji. |
-| IDOR | Profil mengambil ID dari sesi; field userId/role ditolak. PRIVATE hanya pengunggah, termasuk terhadap admin lain. Regresi account/CMS dan browser. |
-| SQL/query injection | Parameter Prisma + Zod, tak ada interpolasi SQL dari input HTTP; payload SQL menjadi search literal, duplicate query/pagination rusak400. Nama DB pada fixture hanya allowlist lokal. |
-| XSS editor/profil/SEO | Sanitizer allowlist dua lintasan, media internal PUBLIC, React escaping dan JSON-LD escape; payload script/iframe/SVG/URL encoding diuji. CSP membatasi sumber dan embedding. |
-| CSRF | Origin persis + double-submit token acak/timing-safe; semua mutasi auth/CMS/account. Cookie HttpOnly/SameSite Strict, Secure saat APP_ORIGIN HTTPS. CORS tidak diperlukan untuk proxy same-origin, tidak ditambahkan. |
-| Brute force/header spoof | Rate limit auth/upload; `trust proxy=false`, API bind127.0.0.1, forwarding palsu tidak mengganti key socket. Tes11 request berbeda X-Forwarded-For tetap429. |
-| Upload/traversal/storage leak | 20MiB/file, satu file/request, dua job, signature/MIME/ekstensi/isi, gambar25MP re-encode, PDF valid attachment/sandbox; path allowlist/UUID dan akses DB. Batas tepat20MiB/+1byte, disguise, traversal, PRIVATE/antar-admin diuji ulang. |
-| Open redirect/SSRF optimizer | Slug ketat, alias ke siteOrigin konfigurasi, return URL eksternal tidak dipakai, unit canonical dan browser hostile next. Optimizer menolak remote URL dan seluruh API termasuk file privat. |
-| DoS/resource exhaustion | JSON100KiB, multipart Nginx21MiB, batas Multer/fields, socket timeout/64connections, pool3; optimizer concurrency1/cache128MiB/input25MP, Sharp concurrency1/cache16MiB. Tidak menyatakan kapasitas pengunjung tanpa load test. |
-| Kebocoran log/cache | Auth/account/admin no-store sebelum parser/guard; log metode/status/requestId/durasi tanpa URL/header/body/IP mentah. Error internal hanya kode kejadian, serializer err tidak memuat pesan/stack DB. Log QA diperiksa terhadap email/password/alamat fixture. |
+| Ancaman                           | Mitigasi dan bukti                                                                                                                                                                                                                                             |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Auth bypass/broken access control | Cookie bertanda tangan + sesi DB/akun aktif/role terkini; tampered token, guest401, warga/lurah403, self/last-admin guards dan pencabutan sesi diuji.                                                                                                          |
+| IDOR                              | Profil mengambil ID dari sesi; field userId/role ditolak. PRIVATE hanya pengunggah, termasuk terhadap admin lain. Regresi account/CMS dan browser.                                                                                                             |
+| SQL/query injection               | Parameter Prisma + Zod, tak ada interpolasi SQL dari input HTTP; payload SQL menjadi search literal, duplicate query/pagination rusak400. Nama DB pada fixture hanya allowlist lokal.                                                                          |
+| XSS editor/profil/SEO             | Sanitizer allowlist dua lintasan, media internal PUBLIC, React escaping dan JSON-LD escape; payload script/iframe/SVG/URL encoding diuji. CSP membatasi sumber dan embedding.                                                                                  |
+| CSRF                              | Origin persis + double-submit token acak/timing-safe; semua mutasi auth/CMS/account. Cookie HttpOnly/SameSite Strict, Secure saat APP_ORIGIN HTTPS. CORS tidak diperlukan untuk proxy same-origin, tidak ditambahkan.                                          |
+| Brute force/header spoof          | Rate limit auth/upload; `trust proxy=false`, API bind127.0.0.1, forwarding palsu tidak mengganti key socket. Tes11 request berbeda X-Forwarded-For tetap429.                                                                                                   |
+| Upload/traversal/storage leak     | 20MiB/file, satu file/request, dua job, signature/MIME/ekstensi/isi, gambar25MP re-encode, PDF valid attachment/sandbox; path allowlist/UUID dan akses DB. Batas tepat20MiB/+1byte, disguise, traversal, PRIVATE/antar-admin diuji ulang.                      |
+| Open redirect/SSRF optimizer      | Slug ketat, alias ke siteOrigin konfigurasi, return URL eksternal tidak dipakai, unit canonical dan browser hostile next. Optimizer menolak remote URL dan seluruh API termasuk file privat.                                                                   |
+| DoS/resource exhaustion           | JSON100KiB, multipart Nginx21MiB, batas Multer/fields, socket timeout/64connections, pool3; optimizer concurrency1/cache128MiB/input25MP, Sharp concurrency1/cache16MiB. Tidak menyatakan kapasitas pengunjung tanpa load test.                                |
+| Kebocoran log/cache               | Auth/account/admin no-store sebelum parser/guard; log metode/status/requestId/durasi tanpa URL/header/body/IP mentah. Error internal hanya kode kejadian, serializer err tidak memuat pesan/stack DB. Log QA diperiksa terhadap email/password/alamat fixture. |
 
 CSP frontend mempertahankan `unsafe-inline` untuk hydration statis/ISR dan style editor; `unsafe-eval` hanya development. Ini **bukan strict nonce CSP** dan tidak menggantikan sanitizer. Frame hanya OpenStreetMap setelah consent yang sudah ada; object/media/frame-ancestors diblokir. HTTPS HSTS hanya saat origin HTTPS, sehingga localhost HTTP tidak dipaksa upgrade. Helmet API memakai default policy; response PDF tetap sandbox/attachment.
 
@@ -56,17 +56,17 @@ Browser: database kedua `kalosara_prompt13_browser_test`, migrasi hanya ke DB it
 
 ## 5. Hasil lint/typecheck/test/build dan temuan
 
-| Pemeriksaan | Hasil akhir |
-| --- | --- |
-| Backend lint/typecheck/build | Lulus |
-| Backend unit/HTTP | 35/35 |
-| PostgreSQL native18.4,10suite | 52/52 |
-| Frontend lint/typecheck/build produksi | Lulus; build akhir memakai env utama |
-| Frontend unit/runtime | 36/36 |
-| Browser Chrome hasil build QA | 6 kelompok kritis lulus; desktop/tablet/mobile360/768/1440, tanpa pageerror/CSP violation |
-| SEO response sebelum JS | Draft404, published200, og:title/og:image/canonical di HTML server |
-| Log data sensitif | Tidak mengandung email/password/alamat fixture |
-| Smoke runtime utama | Health/ready/proxy200, admin/account anonim401/no-store |
+| Pemeriksaan                            | Hasil akhir                                                                               |
+| -------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Backend lint/typecheck/build           | Lulus                                                                                     |
+| Backend unit/HTTP                      | 35/35                                                                                     |
+| PostgreSQL native18.4,10suite          | 52/52                                                                                     |
+| Frontend lint/typecheck/build produksi | Lulus; build akhir memakai env utama                                                      |
+| Frontend unit/runtime                  | 36/36                                                                                     |
+| Browser Chrome hasil build QA          | 6 kelompok kritis lulus; desktop/tablet/mobile360/768/1440, tanpa pageerror/CSP violation |
+| SEO response sebelum JS                | Draft404, published200, og:title/og:image/canonical di HTML server                        |
+| Log data sensitif                      | Tidak mengandung email/password/alamat fixture                                            |
+| Smoke runtime utama                    | Health/ready/proxy200, admin/account anonim401/no-store                                   |
 
 Temuan diperbaiki: tidak ada Helmet/security headers; proxy hop dipercaya terlalu luas; error DB/path HTTP dapat membocorkan masukan; respons auth/guard tidak seluruhnya no-store; pool/optimizer/Sharp/connection tidak eksplisit; rotasi Redis belum dibatasi. Regresi baru membuktikan spoofed forwarding tidak menghindari429 dan injection/tampered token ditolak.
 

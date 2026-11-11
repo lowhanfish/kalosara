@@ -17,7 +17,10 @@ import {
 
 function cleanSnippet(text?: string, max = 110) {
   if (!text) return "";
-  const plain = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  const plain = text
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   return plain.length > max ? plain.slice(0, max) + "…" : plain;
 }
 
@@ -33,7 +36,8 @@ export async function CommunityHighlights() {
       icon: Compass,
       cta: "Lihat semua wisata",
       itemCta: "Jelajahi",
-      bgClass: "bg-gradient-to-b from-transparent via-slate-50/70 to-transparent",
+      bgClass:
+        "bg-gradient-to-b from-transparent via-slate-50/70 to-transparent",
     },
     {
       category: "Produk UMKM",
@@ -136,7 +140,10 @@ export async function CommunityHighlights() {
                             </div>
                             <div className="absolute top-3 right-3 z-10 sm:top-3.5 sm:right-3.5">
                               <span className="grid size-7 place-items-center rounded-full border border-white/25 bg-slate-950/45 text-white shadow-xs backdrop-blur-md transition-all duration-300 group-hover:rotate-45 group-hover:bg-amber-400 group-hover:text-slate-950 sm:size-8">
-                                <ArrowUpRight size={13} className="sm:size-[14px]" />
+                                <ArrowUpRight
+                                  size={13}
+                                  className="sm:size-[14px]"
+                                />
                               </span>
                             </div>
                           </div>
@@ -149,11 +156,17 @@ export async function CommunityHighlights() {
                                 {item.category}
                               </span>
                               <span className="grid size-7 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:rotate-45 group-hover:bg-amber-400 group-hover:text-slate-950 sm:size-8">
-                                <ArrowUpRight size={13} className="sm:size-[14px]" />
+                                <ArrowUpRight
+                                  size={13}
+                                  className="sm:size-[14px]"
+                                />
                               </span>
                             </div>
                             <div className="relative z-10 flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-slate-300 sm:text-[10px]">
-                              <Sparkles size={11} className="text-amber-400 sm:size-3" />
+                              <Sparkles
+                                size={11}
+                                className="text-amber-400 sm:size-3"
+                              />
                               <span>Keunggulan Wilayah</span>
                             </div>
                           </div>

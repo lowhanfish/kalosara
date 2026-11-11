@@ -15,7 +15,11 @@ import {
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
 import { cmsMutate, cmsError, type Category, type List } from "./client";
 import { AdminPagination } from "@/components/admin/pagination";
-import { AdminEmptyState, AdminLoading, AdminError } from "@/components/admin/feedback";
+import {
+  AdminEmptyState,
+  AdminLoading,
+  AdminError,
+} from "@/components/admin/feedback";
 
 export function Categories() {
   const auth = useAuth();
@@ -80,10 +84,13 @@ export function Categories() {
             </div>
             <div>
               <h3 className="text-base font-extrabold text-slate-900">
-                {existing ? "Sunting Kategori Berita" : "Tambah Kategori Berita Baru"}
+                {existing
+                  ? "Sunting Kategori Berita"
+                  : "Tambah Kategori Berita Baru"}
               </h3>
               <p className="text-xs font-medium text-slate-500">
-                Kategori digunakan untuk mengelompokkan arsip dan publikasi berita pada portal kelurahan.
+                Kategori digunakan untuk mengelompokkan arsip dan publikasi
+                berita pada portal kelurahan.
               </p>
             </div>
           </div>
@@ -140,7 +147,8 @@ export function Categories() {
               />
               {existing && (
                 <p className="text-[11px] text-slate-400">
-                  Slug kategori yang sudah dibuat bersifat permanen demi konsistensi tautan.
+                  Slug kategori yang sudah dibuat bersifat permanen demi
+                  konsistensi tautan.
                 </p>
               )}
             </div>
@@ -150,11 +158,14 @@ export function Categories() {
             <input
               type="checkbox"
               checked={draft.archived}
-              onChange={(e) => setDraft({ ...draft, archived: e.target.checked })}
+              onChange={(e) =>
+                setDraft({ ...draft, archived: e.target.checked })
+              }
               className="rounded border-blue-300 text-blue-600 focus:ring-blue-500"
             />
             <span className="font-semibold">
-              Arsipkan kategori ini (tidak ditampilkan lagi pada pilihan berita baru)
+              Arsipkan kategori ini (tidak ditampilkan lagi pada pilihan berita
+              baru)
             </span>
           </label>
 
@@ -198,7 +209,11 @@ export function Categories() {
               ) : (
                 <>
                   <Plus size={15} strokeWidth={2.4} />
-                  <span>{existing ? "Simpan Perubahan Kategori" : "Simpan Kategori Baru"}</span>
+                  <span>
+                    {existing
+                      ? "Simpan Perubahan Kategori"
+                      : "Simpan Kategori Baru"}
+                  </span>
                 </>
               )}
             </button>
@@ -239,14 +254,19 @@ export function Categories() {
           onClick={() => void query.refetch()}
           className="glass-button-secondary self-start sm:self-auto"
         >
-          <RotateCw size={14} className={query.isFetching ? "animate-spin text-blue-600" : ""} />
+          <RotateCw
+            size={14}
+            className={query.isFetching ? "animate-spin text-blue-600" : ""}
+          />
           <span>Segarkan</span>
         </button>
       </div>
 
       {/* Category List */}
       {query.isPending && <AdminLoading />}
-      {query.isError && <AdminError error={query.error} onRetry={() => void query.refetch()} />}
+      {query.isError && (
+        <AdminError error={query.error} onRetry={() => void query.refetch()} />
+      )}
 
       {query.data?.items.length === 0 && (
         <AdminEmptyState

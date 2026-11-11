@@ -30,10 +30,7 @@ import {
   TableCell,
 } from "@/app/(admin)/_components/ui";
 import { listindex } from "@/utilities/pagination";
-import {
-  useResponseListMaster,
-  useResponseDetailMaster,
-} from "./hooks/crud";
+import { useResponseListMaster, useResponseDetailMaster } from "./hooks/crud";
 import { FormTindakLanjutModal } from "./components/FormTindakLanjutModal";
 import { DetailPesanModal } from "./components/DetailPesanModal";
 

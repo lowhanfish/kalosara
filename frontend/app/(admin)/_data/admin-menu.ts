@@ -47,7 +47,12 @@ export function findMenuBreadcrumbs(
       return nextTrail;
     }
     if (node.children?.length) {
-      const found = findMenuBreadcrumbs(pathname, hash, node.children, nextTrail);
+      const found = findMenuBreadcrumbs(
+        pathname,
+        hash,
+        node.children,
+        nextTrail,
+      );
       if (found.length) return found;
     }
   }

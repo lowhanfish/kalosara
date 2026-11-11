@@ -1,18 +1,11 @@
 import React from "react";
 
 export type ButtonVariant =
-  | "primary"
-  | "sky"
-  | "gold"
-  | "secondary"
-  | "outline"
-  | "ghost"
-  | "danger";
+  "primary" | "sky" | "gold" | "secondary" | "outline" | "ghost" | "danger";
 
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   leftIcon?: React.ReactNode;

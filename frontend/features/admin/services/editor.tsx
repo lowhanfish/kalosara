@@ -16,7 +16,12 @@ import {
 } from "lucide-react";
 
 import { useAuth, useAuthRuntime } from "@/features/auth/auth-provider";
-import { cmsMutate, cmsError, type List, type MediaAsset } from "@/features/cms/client";
+import {
+  cmsMutate,
+  cmsError,
+  type List,
+  type MediaAsset,
+} from "@/features/cms/client";
 import { RichEditor } from "@/features/cms/rich-editor";
 import type { ProfilePage } from "@/lib/profile";
 
@@ -88,7 +93,9 @@ export default function Editor({ page }: { page?: ProfilePage }) {
                 <span
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${statusLabel.badge}`}
                 >
-                  <span className={`size-1.5 rounded-full ${statusLabel.dot} animate-pulse`} />
+                  <span
+                    className={`size-1.5 rounded-full ${statusLabel.dot} animate-pulse`}
+                  />
                   {statusLabel.text}
                 </span>
                 <span className="inline-flex items-center rounded-lg border border-blue-200/70 bg-blue-50/80 px-2.5 py-0.5 font-mono text-xs font-bold text-blue-700">
@@ -99,7 +106,9 @@ export default function Editor({ page }: { page?: ProfilePage }) {
                 {title}
               </h2>
               <p className="text-sm leading-relaxed text-slate-600">
-                Pusat panduan resmi untuk warga. Mengatur alur pengurusan berkas, persyaratan administrasi, dan informasi loket kantor Kelurahan Watundehoa.
+                Pusat panduan resmi untuk warga. Mengatur alur pengurusan
+                berkas, persyaratan administrasi, dan informasi loket kantor
+                Kelurahan Watundehoa.
               </p>
             </div>
 
@@ -161,10 +170,16 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             />
           ) : (
             <div className="py-16 text-center text-slate-400 bg-white/60 rounded-2xl border border-dashed border-blue-200">
-              <AlertCircle size={36} className="mx-auto mb-3 opacity-40 text-blue-500" />
-              <p className="text-sm font-extrabold text-slate-800">Belum ada konten panduan yang ditulis</p>
+              <AlertCircle
+                size={36}
+                className="mx-auto mb-3 opacity-40 text-blue-500"
+              />
+              <p className="text-sm font-extrabold text-slate-800">
+                Belum ada konten panduan yang ditulis
+              </p>
               <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                Masyarakat belum dapat melihat panduan alur pelayanan. Klik tombol di bawah untuk mulai menulis.
+                Masyarakat belum dapat melihat panduan alur pelayanan. Klik
+                tombol di bawah untuk mulai menulis.
               </p>
               <button
                 type="button"
@@ -192,7 +207,8 @@ export default function Editor({ page }: { page?: ProfilePage }) {
               title !== (page?.title ?? "Panduan pelayanan kelurahan") ||
               status !== (page?.status ?? "DRAFT")
             ) {
-              if (!confirm("Perubahan belum disimpan. Kembali ke ringkasan?")) return;
+              if (!confirm("Perubahan belum disimpan. Kembali ke ringkasan?"))
+                return;
             }
             setIsEditing(false);
           }}
@@ -223,7 +239,8 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             Form Panduan Pelayanan
           </h2>
           <p className="mt-1 text-xs text-slate-500">
-            Perbarui judul bab, nomor alur, dokumen persyaratan, dan status tayang.
+            Perbarui judul bab, nomor alur, dokumen persyaratan, dan status
+            tayang.
           </p>
         </div>
 
@@ -245,7 +262,9 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             Isi Panduan, Alur, & Persyaratan Dokumen
           </label>
           <p className="text-xs text-slate-500">
-            Gunakan editor WYSIWYG untuk memformat teks (Heading Bab H2/H3, Poin Persyaratan, Nomor Langkah Alur, Kutipan/Catatan, dan Gambar/Tautan).
+            Gunakan editor WYSIWYG untuk memformat teks (Heading Bab H2/H3, Poin
+            Persyaratan, Nomor Langkah Alur, Kutipan/Catatan, dan
+            Gambar/Tautan).
           </p>
           <div className="pt-2">
             <RichEditor
@@ -265,8 +284,12 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            <option value="DRAFT">Draft — Belum ditampilkan di website publik</option>
-            <option value="PUBLISHED">Terbit — Ditampilkan di halaman /pelayanan</option>
+            <option value="DRAFT">
+              Draft — Belum ditampilkan di website publik
+            </option>
+            <option value="PUBLISHED">
+              Terbit — Ditampilkan di halaman /pelayanan
+            </option>
             <option value="ARCHIVED">Arsip — Dinonaktifkan sementara</option>
           </select>
         </label>
@@ -282,9 +305,7 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             type="button"
             onClick={() => setLivePreview(!livePreview)}
             className={`px-4 py-2.5 text-xs ${
-              livePreview
-                ? "glass-button-primary"
-                : "glass-button-secondary"
+              livePreview ? "glass-button-primary" : "glass-button-secondary"
             }`}
           >
             {livePreview ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -303,7 +324,10 @@ export default function Editor({ page }: { page?: ProfilePage }) {
             </p>
           )}
           {save.isSuccess && (
-            <p role="status" className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold">
+            <p
+              role="status"
+              className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold"
+            >
               <CheckCircle2 size={15} />
               Panduan pelayanan berhasil disimpan.
             </p>

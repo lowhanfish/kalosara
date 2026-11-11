@@ -224,7 +224,8 @@ export function FormTindakLanjutModal({
               onChange={(e) => setNote(e.target.value)}
             />
             <p className="text-[11px] text-slate-400">
-              Catatan ini bersifat internal dan hanya dapat dibaca oleh staf/admin kelurahan.
+              Catatan ini bersifat internal dan hanya dapat dibaca oleh
+              staf/admin kelurahan.
             </p>
           </div>
 

@@ -19,7 +19,8 @@ import { createRateLimiter } from '../middlewares/rate-limit.middleware.js';
 const guestbookSubmissionLimit = createRateLimiter({
   windowMs: 15 * 60_000,
   limit: 10,
-  message: 'Terlalu banyak permintaan buku tamu, silakan coba lagi beberapa saat lagi.',
+  message:
+    'Terlalu banyak permintaan buku tamu, silakan coba lagi beberapa saat lagi.',
 });
 
 export const publicGuestbookRouter = Router();

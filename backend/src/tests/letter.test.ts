@@ -1,12 +1,15 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Request, Response } from "express";
-import { citizenCreateLetterSchema, adminLetterActionSchema } from "../validators/letter.validator.js";
-import { LetterService } from "../services/letter.service.js";
-import { LetterPdfService } from "../services/letter-pdf.service.js";
-import { EmailService } from "../services/email.service.js";
-import { LetterController } from "../controllers/letter.controller.js";
-import type { LetterRepository } from "../repositories/letter.repository.js";
-import { ApiError } from "../lib/errors.js";
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Request, Response } from 'express';
+import {
+  citizenCreateLetterSchema,
+  adminLetterActionSchema,
+} from '../validators/letter.validator.js';
+import { LetterService } from '../services/letter.service.js';
+import { LetterPdfService } from '../services/letter-pdf.service.js';
+import { EmailService } from '../services/email.service.js';
+import { LetterController } from '../controllers/letter.controller.js';
+import type { LetterRepository } from '../repositories/letter.repository.js';
+import { ApiError } from '../lib/errors.js';
 
 // Mock repository
 const mockLetterRepo = {
@@ -21,7 +24,7 @@ const mockLetterRepo = {
   delete: vi.fn(),
 };
 
-describe("Letter Workflow & Persuratan KALOSARA", () => {
+describe('Letter Workflow & Persuratan KALOSARA', () => {
   let letterService: LetterService;
   let pdfService: LetterPdfService;
   let emailService: EmailService;
@@ -37,25 +40,25 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
     );
   });
 
-  describe("Validation Schemas", () => {
-    it("accepts valid citizen SKU request payload", () => {
+  describe('Validation Schemas', () => {
+    it('accepts valid citizen SKU request payload', () => {
       const validPayload = {
-        type: "SKU",
-        applicantName: "La Ode Muhammad",
-        applicantNik: "7402010101900001",
-        birthPlace: "Watundehoa",
-        birthDate: "1990-01-01",
-        gender: "Laki-laki",
-        religion: "Islam",
-        maritalStatus: "Kawin",
-        occupation: "Wiraswasta",
-        address: "Jl. Poros Watunohu RT 02 Dusun I",
+        type: 'SKU',
+        applicantName: 'La Ode Muhammad',
+        applicantNik: '7402010101900001',
+        birthPlace: 'Watundehoa',
+        birthDate: '1990-01-01',
+        gender: 'Laki-laki',
+        religion: 'Islam',
+        maritalStatus: 'Kawin',
+        occupation: 'Wiraswasta',
+        address: 'Jl. Poros Watunohu RT 02 Dusun I',
         details: {
-          businessName: "Kios Berkah Tani",
-          businessType: "Perdagangan Sembako",
-          businessAddress: "Jl. Poros Watunohu",
+          businessName: 'Kios Berkah Tani',
+          businessType: 'Perdagangan Sembako',
+          businessAddress: 'Jl. Poros Watunohu',
           startedYear: 2021,
-          purpose: "Pengajuan KUR BRI",
+          purpose: 'Pengajuan KUR BRI',
         },
       };
 
@@ -63,59 +66,61 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
       expect(result.success).toBe(true);
     });
 
-    it("rejects invalid citizen request with short NIK", () => {
+    it('rejects invalid citizen request with short NIK', () => {
       const invalidPayload = {
-        type: "SKU",
-        applicantName: "La Ode Muhammad",
-        applicantNik: "123", // Too short
-        birthPlace: "Watundehoa",
-        birthDate: "1990-01-01",
-        gender: "Laki-laki",
-        religion: "Islam",
-        maritalStatus: "Kawin",
-        occupation: "Wiraswasta",
-        address: "Watundehoa",
+        type: 'SKU',
+        applicantName: 'La Ode Muhammad',
+        applicantNik: '123', // Too short
+        birthPlace: 'Watundehoa',
+        birthDate: '1990-01-01',
+        gender: 'Laki-laki',
+        religion: 'Islam',
+        maritalStatus: 'Kawin',
+        occupation: 'Wiraswasta',
+        address: 'Watundehoa',
       };
 
       const result = citizenCreateLetterSchema.safeParse(invalidPayload);
       expect(result.success).toBe(false);
     });
 
-    it("validates admin action payload for REJECT requiring no mandatory string, but schema allows optional reason", () => {
+    it('validates admin action payload for REJECT requiring no mandatory string, but schema allows optional reason', () => {
       const rejectAction = {
-        action: "REJECT",
-        reason: "Lampiran foto KTP buram dan tidak terbaca",
+        action: 'REJECT',
+        reason: 'Lampiran foto KTP buram dan tidak terbaca',
       };
       const result = adminLetterActionSchema.safeParse(rejectAction);
       expect(result.success).toBe(true);
     });
   });
 
-  describe("Step 1: Citizen Submission", () => {
-    it("creates letter request with generated ticket number", async () => {
-      mockLetterRepo.generateTicketNumber.mockResolvedValue("SRT-20261110-0001");
+  describe('Step 1: Citizen Submission', () => {
+    it('creates letter request with generated ticket number', async () => {
+      mockLetterRepo.generateTicketNumber.mockResolvedValue(
+        'SRT-20261110-0001',
+      );
       mockLetterRepo.create.mockResolvedValue({
-        id: "letter-123",
-        ticketNumber: "SRT-20261110-0001",
-        status: "SUBMITTED",
-        type: "SKTM",
-        applicantName: "Hasanuddin",
+        id: 'letter-123',
+        ticketNumber: 'SRT-20261110-0001',
+        status: 'SUBMITTED',
+        type: 'SKTM',
+        applicantName: 'Hasanuddin',
       });
 
       const result = await letterService.createRequest(
-        "user-abc",
+        'user-abc',
         {
-          type: "SKTM",
-          applicantName: "Hasanuddin",
-          applicantNik: "7402011212850002",
-          birthPlace: "Watundehoa",
-          birthDate: "1985-12-12",
-          gender: "Laki-laki",
-          religion: "Islam",
-          maritalStatus: "Kawin",
-          occupation: "Petani",
-          address: "Dusun II Watundehoa",
-          details: { purpose: "Beasiswa Kuliah Anak" },
+          type: 'SKTM',
+          applicantName: 'Hasanuddin',
+          applicantNik: '7402011212850002',
+          birthPlace: 'Watundehoa',
+          birthDate: '1985-12-12',
+          gender: 'Laki-laki',
+          religion: 'Islam',
+          maritalStatus: 'Kawin',
+          occupation: 'Petani',
+          address: 'Dusun II Watundehoa',
+          details: { purpose: 'Beasiswa Kuliah Anak' },
         },
         [],
       );
@@ -123,117 +128,124 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
       expect(mockLetterRepo.generateTicketNumber).toHaveBeenCalled();
       expect(mockLetterRepo.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          ticketNumber: "SRT-20261110-0001",
-          userId: "user-abc",
-          applicantName: "Hasanuddin",
+          ticketNumber: 'SRT-20261110-0001',
+          userId: 'user-abc',
+          applicantName: 'Hasanuddin',
         }),
       );
-      expect(result.ticketNumber).toBe("SRT-20261110-0001");
+      expect(result.ticketNumber).toBe('SRT-20261110-0001');
     });
   });
 
-  describe("Step 2 & 3: Admin Review and Rejection with Reason", () => {
-    it("verifies letter request when admin approves", async () => {
+  describe('Step 2 & 3: Admin Review and Rejection with Reason', () => {
+    it('verifies letter request when admin approves', async () => {
       mockLetterRepo.findById.mockResolvedValue({
-        id: "letter-123",
-        status: "SUBMITTED",
-        ticketNumber: "SRT-20261110-0001",
-        applicantName: "Hasanuddin",
-        user: { email: "hasan@example.com" },
+        id: 'letter-123',
+        status: 'SUBMITTED',
+        ticketNumber: 'SRT-20261110-0001',
+        applicantName: 'Hasanuddin',
+        user: { email: 'hasan@example.com' },
         attachments: [],
       });
       mockLetterRepo.updateStatus.mockResolvedValue({
-        id: "letter-123",
-        status: "VERIFIED",
+        id: 'letter-123',
+        status: 'VERIFIED',
       });
 
-      await letterService.processAction("letter-123", "Admin Kelurahan", "VERIFY");
+      await letterService.processAction(
+        'letter-123',
+        'Admin Kelurahan',
+        'VERIFY',
+      );
 
       expect(mockLetterRepo.updateStatus).toHaveBeenCalledWith(
-        "letter-123",
+        'letter-123',
         expect.objectContaining({
-          status: "VERIFIED",
+          status: 'VERIFIED',
           rejectionReason: null,
         }),
       );
     });
 
-    it("rejects letter with reason and sends email notification", async () => {
-      const sendRejectionSpy = vi.spyOn(emailService, "sendRejectionEmail").mockResolvedValue();
+    it('rejects letter with reason and sends email notification', async () => {
+      const sendRejectionSpy = vi
+        .spyOn(emailService, 'sendRejectionEmail')
+        .mockResolvedValue();
 
       mockLetterRepo.findById.mockResolvedValue({
-        id: "letter-123",
-        status: "SUBMITTED",
-        type: "SKTM",
-        ticketNumber: "SRT-20261110-0001",
-        applicantName: "Hasanuddin",
-        user: { email: "hasan@example.com" },
+        id: 'letter-123',
+        status: 'SUBMITTED',
+        type: 'SKTM',
+        ticketNumber: 'SRT-20261110-0001',
+        applicantName: 'Hasanuddin',
+        user: { email: 'hasan@example.com' },
         attachments: [],
       });
       mockLetterRepo.updateStatus.mockResolvedValue({
-        id: "letter-123",
-        status: "REJECTED",
-        rejectionReason: "Foto KK tidak jelas",
+        id: 'letter-123',
+        status: 'REJECTED',
+        rejectionReason: 'Foto KK tidak jelas',
       });
 
       await letterService.processAction(
-        "letter-123",
-        "Admin Kelurahan",
-        "REJECT",
-        "Foto KK tidak jelas",
+        'letter-123',
+        'Admin Kelurahan',
+        'REJECT',
+        'Foto KK tidak jelas',
       );
 
-      expect(mockLetterRepo.updateStatus).toHaveBeenCalledWith("letter-123", {
-        status: "REJECTED",
-        rejectionReason: "Foto KK tidak jelas",
+      expect(mockLetterRepo.updateStatus).toHaveBeenCalledWith('letter-123', {
+        status: 'REJECTED',
+        rejectionReason: 'Foto KK tidak jelas',
       });
       expect(sendRejectionSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          to: "hasan@example.com",
-          ticketNumber: "SRT-20261110-0001",
-          reason: "Foto KK tidak jelas",
+          to: 'hasan@example.com',
+          ticketNumber: 'SRT-20261110-0001',
+          reason: 'Foto KK tidak jelas',
         }),
       );
     });
   });
 
-  describe("Step 4 & 5: Lurah TTE Signing & PDF Generation", () => {
-    it("prevents Admin Kelurahan from signing (TTE) letters with 403 Forbidden", async () => {
+  describe('Step 4 & 5: Lurah TTE Signing & PDF Generation', () => {
+    it('prevents Admin Kelurahan from signing (TTE) letters with 403 Forbidden', async () => {
       const controller = new LetterController(letterService);
       const req = {
-        params: { id: "letter-123" },
-        body: { action: "SIGN" },
+        params: { id: 'letter-123' },
+        body: { action: 'SIGN' },
       } as unknown as Request;
       const res = {
         locals: {
-          principal: { role: "ADMIN_KELURAHAN", id: "admin-1" },
+          principal: { role: 'ADMIN_KELURAHAN', id: 'admin-1' },
         },
       } as unknown as Response;
 
-      await expect(controller.processAdminLetterAction(req, res)).rejects.toThrowError(
-        ApiError,
-      );
-      await expect(controller.processAdminLetterAction(req, res)).rejects.toMatchObject({
+      await expect(
+        controller.processAdminLetterAction(req, res),
+      ).rejects.toThrowError(ApiError);
+      await expect(
+        controller.processAdminLetterAction(req, res),
+      ).rejects.toMatchObject({
         status: 403,
-        code: "FORBIDDEN",
+        code: 'FORBIDDEN',
       });
     });
 
-    it("allows Lurah to sign (TTE) letters", async () => {
+    it('allows Lurah to sign (TTE) letters', async () => {
       const controller = new LetterController(letterService);
-      vi.spyOn(letterService, "processAction").mockResolvedValue(
-        { id: "letter-123", status: "SIGNED" } as unknown as Awaited<
-          ReturnType<LetterService["processAction"]>
-        >,
-      );
+      vi.spyOn(letterService, 'processAction').mockResolvedValue({
+        id: 'letter-123',
+        status: 'SIGNED',
+      } as unknown as Awaited<ReturnType<LetterService['processAction']>>);
 
       const req = {
-        params: { id: "letter-123" },
-        body: { action: "SIGN" },
+        params: { id: 'letter-123' },
+        body: { action: 'SIGN' },
       } as unknown as Request;
       const res = {
         locals: {
-          principal: { role: "LURAH", id: "lurah-1" },
+          principal: { role: 'LURAH', id: 'lurah-1' },
         },
         json: vi.fn(),
         status: vi.fn().mockReturnThis(),
@@ -241,145 +253,160 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
 
       await controller.processAdminLetterAction(req, res);
       expect(letterService.processAction).toHaveBeenCalledWith(
-        "letter-123",
-        "Lurah Watundehoa",
-        "SIGN",
+        'letter-123',
+        'Lurah Watundehoa',
+        'SIGN',
         undefined,
       );
     });
 
-    it("signs letter, generates official PDF with QR code and updates status to SIGNED", async () => {
-      const sendCompletionSpy = vi.spyOn(emailService, "sendCompletionEmail").mockResolvedValue();
+    it('signs letter, generates official PDF with QR code and updates status to SIGNED', async () => {
+      const sendCompletionSpy = vi
+        .spyOn(emailService, 'sendCompletionEmail')
+        .mockResolvedValue();
 
       const existingLetter = {
-        id: "letter-123",
-        status: "VERIFIED",
-        type: "SKU",
-        ticketNumber: "SRT-20261110-0001",
-        applicantName: "La Ode Muhammad",
-        applicantNik: "7402010101900001",
-        birthPlace: "Watundehoa",
-        birthDate: "01 Januari 1990",
-        gender: "Laki-laki",
-        religion: "Islam",
-        maritalStatus: "Kawin",
-        occupation: "Wiraswasta",
-        address: "Jl. Poros Watunohu RT 02 Dusun I",
+        id: 'letter-123',
+        status: 'VERIFIED',
+        type: 'SKU',
+        ticketNumber: 'SRT-20261110-0001',
+        applicantName: 'La Ode Muhammad',
+        applicantNik: '7402010101900001',
+        birthPlace: 'Watundehoa',
+        birthDate: '01 Januari 1990',
+        gender: 'Laki-laki',
+        religion: 'Islam',
+        maritalStatus: 'Kawin',
+        occupation: 'Wiraswasta',
+        address: 'Jl. Poros Watunohu RT 02 Dusun I',
         details: {
-          businessName: "Kios Berkah Tani",
-          businessType: "Perdagangan Sembako",
+          businessName: 'Kios Berkah Tani',
+          businessType: 'Perdagangan Sembako',
           startedYear: 2021,
-          purpose: "Pengajuan KUR BRI",
+          purpose: 'Pengajuan KUR BRI',
         },
-        user: { email: "warga@example.com" },
+        user: { email: 'warga@example.com' },
         attachments: [],
       };
 
       mockLetterRepo.findById.mockResolvedValue(existingLetter);
-      mockLetterRepo.generateLetterNumber.mockResolvedValue("500/01/WTDH/XI/2026");
+      mockLetterRepo.generateLetterNumber.mockResolvedValue(
+        '500/01/WTDH/XI/2026',
+      );
       mockLetterRepo.updateStatus.mockResolvedValue({
         ...existingLetter,
-        status: "SIGNED",
-        letterNumber: "500/01/WTDH/XI/2026",
-        pdfPath: "/uploads/letters/SKU-SRT-20261110-0001.pdf",
+        status: 'SIGNED',
+        letterNumber: '500/01/WTDH/XI/2026',
+        pdfPath: '/uploads/letters/SKU-SRT-20261110-0001.pdf',
       });
 
-      const pdfSpy = vi.spyOn(pdfService, "generatePdf").mockResolvedValue({
-        storagePath: "/uploads/letters/SKU-SRT-20261110-0001.pdf",
-        pdfBuffer: Buffer.from("%PDF-1.4 test"),
+      const pdfSpy = vi.spyOn(pdfService, 'generatePdf').mockResolvedValue({
+        storagePath: '/uploads/letters/SKU-SRT-20261110-0001.pdf',
+        pdfBuffer: Buffer.from('%PDF-1.4 test'),
       });
 
-      await letterService.processAction("letter-123", "Lurah Watundehoa", "SIGN");
+      await letterService.processAction(
+        'letter-123',
+        'Lurah Watundehoa',
+        'SIGN',
+      );
 
-      expect(mockLetterRepo.generateLetterNumber).toHaveBeenCalledWith("SKU");
+      expect(mockLetterRepo.generateLetterNumber).toHaveBeenCalledWith('SKU');
       expect(pdfSpy).toHaveBeenCalled();
       expect(mockLetterRepo.updateStatus).toHaveBeenCalledWith(
-        "letter-123",
+        'letter-123',
         expect.objectContaining({
-          status: "SIGNED",
-          letterNumber: "500/01/WTDH/XI/2026",
-          pdfPath: "/uploads/letters/SKU-SRT-20261110-0001.pdf",
+          status: 'SIGNED',
+          letterNumber: '500/01/WTDH/XI/2026',
+          pdfPath: '/uploads/letters/SKU-SRT-20261110-0001.pdf',
         }),
       );
       expect(sendCompletionSpy).toHaveBeenCalled();
     });
   });
 
-  describe("Step 6: Public QR Code Verification & Attachment Download", () => {
-    it("throws 404 when attachment file is not found on disk", async () => {
+  describe('Step 6: Public QR Code Verification & Attachment Download', () => {
+    it('throws 404 when attachment file is not found on disk', async () => {
       const controller = new LetterController(letterService);
       const req = {
-        params: { filename: "non-existent-attachment.pdf" },
+        params: { filename: 'non-existent-attachment.pdf' },
       } as unknown as Request;
       const res = {} as unknown as Response;
 
-      await expect(controller.downloadAttachment(req, res)).rejects.toMatchObject({
+      await expect(
+        controller.downloadAttachment(req, res),
+      ).rejects.toMatchObject({
         status: 404,
-        code: "NOT_FOUND",
+        code: 'NOT_FOUND',
       });
     });
 
-    it("returns verified document details for valid QR token", async () => {
+    it('returns verified document details for valid QR token', async () => {
       mockLetterRepo.findByQrToken.mockResolvedValue({
-        id: "letter-123",
-        status: "SIGNED",
-        ticketNumber: "SRT-20261110-0001",
-        letterNumber: "500/01/WTDH/XI/2026",
-        type: "SKU",
-        applicantName: "La Ode Muhammad",
-        applicantNik: "7402010101900001",
-        signedBy: "Lurah Watundehoa",
-        signedAt: new Date("2026-11-10T08:00:00Z"),
-        pdfPath: "/uploads/letters/test.pdf",
+        id: 'letter-123',
+        status: 'SIGNED',
+        ticketNumber: 'SRT-20261110-0001',
+        letterNumber: '500/01/WTDH/XI/2026',
+        type: 'SKU',
+        applicantName: 'La Ode Muhammad',
+        applicantNik: '7402010101900001',
+        signedBy: 'Lurah Watundehoa',
+        signedAt: new Date('2026-11-10T08:00:00Z'),
+        pdfPath: '/uploads/letters/test.pdf',
       });
 
-      const verification = await letterService.verifyPublicLetter("valid-qr-token-uuid");
+      const verification = await letterService.verifyPublicLetter(
+        'valid-qr-token-uuid',
+      );
 
       expect(verification).not.toBeNull();
       expect(verification?.isValid).toBe(true);
-      expect(verification?.letterNumber).toBe("500/01/WTDH/XI/2026");
-      expect(verification?.applicantName).toBe("La Ode Muhammad");
-      expect(verification?.pdfUrl).toBe("/api/v1/public/letters/download/letter-123");
+      expect(verification?.letterNumber).toBe('500/01/WTDH/XI/2026');
+      expect(verification?.applicantName).toBe('La Ode Muhammad');
+      expect(verification?.pdfUrl).toBe(
+        '/api/v1/public/letters/download/letter-123',
+      );
     });
 
-    it("returns null when QR token is not found", async () => {
+    it('returns null when QR token is not found', async () => {
       mockLetterRepo.findByQrToken.mockResolvedValue(null);
 
-      const verification = await letterService.verifyPublicLetter("invalid-token");
+      const verification =
+        await letterService.verifyPublicLetter('invalid-token');
       expect(verification).toBeNull();
     });
   });
 
-  describe("Real PDF Generation with pdf-lib & QR Code", () => {
-    it("generates a valid binary PDF with embedded QR code and Indonesian Kop Surat", async () => {
+  describe('Real PDF Generation with pdf-lib & QR Code', () => {
+    it('generates a valid binary PDF with embedded QR code and Indonesian Kop Surat', async () => {
       const sampleLetter = {
-        id: "test-pdf-123",
-        ticketNumber: "SRT-20261110-9999",
-        letterNumber: "500/99/WTDH/XI/2026",
-        type: "SKTM" as const,
-        userId: "user-test",
-        applicantName: "Ahmad Fauzi",
-        applicantNik: "7402010101900001",
-        birthPlace: "Watundehoa",
-        birthDate: "01 Januari 1990",
-        gender: "Laki-laki",
-        religion: "Islam",
-        maritalStatus: "Kawin",
-        occupation: "Petani",
-        address: "RT 01 Lingkungan I Kelurahan Watundehoa",
+        id: 'test-pdf-123',
+        ticketNumber: 'SRT-20261110-9999',
+        letterNumber: '500/99/WTDH/XI/2026',
+        type: 'SKTM' as const,
+        userId: 'user-test',
+        applicantName: 'Ahmad Fauzi',
+        applicantNik: '7402010101900001',
+        birthPlace: 'Watundehoa',
+        birthDate: '01 Januari 1990',
+        gender: 'Laki-laki',
+        religion: 'Islam',
+        maritalStatus: 'Kawin',
+        occupation: 'Petani',
+        address: 'RT 01 Lingkungan I Kelurahan Watundehoa',
         details: {
-          purpose: "Beasiswa Kuliah Anak",
-          familyMemberName: "Rizky Ramadhan",
-          schoolOrHospital: "Universitas Halu Oleo",
+          purpose: 'Beasiswa Kuliah Anak',
+          familyMemberName: 'Rizky Ramadhan',
+          schoolOrHospital: 'Universitas Halu Oleo',
         },
-        status: "SIGNED" as const,
+        status: 'SIGNED' as const,
         rejectionReason: null,
         verifiedAt: null,
         verifiedBy: null,
         signedAt: new Date(),
-        signedBy: "Lurah Watundehoa",
+        signedBy: 'Lurah Watundehoa',
         pdfPath: null,
-        qrToken: "test-qr-token-12345",
+        qrToken: 'test-qr-token-12345',
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -389,54 +416,57 @@ describe("Letter Workflow & Persuratan KALOSARA", () => {
       expect(result.pdfBuffer).toBeInstanceOf(Buffer);
       expect(result.pdfBuffer.length).toBeGreaterThan(1000);
       // Valid PDF files start with %PDF
-      const header = result.pdfBuffer.subarray(0, 5).toString("utf-8");
-      expect(header).toBe("%PDF-");
+      const header = result.pdfBuffer.subarray(0, 5).toString('utf-8');
+      expect(header).toBe('%PDF-');
     });
   });
 
-  describe("Step 7: Letter Cancellation & Deletion", () => {
-    it("allows citizen to delete their SUBMITTED letter", async () => {
+  describe('Step 7: Letter Cancellation & Deletion', () => {
+    it('allows citizen to delete their SUBMITTED letter', async () => {
       mockLetterRepo.findById.mockResolvedValue({
-        id: "letter-del-1",
-        userId: "user-1",
-        status: "SUBMITTED",
+        id: 'letter-del-1',
+        userId: 'user-1',
+        status: 'SUBMITTED',
         attachments: [],
         pdfPath: null,
       });
-      mockLetterRepo.delete.mockResolvedValue({ id: "letter-del-1" });
+      mockLetterRepo.delete.mockResolvedValue({ id: 'letter-del-1' });
 
-      const result = await letterService.deleteCitizenLetter("letter-del-1", "user-1");
+      const result = await letterService.deleteCitizenLetter(
+        'letter-del-1',
+        'user-1',
+      );
       expect(result.success).toBe(true);
-      expect(mockLetterRepo.delete).toHaveBeenCalledWith("letter-del-1");
+      expect(mockLetterRepo.delete).toHaveBeenCalledWith('letter-del-1');
     });
 
-    it("rejects deletion if citizen does not own the letter", async () => {
+    it('rejects deletion if citizen does not own the letter', async () => {
       mockLetterRepo.findById.mockResolvedValue({
-        id: "letter-del-2",
-        userId: "other-user",
-        status: "SUBMITTED",
+        id: 'letter-del-2',
+        userId: 'other-user',
+        status: 'SUBMITTED',
       });
 
       await expect(
-        letterService.deleteCitizenLetter("letter-del-2", "user-1"),
+        letterService.deleteCitizenLetter('letter-del-2', 'user-1'),
       ).rejects.toMatchObject({
         status: 403,
-        code: "FORBIDDEN",
+        code: 'FORBIDDEN',
       });
     });
 
-    it("prevents deletion of SIGNED official letters", async () => {
+    it('prevents deletion of SIGNED official letters', async () => {
       mockLetterRepo.findById.mockResolvedValue({
-        id: "letter-del-3",
-        userId: "user-1",
-        status: "SIGNED",
+        id: 'letter-del-3',
+        userId: 'user-1',
+        status: 'SIGNED',
       });
 
       await expect(
-        letterService.deleteCitizenLetter("letter-del-3", "user-1"),
+        letterService.deleteCitizenLetter('letter-del-3', 'user-1'),
       ).rejects.toMatchObject({
         status: 400,
-        code: "BAD_REQUEST",
+        code: 'BAD_REQUEST',
       });
     });
   });

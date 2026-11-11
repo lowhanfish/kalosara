@@ -315,7 +315,8 @@ export default function Editor({
                       {settings.name || "Kelurahan Watundehoa"}
                     </h2>
                     <p className="text-sm leading-relaxed text-slate-600">
-                      Konfigurasi identitas wilayah, nomor kontak darurat, jam kerja pelayanan, titik koordinat peta, dan tautan luar.
+                      Konfigurasi identitas wilayah, nomor kontak darurat, jam
+                      kerja pelayanan, titik koordinat peta, dan tautan luar.
                     </p>
                   </div>
 
@@ -355,7 +356,9 @@ export default function Editor({
                       <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-900">
                         Wilayah Pemerintahan
                       </h3>
-                      <p className="text-[11px] text-slate-500">Nomenklatur resmi daerah</p>
+                      <p className="text-[11px] text-slate-500">
+                        Nomenklatur resmi daerah
+                      </p>
                     </div>
                   </div>
                   <dl className="grid grid-cols-3 gap-3 text-sm">
@@ -388,7 +391,9 @@ export default function Editor({
                       <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-900">
                         Kontak & Lokasi Kantor
                       </h3>
-                      <p className="text-[11px] text-slate-500">Saluran layanan masyarakat</p>
+                      <p className="text-[11px] text-slate-500">
+                        Saluran layanan masyarakat
+                      </p>
                     </div>
                   </div>
                   <dl className="grid grid-cols-3 gap-3 text-sm">
@@ -436,7 +441,9 @@ export default function Editor({
                       />
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-400 italic">Belum ada logo terpasang.</p>
+                    <p className="text-xs text-slate-400 italic">
+                      Belum ada logo terpasang.
+                    </p>
                   )}
                 </div>
 
@@ -460,7 +467,9 @@ export default function Editor({
                       />
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-400 italic">Belum ada gambar hero terpasang.</p>
+                    <p className="text-xs text-slate-400 italic">
+                      Belum ada gambar hero terpasang.
+                    </p>
                   )}
                 </div>
               </div>
@@ -537,7 +546,8 @@ export default function Editor({
                     Form Pengaturan Website
                   </h2>
                   <p className="mt-1 text-xs text-slate-500">
-                    Pastikan nama dan nomor kontak sesuai dengan data pemerintah kelurahan.
+                    Pastikan nama dan nomor kontak sesuai dengan data pemerintah
+                    kelurahan.
                   </p>
                 </div>
 
@@ -609,7 +619,9 @@ export default function Editor({
                       <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-800">
                         Tautan Terkait Eksternal
                       </h3>
-                      <p className="text-xs text-slate-500">Maksimal 10 tautan rujukan untuk publik.</p>
+                      <p className="text-xs text-slate-500">
+                        Maksimal 10 tautan rujukan untuk publik.
+                      </p>
                     </div>
                     <button
                       type="button"
@@ -640,8 +652,9 @@ export default function Editor({
                         onChange={(v) =>
                           setSettings({
                             ...settings,
-                            relatedLinks: settings.relatedLinks.map((item, n) =>
-                              n === i ? { ...item, label: v } : item,
+                            relatedLinks: settings.relatedLinks.map(
+                              (item, n) =>
+                                n === i ? { ...item, label: v } : item,
                             ),
                           })
                         }
@@ -652,8 +665,9 @@ export default function Editor({
                         onChange={(v) =>
                           setSettings({
                             ...settings,
-                            relatedLinks: settings.relatedLinks.map((item, n) =>
-                              n === i ? { ...item, href: v } : item,
+                            relatedLinks: settings.relatedLinks.map(
+                              (item, n) =>
+                                n === i ? { ...item, href: v } : item,
                             ),
                           })
                         }
@@ -709,7 +723,8 @@ export default function Editor({
                       Halaman Profil Kelurahan
                     </h2>
                     <p className="mt-1 text-sm text-slate-600">
-                      Kelola 5 naskah dan dokumen resmi kelurahan yang disajikan untuk masyarakat dan arsip publik.
+                      Kelola 5 naskah dan dokumen resmi kelurahan yang disajikan
+                      untuk masyarakat dan arsip publik.
                     </p>
                   </div>
                   <Link
@@ -847,8 +862,8 @@ export default function Editor({
                   </label>
                   <p className="text-xs text-slate-500">
                     Gunakan editor WYSIWYG untuk menyusun format dokumen resmi
-                    (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan, Tebal/Miring,
-                    dan Sisip Gambar).
+                    (Heading Bab H2/H3, Poin/Daftar, Penomoran, Kutipan,
+                    Tebal/Miring, dan Sisip Gambar).
                   </p>
                   <div className="pt-2">
                     <RichEditor
@@ -925,7 +940,9 @@ export default function Editor({
                       Aparatur & Struktur Organisasi
                     </h2>
                     <p className="mt-1 text-sm text-slate-600">
-                      Kelola profil kepemimpinan lurah, sekretaris, kepala seksi, dan staf kelurahan ({data.officials.length} terdaftar).
+                      Kelola profil kepemimpinan lurah, sekretaris, kepala
+                      seksi, dan staf kelurahan ({data.officials.length}{" "}
+                      terdaftar).
                     </p>
                   </div>
                   <button
@@ -944,10 +961,16 @@ export default function Editor({
 
               {data.officials.length === 0 ? (
                 <div className="glass-card p-16 text-center text-slate-400">
-                  <Users size={40} className="mx-auto mb-3 opacity-40 text-blue-500" />
-                  <p className="text-base font-extrabold text-slate-800">Belum ada aparatur yang ditambahkan</p>
+                  <Users
+                    size={40}
+                    className="mx-auto mb-3 opacity-40 text-blue-500"
+                  />
+                  <p className="text-base font-extrabold text-slate-800">
+                    Belum ada aparatur yang ditambahkan
+                  </p>
                   <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                    Data aparatur akan ditampilkan pada bagan organisasi dan laman profil publik kelurahan.
+                    Data aparatur akan ditampilkan pada bagan organisasi dan
+                    laman profil publik kelurahan.
                   </p>
                 </div>
               ) : (
@@ -986,7 +1009,10 @@ export default function Editor({
                               </span>
                             </div>
                             <p className="text-xs font-bold text-blue-700 truncate">
-                              {o.position || "-"} · <span className="font-medium text-slate-500">{o.unit || "-"}</span>
+                              {o.position || "-"} ·{" "}
+                              <span className="font-medium text-slate-500">
+                                {o.unit || "-"}
+                              </span>
                             </p>
                             <div className="flex items-center gap-2 flex-wrap pt-0.5">
                               {o.active ? (

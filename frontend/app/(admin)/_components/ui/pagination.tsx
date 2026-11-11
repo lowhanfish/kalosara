@@ -20,7 +20,10 @@ export function Pagination({
   onPageChange,
   itemName = "entri",
 }: PaginationProps) {
-  const safeTotalPages = Math.max(1, totalPages || Math.ceil(totalItems / pageSize) || 1);
+  const safeTotalPages = Math.max(
+    1,
+    totalPages || Math.ceil(totalItems / pageSize) || 1,
+  );
   if (totalItems <= 0) return null;
 
   const startItem = (currentPage - 1) * pageSize + 1;
@@ -72,7 +75,9 @@ export function Pagination({
         <button
           type="button"
           disabled={currentPage >= safeTotalPages}
-          onClick={() => onPageChange(Math.min(safeTotalPages, currentPage + 1))}
+          onClick={() =>
+            onPageChange(Math.min(safeTotalPages, currentPage + 1))
+          }
           className="inline-flex h-8 items-center gap-1 rounded-xl border border-sky-200/80 bg-white/85 px-2.5 text-xs font-bold text-slate-600 hover:bg-sky-50 hover:text-sky-700 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
         >
           <span>Berikutnya</span>

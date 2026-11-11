@@ -61,7 +61,8 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
               <span>Registrasi Admin / Pengguna Baru</span>
             </h2>
             <p className="text-xs text-slate-500">
-              Buat akun pengguna baru dan tentukan hak akses peran dalam sistem portal kelurahan.
+              Buat akun pengguna baru dan tentukan hak akses peran dalam sistem
+              portal kelurahan.
             </p>
           </div>
           <button
@@ -203,10 +204,12 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
 
           <div className="space-y-1.5 rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
             <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
-              Kata Sandi Akun Login Anda Saat Ini <span className="text-red-500">*</span>
+              Kata Sandi Akun Login Anda Saat Ini{" "}
+              <span className="text-red-500">*</span>
             </label>
             <p className="text-[11px] text-amber-800 leading-tight">
-              Sebagai otorisasi pendaftaran akun baru, masukkan kata sandi akun login Anda yang sedang aktif saat ini.
+              Sebagai otorisasi pendaftaran akun baru, masukkan kata sandi akun
+              login Anda yang sedang aktif saat ini.
             </p>
             <div className="relative pt-1">
               <input
@@ -238,7 +241,8 @@ export function FormRegisterUserModal({ onClose }: { onClose: () => void }) {
               className="mt-0.5 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
             />
             <span>
-              Saya mengonfirmasi pendaftaran akun dan pemberian peran hak akses ini secara sah sesuai ketentuan kelurahan.
+              Saya mengonfirmasi pendaftaran akun dan pemberian peran hak akses
+              ini secara sah sesuai ketentuan kelurahan.
             </span>
           </label>
 

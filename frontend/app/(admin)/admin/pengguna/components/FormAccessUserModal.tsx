@@ -213,10 +213,12 @@ export function FormAccessUserModal({
 
           <div className="space-y-1.5 rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
             <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
-              Kata Sandi Akun Login Anda Saat Ini <span className="text-red-500">*</span>
+              Kata Sandi Akun Login Anda Saat Ini{" "}
+              <span className="text-red-500">*</span>
             </label>
             <p className="text-[11px] text-amber-800 leading-tight">
-              Sebagai otorisasi perubahan hak akses akun, masukkan kata sandi akun login Anda yang sedang aktif saat ini.
+              Sebagai otorisasi perubahan hak akses akun, masukkan kata sandi
+              akun login Anda yang sedang aktif saat ini.
             </p>
             <div className="relative pt-1">
               <input
@@ -248,7 +250,8 @@ export function FormAccessUserModal({
               className="mt-0.5 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
             />
             <span>
-              Saya telah memverifikasi identitas pemilik akun dan memastikan tindakan akses ini sah.
+              Saya telah memverifikasi identitas pemilik akun dan memastikan
+              tindakan akses ini sah.
             </span>
           </label>
 

@@ -23,10 +23,18 @@ export async function getDashboardOverviewStats() {
     prisma.mediaAsset.count(),
     prisma.user.count(),
     prisma.auditLog.findMany({
-      where: { resourceType: { notIn: ['User', 'AccountProfile', 'ContactChange'] } },
+      where: {
+        resourceType: { notIn: ['User', 'AccountProfile', 'ContactChange'] },
+      },
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: 10,
-      select: { id: true, action: true, resourceType: true, resourceId: true, createdAt: true },
+      select: {
+        id: true,
+        action: true,
+        resourceType: true,
+        resourceId: true,
+        createdAt: true,
+      },
     }),
   ]);
 }
@@ -74,7 +82,9 @@ export async function createDashboardUserInTx(params: {
         passwordHash: params.passwordHash,
         role: params.role,
         isActive: true,
-        profile: params.displayName ? { create: { displayName: params.displayName } } : undefined,
+        profile: params.displayName
+          ? { create: { displayName: params.displayName } }
+          : undefined,
       },
       select: dashboardUserSelect,
     });
@@ -95,7 +105,12 @@ export async function updateUserAccessInTx(params: {
   actorId: string;
   expectedActorPasswordHash: string;
   expectedUpdatedAt: string;
-  action: 'ACTIVATE' | 'DEACTIVATE' | 'REVOKE_SESSIONS' | 'RESET_PASSWORD' | 'SET_ROLE';
+  action:
+    | 'ACTIVATE'
+    | 'DEACTIVATE'
+    | 'REVOKE_SESSIONS'
+    | 'RESET_PASSWORD'
+    | 'SET_ROLE';
   role?: Role;
   passwordHash?: string;
 }) {
@@ -103,23 +118,35 @@ export async function updateUserAccessInTx(params: {
     async (tx) => {
       await acquireAdminAdvisoryLock(tx);
       await lockAccount(tx, params.id);
-      const currentActor = await tx.user.findUnique({ where: { id: params.actorId } });
+      const currentActor = await tx.user.findUnique({
+        where: { id: params.actorId },
+      });
       assertRole(currentActor, ['ADMIN_KELURAHAN', 'LURAH']);
       if (currentActor!.passwordHash !== params.expectedActorPasswordHash) {
         throw new AccessError(409, 'CONFLICT', 'Sesi berubah; masuk kembali');
       }
       const target = await tx.user.findUnique({ where: { id: params.id } });
-      if (!target || target.updatedAt.toISOString() !== params.expectedUpdatedAt) {
+      if (
+        !target ||
+        target.updatedAt.toISOString() !== params.expectedUpdatedAt
+      ) {
         throw new AccessError(409, 'CONFLICT', 'Muat ulang daftar pengguna');
       }
       if (
         target.role === 'ADMIN_KELURAHAN' &&
         target.isActive &&
         (params.action === 'DEACTIVATE' ||
-          (params.action === 'SET_ROLE' && params.role !== 'ADMIN_KELURAHAN')) &&
-        (await tx.user.count({ where: { role: 'ADMIN_KELURAHAN', isActive: true } })) <= 1
+          (params.action === 'SET_ROLE' &&
+            params.role !== 'ADMIN_KELURAHAN')) &&
+        (await tx.user.count({
+          where: { role: 'ADMIN_KELURAHAN', isActive: true },
+        })) <= 1
       ) {
-        throw new AccessError(409, 'LAST_ADMIN', 'Admin aktif terakhir harus dipertahankan');
+        throw new AccessError(
+          409,
+          'LAST_ADMIN',
+          'Admin aktif terakhir harus dipertahankan',
+        );
       }
       const updated = await tx.user.update({
         where: { id: params.id },
@@ -140,7 +167,9 @@ export async function updateUserAccessInTx(params: {
         where: { userId: params.id, usedAt: null },
         data: { usedAt: new Date() },
       });
-      if (['RESET_PASSWORD', 'DEACTIVATE', 'SET_ROLE'].includes(params.action)) {
+      if (
+        ['RESET_PASSWORD', 'DEACTIVATE', 'SET_ROLE'].includes(params.action)
+      ) {
         await tx.contactChange.deleteMany({ where: { userId: params.id } });
       }
       await tx.auditLog.create({
@@ -157,7 +186,11 @@ export async function updateUserAccessInTx(params: {
   );
 }
 
-export async function listAuditLogsWithCount(page: number, limit: number, search: string) {
+export async function listAuditLogsWithCount(
+  page: number,
+  limit: number,
+  search: string,
+) {
   const where = { action: { contains: search, mode: 'insensitive' as const } };
   return prisma.$transaction([
     prisma.auditLog.findMany({

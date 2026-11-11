@@ -189,7 +189,8 @@ function Workspace() {
                   Daftar {channels[kind].title}
                 </h2>
                 <p className="text-xs font-medium text-slate-500 mt-0.5">
-                  Kelola publikasi {channels[kind].title.toLowerCase()} untuk ditampilkan pada portal website kelurahan.
+                  Kelola publikasi {channels[kind].title.toLowerCase()} untuk
+                  ditampilkan pada portal website kelurahan.
                 </p>
               </div>
               <Button
@@ -254,7 +255,9 @@ function Workspace() {
                   <RotateCw
                     size={14}
                     strokeWidth={2.2}
-                    className={query.isFetching ? "animate-spin text-sky-600" : ""}
+                    className={
+                      query.isFetching ? "animate-spin text-sky-600" : ""
+                    }
                   />
                 }
               >
@@ -265,7 +268,10 @@ function Workspace() {
 
           {query.isPending && <AdminLoading />}
           {query.isError && (
-            <AdminError error={query.error} onRetry={() => void query.refetch()} />
+            <AdminError
+              error={query.error}
+              onRetry={() => void query.refetch()}
+            />
           )}
 
           {query.data?.items.length === 0 && (

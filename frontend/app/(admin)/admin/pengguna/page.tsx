@@ -180,7 +180,8 @@ function Management() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
-  const [initialAccessAction, setInitialAccessAction] = useState<string>("SET_ROLE");
+  const [initialAccessAction, setInitialAccessAction] =
+    useState<string>("SET_ROLE");
   const [detailUser, setDetailUser] = useState<UserItem | null>(null);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
